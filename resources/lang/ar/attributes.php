@@ -1,0 +1,82 @@
+<?php
+
+return [
+    // Users
+    'users' => [
+        'title' => 'المستخدمين',
+        'create' => 'إنشاء مستخدم',
+        'edit' => 'تعديل',
+        'delete' => 'حذف',
+        'name' => 'الاسم',
+        'email' => 'البريد الإلكتروني',
+        'role' => 'الدور',
+        'status' => 'الحالة',
+        'created_at' => 'تاريخ الإنشاء',
+        'active' => 'نشط',
+        'inactive' => 'غير نشط',
+        'no_role' => 'لا يوجد دور',
+        'no_records' => 'لا يوجد مستخدمين',
+        'password' => 'كلمة المرور',
+        'password_confirmation' => 'تأكيد كلمة المرور',
+    ],
+
+    // Agencies
+    'agencies' => [
+        'title' => 'الوكالات',
+        'create' => 'إنشاء وكالة',
+        'edit' => 'تعديل',
+        'delete' => 'حذف',
+        'agency_name' => 'اسم الوكالة',
+        'agency_type' => 'نوع الوكالة',
+        'commercial_register' => 'السجل التجاري',
+        'phone' => 'الهاتف',
+        'accreditation_status' => 'حالة الاعتماد',
+        'created_at' => 'تاريخ الإنشاء',
+        'no_records' => 'لا توجد وكالات',
+        'user_id' => 'المستخدم',
+        'agency_name_en' => 'اسم الوكالة (بالإنجليزية)',
+        'agency_name_ar' => 'اسم الوكالة (بالعربية)',
+        'agency_type_id' => 'نوع الوكالة',
+        'commercial_register_number' => 'رقم السجل التجاري',
+        'commercial_issue_date' => 'تاريخ إصدار السجل التجاري',
+        'commercial_expiry_date' => 'تاريخ انتهاء السجل التجاري',
+        'tax_id' => 'الرقم الضريبي',
+        'tax_issue_date' => 'تاريخ إصدار الرقم الضريبي',
+        'tax_expiry_date' => 'تاريخ انتهاء الرقم الضريبي',
+        'address_en' => 'العنوان (بالإنجليزية)',
+        'address_ar' => 'العنوان (بالعربية)',
+        'phone_number' => 'رقم الهاتف',
+        'email' => 'البريد الإلكتروني',
+        'accreditation_status_en' => 'حالة الاعتماد (بالإنجليزية)',
+        'accreditation_status_ar' => 'حالة الاعتماد (بالعربية)',
+    ],
+
+    // Agency Types
+    'agency_types' => [
+        'title' => 'أنواع الوكالات',
+        'create' => 'إنشاء نوع وكالة',
+        'edit' => 'تعديل',
+        'delete' => 'حذف',
+        'name' => 'الاسم',
+        'description' => 'الوصف',
+        'status' => 'الحالة',
+        'created_at' => 'تاريخ الإنشاء',
+        'active' => 'نشط',
+        'inactive' => 'غير نشط',
+        'no_records' => 'لا توجد أنواع وكالات',
+        'name_en' => 'الاسم (بالإنجليزية)',
+        'name_ar' => 'الاسم (بالعربية)',
+        'description_en' => 'الوصف (بالإنجليزية)',
+        'description_ar' => 'الوصف (بالعربية)',
+        'is_active' => 'الحالة النشطة',
+    ],
+
+    // Messages
+    'messages' => [
+        'save' => 'حفظ',
+        'cancel' => 'إلغاء',
+        'select_user' => 'اختر المستخدم',
+        'select_agency_type' => 'اختر نوع الوكالة',
+        'dashboard' => 'لوحة التحكم',
+    ],
+]; 
