@@ -12,8 +12,8 @@
     <div class="collapse navbar-collapse w-auto max-height-vh-100 h-100" id="sidenav-collapse-main">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active bg-gradient-info' : '' }}"
-                    href="{{ route('dashboard') }}">
+                <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active bg-gradient-info' : '' }}"
+                    href="{{ route('admin.dashboard') }}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-home"></i>
@@ -52,6 +52,50 @@
                         <i class="fas fa-handshake"></i>
                     </div>
                     <span class="nav-link-text ms-1">{{ __('attributes.agencies.title') }}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.license-types.*') ? 'active bg-gradient-info' : '' }}"
+                    href="{{ route('admin.license-types.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">{{ __('attributes.license_types.title') }}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.licenses.*') ? 'active bg-gradient-info' : '' }}"
+                    href="{{ route('admin.licenses.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">{{ __('attributes.licenses.title') }}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.property-purposes.*') ? 'active bg-gradient-info' : '' }}"
+                    href="{{ route('admin.property-purposes.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">{{ __('attributes.property_purposes.title') }}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.property-types.*') ? 'active bg-gradient-info' : '' }}"
+                    href="{{ route('admin.property-types.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">{{ __('attributes.property_types.title') }}</span>
                 </a>
             </li>
         </ul>

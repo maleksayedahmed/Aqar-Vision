@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
 
 class PropertyPurpose extends Model
 {
-    use HasTranslations, SoftDeletes;
+    use HasFactory, SoftDeletes, HasTranslations;
 
     protected $fillable = [
         'name',
@@ -26,7 +27,7 @@ class PropertyPurpose extends Model
 
     public function properties()
     {
-        return $this->hasMany(Property::class, 'purpose_id');
+        return $this->hasMany(Property::class);
     }
 
     public function creator()
