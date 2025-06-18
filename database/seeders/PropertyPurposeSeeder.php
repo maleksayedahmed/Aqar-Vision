@@ -2,35 +2,78 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\PropertyPurpose;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class PropertyPurposeSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
+        // Get the first user or create a default one
+        $user = User::first();
+        $createdBy = $user ? $user->id : null;
+
         $purposes = [
             [
                 'name' => [
-                    'ar' => 'سكني',
-                    'en' => 'Residential'
+                    'en' => 'Residential',
+                    'ar' => 'سكني'
                 ],
                 'description' => [
-                    'ar' => 'عقار مخصص للسكن',
-                    'en' => 'Property designated for residential use'
+                    'en' => 'Properties intended for residential use',
+                    'ar' => 'العقارات المخصصة للاستخدام السكني'
                 ],
-                'is_active' => true
+                'is_active' => true,
+                'created_by' => $createdBy
             ],
             [
                 'name' => [
-                    'ar' => 'تجاري',
-                    'en' => 'Commercial'
+                    'en' => 'Commercial',
+                    'ar' => 'تجاري'
                 ],
                 'description' => [
-                    'ar' => 'عقار مخصص للاستخدام التجاري',
-                    'en' => 'Property designated for commercial use'
+                    'en' => 'Properties intended for commercial use',
+                    'ar' => 'العقارات المخصصة للاستخدام التجاري'
                 ],
-                'is_active' => true
+                'is_active' => true,
+                'created_by' => $createdBy
+            ],
+            [
+                'name' => [
+                    'en' => 'Industrial',
+                    'ar' => 'صناعي'
+                ],
+                'description' => [
+                    'en' => 'Properties intended for industrial use',
+                    'ar' => 'العقارات المخصصة للاستخدام الصناعي'
+                ],
+                'is_active' => true,
+                'created_by' => $createdBy
+            ],
+            [
+                'name' => [
+                    'en' => 'Agricultural',
+                    'ar' => 'زراعي'
+                ],
+                'description' => [
+                    'en' => 'Properties intended for agricultural use',
+                    'ar' => 'العقارات المخصصة للاستخدام الزراعي'
+                ],
+                'is_active' => true,
+                'created_by' => $createdBy
+            ],
+            [
+                'name' => [
+                    'en' => 'Investment',
+                    'ar' => 'استثماري'
+                ],
+                'description' => [
+                    'en' => 'Properties intended for investment purposes',
+                    'ar' => 'العقارات المخصصة للأغراض الاستثمارية'
+                ],
+                'is_active' => true,
+                'created_by' => $createdBy
             ]
         ];
 

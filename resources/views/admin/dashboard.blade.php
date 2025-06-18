@@ -9,7 +9,8 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">{{ __('users.title') }}</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">
+                                        {{ __('attributes.users.title') }}</p>
                                     <h5 class="font-weight-bolder">
                                         {{ $usersCount ?? 0 }}
                                     </h5>
@@ -30,8 +31,8 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">{{ __('agency_types.title') }}
-                                    </p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">
+                                        {{ __('attributes.agency_types.title') }}</p>
                                     <h5 class="font-weight-bolder">
                                         {{ $agencyTypesCount ?? 0 }}
                                     </h5>
@@ -52,7 +53,8 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">{{ __('agencies.title') }}</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">
+                                        {{ __('attributes.agencies.title') }}</p>
                                     <h5 class="font-weight-bolder">
                                         {{ $agenciesCount ?? 0 }}
                                     </h5>
@@ -73,7 +75,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">{{ __('messages.recent_activities') }}</h5>
+                        <h5 class="mb-0">{{ __('attributes.messages.recent_activities') }}</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -81,13 +83,13 @@
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            {{ __('messages.user') }}</th>
+                                            {{ __('attributes.messages.user') }}</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            {{ __('messages.action') }}</th>
+                                            {{ __('attributes.messages.action') }}</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            {{ __('messages.date') }}</th>
+                                            {{ __('attributes.messages.date') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -112,7 +114,8 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center">{{ __('messages.no_activities') }}</td>
+                                            <td colspan="3" class="text-center">
+                                                {{ __('attributes.messages.no_activities') }}</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
