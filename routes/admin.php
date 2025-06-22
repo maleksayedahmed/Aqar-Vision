@@ -123,4 +123,34 @@ Route::middleware(['auth' ,Language::class])
         'update' => 'admin.property-attributes.update',
         'destroy' => 'admin.property-attributes.destroy',
     ]);
+
+    // Agents routes
+    Route::resource('agents', App\Http\Controllers\Admin\AgentController::class)->names([
+        'index' => 'admin.agents.index',
+        'create' => 'admin.agents.create',
+        'store' => 'admin.agents.store',
+        'edit' => 'admin.agents.edit',
+        'update' => 'admin.agents.update',
+        'destroy' => 'admin.agents.destroy',
+    ]);
+
+    // Agent Types routes
+    Route::resource('agent-types', App\Http\Controllers\Admin\AgentTypeController::class)->names([
+        'index' => 'admin.agent-types.index',
+        'create' => 'admin.agent-types.create',
+        'store' => 'admin.agent-types.store',
+        'edit' => 'admin.agent-types.edit',
+        'update' => 'admin.agent-types.update',
+        'destroy' => 'admin.agent-types.destroy',
+    ]);
+
+    // Commercial Records routes
+    Route::resource('commercial-records', App\Http\Controllers\Admin\CommercialRecordController::class)->names([
+        'index' => 'admin.commercial-records.index',
+        'create' => 'admin.commercial-records.create',
+        'store' => 'admin.commercial-records.store',
+        'edit' => 'admin.commercial-records.edit',
+        'update' => 'admin.commercial-records.update',
+        'destroy' => 'admin.commercial-records.destroy',
+    ]);
 });

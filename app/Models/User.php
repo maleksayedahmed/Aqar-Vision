@@ -49,4 +49,12 @@ class User extends Authenticatable
             'is_active' => 'boolean',
         ];
     }
+
+    /**
+     * Get the agents for the user.
+     */
+    public function agents()
+    {
+        return $this->hasMany(Agent::class);
+    }
 }

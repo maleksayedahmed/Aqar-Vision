@@ -24,6 +24,9 @@ class AgentType extends Model
         'is_active' => 'boolean',
     ];
 
+    /**
+     * Get the agents for the agent type.
+     */
     public function agents()
     {
         return $this->hasMany(Agent::class);

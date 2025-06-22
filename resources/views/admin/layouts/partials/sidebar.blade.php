@@ -52,6 +52,22 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.agents.*') ? 'active' : '' }}"
+                href="{{ route('admin.agents.index') }}">
+                <svg class="nav-icon">
+                    <use xlink:href="/assets/icons/free.svg#cil-user-follow"></use>
+                </svg> {{ __('attributes.agents.title') }}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.agent-types.*') ? 'active' : '' }}"
+                href="{{ route('admin.agent-types.index') }}">
+                <svg class="nav-icon">
+                    <use xlink:href="/assets/icons/free.svg#cil-user"></use>
+                </svg> {{ __('attributes.agents.agent_type_title') }}
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.license-types.*') ? 'active' : '' }}"
                 href="{{ route('admin.license-types.index') }}">
                 <svg class="nav-icon">
@@ -89,6 +105,14 @@
                 <svg class="nav-icon">
                     <use xlink:href="/assets/icons/free.svg#cil-list-rich"></use>
                 </svg> {{ __('attributes.property_attributes.title') }}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.commercial-records.*') ? 'active' : '' }}"
+                href="{{ route('admin.commercial-records.index') }}">
+                <svg class="nav-icon">
+                    <use xlink:href="/assets/icons/free.svg#cil-briefcase"></use>
+                </svg> {{ __('attributes.commercial_records.title') }}
             </a>
         </li>
     </ul>
