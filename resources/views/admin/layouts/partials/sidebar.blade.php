@@ -28,6 +28,14 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}"
+                href="{{ route('admin.roles.index') }}">
+                <svg class="nav-icon">
+                    <use xlink:href="/assets/icons/free.svg#cil-shield-alt"></use>
+                </svg> {{ __('attributes.roles.title') }}
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.agency-types.*') ? 'active' : '' }}"
                 href="{{ route('admin.agency-types.index') }}">
                 <svg class="nav-icon">
@@ -73,6 +81,14 @@
                 <svg class="nav-icon">
                     <use xlink:href="/assets/icons/free.svg#cil-building"></use>
                 </svg> {{ __('attributes.property_types.title') }}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.property-attributes.*') ? 'active' : '' }}"
+                href="{{ route('admin.property-attributes.index') }}">
+                <svg class="nav-icon">
+                    <use xlink:href="/assets/icons/free.svg#cil-list-rich"></use>
+                </svg> {{ __('attributes.property_attributes.title') }}
             </a>
         </li>
     </ul>

@@ -5,7 +5,7 @@ return [
     'users' => [
         'title' => 'المستخدمين',
         'create' => 'إنشاء مستخدم',
-        'edit' => 'تعديل',
+        'edit' => 'تعديل المستخدم',
         'delete' => 'حذف',
         'name' => 'الاسم',
         'email' => 'البريد الإلكتروني',
@@ -20,11 +20,22 @@ return [
         'password_confirmation' => 'تأكيد كلمة المرور',
     ],
 
+    // Roles
+    'roles' => [
+        'title' => 'الأدوار والصلاحيات',
+        'create' => 'إنشاء دور جديد',
+        'edit' => 'تعديل الدور',
+        'delete' => 'حذف',
+        'name' => 'اسم الدور',
+        'permissions' => 'الصلاحيات',
+        'no_records' => 'لا توجد أدوار معرفة.',
+    ],
+
     // Agencies
     'agencies' => [
         'title' => 'الوكالات',
         'create' => 'إنشاء وكالة',
-        'edit' => 'تعديل',
+        'edit' => 'تعديل الوكالة',
         'delete' => 'حذف',
         'agency_name' => 'اسم الوكالة',
         'agency_type' => 'نوع الوكالة',
@@ -55,7 +66,7 @@ return [
     'agency_types' => [
         'title' => 'أنواع الوكالات',
         'create' => 'إنشاء نوع وكالة',
-        'edit' => 'تعديل',
+        'edit' => 'تعديل نوع الوكالة',
         'delete' => 'حذف',
         'name' => 'الاسم',
         'description' => 'الوصف',
@@ -68,14 +79,14 @@ return [
         'name_ar' => 'الاسم (بالعربية)',
         'description_en' => 'الوصف (بالإنجليزية)',
         'description_ar' => 'الوصف (بالعربية)',
-        'is_active' => 'الحالة النشطة',
+        'is_active' => 'فعال',
     ],
 
     // License Types
     'license_types' => [
         'title' => 'أنواع التراخيص',
         'create' => 'إنشاء نوع ترخيص',
-        'edit' => 'تعديل',
+        'edit' => 'تعديل نوع الترخيص',
         'delete' => 'حذف',
         'name' => 'الاسم',
         'description' => 'الوصف',
@@ -88,14 +99,14 @@ return [
         'name_ar' => 'الاسم (بالعربية)',
         'description_en' => 'الوصف (بالإنجليزية)',
         'description_ar' => 'الوصف (بالعربية)',
-        'is_active' => 'الحالة النشطة',
+        'is_active' => 'فعال',
     ],
 
     // Licenses
     'licenses' => [
         'title' => 'التراخيص',
         'create' => 'إنشاء ترخيص',
-        'edit' => 'تعديل',
+        'edit' => 'تعديل الترخيص',
         'delete' => 'حذف',
         'show' => 'عرض الترخيص',
         'license_type' => 'نوع الترخيص',
@@ -124,7 +135,7 @@ return [
     'property_purposes' => [
         'title' => 'أغراض العقارات',
         'create' => 'إنشاء غرض عقار',
-        'edit' => 'تعديل',
+        'edit' => 'تعديل غرض العقار',
         'delete' => 'حذف',
         'name' => 'الاسم',
         'description' => 'الوصف',
@@ -137,14 +148,14 @@ return [
         'name_ar' => 'الاسم (بالعربية)',
         'description_en' => 'الوصف (بالإنجليزية)',
         'description_ar' => 'الوصف (بالعربية)',
-        'is_active' => 'الحالة النشطة',
+        'is_active' => 'فعال',
     ],
 
     // Property Types
     'property_types' => [
         'title' => 'أنواع العقارات',
         'create' => 'إنشاء نوع عقار',
-        'edit' => 'تعديل',
+        'edit' => 'تعديل نوع العقار',
         'delete' => 'حذف',
         'name' => 'الاسم',
         'description' => 'الوصف',
@@ -157,7 +168,29 @@ return [
         'name_ar' => 'الاسم (بالعربية)',
         'description_en' => 'الوصف (بالإنجليزية)',
         'description_ar' => 'الوصف (بالعربية)',
-        'is_active' => 'الحالة النشطة',
+        'is_active' => 'فعال',
+        'parent_type' => 'النوع الرئيسي',
+        'icon' => 'الأيقونة',
+        'applicable_attributes' => 'السمات المتاحة',
+    ],
+
+    // Property Attributes
+    'property_attributes' => [
+        'title' => 'سمات العقارات',
+        'create' => 'إنشاء سمة',
+        'edit' => 'تعديل السمة',
+        'delete' => 'حذف',
+        'name' => 'اسم السمة',
+        'name_en' => 'الاسم (انجليزي)',
+        'name_ar' => 'الاسم (عربي)',
+        'type' => 'نوع الحقل',
+        'types' => [
+            'text' => 'نص',
+            'number' => 'رقم',
+            'boolean' => 'نعم/لا (صندوق اختيار)',
+        ],
+        'created_at' => 'تاريخ الإنشاء',
+        'no_records' => 'لم يتم العثور على سمات.',
     ],
 
     // Messages
@@ -165,17 +198,24 @@ return [
         'save' => 'حفظ',
         'cancel' => 'إلغاء',
         'select_user' => 'اختر المستخدم',
+        'select_role' => 'اختر الدور',
         'select_agency_type' => 'اختر نوع الوكالة',
+        'none' => 'لا شيء',
+        'password_optional' => 'كلمة المرور (اختياري)',
+        'no_attributes_defined' => 'لا توجد سمات معرفة.',
+        'create_attribute_first' => 'قم بإنشاء سمة أولاً.',
         'dashboard' => 'لوحة التحكم',
         'recent_activities' => 'آخر الأنشطة',
         'user' => 'المستخدم',
         'action' => 'الإجراء',
         'date' => 'التاريخ',
         'no_activities' => 'لا توجد أنشطة',
-        'created_successfully' => 'تم إنشاء السجل بنجاح',
-        'updated_successfully' => 'تم تحديث السجل بنجاح',
-        'deleted_successfully' => 'تم حذف السجل بنجاح',
-        'status_updated_successfully' => 'تم تحديث الحالة بنجاح',
+        'created_successfully' => 'تم إنشاء السجل بنجاح.',
+        'updated_successfully' => 'تم تحديث السجل بنجاح.',
+        'deleted_successfully' => 'تم حذف السجل بنجاح.',
+        'status_updated_successfully' => 'تم تحديث الحالة بنجاح.',
+        'cannot_delete_self' => 'لا يمكنك حذف حسابك الخاص.',
+        'cannot_deactivate_self' => 'لا يمكنك تعطيل حسابك الخاص.',
     ],
 
     // Dashboard

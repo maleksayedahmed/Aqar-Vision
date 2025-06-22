@@ -13,6 +13,8 @@ class PropertyType extends Model
 
     protected $fillable = [
         'name',
+        'parent_id', // Add this
+        'icon',      // Add this
         'description',
         'is_active',
         'created_by',
@@ -24,6 +26,24 @@ class PropertyType extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    // Parent relationship
+    public function parent()
+    {
+        return $this->belongsTo(PropertyType::class, 'parent_id');
+    }
+
+    // Children relationship
+    public function children()
+    {
+        return $this->hasMany(PropertyType::class, 'parent_id');
+    }
+
+    // Applicable attributes relationship
+    public function attributes()
+    {
+        return $this->belongsToMany(PropertyAttribute::class, 'attribute_property_type');
+    }
 
     public function properties()
     {
@@ -39,4 +59,4 @@ class PropertyType extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-} 
+}

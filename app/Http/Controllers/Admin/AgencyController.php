@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AgencyRequest;
+use App\Models\Agency;
 use App\Repositories\AgencyRepository;
 use App\Repositories\AgencyTypeRepository;
 use App\Repositories\UserRepository;
@@ -49,43 +50,48 @@ class AgencyController extends Controller
             ->with('success', __('messages.created_successfully'));
     }
 
-    public function edit($id)
+    public function edit(Agency $agency)
     {
-        $agency = $this->agencyRepository->getWithRelations($id);
+        $agency->load('user', 'agencyType');
         $users = $this->userRepository->all();
         $agencyTypes = $this->agencyTypeRepository->getActive();
         return view('admin.agencies.edit', compact('agency', 'users', 'agencyTypes'));
     }
 
-    public function update(AgencyRequest $request, $id)
+    public function update(AgencyRequest $request, Agency $agency)
     {
         $data = $request->validated();
         $data['updated_by'] = auth()->id();
         
-        $this->agencyRepository->update($id, $data);
+        $this->agencyRepository->update($agency->id, $data);
         
         return redirect()->route('admin.agencies.index')
             ->with('success', __('messages.updated_successfully'));
     }
 
-    public function destroy($id)
+    public function destroy(Agency $agency)
     {
-        $this->agencyRepository->delete($id);
+        $this->agencyRepository->delete($agency->id);
         return redirect()->route('admin.agencies.index')
             ->with('success', __('messages.deleted_successfully'));
     }
 
     public function updateAccreditationStatus(Request $request, $id)
     {
-        $request->validate([
-            'status' => 'required|array',
-            'status.en' => 'required|string|max:255',
-            'status.ar' => 'required|string|max:255',
-        ]);
+        $agency = $this->agencyRepository->find($id);
 
-        $this->agencyRepository->updateAccreditationStatus($id, $request->status);
+        $accreditedStatus    = ['en' => 'Accredited', 'ar' => 'معتمد'];
+        $notAccreditedStatus = ['en' => 'Not Accredited', 'ar' => 'غير معتمد'];
+
+        if ($agency->getTranslation('accreditation_status', 'en') === 'Accredited') {
+            $newStatus = $notAccreditedStatus;
+        } else {
+            $newStatus = $accreditedStatus;
+        }
+
+        $this->agencyRepository->update($id, ['accreditation_status' => $newStatus]);
         
         return redirect()->route('admin.agencies.index')
             ->with('success', __('messages.status_updated_successfully'));
     }
-} 
+}

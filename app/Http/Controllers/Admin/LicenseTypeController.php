@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LicenseTypeRequest;
+use App\Models\LicenseType;
 use App\Repositories\LicenseTypeRepository;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,7 @@ class LicenseTypeController extends Controller
     {
         $data = $request->validated();
         $data['created_by'] = auth()->id();
+        $data['is_active'] = $request->has('is_active');
         
         $this->licenseTypeRepository->create($data);
         
@@ -38,34 +40,34 @@ class LicenseTypeController extends Controller
             ->with('success', __('messages.created_successfully'));
     }
 
-    public function edit($id)
+    public function edit(LicenseType $licenseType)
     {
-        $licenseType = $this->licenseTypeRepository->find($id);
         return view('admin.license-types.edit', compact('licenseType'));
     }
 
-    public function update(LicenseTypeRequest $request, $id)
+    public function update(LicenseTypeRequest $request, LicenseType $licenseType)
     {
         $data = $request->validated();
         $data['updated_by'] = auth()->id();
+        $data['is_active'] = $request->has('is_active');
         
-        $this->licenseTypeRepository->update($id, $data);
+        $this->licenseTypeRepository->update($licenseType->id, $data);
         
         return redirect()->route('admin.license-types.index')
             ->with('success', __('messages.updated_successfully'));
     }
 
-    public function destroy($id)
+    public function destroy(LicenseType $licenseType)
     {
-        $this->licenseTypeRepository->delete($id);
+        $this->licenseTypeRepository->delete($licenseType->id);
         return redirect()->route('admin.license-types.index')
             ->with('success', __('messages.deleted_successfully'));
     }
 
-    public function toggleStatus($id)
+    public function toggleStatus(LicenseType $licenseType)
     {
-        $licenseType = $this->licenseTypeRepository->toggleStatus($id);
+        $this->licenseTypeRepository->toggleStatus($licenseType->id);
         return redirect()->route('admin.license-types.index')
             ->with('success', __('messages.status_updated_successfully'));
     }
-} 
+}

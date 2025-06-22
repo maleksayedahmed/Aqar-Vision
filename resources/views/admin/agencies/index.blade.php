@@ -62,17 +62,16 @@
                                                     {{ $agency->commercial_register_number }}</p>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $agency->phone }}</p>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $agency->phone_number }}</p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 <form
                                                     action="{{ route('admin.agencies.update-accreditation-status', $agency->id) }}"
                                                     method="POST" class="d-inline">
                                                     @csrf
-                                                    @method('PATCH')
                                                     <button type="submit" class="btn btn-link text-sm mb-0 px-0">
                                                         <span
-                                                            class="badge badge-sm {{ $agency->accreditation_status ? 'bg-gradient-success' : 'bg-gradient-secondary' }}">
+                                                            class="badge badge-sm {{ $agency->getTranslation('accreditation_status', 'en') === 'Accredited' ? 'bg-gradient-success' : 'bg-gradient-secondary' }}">
                                                             {{ $agency->getTranslation('accreditation_status', app()->getLocale()) }}
                                                         </span>
                                                     </button>
@@ -113,9 +112,11 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        {{ $agencies->links() }}
-                    </div>
+                    @if ($agencies->hasPages())
+                        <div class="card-footer">
+                            {{ $agencies->links() }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
