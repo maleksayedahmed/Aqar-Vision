@@ -1,0 +1,78 @@
+/* Base badge style */
+.badge {
+    --cui-badge-padding-x: 0.65em;
+    --cui-badge-padding-y: 0.35em;
+    --cui-badge-font-size: 0.75em;
+    --cui-badge-font-weight: 700;
+    --cui-badge-color: black;
+    --cui-badge-border-radius: var(--cui-border-radius);
+    display: inline-block;
+    padding: var(--cui-badge-padding-y) var(--cui-badge-padding-x);
+    font-size: var(--cui-badge-font-size);
+    font-weight: var(--cui-badge-font-weight);
+    line-height: 1;
+    color: var(--cui-badge-color);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--cui-badge-border-radius, 0);
+}
+
+/* Modifier for a smaller badge */
+.badge-sm {
+    --cui-badge-padding-x: 0.5em;
+    --cui-badge-padding-y: 0.3em;
+    font-size: .65em;
+}
+
+.bg-gradient {
+    background-image: var(--cui-gradient) !important;
+}
+
+/* The CSS variable defining the gradient */
+:root {
+    --cui-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+}
+
+/* Success background color utility */
+.bg-success {
+    --cui-bg-opacity: 1;
+    background-color: rgba(var(--cui-success-rgb), var(--cui-bg-opacity)) !important;
+}
+
+/* Secondary background color utility */
+.bg-secondary {
+    --cui-bg-opacity: 1;
+    background-color: rgba(var(--cui-secondary-rgb), var(--cui-bg-opacity)) !important;
+}
+
+/* The color definitions in :root */
+:root {
+    --cui-success: #1b9e3e;
+    --cui-success-rgb: 27, 158, 62;
+    --cui-secondary: #6b7785;
+    --cui-secondary-rgb: 107, 119, 133;
+}
+
+/* Custom License Status Styles */
+
+.status-active {
+    background-color: #d4edda;
+    /* Light green for active licenses */
+    color: #155724;
+    /* Dark green text */
+}
+
+.status-expiring-soon {
+    background-color: #fff3cd;
+    /* Light yellow for licenses expiring soon */
+    color: #856404;
+    /* Dark yellow text */
+}
+
+.status-expired {
+    background-color: #f8d7da;
+    /* Light red for expired licenses */
+    color: #721c24;
+    /* Dark red text */
+}

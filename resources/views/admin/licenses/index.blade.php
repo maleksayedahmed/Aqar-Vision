@@ -63,7 +63,14 @@
                                                     {{ $license->expiry_date ? $license->expiry_date->format('Y-m-d') : 'N/A' }}
                                                 </span>
                                             </td>
-                                            <td class="align-middle text-center text-sm">
+                                            <td
+                                                class="align-middle text-center text-sm
+                                                @if ($license->is_expired) status-expired
+                                                @elseif($license->days_until_expiry !== null && $license->days_until_expiry <= 30)
+                                                    status-expiring-soon
+                                                @else
+                                                    status-active @endif
+                                            ">
                                                 @if ($license->is_expired)
                                                     <span class="badge badge-sm bg-gradient-danger">
                                                         {{ __('attributes.licenses.expired') }}
