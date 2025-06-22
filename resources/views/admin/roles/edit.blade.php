@@ -6,11 +6,12 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">{{ __('attributes.license_types.create') }}</h3>
+                        <h3 class="card-title">{{ __('attributes.roles.edit') }}</h3>
                     </div>
-                    <form action="{{ route('admin.license-types.store') }}" method="POST">
+                    <form action="{{ route('admin.roles.update', $role->id) }}" method="POST">
                         @csrf
-                        @include('admin.license-types._form', ['licenseType' => null])
+                        @method('PUT')
+                        @include('admin.roles._form', ['role' => $role, 'rolePermissions' => $rolePermissions])
                     </form>
                 </div>
             </div>

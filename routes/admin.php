@@ -5,8 +5,10 @@ use App\Http\Controllers\Admin\AgencyTypeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LicenseController;
 use App\Http\Controllers\Admin\LicenseTypeController;
+use App\Http\Controllers\Admin\PropertyAttributeController;
 use App\Http\Controllers\Admin\PropertyPurposeController;
 use App\Http\Controllers\Admin\PropertyTypeController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Middleware\Language;
 use Illuminate\Support\Facades\Route;
@@ -14,11 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth' ,Language::class])
     ->prefix('admin')
     ->group(function () {
-    // Users routes
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    
+    // Users routes
     Route::resource('users', UserController::class)->names([
         'index' => 'admin.users.index',
         'create' => 'admin.users.create',
@@ -27,8 +28,18 @@ Route::middleware(['auth' ,Language::class])
         'update' => 'admin.users.update',
         'destroy' => 'admin.users.destroy',
     ]);
-    Route::post('users/{id}/toggle-status', [UserController::class, 'toggleStatus'])
+    Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])
         ->name('admin.users.toggle-status');
+
+    // Roles routes
+    Route::resource('roles', RoleController::class)->names([
+        'index' => 'admin.roles.index',
+        'create' => 'admin.roles.create',
+        'store' => 'admin.roles.store',
+        'edit' => 'admin.roles.edit',
+        'update' => 'admin.roles.update',
+        'destroy' => 'admin.roles.destroy',
+    ]);
 
     // Agency Types routes
     Route::resource('agency-types', AgencyTypeController::class)->names([
@@ -39,7 +50,7 @@ Route::middleware(['auth' ,Language::class])
         'update' => 'admin.agency-types.update',
         'destroy' => 'admin.agency-types.destroy',
     ]);
-    Route::post('agency-types/{id}/toggle-status', [AgencyTypeController::class, 'toggleStatus'])
+    Route::post('agency-types/{agencyType}/toggle-status', [AgencyTypeController::class, 'toggleStatus'])
         ->name('admin.agency-types.toggle-status');
 
     // Agencies routes
@@ -51,7 +62,7 @@ Route::middleware(['auth' ,Language::class])
         'update' => 'admin.agencies.update',
         'destroy' => 'admin.agencies.destroy',
     ]);
-    Route::post('agencies/{id}/update-accreditation-status', [AgencyController::class, 'updateAccreditationStatus'])
+    Route::post('agencies/{agency}/update-accreditation-status', [AgencyController::class, 'updateAccreditationStatus'])
         ->name('admin.agencies.update-accreditation-status');
 
     // License Types routes
@@ -63,7 +74,7 @@ Route::middleware(['auth' ,Language::class])
         'update' => 'admin.license-types.update',
         'destroy' => 'admin.license-types.destroy',
     ]);
-    Route::post('license-types/{id}/toggle-status', [LicenseTypeController::class, 'toggleStatus'])
+    Route::post('license-types/{licenseType}/toggle-status', [LicenseTypeController::class, 'toggleStatus'])
         ->name('admin.license-types.toggle-status');
 
     // Licenses routes
@@ -88,7 +99,7 @@ Route::middleware(['auth' ,Language::class])
         'update' => 'admin.property-purposes.update',
         'destroy' => 'admin.property-purposes.destroy',
     ]);
-    Route::post('property-purposes/{id}/toggle-status', [PropertyPurposeController::class, 'toggleStatus'])
+    Route::post('property-purposes/{propertyPurpose}/toggle-status', [PropertyPurposeController::class, 'toggleStatus'])
         ->name('admin.property-purposes.toggle-status');
 
     // Property Types routes
@@ -100,6 +111,16 @@ Route::middleware(['auth' ,Language::class])
         'update' => 'admin.property-types.update',
         'destroy' => 'admin.property-types.destroy',
     ]);
-    Route::post('property-types/{id}/toggle-status', [PropertyTypeController::class, 'toggleStatus'])
+    Route::post('property-types/{propertyType}/toggle-status', [PropertyTypeController::class, 'toggleStatus'])
         ->name('admin.property-types.toggle-status');
-}); 
+
+    // Property Attributes routes
+    Route::resource('property-attributes', PropertyAttributeController::class)->names([
+        'index' => 'admin.property-attributes.index',
+        'create' => 'admin.property-attributes.create',
+        'store' => 'admin.property-attributes.store',
+        'edit' => 'admin.property-attributes.edit',
+        'update' => 'admin.property-attributes.update',
+        'destroy' => 'admin.property-attributes.destroy',
+    ]);
+});

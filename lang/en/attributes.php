@@ -5,7 +5,7 @@ return [
     'users' => [
         'title' => 'Users',
         'create' => 'Create User',
-        'edit' => 'Edit',
+        'edit' => 'Edit User',
         'delete' => 'Delete',
         'name' => 'Name',
         'email' => 'Email',
@@ -20,11 +20,22 @@ return [
         'password_confirmation' => 'Confirm Password',
     ],
 
+    // Roles
+    'roles' => [
+        'title' => 'Roles & Permissions',
+        'create' => 'Create New Role',
+        'edit' => 'Edit Role',
+        'delete' => 'Delete',
+        'name' => 'Role Name',
+        'permissions' => 'Permissions',
+        'no_records' => 'No roles found.',
+    ],
+
     // Agencies
     'agencies' => [
         'title' => 'Agencies',
         'create' => 'Create Agency',
-        'edit' => 'Edit',
+        'edit' => 'Edit Agency',
         'delete' => 'Delete',
         'agency_name' => 'Agency Name',
         'agency_type' => 'Agency Type',
@@ -55,7 +66,7 @@ return [
     'agency_types' => [
         'title' => 'Agency Types',
         'create' => 'Create Agency Type',
-        'edit' => 'Edit',
+        'edit' => 'Edit Agency Type',
         'delete' => 'Delete',
         'name' => 'Name',
         'description' => 'Description',
@@ -68,14 +79,14 @@ return [
         'name_ar' => 'Name (Arabic)',
         'description_en' => 'Description (English)',
         'description_ar' => 'Description (Arabic)',
-        'is_active' => 'Active Status',
+        'is_active' => 'Is Active',
     ],
 
     // License Types
     'license_types' => [
         'title' => 'License Types',
         'create' => 'Create License Type',
-        'edit' => 'Edit',
+        'edit' => 'Edit License Type',
         'delete' => 'Delete',
         'name' => 'Name',
         'description' => 'Description',
@@ -88,14 +99,14 @@ return [
         'name_ar' => 'Name (Arabic)',
         'description_en' => 'Description (English)',
         'description_ar' => 'Description (Arabic)',
-        'is_active' => 'Active Status',
+        'is_active' => 'Is Active',
     ],
 
     // Licenses
     'licenses' => [
         'title' => 'Licenses',
         'create' => 'Create License',
-        'edit' => 'Edit',
+        'edit' => 'Edit License',
         'delete' => 'Delete',
         'show' => 'View License',
         'license_type' => 'License Type',
@@ -124,7 +135,7 @@ return [
     'property_purposes' => [
         'title' => 'Property Purposes',
         'create' => 'Create Property Purpose',
-        'edit' => 'Edit',
+        'edit' => 'Edit Property Purpose',
         'delete' => 'Delete',
         'name' => 'Name',
         'description' => 'Description',
@@ -137,14 +148,14 @@ return [
         'name_ar' => 'Name (Arabic)',
         'description_en' => 'Description (English)',
         'description_ar' => 'Description (Arabic)',
-        'is_active' => 'Active Status',
+        'is_active' => 'Is Active',
     ],
 
     // Property Types
     'property_types' => [
         'title' => 'Property Types',
         'create' => 'Create Property Type',
-        'edit' => 'Edit',
+        'edit' => 'Edit Property Type',
         'delete' => 'Delete',
         'name' => 'Name',
         'description' => 'Description',
@@ -157,7 +168,29 @@ return [
         'name_ar' => 'Name (Arabic)',
         'description_en' => 'Description (English)',
         'description_ar' => 'Description (Arabic)',
-        'is_active' => 'Active Status',
+        'is_active' => 'Is Active',
+        'parent_type' => 'Parent Type',
+        'icon' => 'Icon',
+        'applicable_attributes' => 'Applicable Attributes',
+    ],
+
+    // Property Attributes
+    'property_attributes' => [
+        'title' => 'Property Attributes',
+        'create' => 'Create Attribute',
+        'edit' => 'Edit Attribute',
+        'delete' => 'Delete',
+        'name' => 'Attribute Name',
+        'name_en' => 'Name (English)',
+        'name_ar' => 'Name (Arabic)',
+        'type' => 'Input Type',
+        'types' => [
+            'text' => 'Text',
+            'number' => 'Number',
+            'boolean' => 'Yes/No (Checkbox)',
+        ],
+        'created_at' => 'Created At',
+        'no_records' => 'No attributes found.',
     ],
 
     // Messages
@@ -165,17 +198,24 @@ return [
         'save' => 'Save',
         'cancel' => 'Cancel',
         'select_user' => 'Select User',
+        'select_role' => 'Select Role',
         'select_agency_type' => 'Select Agency Type',
+        'none' => 'None',
+        'password_optional' => 'Password (leave blank to keep unchanged)',
+        'no_attributes_defined' => 'No attributes have been defined.',
+        'create_attribute_first' => 'Create an attribute first.',
         'dashboard' => 'Dashboard',
         'recent_activities' => 'Recent Activities',
         'user' => 'User',
         'action' => 'Action',
         'date' => 'Date',
         'no_activities' => 'No activities found',
-        'created_successfully' => 'Record created successfully',
-        'updated_successfully' => 'Record updated successfully',
-        'deleted_successfully' => 'Record deleted successfully',
-        'status_updated_successfully' => 'Status updated successfully',
+        'created_successfully' => 'Record created successfully.',
+        'updated_successfully' => 'Record updated successfully.',
+        'deleted_successfully' => 'Record deleted successfully.',
+        'status_updated_successfully' => 'Status updated successfully.',
+        'cannot_delete_self' => 'You cannot delete your own account.',
+        'cannot_deactivate_self' => 'You cannot deactivate your own account.',
     ],
 
     // Dashboard

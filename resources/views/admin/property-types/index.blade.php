@@ -80,8 +80,7 @@
                                                         @method('DELETE')
                                                         <button type="submit"
                                                             class="text-danger font-weight-bold text-xs border-0 bg-transparent"
-                                                            data-toggle="tooltip"
-                                                            data-original-title="Delete property type">
+                                                            data-toggle="tooltip" data-original-title="Delete property type">
                                                             {{ __('attributes.property_types.delete') }}
                                                         </button>
                                                     </form>
@@ -99,9 +98,11 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        {{ $propertyTypes->links() }}
-                    </div>
+                    @if ($propertyTypes->hasPages())
+                        <div class="card-footer">
+                            {{ $propertyTypes->links() }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

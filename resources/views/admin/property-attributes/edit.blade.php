@@ -6,11 +6,12 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">{{ __('attributes.license_types.create') }}</h3>
+                        <h3 class="card-title">{{ __('attributes.property_attributes.edit') }}</h3>
                     </div>
-                    <form action="{{ route('admin.license-types.store') }}" method="POST">
+                    <form action="{{ route('admin.property-attributes.update', $propertyAttribute->id) }}" method="POST">
                         @csrf
-                        @include('admin.license-types._form', ['licenseType' => null])
+                        @method('PUT')
+                        @include('admin.property-attributes._form', ['propertyAttribute' => $propertyAttribute])
                     </form>
                 </div>
             </div>
