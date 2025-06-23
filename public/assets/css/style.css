@@ -2056,39 +2056,8 @@ progress {
   }
 }
 
-/* Modern custom scrollbar for sidebar */
-.sidebar [data-simplebar] {
-  scrollbar-width: thin;
-  /* Firefox */
-  scrollbar-color: #111 #e5e5e5;
-  /* thumb color, track color for Firefox */
-}
 
-/* Chrome, Edge, Safari */
-.sidebar [data-simplebar]::-webkit-scrollbar {
-  width: 8px;
-  background: #e5e5e5;
-  /* Track color */
-  border-radius: 8px;
-}
 
-.sidebar [data-simplebar]::-webkit-scrollbar-thumb {
-  background: #111;
-  /* Thumb color (black) */
-  border-radius: 8px;
-  min-height: 24px;
-}
-
-.sidebar [data-simplebar]::-webkit-scrollbar-thumb:hover {
-  background: #333;
-  /* Slightly lighter on hover */
-}
-
-.sidebar [data-simplebar]::-webkit-scrollbar-track {
-  background: #e5e5e5;
-  /* Track color (light) */
-  border-radius: 8px;
-}
 
 @media (min-width: 1400px) {
   .col-xxl {
@@ -13859,18 +13828,7 @@ progress {
   }
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.sidebar [data-simplebar]::-webkit-scrollbar {
-  display: none;
-}
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.sidebar [data-simplebar] {
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
-}
 
 @media (min-width: 1400px) {
   .col-xxl {
@@ -28183,78 +28141,3 @@ fieldset:disabled .btn {
   --cui-footer-bg: var(--cui-body-bg);
 }
 
-/*# sourceMappingURL=style.css.map */
-/* Modern custom scrollbar for sidebar */
-.sidebar [data-simplebar] {
-  scrollbar-width: thin;
-  /* Firefox */
-  scrollbar-color: #111 #e5e5e5;
-  /* thumb color, track color for Firefox */
-}
-
-/* Chrome, Edge, Safari */
-.sidebar [data-simplebar]::-webkit-scrollbar {
-  width: 8px;
-  background: #e5e5e5;
-  /* Track color */
-  border-radius: 8px;
-}
-
-.sidebar [data-simplebar]::-webkit-scrollbar-thumb {
-  background: #111;
-  /* Thumb color (black) */
-  border-radius: 8px;
-  min-height: 24px;
-}
-
-.sidebar [data-simplebar]::-webkit-scrollbar-thumb:hover {
-  background: #333;
-  /* Slightly lighter on hover */
-}
-
-.sidebar [data-simplebar]::-webkit-scrollbar-track {
-  background: #e5e5e5;
-  /* Track color (light) */
-  border-radius: 8px;
-}
-
-/* Force transparent sidebar scrollbar and hide arrows */
-.sidebar [data-simplebar]::-webkit-scrollbar {
-  width: 8px !important;
-  background: transparent !important;
-}
-
-.sidebar [data-simplebar]::-webkit-scrollbar-track {
-  background: transparent !important;
-}
-
-.sidebar [data-simplebar]::-webkit-scrollbar-thumb {
-  background: #111 !important;
-  border-radius: 8px !important;
-  min-height: 24px !important;
-}
-
-.sidebar [data-simplebar]::-webkit-scrollbar-thumb:hover {
-  background: #333 !important;
-}
-
-.sidebar [data-simplebar]::-webkit-scrollbar-button {
-  display: none !important;
-  height: 0 !important;
-  width: 0 !important;
-}
-
-/* For SimpleBar or CoreUI custom scrollbars */
-.sidebar .simplebar-scrollbar {
-  background: #111 !important;
-  border-radius: 8px !important;
-}
-
-.sidebar .simplebar-scrollbar:before {
-  background: #111 !important;
-  border-radius: 8px !important;
-}
-
-.sidebar .simplebar-track {
-  background: transparent !important;
-}
