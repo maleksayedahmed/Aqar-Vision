@@ -11,7 +11,7 @@ class AdPriceController extends Controller
 {
     public function index()
     {
-        $prices = AdPrice::all();
+        $prices = AdPrice::latest()->get(); // Using latest() is good practice
         return view('admin.ad-prices.index', compact('prices'));
     }
 
@@ -32,8 +32,10 @@ class AdPriceController extends Controller
             'description' => 'nullable|array',
             'description.ar' => 'nullable|string',
             'description.en' => 'nullable|string',
-            'is_active' => 'boolean'
         ]);
+
+        // This is the crucial fix for the checkbox
+        $validated['is_active'] = $request->has('is_active');
 
         $validated['created_by'] = Auth::id();
         $validated['updated_by'] = Auth::id();
@@ -61,8 +63,10 @@ class AdPriceController extends Controller
             'description' => 'nullable|array',
             'description.ar' => 'nullable|string',
             'description.en' => 'nullable|string',
-            'is_active' => 'boolean'
         ]);
+
+        // This is the crucial fix for the checkbox
+        $validated['is_active'] = $request->has('is_active');
 
         $validated['updated_by'] = Auth::id();
 
@@ -79,4 +83,4 @@ class AdPriceController extends Controller
         return redirect()->route('admin.ad-prices.index')
             ->with('success', 'Ad price deleted successfully.');
     }
-} 
+}
