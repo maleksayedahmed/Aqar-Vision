@@ -31,10 +31,19 @@ class PropertyRequest extends FormRequest
             'encumbrances' => 'nullable|string',
             'status' => 'required|in:available,sold,rented',
             'list_date' => 'nullable|date',
-
-            // For dynamic attributes
             'attributes' => 'nullable|array',
-            'attributes.*' => 'nullable', // Basic validation for now
+            'attributes.*' => 'nullable',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.required' => __('validation.required', ['attribute' => 'title']),
+            'purpose_id.required' => __('validation.required', ['attribute' => __('attributes.properties.purpose')]),
+            'property_type_id.required' => __('validation.required', ['attribute' => __('attributes.properties.type')]),
+            'total_price.required' => __('validation.required', ['attribute' => __('attributes.properties.total_price')]),
+            'listing_purpose.required' => __('validation.required', ['attribute' => __('attributes.properties.listing_purpose')]),
         ];
     }
 }

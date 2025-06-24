@@ -21,4 +21,17 @@ class SubscriptionRequest extends FormRequest
             'status' => 'required|in:active,expired,cancelled',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'user_id.required' => __('validation.required', ['attribute' => __('attributes.subscriptions.user')]),
+            'user_id.exists' => __('validation.exists', ['attribute' => __('attributes.subscriptions.user')]),
+            'plan_id.required' => __('validation.required', ['attribute' => __('attributes.subscriptions.plan')]),
+            'end_date.after_or_equal' => __('validation.after_or_equal', [
+                'attribute' => __('attributes.subscriptions.end_date'),
+                'date' => __('attributes.subscriptions.start_date'),
+            ]),
+        ];
+    }
 }
