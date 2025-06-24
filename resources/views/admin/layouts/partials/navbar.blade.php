@@ -1,3 +1,18 @@
+ <style>
+    .sidebar-nav::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    .sidebar-nav::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    .sidebar-nav::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      border-radius: 6px;
+      border: 2px solid #e0e0e0;
+    }
+  </style>
 <header class="header header-sticky p-0 mb-4">
     <div class="container-fluid border-bottom px-4">
         <button class="header-toggler" type="button"

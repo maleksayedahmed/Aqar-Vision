@@ -36,9 +36,9 @@ class PropertyTypeController extends Controller
         $data = $request->validated();
         $data['created_by'] = auth()->id();
         $data['is_active'] = $request->has('is_active');
-        
+
         $propertyType = $this->propertyTypeRepository->create($data);
-        
+
         $attributesToSync = array_filter($request->input('attributes', []));
         $propertyType->attributes()->sync($attributesToSync);
 
@@ -60,9 +60,9 @@ class PropertyTypeController extends Controller
         $data = $request->validated();
         $data['updated_by'] = auth()->id();
         $data['is_active'] = $request->has('is_active');
-        
+
         $this->propertyTypeRepository->update($propertyType->id, $data);
-        
+
         $attributesToSync = array_filter($request->input('attributes', []));
         $propertyType->attributes()->sync($attributesToSync);
 
@@ -82,5 +82,9 @@ class PropertyTypeController extends Controller
         $this->propertyTypeRepository->toggleStatus($propertyType->id);
         return redirect()->route('admin.property-types.index')
             ->with('success', __('messages.status_updated_successfully'));
+    }
+    public function getAttributes(PropertyType $propertyType)
+    {
+        return response()->json($propertyType->load('attributes')->attributes);
     }
 }

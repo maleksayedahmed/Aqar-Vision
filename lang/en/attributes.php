@@ -14,6 +14,7 @@ return [
         'created_at' => 'Created At',
         'active' => 'Active',
         'inactive' => 'Inactive',
+        'is_active' => 'Is Active',
         'no_role' => 'No Role',
         'no_records' => 'No users found',
         'password' => 'Password',
@@ -131,6 +132,14 @@ return [
         'related_entities' => 'Related Entities',
     ],
 
+    // Properties
+    'properties' => [
+        'purpose' => 'Property Purpose',
+        'type' => 'Property Type',
+        'total_price' => 'Total Price',
+        'listing_purpose' => 'Listing Purpose',
+    ],
+
     // Property Purposes
     'property_purposes' => [
         'title' => 'Property Purposes',
@@ -191,6 +200,56 @@ return [
         ],
         'created_at' => 'Created At',
         'no_records' => 'No attributes found.',
+    ],
+
+    // Plans
+    'plans' => [
+        'title' => 'Subscription Plans',
+        'create' => 'Create Plan',
+        'edit' => 'Edit Plan',
+        'delete' => 'Delete',
+        'name' => 'Plan Name',
+        'name_en' => 'Name (English)',
+        'name_ar' => 'Name (Arabic)',
+        'target_type' => 'Target Type',
+        'price_monthly' => 'Monthly Price',
+        'ads_regular' => '# of Regular Ads',
+        'ads_featured' => '# of Featured Ads',
+        'ads_premium' => '# of Premium Ads',
+        'ads_map' => '# of Map Ads',
+        'agent_seats' => 'Agent Seats',
+        'description' => 'Description',
+        'description_en' => 'Description (English)',
+        'description_ar' => 'Description (Arabic)',
+        'no_records' => 'No plans found.',
+    ],
+
+    // Ad Prices
+    'ad_prices' => [
+        'title' => 'Ad-Hoc Ad Prices',
+        'create' => 'Create Ad Price',
+        'edit' => 'Edit Ad Price',
+        'delete' => 'Delete',
+        'name' => 'Name',
+        'price' => 'Price',
+        'duration_days' => 'Duration (Days)',
+        'type' => 'Ad Type',
+        'is_active' => 'Is Active',
+        'no_records' => 'No ad prices found.',
+    ],
+
+    // Subscriptions
+    'subscriptions' => [
+        'title' => 'Subscriptions',
+        'create' => 'Create Subscription',
+        'edit' => 'Edit Subscription',
+        'delete' => 'Delete',
+        'user' => 'User',
+        'plan' => 'Plan',
+        'start_date' => 'Start Date',
+        'end_date' => 'End Date',
+        'status' => 'Status',
+        'no_records' => 'No subscriptions found.',
     ],
 
     // Messages

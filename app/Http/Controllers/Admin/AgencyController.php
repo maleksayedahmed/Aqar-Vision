@@ -43,9 +43,9 @@ class AgencyController extends Controller
     {
         $data = $request->validated();
         $data['created_by'] = auth()->id();
-        
+
         $this->agencyRepository->create($data);
-        
+
         return redirect()->route('admin.agencies.index')
             ->with('success', __('messages.created_successfully'));
     }
@@ -62,9 +62,9 @@ class AgencyController extends Controller
     {
         $data = $request->validated();
         $data['updated_by'] = auth()->id();
-        
+
         $this->agencyRepository->update($agency->id, $data);
-        
+
         return redirect()->route('admin.agencies.index')
             ->with('success', __('messages.updated_successfully'));
     }
@@ -90,7 +90,7 @@ class AgencyController extends Controller
         }
 
         $this->agencyRepository->update($id, ['accreditation_status' => $newStatus]);
-        
+
         return redirect()->route('admin.agencies.index')
             ->with('success', __('messages.status_updated_successfully'));
     }
