@@ -132,6 +132,14 @@ return [
         'related_entities' => 'Related Entities',
     ],
 
+    // Properties
+    'properties' => [
+        'purpose' => 'Property Purpose',
+        'type' => 'Property Type',
+        'total_price' => 'Total Price',
+        'listing_purpose' => 'Listing Purpose',
+    ],
+
     // Property Purposes
     'property_purposes' => [
         'title' => 'Property Purposes',

@@ -132,6 +132,14 @@ return [
         'related_entities' => 'الكيانات المرتبطة',
     ],
 
+    // Properties
+    'properties' => [
+        'purpose' => 'غرض العقار',
+        'type' => 'نوع العقار',
+        'total_price' => 'السعر الإجمالي',
+        'listing_purpose' => 'الغرض من العرض',
+    ],
+
     // Property Purposes
     'property_purposes' => [
         'title' => 'أغراض العقارات',
