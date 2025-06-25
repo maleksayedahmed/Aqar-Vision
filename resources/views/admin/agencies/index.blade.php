@@ -6,6 +6,36 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0">
+                        <h6>Filters</h6>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ route('admin.agencies.index') }}" method="GET">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <input type="text" name="search" class="form-control" placeholder="Search by Agency Name..." value="{{ request('search') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <select name="accreditation_status" class="form-control">
+                                            <option value="">-- All Statuses --</option>
+                                            <option value="Accredited" {{ request('accreditation_status') == 'Accredited' ? 'selected' : '' }}>Accredited</option>
+                                            <option value="Not Accredited" {{ request('accreditation_status') == 'Not Accredited' ? 'selected' : '' }}>Not Accredited</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                    <a href="{{ route('admin.agencies.index') }}" class="btn btn-secondary">Reset</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header pb-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6>{{ __('attributes.agencies.title') }}</h6>
                             <a href="{{ route('admin.agencies.create') }}" class="btn btn-primary btn-sm">
@@ -47,14 +77,14 @@
                                                         <h6 class="mb-0 text-sm">
                                                             {{ $agency->getTranslation('agency_name', app()->getLocale()) }}
                                                         </h6>
-                                                        <p class="text-xs text-secondary mb-0">{{ $agency->user->email }}
+                                                        <p class="text-xs text-secondary mb-0">{{ $agency->user?->email }}
                                                         </p>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
                                                 <p class="text-xs font-weight-bold mb-0">
-                                                    {{ $agency->agencyType->getTranslation('name', app()->getLocale()) }}
+                                                    {{ $agency->agencyType?->getTranslation('name', app()->getLocale()) }}
                                                 </p>
                                             </td>
                                             <td>

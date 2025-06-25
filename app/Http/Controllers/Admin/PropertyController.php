@@ -8,13 +8,34 @@ use App\Models\Property;
 use App\Models\PropertyPurpose;
 use App\Models\PropertyType;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class PropertyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $properties = Property::with('propertyType', 'user')->latest()->paginate(15);
-        return view('admin.properties.index', compact('properties'));
+        $query = Property::with(['propertyType', 'user']);
+
+        if ($request->filled('search')) {
+            $query->where('title', 'LIKE', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('property_type_id')) {
+            $query->where('property_type_id', $request->property_type_id);
+        }
+
+        if ($request->filled('city')) {
+            $query->where('city', 'LIKE', '%' . $request->city . '%');
+        }
+
+        $properties = $query->latest()->paginate(15)->withQueryString();
+        $propertyTypes = PropertyType::where('is_active', true)->orderBy('name')->get();
+
+        return view('admin.properties.index', compact('properties', 'propertyTypes'));
     }
 
     public function create()
@@ -32,7 +53,6 @@ class PropertyController extends Controller
 
         $data['user_id'] = auth()->id();
         $data['created_by'] = auth()->id();
-
         $data['services'] = $request->input('attributes', []);
 
         Property::create($data);
