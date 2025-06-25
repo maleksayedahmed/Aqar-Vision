@@ -42,12 +42,55 @@
     </div>
 
     <hr>
+    <h5>Property Photos</h5>
+    <div class="form-group">
+        <label for="photos">Upload New Photos</label>
+        <input type="file" name="photos[]" class="form-control" multiple>
+    </div>
+
+    @if(isset($property) && $property->hasMedia('property_images'))
+    <div class="mb-3">
+        <p><strong>Current Photos:</strong></p>
+        <div class="row">
+            @foreach($property->getMedia('property_images') as $media)
+                <div class="col-md-2 text-center">
+                    <img src="{{ $media->getUrl('thumb') }}" alt="Thumbnail" class="img-thumbnail mb-2" style="width: 100px; height: 100px; object-fit: cover;">
+                    <br>
+                    <a href="{{ route('admin.properties.media.destroy', [$property->id, $media->id]) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this image?');">Delete</a>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+    <hr>
+
     <h5>Dynamic Attributes</h5>
     <div id="dynamic-attributes-container" class="row">
         <p class="text-muted">Please select a property type to see its specific attributes.</p>
     </div>
     <hr>
 
+    <div class="row">
+        <div class="col-md-6">
+             <div class="form-group">
+                <label for="listing_purpose">Listing Purpose</label>
+                <select name="listing_purpose" class="form-control" required>
+                    <option value="sale" {{ old('listing_purpose', $property?->listing_purpose) == 'sale' ? 'selected' : '' }}>For Sale</option>
+                    <option value="rent" {{ old('listing_purpose', $property?->listing_purpose) == 'rent' ? 'selected' : '' }}>For Rent</option>
+                </select>
+            </div>
+        </div>
+         <div class="col-md-6">
+             <div class="form-group">
+                <label for="status">Property Status</label>
+                <select name="status" class="form-control" required>
+                    <option value="available" {{ old('status', $property?->status) == 'available' ? 'selected' : '' }}>Available</option>
+                    <option value="sold" {{ old('status', $property?->status) == 'sold' ? 'selected' : '' }}>Sold</option>
+                    <option value="rented" {{ old('status', $property?->status) == 'rented' ? 'selected' : '' }}>Rented</option>
+                </select>
+            </div>
+        </div>
+    </div>
 
 </div>
 <div class="card-footer">

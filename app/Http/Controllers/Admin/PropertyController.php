@@ -9,6 +9,7 @@ use App\Models\PropertyPurpose;
 use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class PropertyController extends Controller
 {
@@ -19,15 +20,12 @@ class PropertyController extends Controller
         if ($request->filled('search')) {
             $query->where('title', 'LIKE', '%' . $request->search . '%');
         }
-
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-
         if ($request->filled('property_type_id')) {
             $query->where('property_type_id', $request->property_type_id);
         }
-
         if ($request->filled('city')) {
             $query->where('city', 'LIKE', '%' . $request->city . '%');
         }
@@ -55,9 +53,17 @@ class PropertyController extends Controller
         $data['created_by'] = auth()->id();
         $data['services'] = $request->input('attributes', []);
 
-        Property::create($data);
+        $property = Property::create($data);
 
-        return redirect()->route('admin.properties.index')->with('success', 'Property created successfully.');
+        if ($request->hasFile('photos')) {
+            $property
+                ->addMultipleMediaFromRequest(['photos'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->toMediaCollection('property_images');
+                });
+        }
+
+        return redirect()->route('admin.properties.edit', $property)->with('success', 'Property created successfully.');
     }
 
     public function show(Property $property)
@@ -82,12 +88,26 @@ class PropertyController extends Controller
 
         $property->update($data);
 
-        return redirect()->route('admin.properties.index')->with('success', 'Property updated successfully.');
+        if ($request->hasFile('photos')) {
+            $property
+                ->addMultipleMediaFromRequest(['photos'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->toMediaCollection('property_images');
+                });
+        }
+
+        return redirect()->route('admin.properties.edit', $property)->with('success', 'Property updated successfully.');
     }
 
     public function destroy(Property $property)
     {
         $property->delete();
         return redirect()->route('admin.properties.index')->with('success', 'Property deleted successfully.');
+    }
+
+    public function destroyMedia(Property $property, Media $media)
+    {
+        $media->delete();
+        return back()->with('success', 'Image deleted successfully.');
     }
 }

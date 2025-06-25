@@ -48,9 +48,10 @@ Route::middleware(['auth' ,Language::class])
 
     // Properties
     Route::resource('properties', PropertyController::class);
+    Route::get('properties/{property}/media/{media}/destroy', [PropertyController::class, 'destroyMedia'])->name('properties.media.destroy');
     Route::resource('property-types', PropertyTypeController::class)->except('show');
     Route::post('property-types/{propertyType}/toggle-status', [PropertyTypeController::class, 'toggleStatus'])->name('property-types.toggle-status');
-    Route::get('property-types/{propertyType}/attributes', [PropertyTypeController::class, 'getAttributes'])->name('property-types.attributes'); // <-- API route for dynamic attributes
+    Route::get('property-types/{propertyType}/attributes', [PropertyTypeController::class, 'getAttributes'])->name('property-types.attributes');
     Route::resource('property-purposes', PropertyPurposeController::class)->except('show');
     Route::post('property-purposes/{propertyPurpose}/toggle-status', [PropertyPurposeController::class, 'toggleStatus'])->name('property-purposes.toggle-status');
     Route::resource('property-attributes', PropertyAttributeController::class)->except('show');
