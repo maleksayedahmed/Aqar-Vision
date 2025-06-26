@@ -6,6 +6,39 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0">
+                        <h6>Filters</h6>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ route('admin.users.index') }}" method="GET">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <input type="text" name="search" class="form-control" placeholder="Search by Name or Email..." value="{{ request('search') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <select name="role" class="form-control">
+                                            <option value="">-- All Roles --</option>
+                                            @foreach($roles as $role)
+                                                <option value="{{ $role->name }}" {{ request('role') == $role->name ? 'selected' : '' }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                    <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Reset</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header pb-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6>{{ __('attributes.users.title') }}</h6>
                             <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm">
@@ -41,7 +74,7 @@
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div>
-                                                        <img src="{{ $user->profile_photo_url }}"
+                                                        <img src="{{ $user->profile_photo_url ?? 'https://via.placeholder.com/40' }}"
                                                             class="avatar avatar-sm me-3" alt="{{ $user->name }}">
                                                     </div>
                                                     <div class="d-flex flex-column justify-content-center">

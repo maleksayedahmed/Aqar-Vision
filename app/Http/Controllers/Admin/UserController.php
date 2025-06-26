@@ -12,10 +12,28 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->latest()->paginate(10);
-        return view('admin.users.index', compact('users'));
+        $query = User::with('roles');
+
+        // Search by name or email
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'LIKE', '%' . $request->search . '%')
+                  ->orWhere('email', 'LIKE', '%' . $request->search . '%');
+            });
+        }
+
+        // Filter by role
+        if ($request->filled('role')) {
+            $query->whereHas('roles', function ($q) use ($request) {
+                $q->where('name', $request->role);
+            });
+        }
+
+        $users = $query->latest()->paginate(10)->withQueryString(); 
+        $roles = Role::all();
+        return view('admin.users.index', compact('users', 'roles'));
     }
 
     public function create()
@@ -49,7 +67,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
-        
+
         if ($request->filled('password')) {
             $data['password'] = Hash::make($data['password']);
         } else {
@@ -91,7 +109,7 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')
                 ->with('error', __('messages.cannot_deactivate_self'));
         }
-        
+
         $user->update(['is_active' => !$user->is_active]);
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.status_updated_successfully'));
