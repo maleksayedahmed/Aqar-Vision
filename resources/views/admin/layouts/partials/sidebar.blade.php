@@ -25,6 +25,18 @@
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-shield-alt"></use></svg> {{ __('attributes.roles.title') }}
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.upgrade-requests.*') ? 'active' : '' }}"
+                href="{{ route('admin.upgrade-requests.index') }}">
+                <svg class="nav-icon">
+                    <use xlink:href="/assets/icons/free.svg#cil-user-plus"></use>
+                </svg>
+                Upgrade Requests
+                @if($notificationCount > 0)
+                    <span class="badge badge-sm bg-danger ms-auto">{{ $notificationCount }}</span>
+                @endif
+            </a>
+        </li>
 
         <li class="nav-title">Agency Management</li>
         <li class="nav-item">
