@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\PropertyTypeController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UpgradeRequestController;
 use App\Http\Middleware\Language;
 use Illuminate\Support\Facades\Route;
 
@@ -63,4 +64,8 @@ Route::middleware(['auth' ,Language::class])
 
     // Other Records
     Route::resource('commercial-records', CommercialRecordController::class)->except('show');
+
+    Route::get('upgrade-requests', [UpgradeRequestController::class, 'index'])->name('upgrade-requests.index');
+    Route::post('upgrade-requests/{upgradeRequest}/approve', [UpgradeRequestController::class, 'approve'])->name('upgrade-requests.approve');
+    Route::post('upgrade-requests/{upgradeRequest}/reject', [UpgradeRequestController::class, 'reject'])->name('upgrade-requests.reject');
 });
