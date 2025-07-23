@@ -57,4 +57,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Agent::class);
     }
+
+    /**
+     * Get the agency for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function agency()
+    {
+        // A user can be associated with at most one agency.
+        return $this->hasOne(Agency::class);
+    }
 }

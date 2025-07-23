@@ -6,6 +6,7 @@
 
 @section('content')
 
+@if ($agent->user && $agent->user->is_active)
     <!-- Account Activation Section -->
     <div class="w-full mx-auto">
         <div class="relative bg-[rgba(79,171,232,0.1)] rounded-2xl h-[300px] border-r-[3px] border-[rgba(255,224,51,1)] p-9 overflow-hidden">
@@ -106,5 +107,24 @@
         </div>
 
     </section>
+
+
+@else
+<div class="w-full max-w-5xl mx-auto">
+            <div class="bg-[rgba(203,84,75,1)] h-[100px] text-white p-4 sm:p-5 rounded-2xl flex items-center">
+                <div class="flex items-center gap-6 w-full">
+                    <div class="w-7 h-7 flex-shrink-0 flex items-center justify-center border-2 border-white/50 rounded-full">
+                            <span class="font-mono font-bold text-lg italic">i</span>
+                    </div>
+                    <div>
+                        <span class="hidden sm:inline font-bold">تنبيه!</span>
+                        <p class="text-sm sm:text-base">
+                            لم يتم تفعيل الحساب بعد من فضلك انتظر مراجعة البيانات لتفعيل حسابك واستقبال الطلبات
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+@endif
 
 @endsection

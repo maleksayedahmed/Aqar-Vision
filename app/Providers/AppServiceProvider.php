@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Http\View\Composers\NotificationComposer; // Import the class
 use Illuminate\Support\Facades\View; // Import the View facade
 use Illuminate\Support\ServiceProvider;
+use App\Models\User;
+use App\Observers\UserObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     {
         // Share notification count with all views that use the admin layout
         View::composer('admin.layouts.app', NotificationComposer::class);
+        User::observe(UserObserver::class);
     }
 }
