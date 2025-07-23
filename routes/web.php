@@ -5,6 +5,8 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\UserRequestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Agent\HomeController;
+use App\Http\Controllers\Agent\PackageController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,12 +38,7 @@ require __DIR__.'/admin.php';
 // ===================================
 Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () {
 
-    // This route handles the URL: /agent
-    // It's the agent's "home page".
     Route::get('/', [HomeController::class, 'index'])->name('home');
-
-    // Other agent-specific routes will go here later
-    // e.g., Route::get('/profile', ...)->name('profile');
-    // e.g., Route::get('/listings', ...)->name('listings.index');
+    Route::get('/packages', [PackageController::class, 'index'])->name('packages');
 
 });

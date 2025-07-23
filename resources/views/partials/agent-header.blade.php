@@ -1,4 +1,4 @@
-{{-- Stored at: resources/views/partials/agent-header.blade.php --}}
+{{-- resources/views/partials/agent-header.blade.php --}}
 <header id="main-header" class="py-[5px] bg-[linear-gradient(90deg,_#F6F8FF_0%,_#FFFFFF_100%)] sticky top-0 z-50 transition-transform duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
         <div class="flex items-center justify-between h-16">
@@ -20,21 +20,16 @@
                 <div class="hidden lg:flex gap-[33px]">
                     <!-- Navigation Links -->
                     <nav class="hidden lg:flex items-center gap-x-6">
-                        <a href="{{ route('agent.home') }}" class="text-sm font-medium text-gray-700 hover:text-[#303f7d]">الرئيسية</a>
-                        <a href="#" class="text-sm font-medium text-gray-700 hover:text-[#303f7d]">وسطاء العقاريون</a>
-                        <a href="#" class="text-sm font-medium text-gray-700 hover:text-[#303f7d]">نبذة عنا</a>
-                        <a href="#" class="text-sm font-medium text-gray-700 hover:text-[#303f7d]">تواصل معنا</a>
+                        <a href="{{ route('agent.home') }}"
+                            class="text-sm font-medium {{ request()->routeIs('agent.home') ? 'text-[rgba(79,171,232,1)]' : 'text-[rgba(48,62,124,1)]' }} hover:text-[rgba(48,62,124,1)]">
+                             الرئيسية
+                        </a>
+                        <a href="#" class="text-sm font-medium text-[rgba(48,62,124,1)] hover:text-[rgba(48,62,124,1)]">إعلاناتي</a>
+                        <a href="{{ route('agent.packages') }}" class="text-sm font-medium {{ request()->routeIs('agent.packages') ? 'text-[rgba(79,171,232,1)]' : 'text-[rgba(48,62,124,1)]' }} hover:text-[rgba(48,62,124,1)]"> الباقات</a>
+                        <a href="#" class="text-sm font-medium text-[rgba(48,62,124,1)] hover:text-[rgba(48,62,124,1)]">تواصل معنا</a>
                     </nav>
 
-                    <!-- Language Switcher Dropdown -->
-                    <div class="hidden md:flex">
-                        <button class="flex items-center gap-x-2 text-sm bg-gray-200 hover:bg-gray-300 p-0.5 rounded-lg transition-colors">
-                            <div class="flex items-center gap-x-1 text-white">
-                                <img src="{{ asset('images/arabic.png') }}" alt="arabic flag">
-                            </div>
-                            <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                        </button>
-                    </div>
+
                 </div>
             </div>
 
@@ -43,8 +38,8 @@
 
                 <!-- Map Button (Hidden on mobile) -->
                 <button class="hidden lg:flex bg-[rgba(48,63,125,1)] hover:bg-blue-700 text-white px-4 py-2 rounded-lg items-center gap-2 transition-colors duration-200 text-sm font-medium shadow-sm">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2C6.686 2 4 4.686 4 8c0 4.28 6 10 6 10s6-5.72 6-10c0-3.314-2.686-6-6-6zm0 8.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd"/></svg>
-                    <span>تحديث الخريطة</span>
+                    <img src="{{asset('images/plus.svg')}}" alt="">
+                    <span>أضف إعلان </span>
                 </button>
 
                 <div class="flex items-center gap-[12.5px]">
@@ -180,15 +175,7 @@
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2C6.686 2 4 4.686 4 8c0 4.28 6 10 6 10s6-5.72 6-10c0-3.314-2.686-6-6-6zm0 8.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd"/></svg>
                     <span>تحديث الخريطة</span>
                 </button>
-                    <div class="flex">
-                            <button class="flex items-center gap-x-2 text-sm bg-gray-200 hover:bg-gray-300 p-0.5 rounded-lg transition-colors">
-                                <div class="flex items-center gap-x-1 text-white">
-                                    <img src="images/arabic.png" alt="arabic flag">
-                                </div>
 
-                                <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                            </button>
-                        </div>
                 </div>
             </div>
         </div>

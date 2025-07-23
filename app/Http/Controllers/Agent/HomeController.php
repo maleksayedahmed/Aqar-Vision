@@ -22,8 +22,17 @@ class HomeController extends Controller
                 ->with('error', 'Your account does not have an associated agent profile. Please contact support.');
         }
 
-        return view('agent.home', [
+        if ($agent->has_visited_active) {
+        return  view('agent.home', [
             'agent' => $agent,
         ]);
-    }
+        }
+
+        $agent->has_visited_active = true;
+        $agent->save();
+
+        return view('agent.active', [
+            'agent' => $agent,
+        ]);
+        }
 }

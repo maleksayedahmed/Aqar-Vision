@@ -24,6 +24,7 @@ class Agent extends Model
         'agency_id',
         'created_by',
         'updated_by',
+        'has_visited_active',
     ];
 
     protected $casts = [
@@ -60,4 +61,4 @@ class Agent extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-} 
+}

@@ -6,30 +6,53 @@
 
 @section('content')
 
-@if ($agent->user && $agent->user->is_active)
-    <!-- Account Activation Section -->
-    <div class="w-full mx-auto">
-        <div class="relative bg-[rgba(79,171,232,0.1)] rounded-2xl h-[300px] border-r-[3px] border-[rgba(255,224,51,1)] p-9 overflow-hidden">
-            <div class="flex flex-col items-center text-center">
-                <img src="{{ asset('images/bellactive.svg') }}">
+    <div class="w-full">
+        <div class="bg-[rgba(249,250,252,1)] rounded-2xl p-6 sm:p-8 shadow-sm">
 
-                {{-- DYNAMIC WELCOME MESSAGE --}}
-                <h2 class="text-[17px] font-bold text-[rgba(26,36,76,1)] mb-3 mt-7">
-                    مرحباً بك يا {{ $agent->name }}! تم تفعيل حسابك بنجاح
-                </h2>
+            <!-- Section Title -->
+            <div class="text-right mb-6 sm:mb-8">
+                <h3 class="text-[22px] font-bold">ملخص إعلاناتك المتبقية</h3>
+            </div>
 
-                <p class="mb-8 text-[17px] text-[rgba(26,36,76,1)]">
-                    لوحة تحكمك السريعة لإدارة عقاراتك واستكشاف الفرص.
-                </p>
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-y-6">
 
-                <a href="{{-- route('agent.packages.subscribe') --}}" class="bg-[rgba(79,171,232,1)] text-[19px] text-white py-3 px-8 rounded-lg hover:bg-[#4a95c8] transition-colors">
-                    اشترك بباقتك الان
-                </a>
+                <!-- Stat: Featured Ad -->
+                <div class="flex flex-col items-center text-center px-2">
+                    <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان مميز</p>
+                    <p class="text-[37.3px] font-bold text-[rgba(203,84,75,1)] my-1">5</p>
+                    <p class="text-xs text-gray-400">إعلان متبقي</p>
+                </div>
+
+                <!-- Stat: Normal Ad -->
+                <div class="flex flex-col items-center text-center px-2 border-r-2 border-gray-200 md:border-r-2 mt-0">
+                    <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان عادي</p>
+                    <p class="text-[37.3px] font-bold text-[rgba(102,102,102,1)] my-1">7</p>
+                    <p class="text-xs text-gray-400">إعلان متبقي</p>
+                </div>
+
+                <!-- Stat: Exceptional Ad -->
+                <div class="flex flex-col items-center text-center px-2 border-r-2 border-gray-200">
+                    <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان استثنائي</p>
+                    <p class="text-[37.3px] font-bold text-[rgba(221,162,80,1)] my-1">3</p>
+                    <p class="text-xs text-gray-400">إعلان متبقي</p>
+                </div>
+
+
+                <!-- Stat: Map Ad -->
+                <div class="flex flex-col items-center text-center px-2 border-r-2 border-gray-200">
+                    <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان علي الخريطة</p>
+                    <p class="text-[37.3px] font-bold text-[rgba(113,183,159,1)] my-1">5</p>
+                    <p class="text-xs text-gray-400">إعلان متبقي</p>
+                </div>
+
+
+
             </div>
         </div>
     </div>
 
-    <section class="max-w-[1325px] w-full mx-auto py-12 lg:pt-[95px] px-0">
+     <section class=" w-full mx-auto py-8 px-4 lg:px-0">
 
         <!-- The Hero Slider Component (The code inside this component is the same) -->
         <div
@@ -109,22 +132,137 @@
     </section>
 
 
-@else
-<div class="w-full max-w-5xl mx-auto">
-            <div class="bg-[rgba(203,84,75,1)] h-[100px] text-white p-4 sm:p-5 rounded-2xl flex items-center">
-                <div class="flex items-center gap-6 w-full">
-                    <div class="w-7 h-7 flex-shrink-0 flex items-center justify-center border-2 border-white/50 rounded-full">
-                            <span class="font-mono font-bold text-lg italic">i</span>
+    <!-- Active Ads Section -->
+      <section class="w-full py-8">
+    <div class="w-full">
+        <!-- Section Header - Now responsive -->
+        <div class="flex flex-col items-start gap-4 mb-8 sm:flex-row sm:items-center sm:justify-between">
+            <h2 class="text-2xl font-bold font-madani text-rgba(26,26,26,1) sm:text-[26px]">
+                اعلانات مفعلة
+            </h2>
+            <a href="#" class="flex items-center self-stretch gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-[rgba(217,222,242,1)] rounded-lg sm:self-auto sm:px-6 sm:py-3 hover:bg-gray-50 transition-colors">
+                <span class="font-medium text-[14.64px] text-[rgba(48,62,124,1)]">رؤية الكل</span>
+                <img src="images/view-all-arrow.svg" alt="">
+            </a>
+        </div>
+
+        <!-- Ads Grid - Already responsive, no changes needed here -->
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+
+            <!-- Ad Card 1 -->
+            <!-- Changed h-[156px] to min-h-[156px] for flexibility on small screens -->
+            <div class="bg-[rgba(249,250,252,1)] min-h-[156px] rounded-xl shadow-sm p-5 flex items-center justify-between gap-4">
+                <!-- Left Side -->
+                <div class="flex flex-col justify-between h-full text-right">
+                    <div class="flex flex-col gap-2 text-right">
+                    <!-- Responsive font size -->
+                    <h3 class="font-semibold text-base sm:text-[17.49px] text-[rgba(26,26,26,1)]">فيلا متشطبة مميزة</h3>
+                    <!-- Responsive font size -->
+                    <p class="flex items-center gap-1 text-xs sm:text-[12.24px] text-[rgba(26,26,26,1)]">
+                        <svg class="w-3 h-3 text-[#303F7C]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                        <span>الرياض - الشرقية</span>
+                    </p>
                     </div>
-                    <div>
-                        <span class="hidden sm:inline font-bold">تنبيه!</span>
-                        <p class="text-sm sm:text-base">
-                            لم يتم تفعيل الحساب بعد من فضلك انتظر مراجعة البيانات لتفعيل حسابك واستقبال الطلبات
-                        </p>
-                    </div>
+                    <p class="flex items-center gap-1 text-[10.49px] text-[rgba(204,204,204,1)]">
+                        <img src="images/clock.svg" alt="">
+                        <span>20/6/2025</span>
+                    </p>
+                </div>
+                <!-- Right Side -->
+
+                <div class="flex flex-col items-end justify-between h-full text-left">
+                    <!-- Responsive padding and font size -->
+                    <span class="text-xs sm:text-[12.55px] font-medium px-3 sm:px-[18px] py-1 rounded-md bg-[rgba(230,230,230,1)] text-[rgba(153,153,153,1)]">عادي</span>
+                    <!-- Responsive padding -->
+                    <a href="#" class="bg-[rgba(48,62,124,1)] text-white flex items-center gap-3 text-[12px] font-medium px-4 sm:px-6 py-2 rounded-lg hover:bg-opacity-50 transition-colors">
+                        <span>رؤية التفاصيل</span>
+                        <img src="images/next-arrow.svg" alt="">
+                    </a>
                 </div>
             </div>
+
+            <!-- Ad Card 2 -->
+            <div class="bg-[rgba(249,250,252,1)] min-h-[156px] rounded-xl shadow-sm p-5 flex items-center justify-between gap-4">
+                <!-- Left Side -->
+                <div class="flex flex-col justify-between h-full text-right">
+                    <div class="flex flex-col gap-2 text-right">
+                    <h3 class="font-semibold text-base sm:text-[17.49px] text-[rgba(26,26,26,1)]">فيلا متشطبة مميزة</h3>
+                    <p class="flex items-center gap-1 text-xs sm:text-[12.24px] text-[rgba(26,26,26,1)]">
+                        <svg class="w-3 h-3 text-[#303F7C]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                        <span>الرياض - الشرقية</span>
+                    </p>
+                    </div>
+                    <p class="flex items-center gap-1 text-[10.49px] text-[rgba(204,204,204,1)]">
+                        <img src="images/clock.svg" alt="">
+                        <span>20/6/2025</span>
+                    </p>
+                </div>
+                <!-- Right Side -->
+
+                <div class="flex flex-col items-end justify-between h-full text-left">
+                    <span class="text-xs sm:text-[12.55px] font-medium px-3 sm:px-[18px] py-1 rounded-md bg-[rgba(221,162,80,0.18)] text-[rgba(221,162,80,1)]">مميز</span>
+                    <a href="#" class="bg-[rgba(48,62,124,1)] text-white flex items-center gap-3 text-[12px] font-medium px-4 sm:px-6 py-2 rounded-lg hover:bg-opacity-50 transition-colors">
+                        <span>رؤية التفاصيل</span>
+                        <img src="images/next-arrow.svg" alt="">
+                    </a>
+                </div>
+            </div>
+            <!-- Ad Card 3 -->
+            <div class="bg-[rgba(249,250,252,1)] min-h-[156px] rounded-xl shadow-sm p-5 flex items-center justify-between gap-4">
+                <!-- Left Side -->
+                <div class="flex flex-col justify-between h-full text-right">
+                    <div class="flex flex-col gap-2 text-right">
+                    <h3 class="font-semibold text-base sm:text-[17.49px] text-[rgba(26,26,26,1)]">فيلا متشطبة مميزة</h3>
+                    <p class="flex items-center gap-1 text-xs sm:text-[12.24px] text-[rgba(26,26,26,1)]">
+                        <svg class="w-3 h-3 text-[#303F7C]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                        <span>الرياض - الشرقية</span>
+                    </p>
+                    </div>
+                    <p class="flex items-center gap-1 text-[10.49px] text-[rgba(204,204,204,1)]">
+                        <img src="images/clock.svg" alt="">
+                        <span>20/6/2025</span>
+                    </p>
+                </div>
+                <!-- Right Side -->
+
+                <div class="flex flex-col items-end justify-between h-full text-left">
+                    <span class="text-xs sm:text-[12.55px] font-medium px-3 sm:px-[18px] py-1 rounded-md bg-[rgba(230,230,230,1)] text-[rgba(153,153,153,1)]">عادي</span>
+                    <a href="#" class="bg-[rgba(48,62,124,1)] text-white flex items-center gap-3 text-[12px] font-medium px-4 sm:px-6 py-2 rounded-lg hover:bg-opacity-50 transition-colors">
+                        <span>رؤية التفاصيل</span>
+                        <img src="images/next-arrow.svg" alt="">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Ad Card 4 -->
+            <div class="bg-[rgba(249,250,252,1)] min-h-[156px] rounded-xl shadow-sm p-5 flex items-center justify-between gap-4">
+                <!-- Left Side -->
+                <div class="flex flex-col justify-between h-full text-right">
+                    <div class="flex flex-col gap-2 text-right">
+                    <h3 class="font-semibold text-base sm:text-[17.49px] text-[rgba(26,26,26,1)]">فيلا متشطبة مميزة</h3>
+                    <p class="flex items-center gap-1 text-xs sm:text-[12.24px] text-[rgba(26,26,26,1)]">
+                        <svg class="w-3 h-3 text-[#303F7C]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                        <span>الرياض - الشرقية</span>
+                    </p>
+                    </div>
+                    <p class="flex items-center gap-1 text-[10.49px] text-[rgba(204,204,204,1)]">
+                        <img src="images/clock.svg" alt="">
+                        <span>20/6/2025</span>
+                    </p>
+                </div>
+                <!-- Right Side -->
+
+                <div class="flex flex-col items-end justify-between h-full text-left">
+                    <span class="text-xs sm:text-[12.55px] font-medium px-3 sm:px-[18px] py-1 rounded-md bg-[rgba(230,230,230,1)] text-[rgba(153,153,153,1)]">عادي</span>
+                    <a href="#" class="bg-[rgba(48,62,124,1)] text-white flex items-center gap-3 text-[12px] font-medium px-4 sm:px-6 py-2 rounded-lg hover:bg-opacity-50 transition-colors">
+                        <span>رؤية التفاصيل</span>
+                        <img src="images/next-arrow.svg" alt="">
+                    </a>
+                </div>
+            </div>
+
         </div>
-@endif
+    </div>
+</section>
 
 @endsection
