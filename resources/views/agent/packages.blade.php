@@ -1,4 +1,4 @@
-{{-- resources/views/agent/home.blade.php --}}
+{{-- resources/views/agent/package.blade.php --}}
 
 @extends('layouts.agent')
 
