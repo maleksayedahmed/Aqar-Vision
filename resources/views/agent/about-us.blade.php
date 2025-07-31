@@ -32,19 +32,19 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('agent.about-us') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg bg-[rgba(48,62,124,0.09)] text-[rgba(48,62,124,1)] font-normal text-[16px] transition-colors">
+                                <a href="{{ route('agent.about-us') }}" class="bg-[rgba(48,62,124,0.09)] flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
                                     <img src="{{ asset('images/about.svg') }}">
                                     <span>من نحن</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
+                                <a href="{{ route('agent.terms-of-use') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] font-normal text-[16px] transition-colors">
                                     <img src="{{ asset('images/use.svg') }}">
                                     <span>شروط الاستخدام</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('agent.contact') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
+                                <a href="{{ route('agent.complaints.create') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
                                     <img src="{{ asset('images/complain.svg') }}">
                                     <span>تقديم الشكاوي</span>
                                 </a>

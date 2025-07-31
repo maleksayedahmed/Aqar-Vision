@@ -11,6 +11,7 @@ use App\Http\Controllers\Agent\ProfileController as AgentProfileController;
 use App\Http\Controllers\Agent\AdController;
 use App\Http\Controllers\Agent\AboutController;
 use App\Http\Controllers\Agent\ComplaintController;
+use App\Http\Controllers\Agent\TermsController;
 
 
 Route::get('/', function () {
@@ -53,5 +54,7 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
     Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');
     Route::get('/complaints', [ComplaintController::class, 'create'])->name('complaints.create');
     Route::post('/complaints', [ComplaintController::class, 'store'])->name('complaints.store');
+    Route::get('/terms-of-use', [TermsController::class, 'index'])->name('terms-of-use');
+
 
 });

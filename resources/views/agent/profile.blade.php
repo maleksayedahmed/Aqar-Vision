@@ -18,33 +18,46 @@
             <div class="bg-white p-4 rounded-xl shadow-sm h-full">
                 <nav>
                     <ul class="space-y-1">
-                        {{-- Active Link --}}
                         <li>
-                            <a href="{{ route('agent.profile.edit') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg bg-[rgba(48,62,124,0.09)] text-[rgba(48,62,124,1)] font-normal text-[16px] transition-colors">
+                            <a href="{{ route('agent.profile.edit') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] bg-[rgba(48,62,124,0.09)]  hover:bg-gray-100 font-normal text-[16px] transition-colors">
                                 <img src="{{ asset('images/account.svg') }}">
                                 <span>حسابي</span>
                             </a>
                         </li>
-                        {{-- Other Links --}}
                         <li>
-                            <a href="#" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
+                            <a href="{{ route('agent.my-ads') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
                                 <img src="{{ asset('images/ads.svg') }}">
                                 <span>إعلاناتي</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('agent.contact') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
-                                <img src="{{ asset('images/complain.svg') }}">
-                                <span>تواصل معنا</span>
+                            <a href="#" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
+                                <img src="{{ asset('images/bell.svg') }}">
+                                <span>الاشعارات</span>
                             </a>
                         </li>
-                        {{-- Logout Form --}}
                         <li>
-                             <form method="POST" action="{{ route('logout') }}">
+                            <a href="{{ route('agent.about-us') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
+                                <img src="{{ asset('images/about.svg') }}">
+                                <span>من نحن</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('agent.terms-of-use') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] font-normal text-[16px] transition-colors">
+                                <img src="{{ asset('images/use.svg') }}">
+                                <span>شروط الاستخدام</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('agent.complaints.create') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
+                                <img src="{{ asset('images/complain.svg') }}">
+                                <span>تقديم الشكاوي</span>
+                            </a>
+                        </li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <a href="{{ route('logout') }}"
-                                   onclick="event.preventDefault(); this.closest('form').submit();"
-                                   class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg hover:bg-red-50 text-red-500 text-[16px] transition-colors">
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg hover:bg-red-50 text-red-500 text-[16px] transition-colors">
                                     <img src="{{ asset('images/log-out.svg') }}">
                                     <span>تسجيل الخروج</span>
                                 </a>
