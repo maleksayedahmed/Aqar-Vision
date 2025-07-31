@@ -8,6 +8,7 @@ use App\Http\Controllers\Agent\HomeController;
 use App\Http\Controllers\Agent\PackageController;
 use App\Http\Controllers\Agent\ContactController;
 use App\Http\Controllers\Agent\ProfileController as AgentProfileController;
+use App\Http\Controllers\Agent\AdController;
 
 
 Route::get('/', function () {
@@ -46,5 +47,6 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
     Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
         Route::get('/profile', [AgentProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [AgentProfileController::class, 'update'])->name('profile.update');
+    Route::get('/my-ads', [AdController::class, 'index'])->name('my-ads');
 
 });

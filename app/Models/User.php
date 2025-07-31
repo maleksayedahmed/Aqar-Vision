@@ -65,4 +65,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(Agency::class);
     }
+
+    /**
+     * Get all of the ads for the user.
+     */
+    public function ads()
+    {
+        return $this->hasMany(Ad::class);
+    }
 }
