@@ -10,6 +10,7 @@ use App\Http\Controllers\Agent\ContactController;
 use App\Http\Controllers\Agent\ProfileController as AgentProfileController;
 use App\Http\Controllers\Agent\AdController;
 use App\Http\Controllers\Agent\AboutController;
+use App\Http\Controllers\Agent\ComplaintController;
 
 
 Route::get('/', function () {
@@ -50,5 +51,7 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
     Route::patch('/profile', [AgentProfileController::class, 'update'])->name('profile.update');
     Route::get('/my-ads', [AdController::class, 'index'])->name('my-ads');
     Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');
+    Route::get('/complaints', [ComplaintController::class, 'create'])->name('complaints.create');
+    Route::post('/complaints', [ComplaintController::class, 'store'])->name('complaints.store');
 
 });
