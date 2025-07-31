@@ -9,6 +9,7 @@ use App\Http\Controllers\Agent\PackageController;
 use App\Http\Controllers\Agent\ContactController;
 use App\Http\Controllers\Agent\ProfileController as AgentProfileController;
 use App\Http\Controllers\Agent\AdController;
+use App\Http\Controllers\Agent\AboutController;
 
 
 Route::get('/', function () {
@@ -48,5 +49,6 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
         Route::get('/profile', [AgentProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [AgentProfileController::class, 'update'])->name('profile.update');
     Route::get('/my-ads', [AdController::class, 'index'])->name('my-ads');
+    Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');
 
 });
