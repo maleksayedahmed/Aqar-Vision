@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Agent\HomeController;
 use App\Http\Controllers\Agent\PackageController;
 use App\Http\Controllers\Agent\ContactController;
+use App\Http\Controllers\Agent\ProfileController as AgentProfileController;
 
 
 Route::get('/', function () {
@@ -41,7 +42,9 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/packages', [PackageController::class, 'index'])->name('packages');
-    Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
+    Route::get('/contact', [ContactController::class, 'create'])->name('contact');
     Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+        Route::get('/profile', [AgentProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [AgentProfileController::class, 'update'])->name('profile.update');
 
 });

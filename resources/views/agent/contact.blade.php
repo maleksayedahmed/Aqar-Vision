@@ -6,6 +6,8 @@
 
 @section('content')
 
+    <main class="flex lg:px-20 px-4  flex-col items-center lg:min-h-screen pt-[60px] pb-8 lg:pb-[140px]">
+
 @if (session('success'))
     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
         <strong class="font-bold">نجاح!</strong>
@@ -140,4 +142,6 @@
         </div>
     </div>
 </section>
+
+    </main>
 @endsection

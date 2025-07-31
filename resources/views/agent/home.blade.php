@@ -6,6 +6,8 @@
 
 @section('content')
 
+    <main class="flex lg:px-20 px-4  flex-col items-center lg:min-h-screen pt-[60px] pb-8 lg:pb-[140px]">
+
     <div class="w-full">
         <div class="bg-[rgba(249,250,252,1)] rounded-2xl p-6 sm:p-8 shadow-sm">
 
@@ -264,5 +266,6 @@
         </div>
     </div>
 </section>
+    </main>
 
 @endsection

@@ -6,6 +6,8 @@
 
 @section('content')
 
+    <main class="flex lg:px-20 px-4  flex-col items-center lg:min-h-screen pt-[60px] pb-8 lg:pb-[140px]">
+
 @if ($agent->user && $agent->user->is_active)
     <!-- Account Activation Section -->
     <div class="w-full mx-auto">
@@ -127,4 +129,5 @@
         </div>
 @endif
 
+    </main>
 @endsection

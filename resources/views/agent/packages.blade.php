@@ -6,6 +6,8 @@
 
 @section('content')
 
+    <main class="flex lg:px-20 px-4  flex-col items-center lg:min-h-screen pt-[60px] pb-8 lg:pb-[140px]">
+
 <!-- Responsive Pricing Section -->
 <section class="pb-10"> 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"> 
@@ -184,4 +186,6 @@
         updatePrices(initialBillingType);
     });
 </script>
+    </main>
+
 @endsection

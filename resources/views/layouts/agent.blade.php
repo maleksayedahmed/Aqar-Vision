@@ -23,9 +23,8 @@
     @include('partials.agent-header')
 
     {{-- 2. This is where the unique page content will be injected --}}
-    <main class="flex lg:px-20 px-4  flex-col items-center lg:min-h-screen pt-[60px] pb-8 lg:pb-[140px]">
         @yield('content')
-    </main>
+    
 
     {{-- 3. Include the Footer Partial --}}
     @include('partials.agent-footer')
