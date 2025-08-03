@@ -12,11 +12,10 @@ use App\Http\Controllers\Agent\AdController;
 use App\Http\Controllers\Agent\AboutController;
 use App\Http\Controllers\Agent\ComplaintController;
 use App\Http\Controllers\Agent\TermsController;
+use App\Http\Controllers\HomeController as UserHomeController;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [UserHomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
@@ -39,9 +38,6 @@ require __DIR__.'/admin.php';
 
 
 
-// ===================================
-// AGENT ROUTES
-// ===================================
 Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
