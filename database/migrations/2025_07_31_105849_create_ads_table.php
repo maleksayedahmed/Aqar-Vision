@@ -8,47 +8,66 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * This method creates the 'ads' table with all necessary columns
-     * to store advertisement information.
      */
     public function up(): void
     {
         Schema::create('ads', function (Blueprint $table) {
             $table->id();
 
-            // Foreign key to link the ad to the user who created it.
-            // If the user is deleted, all their ads are also deleted.
+            // Foreign Keys
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            
-            // Foreign key to link to the type of ad package purchased (e.g., "Featured Ad").
-            // If the AdPrice record is deleted, this value becomes null, but the ad remains.
             $table->foreignId('ad_price_id')->nullable()->constrained()->onDelete('set null');
 
-            // Core details of the property advertisement
+            // --- Step 1 Data ---
+            
+            // Basic Info
             $table->string('title');
+            $table->string('age')->nullable();
+            $table->string('transaction_type');
+            $table->string('floor_number')->nullable();
+            $table->decimal('price', 15, 2);
+            $table->string('finishing_status');
+            $table->string('property_type');
+            $table->string('direction')->nullable();
+            $table->unsignedInteger('bathrooms');
+            $table->unsignedInteger('rooms');
+            $table->decimal('area', 10, 2);
             $table->text('description')->nullable();
-            $table->string('location')->nullable();
-            $table->string('property_type')->nullable(); // e.g., 'Villa', 'Apartment', 'Land'
 
-            // Status of the ad to manage its lifecycle
-            $table->enum('status', ['active', 'pending', 'expired', 'rejected', 'deleted'])->default('pending');
-            
-            // The date and time when the ad will no longer be active.
-            $table->timestamp('expires_at')->nullable(); 
-            
-            // Standard timestamps for creation and updates.
-            $table->timestamps(); 
-            
-            // Enables soft deleting for the "deleted" tab functionality.
+            // Location Info
+            $table->string('city');
+            $table->string('neighborhood');
+            $table->string('province');
+            $table->string('street');
+
+            // Features (stored as a JSON array)
+            $table->json('features')->nullable();
+
+            // Additional Details
+            $table->string('usage')->nullable();
+            $table->string('plan_number')->nullable();
+            $table->string('mortgaged')->nullable();
+            $table->string('furniture')->nullable();
+            $table->string('build_status')->nullable();
+            $table->string('building_number')->nullable();
+            $table->string('postal_code')->nullable();
+
+            // --- Step 2 Data ---
+
+            // Media (simple path storage)
+            $table->string('video_path', 2048)->nullable();
+            $table->json('images')->nullable();
+
+            // Status & Timestamps
+            $table->string('status')->default('pending');
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamps();
             $table->softDeletes();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * This method ensures that the table can be safely dropped if a rollback is needed.
      */
     public function down(): void
     {

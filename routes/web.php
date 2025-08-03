@@ -56,5 +56,13 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
     Route::post('/complaints', [ComplaintController::class, 'store'])->name('complaints.store');
     Route::get('/terms-of-use', [TermsController::class, 'index'])->name('terms-of-use');
 
+    Route::get('/ads/create', [AdController::class, 'create'])->name('ads.create');
+
+    Route::get('/ads/create/step-1/{adPrice}', [AdController::class, 'createStepOne'])->name('ads.create.step1');
+    Route::post('/ads/create/step-1', [AdController::class, 'storeStepOne'])->name('ads.store.step1');
+
+    Route::get('/ads/create/step-2', [AdController::class, 'createStepTwo'])->name('ads.create.step2');
+    Route::post('/ads/create/store', [AdController::class, 'storeAd'])->name('ads.store');
+
 
 });
