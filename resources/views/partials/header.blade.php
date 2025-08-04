@@ -1,4 +1,95 @@
-{{-- resources/views/partials/header.blade.php --}}
+{{-- This file now handles both guest and authenticated users --}}
+
+@guest
+{{-- ============================================= --}}
+{{-- THIS HEADER IS SHOWN ONLY FOR GUESTS --}}
+{{-- ============================================= --}}
+<header id="main-header" class="py-[5px] bg-[linear-gradient(90deg,_#F6F8FF_0%,_#FFFFFF_100%)] sticky top-0 z-50 transition-transform duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
+        <div class="flex flex-wrap items-center justify-between min-h-16 py-2">
+
+            <!-- Left side - Logo -->
+            <div class="flex items-center">
+                <a href="{{ route('home') }}">
+                    <img src="{{ asset('images/logo.png') }}" class="w-[70px] h-[60px]" alt="logo">
+                </a>
+            </div>
+
+            <!-- Right side - Controls -->
+            <div class="flex items-center gap-x-2 lg:gap-x-4">
+                <!-- Map Button -->
+                <button class="flex bg-[rgba(48,63,125,1)] hover:bg-blue-700 text-white px-2 py-1 sm:px-4 sm:py-2 rounded-lg items-center gap-2 transition-colors duration-200 text-[9px] sm:text-sm font-medium shadow-sm">
+                    <svg class="w-3 h-3 lg:w-4 lg:h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2C6.686 2 4 4.686 4 8c0 4.28 6 10 6 10s6-5.72 6-10c0-3.314-2.686-6-6-6zm0 8.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd"></path></svg>
+                    <span>بحث على الخريطة</span>
+                </button>
+
+                <!-- User Profile Dropdown / Login Trigger -->
+                <div class="relative">
+                    <button id="open-login-modal" type="button" class="flex items-center gap-x-1 sm:gap-x-2 text-sm font-medium text-gray-700 focus:outline-none focus:ring-offset-2 focus:ring-[#303f7d] rounded-full" aria-expanded="false" aria-haspopup="true">
+                        <span class="sr-only">Open user menu</span>
+                        <img src="{{ asset('images/pfp.png') }}" alt="User Profile" class="w-8 h-8 sm:w-auto sm:h-auto rounded-full">
+                        <div class="flex flex-col items-start text-xs">
+                            <span class="text-[10px] sm:text-[12px] text-[#B5B7BF] hidden sm:block">مرحبا بك</span>
+                            <span>تسجيل الدخول</span>
+                        </div>
+                        <svg class="block w-2.5 h-2.5 ms-1 transition-transform" xmlns="http://www.w3.org/2000/svg" width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M0.914031 1.71206L3.64411 4.898C3.68811 4.94932 3.7427 4.99052 3.80413 5.01877C3.86555 5.04702 3.93236 5.06164 3.99997 5.06164C4.06758 5.06164 4.13438 5.04702 4.19581 5.01877C4.25723 4.99052 4.31182 4.94932 4.35583 4.898L7.08591 1.71206C7.34645 1.40796 7.13044 0.938232 6.73005 0.938232H1.26911C0.868718 0.938232 0.652702 1.40796 0.914031 1.71206Z" fill="#0D1226"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Login Modal -->
+<div id="login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl pt-12 shadow-xl w-full max-w-md m-4 p-8 relative flex flex-col items-center gap-y-5">
+        <!-- Close Button -->
+        <button id="close-login-modal" class="absolute top-4 left-4 w-8 h-8 bg-gray-800 text-white rounded-md flex items-center justify-center hover:bg-gray-700 transition-colors" aria-label="Close modal">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <!-- Logo -->
+        <img src="{{ asset('images/logo.png') }}" class="w-[70px] h-[60px]" alt="logo">
+        <!-- Heading -->
+        <h2 class="text-[16px] font-bold text-[rgba(26,26,26,1)]">تسجيل الدخول لحسابك</h2>
+        <!-- Social Logins -->
+        <div class="w-full space-y-3">
+            <button class="w-full border border-gray-300 rounded-lg py-3 px-4 font-bold text-[14px] flex items-center gap-[21px] hover:bg-gray-50 transition-colors">
+                <img src="{{ asset('images/Google.svg') }}" alt="Google">
+                <span>متابعة مع جوجل</span>
+            </button>
+             <button class="w-full border border-gray-300 rounded-lg py-3 px-4 text-center font-bold text-[14px] flex items-center gap-[21px] hover:bg-gray-50 transition-colors">
+                <img src="{{ asset('images/Apple.svg') }}" alt="Apple">
+                <span>متابعة مع ابل</span>
+            </button>
+        </div>
+        <!-- Separator -->
+        <div class="text-gray-500 font-medium">أو</div>
+        <!-- Other Login Methods -->
+        <div class="w-full space-y-3">
+            <a href="{{ route('login') }}" class="w-full border border-gray-300 rounded-lg py-3 px-4 text-center font-bold text-[14px] flex items-center gap-[14px] hover:bg-gray-50 transition-colors">
+                <img src="{{ asset('images/email-dark.svg') }}" alt="Email">
+                <span>تسجيل الدخول باستخدام البريد الإلكتروني</span>
+            </a>
+            <button class="w-full border border-gray-300 rounded-lg py-3 px-4 text-center font-bold text-[14px] flex items-center gap-[14px] hover:bg-gray-50 transition-colors">
+                <img src="{{ asset('images/phone-dark.png') }}" alt="Phone">
+                <span>تسجيل الدخول باستخدام رقم الجوال</span>
+            </button>
+        </div>
+        <!-- Sign Up Link -->
+        <p class="text-sm text-gray-600 pt-3">
+            عضو جديد في عقار فيجن؟ 
+            <a href="{{ route('register') }}" class="font-semibold text-blue-600 hover:text-blue-700 underline">قم بإنشاء حساب الآن</a>
+        </p>
+    </div>
+</div>
+@endguest
+
+
+
+@auth
+{{-- ==================================================== --}}
+{{-- THIS HEADER IS SHOWN ONLY FOR AUTHENTICATED USERS --}}
+{{-- ==================================================== --}}
 <header id="main-header" class="py-[5px] bg-[linear-gradient(90deg,_#F6F8FF_0%,_#FFFFFF_100%)] sticky top-0 z-50 transition-transform duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
         <div class="flex items-center justify-between h-16">
@@ -24,30 +115,11 @@
                         <a href="#" class="text-sm font-medium text-gray-700 hover:text-[#303f7d]">نبذة عنا</a>
                         <a href="#" class="text-sm font-medium text-gray-700 hover:text-[#303f7d]">تواصل معنا</a>
                     </nav>
-                    <!-- Language Switcher (Optional) -->
-                    <div class="hidden md:flex">
-                        <button class="flex items-center gap-x-2 text-sm bg-gray-200 hover:bg-gray-300 p-0.5 rounded-lg transition-colors">
-                            <div class="flex items-center gap-x-1 text-white">
-                                <img src="{{ asset('images/arabic.png') }}" alt="arabic flag">
-                            </div>
-                            <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                        </button>
-                    </div>
                 </div>
             </div>
 
             <!-- Right side Controls -->
             <div class="flex items-center gap-x-4 lg:gap-x-[45px]">
-                @guest
-                {{-- Content for Guests --}}
-                <button id="open-login-modal" class="flex bg-[rgba(48,63,125,1)] hover:bg-blue-700 text-white px-4 py-2 rounded-lg items-center gap-2 transition-colors duration-200 text-sm font-medium shadow-sm">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2C6.686 2 4 4.686 4 8c0 4.28 6 10 6 10s6-5.72 6-10c0-3.314-2.686-6-6-6zm0 8.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd"/></svg>
-                    <span>تسجيل الدخول</span>
-                </button>
-                @endguest
-
-                @auth
-                {{-- FULL Content for Authenticated Users --}}
                 <div class="flex items-center gap-[12.5px]">
                     <!-- Messages Icon -->
                     <button class="hidden lg:block relative rounded-lg transition-colors">
@@ -67,22 +139,14 @@
                         </button>
 
                         <div id="user-menu" class="hidden absolute left-[-30px] mt-4 w-[200px] origin-top-left rounded-lg bg-white p-5 shadow-lg" role="menu">
+                             <!-- Dropdown Links -->
                             <div class="space-y-[10px]">
-                                <a href="#" class="flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
+                                <a href="{{ route('profile.edit') }}" class="flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none"><path d="M6.77894 7.44089C6.73386 7.43523 6.68825 7.43523 6.64317 7.44089C6.15724 7.4231 5.69771 7.21528 5.36345 6.86214C5.02918 6.509 4.84688 6.03877 4.85578 5.55259C4.86468 5.06642 5.06405 4.60317 5.41102 4.2625C5.75798 3.92182 6.2248 3.73096 6.71106 3.73096C7.19731 3.73096 7.66413 3.92182 8.0111 4.2625C8.35806 4.60317 8.55744 5.06642 8.56633 5.55259C8.57523 6.03877 8.39293 6.509 8.05867 6.86214C7.7244 7.21528 7.26487 7.4231 6.77894 7.44089Z" stroke="#303E7C" stroke-width="1.12978" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5242 11.1752C9.48455 12.1308 8.12327 12.6599 6.7112 12.6574C5.29912 12.6599 3.93785 12.1308 2.89819 11.1752C2.94757 10.8733 3.0629 10.5859 3.23597 10.3337C3.40905 10.0814 3.63561 9.87036 3.89953 9.71562C4.7503 9.21014 5.7216 8.94336 6.7112 8.94336C7.7008 8.94336 8.6721 9.21014 9.52286 9.71562C9.78679 9.87036 10.0134 10.0814 10.1864 10.3337C10.3595 10.5859 10.4748 10.8733 10.5242 11.1752Z" stroke="#303E7C" stroke-width="1.12978" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.3685 7.00005C12.3685 8.11895 12.0367 9.21273 11.4151 10.1431C10.7935 11.0734 9.90991 11.7985 8.87618 12.2267C7.84245 12.6549 6.70496 12.7669 5.60756 12.5486C4.51015 12.3303 3.50212 11.7915 2.71094 11.0003C1.91975 10.2092 1.38095 9.20113 1.16266 8.10373C0.944373 7.00633 1.05641 5.86884 1.48459 4.8351C1.91278 3.80137 2.63789 2.91783 3.56822 2.2962C4.49855 1.67457 5.59233 1.34277 6.71123 1.34277C8.21164 1.34277 9.65059 1.93881 10.7115 2.99975C11.7725 4.0607 12.3685 5.49965 12.3685 7.00005Z" stroke="#303E7C" stroke-width="1.12978" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     <span>ملفي الشخصي</span>
                                 </a>
-                                <a href="#" class="flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M6.99999 11.1974C5.68211 11.1974 4.36261 11.0154 3.08211 10.653C2.51174 10.4922 2.06161 10.0745 1.84711 9.5074C1.62936 8.93053 1.69599 8.27728 2.02749 7.76053L2.63199 6.81965C2.90336 6.4134 2.93911 5.8349 2.93911 5.37665C2.93911 4.25703 3.35999 3.20403 4.12374 2.41103C4.89074 1.61478 5.91286 1.17603 7.00162 1.17603C8.08874 1.17603 9.11087 1.61478 9.87949 2.41103C10.6432 3.20403 11.0641 4.25703 11.0641 5.37665V5.3799C11.0641 5.40753 11.0674 6.24278 11.3842 6.83915L11.9757 7.7589C12.3072 8.27565 12.3755 8.9289 12.1561 9.50578C11.9416 10.0729 11.4915 10.4905 10.9211 10.6514C9.63736 11.0154 8.31786 11.1974 6.99999 11.1974ZM3.30799 7.26978L2.70999 8.19928C2.51336 8.50478 2.47599 8.8769 2.60599 9.21815C2.72786 9.54153 2.98299 9.7804 3.30311 9.86978C5.72111 10.5539 8.27886 10.5539 10.6969 9.86978C11.017 9.77878 11.2705 9.54153 11.394 9.21815C11.524 8.87528 11.485 8.50478 11.29 8.19928L10.6822 7.2519L10.6757 7.2389C10.2516 6.46053 10.25 5.44815 10.25 5.37665C10.25 3.50953 8.79237 1.98853 6.99999 1.98853C5.20761 1.98853 3.74999 3.5079 3.74999 5.37665C3.74999 5.95028 3.69961 6.68153 3.30799 7.26978Z" fill="#303E7C"/><path d="M6.99991 12.8223C5.73729 12.8223 4.60466 12.0635 4.18216 10.9341C4.10416 10.7245 4.20979 10.4905 4.41941 10.4108C4.62904 10.3328 4.86304 10.4385 4.94266 10.6481C5.24816 11.4622 6.07529 12.0098 6.99991 12.0098C7.92454 12.0098 8.75166 11.4622 9.05716 10.6481C9.13516 10.4385 9.37079 10.3312 9.58041 10.4108C9.79004 10.4888 9.89729 10.7245 9.81767 10.9341C9.39516 12.0635 8.26254 12.8223 6.99991 12.8223Z" fill="#303E7C"/></svg>
-                                    <span>الاشعارات</span>
-                                </a>
-                                <a href="#" class="flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" viewBox="0 0 15 14" fill="none"><path d="M7.14636 1.3324C7.04809 1.23413 6.90945 1.18713 6.77188 1.20914C6.63473 1.22964 6.51532 1.31424 6.45038 1.43707L3.6972 6.63794L2.1965 8.13843C1.73486 8.60049 1.59366 9.25653 1.75687 9.84485C1.21661 10.531 1.25506 11.5271 1.88739 12.1603C2.22876 12.5013 2.67694 12.6717 3.12512 12.6717C3.50793 12.6717 3.88647 12.5395 4.20264 12.2906C4.35623 12.3333 4.51303 12.3624 4.67154 12.3624C4.97851 12.3622 5.28314 12.2761 5.55572 12.1161L6.6828 13.2427C6.89578 13.4559 7.17584 13.5623 7.4559 13.5623C7.73596 13.5623 8.01623 13.4559 8.22943 13.2427C8.65582 12.8163 8.65582 12.1225 8.22943 11.6961L7.14657 10.6133L7.40954 10.3503L12.6104 7.59668C12.733 7.53174 12.8176 7.41232 12.8386 7.27496C12.8591 7.13782 12.8134 6.99875 12.7151 6.9007L7.14636 1.3324ZM2.50625 11.5414C2.27832 11.3133 2.20611 10.9905 2.28281 10.6991L3.34836 11.7647C3.05719 11.8414 2.7344 11.7694 2.50625 11.5414ZM4.0531 11.2321L2.81537 9.99438C2.47442 9.65344 2.47442 9.09824 2.81537 8.75708L4.0531 7.51935L6.52814 9.99438L5.2904 11.2319C4.94946 11.5733 4.39447 11.5735 4.0531 11.2321ZM7.61078 12.3148C7.66568 12.3697 7.67401 12.4352 7.67401 12.4694C7.67401 12.5036 7.66568 12.5692 7.61099 12.6239C7.52725 12.7072 7.38562 12.7083 7.30145 12.6241L6.21838 11.5414L6.52792 11.2319L7.61078 12.3148ZM7.22754 9.4567L4.591 6.81973L6.94662 2.36996L11.6777 7.10065L7.22754 9.4567ZM8.81262 1.75024V0.875244C8.81262 0.633636 9.0083 0.437744 9.25012 0.437744C9.49194 0.437744 9.68762 0.633636 9.68762 0.875244V1.75024C9.68762 1.99185 9.49194 2.18774 9.25012 2.18774C9.0083 2.18774 8.81262 1.99185 8.81262 1.75024ZM13.6251 4.81253C13.6251 5.05414 13.4294 5.25003 13.1876 5.25003H12.3126C12.0708 5.25003 11.8751 5.05414 11.8751 4.81253C11.8751 4.57092 12.0708 4.37503 12.3126 4.37503H13.1876C13.4294 4.37503 13.6251 4.57092 13.6251 4.81253ZM10.6908 3.37186C10.5199 3.20096 10.5199 2.9241 10.6908 2.7532L11.5658 1.8782C11.7367 1.70731 12.0135 1.70731 12.1844 1.8782C12.3553 2.0491 12.3553 2.32596 12.1844 2.49686L11.3094 3.37186C11.224 3.45731 11.1121 3.50003 11.0001 3.50003C10.8882 3.50003 10.7762 3.45731 10.6908 3.37186Z" fill="#303E7C"/></svg>
-                                    <span>إعلاناتي</span>
-                                </a>
-                                {{-- Add other links as needed --}}
+                                <!-- ... Other links -->
                             </div>
-                           
                             <!-- Logout Form -->
                             <div class="w-full pt-6 flex justify-center">
                                 <form method="POST" action="{{ route('logout') }}">
@@ -96,7 +160,6 @@
                         </div>
                     </div>
                 </div>
-                @endauth
             </div>
         </div>
 
@@ -108,33 +171,7 @@
                 <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#303f7d] hover:bg-gray-50">نبذة عنا</a>
                 <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#303f7d] hover:bg-gray-50">تواصل معنا</a>
             </div>
-             @guest
-            <div class="pt-4 pb-3 border-t border-gray-200">
-                <div class="px-3">
-                    <button id="open-login-modal-mobile" class="w-full flex justify-center bg-[rgba(48,63,125,1)] hover:bg-blue-700 text-white px-4 py-2 rounded-lg items-center gap-2 transition-colors duration-200 text-sm font-medium shadow-sm">
-                        <span>تسجيل الدخول</span>
-                    </button>
-                </div>
-            </div>
-            @endguest
         </div>
     </div>
 </header>
-
-{{-- Include Login Modal only for guests --}}
-@guest
-    @include('partials.login-modal')
-
-    @push('scripts')
-    <script>
-        // Script to ensure mobile login button also opens the modal
-        document.addEventListener('DOMContentLoaded', function() {
-            const openModalButtonMobile = document.getElementById('open-login-modal-mobile');
-            const loginModal = document.getElementById('login-modal');
-            if(openModalButtonMobile && loginModal) {
-                openModalButtonMobile.addEventListener('click', () => loginModal.classList.remove('hidden'));
-            }
-        });
-    </script>
-    @endpush
-@endguest
+@endauth
