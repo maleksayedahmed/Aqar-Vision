@@ -29,15 +29,18 @@
     {{-- 3. Include the Footer Partial --}}
     @include('partials.footer')
 
-    {{-- For guests, include both the login and signup modals --}}
+    {{-- For guests, include all modals needed for the auth flow --}}
     @guest
         @include('partials.login-modal')
         @include('partials.signup-modal')
+        @include('partials.login-email-modal')
+        @include('partials.login-phone-modal')
+        @include('partials.login-otp-modal')
     @endguest
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Header scroll functionality
+            // --- General Header and Dropdown Logic ---
             const menuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
 
@@ -53,9 +56,7 @@
             if (header) {
                 window.addEventListener('scroll', () => {
                     const currentScrollY = window.scrollY;
-                    if (currentScrollY <= 0) {
-                        header.classList.remove('-translate-y-full');
-                    } else if (currentScrollY < lastScrollY) {
+                    if (currentScrollY <= 0 || currentScrollY < lastScrollY) {
                         header.classList.remove('-translate-y-full');
                     } else {
                         header.classList.add('-translate-y-full');
@@ -64,7 +65,6 @@
                 });
             }
 
-            // --- User Profile Dropdown Logic ---
             const userMenuButton = document.getElementById('user-menu-button');
             const userMenu = document.getElementById('user-menu');
 
@@ -76,56 +76,107 @@
                 });
 
                 window.addEventListener('click', (event) => {
-                    if (!userMenu.classList.contains('hidden') && !userMenu.contains(event.target) && !userMenuButton.contains(event.target)) {
+                    if (userMenu && !userMenu.classList.contains('hidden') && !userMenu.contains(event.target) && !userMenuButton.contains(event.target)) {
                         userMenu.classList.add('hidden');
                         userMenuButton.setAttribute('aria-expanded', 'false');
                     }
                 });
             }
 
-            // --- MODAL SWITCHING LOGIC ---
+            // --- FULL MODAL SWITCHING LOGIC ---
             const loginModal = document.getElementById('login-modal');
             const signupModal = document.getElementById('signup-modal');
+            const loginEmailModal = document.getElementById('login-email-modal');
+            const loginPhoneModal = document.getElementById('login-phone-modal');
+            const otpModal = document.getElementById('otp-modal');
 
+            const allModals = [loginModal, signupModal, loginEmailModal, loginPhoneModal, otpModal];
+
+            // All Buttons that control modals
             const openLoginModalBtn = document.getElementById('open-login-modal');
-            const closeLoginModalBtn = document.getElementById('close-login-modal');
-            const closeSignupModalBtn = document.getElementById('close-signup-modal');
+            const closeButtons = document.querySelectorAll('#close-login-modal, #close-signup-modal, #close-login-email-modal, #close-login-phone-modal, #close-otp-modal');
+            
+            const switchToSignupBtns = document.querySelectorAll('#switch-to-signup-modal, #switch-to-signup-from-email-modal, #switch-to-signup-from-phone-modal, #switch-to-signup-from-otp-modal');
+            const switchToLoginBtns = document.querySelectorAll('#switch-to-login-modal, #back-to-initial-login-modal, #back-to-initial-login-from-phone');
+            const switchToLoginEmailBtn = document.getElementById('switch-to-login-email-modal');
+            const switchToLoginPhoneBtn = document.getElementById('switch-to-login-phone-modal');
+            const backToLoginPhoneBtn = document.getElementById('back-to-login-phone-modal');
 
-            const switchToSignupBtn = document.getElementById('switch-to-signup-modal');
-            const switchToLoginBtn = document.getElementById('switch-to-login-modal');
-            const backToLoginBtn = document.getElementById('back-to-login-modal');
-
-            // Functions to toggle modals
-            const showLoginModal = () => {
-                if (signupModal) signupModal.classList.add('hidden');
-                if (loginModal) loginModal.classList.remove('hidden');
+            // General function to show a specific modal
+            const showModal = (modalToShow) => {
+                allModals.forEach(modal => modal && modal.classList.add('hidden'));
+                if (modalToShow) modalToShow.classList.remove('hidden');
             };
-            const showSignupModal = () => {
-                if (loginModal) loginModal.classList.add('hidden');
-                if (signupModal) signupModal.classList.remove('hidden');
-            };
-            const closeAllModals = () => {
-                if (loginModal) loginModal.classList.add('hidden');
-                if (signupModal) signupModal.classList.add('hidden');
-            };
+            const closeAllModals = () => allModals.forEach(modal => modal && modal.classList.add('hidden'));
 
-            // Event Listeners for buttons
-            if (openLoginModalBtn) openLoginModalBtn.addEventListener('click', showLoginModal);
-            if (closeLoginModalBtn) closeLoginModalBtn.addEventListener('click', closeAllModals);
-            if (closeSignupModalBtn) closeSignupModalBtn.addEventListener('click', closeAllModals);
+            // Event Listeners
+            if (openLoginModalBtn) openLoginModalBtn.addEventListener('click', () => showModal(loginModal));
+            
+            closeButtons.forEach(btn => btn && btn.addEventListener('click', closeAllModals));
+            switchToSignupBtns.forEach(btn => btn && btn.addEventListener('click', () => showModal(signupModal)));
+            switchToLoginBtns.forEach(btn => btn && btn.addEventListener('click', () => showModal(loginModal)));
 
-            if (switchToSignupBtn) switchToSignupBtn.addEventListener('click', showSignupModal);
-            if (switchToLoginBtn) switchToLoginBtn.addEventListener('click', showLoginModal);
-            if (backToLoginBtn) backToLoginBtn.addEventListener('click', showLoginModal);
-
-            // Close modals if the background overlay is clicked
-            if (loginModal) loginModal.addEventListener('click', (e) => {
-                if (e.target === loginModal) closeAllModals();
+            if (switchToLoginEmailBtn) switchToLoginEmailBtn.addEventListener('click', () => showModal(loginEmailModal));
+            if (switchToLoginPhoneBtn) switchToLoginPhoneBtn.addEventListener('click', () => showModal(loginPhoneModal));
+            if (backToLoginPhoneBtn) backToLoginPhoneBtn.addEventListener('click', () => showModal(loginPhoneModal));
+            
+            // Background click to close
+            allModals.forEach(modal => {
+                if (modal) modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeAllModals();
+                });
             });
-            if (signupModal) signupModal.addEventListener('click', (e) => {
-                if (e.target === signupModal) closeAllModals();
-            });
+
+            // --- OTP Input Logic ---
+            const otpInputsContainer = document.getElementById('otp-inputs');
+            if (otpInputsContainer) {
+                const inputs = otpInputsContainer.querySelectorAll('.otp-input');
+                const hiddenInput = document.getElementById('otp-full-input');
+
+                inputs.forEach((input, index) => {
+                    input.addEventListener('input', (e) => {
+                        if (e.target.value && index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                        if (hiddenInput) {
+                            hiddenInput.value = Array.from(inputs).map(i => i.value).join('');
+                        }
+                    });
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === "Backspace" && !e.target.value && index > 0) {
+                            inputs[index - 1].focus();
+                        }
+                    });
+                });
+            }
+
+            // --- Logic to show appropriate modal after form submission (from session flash) ---
+            @if (session('show_otp_modal'))
+                showModal(otpModal);
+            @endif
+
+            @if ($errors->any())
+                @if ($errors->has('name') || $errors->has('terms') || (old('password') && Route::currentRouteName() == 'register'))
+                    showModal(signupModal);
+                @elseif (old('email') && !$errors->has('phone') && Route::currentRouteName() == 'login')
+                    showModal(loginEmailModal);
+                @elseif ($errors->has('phone'))
+                     showModal(loginPhoneModal);
+                @elseif ($errors->has('otp'))
+                     showModal(otpModal);
+                @endif
+            @endif
         });
+
+        // Function to toggle password visibility
+        function togglePasswordVisibility(button) {
+            const input = button.nextElementSibling;
+            if (input && input.type === "password") {
+                input.type = "text";
+            } else if (input) {
+                input.type = "password";
+            }
+        }
     </script>
 
     {{-- This allows adding extra scripts from child pages if needed --}}

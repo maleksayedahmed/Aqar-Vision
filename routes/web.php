@@ -1,9 +1,17 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
+// General Controllers
+use App\Http\Controllers\HomeController as UserHomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\UserRequestController;
-use Illuminate\Support\Facades\Route;
+
+// Auth Controllers (including the new one)
+use App\Http\Controllers\Auth\LoginWithPhoneController;
+
+// Agent Controllers
 use App\Http\Controllers\Agent\HomeController;
 use App\Http\Controllers\Agent\PackageController;
 use App\Http\Controllers\Agent\ContactController;
@@ -12,10 +20,23 @@ use App\Http\Controllers\Agent\AdController;
 use App\Http\Controllers\Agent\AboutController;
 use App\Http\Controllers\Agent\ComplaintController;
 use App\Http\Controllers\Agent\TermsController;
-use App\Http\Controllers\HomeController as UserHomeController;
 
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// Homepage Route
 Route::get('/', [UserHomeController::class, 'index'])->name('home');
+
+// ===================================
+// NEW PHONE LOGIN ROUTES (THIS IS THE FIX)
+// ===================================
+Route::post('/login/phone', [LoginWithPhoneController::class, 'sendOtp'])->name('login.phone.send');
+Route::post('/login/otp/verify', [LoginWithPhoneController::class, 'verifyOtp'])->name('login.phone.verify');
+
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
@@ -38,13 +59,16 @@ require __DIR__.'/admin.php';
 
 
 
+// ===================================
+// AGENT ROUTES
+// ===================================
 Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/packages', [PackageController::class, 'index'])->name('packages');
     Route::get('/contact', [ContactController::class, 'create'])->name('contact');
     Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-        Route::get('/profile', [AgentProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [AgentProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [AgentProfileController::class, 'update'])->name('profile.update');
     Route::get('/my-ads', [AdController::class, 'index'])->name('my-ads');
     Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');
@@ -59,6 +83,5 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
 
     Route::get('/ads/create/step-2', [AdController::class, 'createStepTwo'])->name('ads.create.step2');
     Route::post('/ads/create/store', [AdController::class, 'storeAd'])->name('ads.store');
-
 
 });
