@@ -19,6 +19,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
+        // This still points to the default register page, which is fine as a fallback.
         return view('auth.register');
     }
 
@@ -29,15 +30,22 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // UPDATED: Added validation for phone and terms.
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['required', 'string', 'max:20'], // Added phone validation
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'terms' => ['accepted'], // Ensures the terms checkbox is checked
+        ], [
+            'terms.accepted' => 'يجب عليك الموافقة على الشروط والأحكام.', // Custom error message
         ]);
 
+        // UPDATED: Added 'phone' to the create method.
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
         ]);
 
@@ -45,6 +53,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('admin.dashboard', absolute: false));
+        // UPDATED: Redirect to the homepage instead of the admin dashboard.
+        return redirect(route('home'));
     }
 }
