@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\AgencyTypeController;
 use App\Http\Controllers\Admin\AgentController;
 use App\Http\Controllers\Admin\AgentTypeController;
 use App\Http\Controllers\Admin\CommercialRecordController;
+use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LicenseController;
 use App\Http\Controllers\Admin\LicenseTypeController;
@@ -56,6 +58,10 @@ Route::middleware(['auth' ,Language::class])
     Route::resource('property-purposes', PropertyPurposeController::class)->except('show');
     Route::post('property-purposes/{propertyPurpose}/toggle-status', [PropertyPurposeController::class, 'toggleStatus'])->name('property-purposes.toggle-status');
     Route::resource('property-attributes', PropertyAttributeController::class)->except('show');
+
+    // Locations (Countries & Cities)
+    Route::resource('countries', CountryController::class)->except('show');
+    Route::resource('cities', CityController::class)->except('show');
 
     // Monetization
     Route::resource('plans', PlanController::class)->except('show');
