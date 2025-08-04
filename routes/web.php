@@ -20,6 +20,7 @@ use App\Http\Controllers\Agent\AdController;
 use App\Http\Controllers\Agent\AboutController;
 use App\Http\Controllers\Agent\ComplaintController;
 use App\Http\Controllers\Agent\TermsController;
+use App\Http\Controllers\LocationController;
 
 
 /*
@@ -31,11 +32,9 @@ use App\Http\Controllers\Agent\TermsController;
 // Homepage Route
 Route::get('/', [UserHomeController::class, 'index'])->name('home');
 
-// ===================================
-// NEW PHONE LOGIN ROUTES (THIS IS THE FIX)
-// ===================================
 Route::post('/login/phone', [LoginWithPhoneController::class, 'sendOtp'])->name('login.phone.send');
 Route::post('/login/otp/verify', [LoginWithPhoneController::class, 'verifyOtp'])->name('login.phone.verify');
+Route::get('/api/locations/countries/{country}/cities', [LocationController::class, 'getCities'])->name('api.locations.cities');
 
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
