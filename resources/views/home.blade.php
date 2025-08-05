@@ -179,7 +179,7 @@
             <div class="relative">
                 <div id="gradient-left" class="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none transition-opacity duration-300 opacity-0"></div>
                 <div id="gradient-right" class="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none transition-opacity duration-300"></div>
-                <div id="agents-slider" class="flex overflow-x-auto gap-5 no-scrollbar px-4 sm:pl-6 lg:pl-8">
+                <div id="agents-slider" class="flex overflow-x-auto gap-5 cursor-grab active:cursor-grabbing select-none px-4 sm:pl-6 lg:pl-8" style="scrollbar-width: none;">
                     @for ($i = 0; $i < 4; $i++)
                     <div class="bg-[rgba(247,249,250,1)] p-5 rounded-2xl flex flex-col gap-2 min-w-[380px]">
                         <div class="self-end"><span class="bg-[#e6f6f0] text-[#1d8e5a] text-[11px] font-medium px-2 py-1 rounded-md">مسوق عقاري</span></div>
@@ -254,34 +254,86 @@
         }
 
         // Property Slider Functionality
-        const sliderTrack = document.getElementById('sliderTrack');
-        if (sliderTrack) {
-            const nextBtn = document.getElementById('nextBtn');
-            const prevBtn = document.getElementById('prevBtn');
-            const cards = sliderTrack.querySelectorAll('.slider-card');
-            
-            if (cards.length) {
-                let currentIndex = 0;
-                const cardWidth = 320;
-                const gap = 16;
-                const slideDistance = cardWidth + gap;
-                const maxIndex = cards.length > 0 ? cards.length - 1 : 0;
-                
-                function updateSliderPosition() {
-                    const translateX = currentIndex * slideDistance * -1;
-                    sliderTrack.style.transform = `translateX(${translateX}px)`;
-                    if (prevBtn && nextBtn) {
-                        prevBtn.disabled = currentIndex === 0;
-                        nextBtn.disabled = currentIndex === maxIndex;
-                        prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
-                        nextBtn.style.opacity = currentIndex === maxIndex ? '0.5' : '1';
-                    }
-                }
-                if (nextBtn) nextBtn.addEventListener('click', () => { if (currentIndex < maxIndex) { currentIndex++; updateSliderPosition(); } });
-                if (prevBtn) prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; updateSliderPosition(); } });
+          const sliderTrack = document.getElementById('sliderTrack');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const cards = document.querySelectorAll('.slider-card');
+    
+    let currentIndex = 0;
+    const cardWidth = 320; // Card width in pixels
+    const gap = 16; // Gap between cards (assuming 1rem = 16px)
+    const slideDistance = cardWidth + gap;
+    const maxIndex = cards.length - 1;
+    
+    // Function to update slider position
+    function updateSliderPosition() {
+        const translateX = currentIndex * slideDistance;
+        sliderTrack.style.transform = `translateX(${translateX}px)`;
+        
+        // Update button states
+        prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+        nextBtn.style.opacity = currentIndex === maxIndex ? '0.5' : '1';
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === maxIndex;
+    }
+    
+    // Next button click handler
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+                updateSliderPosition();
+            }
+        });
+    }
+    
+    // Previous button click handler
+    prevBtn.addEventListener('click', function() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSliderPosition();
+        }
+    });
+    
+    // Initialize slider
+    updateSliderPosition();
+    
+    
+    // Optional: Add touch/swipe support for mobile
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+    
+    sliderTrack.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+    });
+    
+    sliderTrack.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        e.preventDefault();
+    });
+    
+    sliderTrack.addEventListener('touchend', function() {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const diffX = startX - currentX;
+        const threshold = 50; // Minimum swipe distance
+        
+        if (Math.abs(diffX) > threshold) {
+            if (diffX > 0 && currentIndex < maxIndex) {
+                // Swipe left - go to next
+                currentIndex++;
+                updateSliderPosition();
+            } else if (diffX < 0 && currentIndex > 0) {
+                // Swipe right - go to previous
+                currentIndex--;
                 updateSliderPosition();
             }
         }
+     });
 
         // Agents Slider Functionality
         const agentsSlider = document.querySelector('#agents-slider');
