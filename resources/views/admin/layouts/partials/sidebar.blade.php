@@ -1,4 +1,3 @@
-
 <div class="sidebar sidebar-dark sidebar-fixed border-end" id="sidebar">
     <div class="sidebar-header border-bottom">
         <div class="sidebar-brand">
@@ -71,6 +70,26 @@
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-list-rich"></use></svg> {{ __('attributes.property_attributes.title') }}
             </a>
         </li>
+
+        {{-- Locations Dropdown --}}
+        <li class="nav-group {{ request()->routeIs('admin.countries.*') || request()->routeIs('admin.cities.*') ? 'show' : '' }}">
+            <a class="nav-link nav-group-toggle" href="#">
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-location-pin"></use></svg> Locations
+            </a>
+            <ul class="nav-group-items">
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.countries.*') ? 'active' : '' }}" href="{{ route('admin.countries.index') }}">
+                        <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Countries
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.cities.*') ? 'active' : '' }}" href="{{ route('admin.cities.index') }}">
+                        <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Cities
+                    </a>
+                </li>
+            </ul>
+        </li>
+
 
         <li class="nav-title">Monetization</li>
         <li class="nav-item">
