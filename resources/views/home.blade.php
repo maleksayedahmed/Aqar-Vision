@@ -40,44 +40,62 @@
         </div>
 
         {{-- Main Search Form --}}
-        <form action="#" method="GET" class="w-full">
-            <div class="flex flex-col-reverse lg:flex-row-reverse items-center gap-4 w-full">
-                
-                <button type="submit" class="flex items-center justify-center w-full lg:w-auto h-12 bg-[rgba(48,62,124,1)] text-white font-semibold rounded-lg px-10 hover:bg-indigo-800 focus:outline-none flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <span>بحث</span>
-                </button>
+<form action="#" method="GET" class="w-full">
+    <div class="flex flex-col-reverse lg:flex-row-reverse items-center gap-4 w-full">
+        
+        <button type="submit" class="flex items-center justify-center w-full lg:w-auto h-12 bg-[rgba(48,62,124,1)] text-white font-semibold rounded-lg px-10 hover:bg-indigo-800 focus:outline-none flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <span>بحث</span>
+        </button>
 
-                <!-- District Dropdown -->
-                <div class="w-full h-12">
-                    <select name="district_id" id="district-select" class="w-full h-full bg-white border border-gray-200 rounded-lg px-4 cursor-pointer hover:border-indigo-400 transition-colors text-sm font-medium text-gray-700 disabled:bg-gray-100" disabled>
-                        <option value="">اختر المدينة أولاً</option>
-                    </select>
-                </div>
-                
-                <!-- City Dropdown -->
-                <div class="w-full h-12">
-                    <select name="city_id" id="city-select" class="w-full h-full bg-white border border-gray-200 rounded-lg px-4 cursor-pointer hover:border-indigo-400 transition-colors text-sm font-medium text-gray-700">
-                        <option value="">اختر المدينة</option>
-                        @foreach($cities as $city)
-                            <option value="{{ $city->id }}">{{ $city->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                
-                <!-- Property Type Dropdown -->
-                <div class="w-full h-12">
-                    <select name="property_type_id" class="w-full h-full bg-white border border-gray-200 rounded-lg px-4 cursor-pointer hover:border-indigo-400 transition-colors text-sm font-medium text-gray-700">
-                        <option value="">نوع العقار</option>
-                        @foreach($propertyTypes as $propertyType)
-                        <option value="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+        <!-- District Dropdown -->
+        <div class="w-full h-12 relative">
+            <select name="district_id" id="district-select" class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pl-10 pr-4 cursor-pointer hover:border-indigo-400 transition-colors text-sm font-medium text-gray-700 disabled:bg-gray-100" disabled>
+                <option value="">اختر المدينة أولاً</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
             </div>
-        </form>
+        </div>
+        
+        <!-- City Dropdown -->
+        <div class="w-full h-12 relative">
+            <div class="absolute inset-y-0 right-0 flex items-center px-3"><img src="{{ asset('images/city.svg') }}" alt=""></div>
+            <select name="city_id" id="city-select" class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg px-7 cursor-pointer hover:border-indigo-400 transition-colors text-sm font-medium text-gray-700">
+                <option value=""> المدينة</option>
+                @foreach($cities as $city)
+                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                @endforeach
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Property Type Dropdown -->
+        <div class="w-full h-12 relative">
+            <div class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400"><img src="{{ asset('images/aqar.svg') }}" alt=""></div>
+            <select name="property_type_id" class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg px-8 cursor-pointer hover:border-indigo-400 transition-colors text-sm font-medium text-gray-700">
+                
+                <option value="">نوع العقار</option>
+                @foreach($propertyTypes as $propertyType)
+                    <option value="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
+                @endforeach
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+</form>
     </section>
 
     <section class="max-w-[1325px] w-full mx-auto py-8 px-4 lg:px-0">

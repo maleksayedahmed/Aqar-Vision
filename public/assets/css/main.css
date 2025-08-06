@@ -122,3 +122,9 @@
     .grabbing {
         cursor: grabbing;
     }
+  .custom-select-arrow {
+      -webkit-appearance: none; /* Remove default arrow for Safari/Chrome */
+      -moz-appearance: none;    /* Remove default arrow for Firefox */
+      appearance: none;         /* Remove default arrow for other browsers */
+      background-image: none;   /* Ensure no background image is used */
+  }
