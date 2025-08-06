@@ -6,21 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('city')->nullable();
-            $table->string('neighborhood')->nullable();
+
+            // REPLACED 'city' and 'neighborhood' with 'district_id'
+            $table->foreignId('district_id')->nullable()->constrained()->onDelete('set null');
+
             $table->decimal('street_width', 5, 2)->nullable();
             $table->string('facade')->nullable();
             $table->decimal('area_sq_meters', 10, 2)->nullable();
-            $table->unsignedBigInteger('purpose_id')->nullable();
             $table->decimal('price_per_unit', 15, 2)->nullable();
             $table->decimal('total_price', 15, 2)->nullable();
-            $table->unsignedBigInteger('property_type_id')->nullable();
             $table->integer('age_years')->nullable();
             $table->json('services')->nullable();
             $table->enum('listing_purpose', ['sale', 'rent'])->nullable();
@@ -29,22 +32,24 @@ return new class extends Migration
             $table->enum('status', ['available', 'sold', 'rented'])->default('available');
             $table->date('list_date')->nullable();
             $table->date('sold_rented_date')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
+
+            // Foreign Keys using the modern, chained method
+            $table->foreignId('purpose_id')->nullable()->constrained('property_purposes')->onDelete('set null');
+            $table->foreignId('property_type_id')->nullable()->constrained('property_types')->onDelete('set null');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            
             $table->softDeletes();
             $table->timestamps();
-
-            $table->foreign('purpose_id')->references('id')->on('property_purposes')->onDelete('restrict');
-            $table->foreign('property_type_id')->references('id')->on('property_types')->onDelete('restrict');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::dropIfExists('properties');
     }
-}; 
+};

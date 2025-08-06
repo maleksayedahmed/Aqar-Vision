@@ -21,6 +21,7 @@ use App\Http\Controllers\Agent\AboutController;
 use App\Http\Controllers\Agent\ComplaintController;
 use App\Http\Controllers\Agent\TermsController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\PropertySearchController;
 
 
 /*
@@ -35,6 +36,7 @@ Route::get('/', [UserHomeController::class, 'index'])->name('home');
 Route::post('/login/phone', [LoginWithPhoneController::class, 'sendOtp'])->name('login.phone.send');
 Route::post('/login/otp/verify', [LoginWithPhoneController::class, 'verifyOtp'])->name('login.phone.verify');
 Route::get('/get-districts/{city}', [LocationController::class, 'getDistrictsByCity'])->name('districts.get');
+Route::get('/properties', [PropertySearchController::class, 'index'])->name('properties.search');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

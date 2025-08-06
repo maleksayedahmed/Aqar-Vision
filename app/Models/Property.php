@@ -13,11 +13,14 @@ class Property extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
+    /**
+     * The attributes that are mass assignable.
+     * UPDATED: Added 'district_id' and removed 'city', 'neighborhood'.
+     */
     protected $fillable = [
         'title',
         'description',
-        'city',
-        'neighborhood',
+        'district_id', // <-- THIS IS THE NEW REQUIRED FIELD
         'street_width',
         'facade',
         'area_sq_meters',
@@ -55,6 +58,15 @@ class Property extends Model implements HasMedia
               ->width(150)
               ->height(150)
               ->sharpen(10);
+    }
+
+    /**
+     * ADDED: This is the missing relationship method that causes the error.
+     * A Property belongs to a District.
+     */
+    public function district()
+    {
+        return $this->belongsTo(District::class);
     }
 
     public function purpose()
