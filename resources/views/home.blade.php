@@ -71,8 +71,9 @@
                 <div class="w-full h-12">
                     <select name="property_type_id" class="w-full h-full bg-white border border-gray-200 rounded-lg px-4 cursor-pointer hover:border-indigo-400 transition-colors text-sm font-medium text-gray-700">
                         <option value="">نوع العقار</option>
-                        <option value="1">شقة</option>
-                        <option value="2">فيلا</option>
+                        @foreach($propertyTypes as $propertyType)
+                        <option value="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
