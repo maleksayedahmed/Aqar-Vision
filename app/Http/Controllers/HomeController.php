@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\Country;
+use App\Models\City;
 
 class HomeController extends Controller
 {
@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function index(): View
     {
-        $countries = Country::where('is_active', true)->orderBy('name')->get();
-        return view('home', compact('countries'));
+        $cities = City::where('is_active', true)->orderBy('name')->get();
+        return view('home', compact('cities'));
     }
 }

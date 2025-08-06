@@ -132,7 +132,6 @@
             if (otpInputsContainer) {
                 const inputs = otpInputsContainer.querySelectorAll('.otp-input');
                 const hiddenInput = document.getElementById('otp-full-input');
-
                 inputs.forEach((input, index) => {
                     input.addEventListener('input', (e) => {
                         if (e.target.value && index < inputs.length - 1) {
@@ -147,6 +146,48 @@
                             inputs[index - 1].focus();
                         }
                     });
+                });
+            }
+
+            // --- DYNAMIC CITY/DISTRICT DROPDOWN LOGIC ---
+            const citySelect = document.getElementById('city-select');
+            const districtSelect = document.getElementById('district-select');
+
+            if (citySelect && districtSelect) {
+                citySelect.addEventListener('change', function() {
+                    const cityId = this.value;
+
+                    districtSelect.innerHTML = '<option value="">جار التحميل...</option>';
+                    districtSelect.disabled = true;
+
+                    if (cityId) {
+                        fetch(`/get-districts/${cityId}`)
+                            .then(response => {
+                                if (!response.ok) throw new Error('Network response was not ok.');
+                                return response.json();
+                            })
+                            .then(districts => {
+                                districtSelect.innerHTML = '<option value="">اختر الحي</option>';
+                                if (districts.length > 0) {
+                                    districts.forEach(district => {
+                                        const option = document.createElement('option');
+                                        option.value = district.id;
+                                        option.textContent = district.name;
+                                        districtSelect.appendChild(option);
+                                    });
+                                    districtSelect.disabled = false;
+                                } else {
+                                    districtSelect.innerHTML = '<option value="">لا توجد أحياء لهذه المدينة</option>';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error fetching districts:', error);
+                                districtSelect.innerHTML = '<option value="">حدث خطأ</option>';
+                            });
+                    } else {
+                        districtSelect.innerHTML = '<option value="">اختر المدينة أولاً</option>';
+                        districtSelect.disabled = true;
+                    }
                 });
             }
 

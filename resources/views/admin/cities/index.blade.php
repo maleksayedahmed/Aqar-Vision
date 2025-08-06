@@ -16,7 +16,6 @@
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">City Name</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Country</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                     <th class="text-secondary opacity-7"></th>
                                 </tr>
@@ -25,7 +24,6 @@
                                 @forelse($cities as $city)
                                 <tr>
                                     <td><p class="text-xs font-weight-bold mb-0 px-3">{{ $city->name }}</p></td>
-                                    <td><p class="text-xs font-weight-bold mb-0">{{ $city->country->name }}</p></td>
                                     <td class="align-middle text-center text-sm">
                                         <span class="badge badge-sm {{ $city->is_active ? 'bg-gradient-success' : 'bg-gradient-secondary' }}">
                                             {{ $city->is_active ? 'Active' : 'Inactive' }}
@@ -43,7 +41,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <tr><td colspan="4" class="text-center py-4">No cities found.</td></tr>
+                                <tr><td colspan="3" class="text-center py-4">No cities found.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>

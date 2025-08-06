@@ -72,19 +72,19 @@
         </li>
 
         {{-- Locations Dropdown --}}
-        <li class="nav-group {{ request()->routeIs('admin.countries.*') || request()->routeIs('admin.cities.*') ? 'show' : '' }}">
+        <li class="nav-group {{ request()->routeIs('admin.districts.*') || request()->routeIs('admin.cities.*') ? 'show' : '' }}">
             <a class="nav-link nav-group-toggle" href="#">
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-location-pin"></use></svg> Locations
             </a>
             <ul class="nav-group-items">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.countries.*') ? 'active' : '' }}" href="{{ route('admin.countries.index') }}">
-                        <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Countries
+                    <a class="nav-link {{ request()->routeIs('admin.cities.*') ? 'active' : '' }}" href="{{ route('admin.cities.index') }}">
+                        <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Cities
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.cities.*') ? 'active' : '' }}" href="{{ route('admin.cities.index') }}">
-                        <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Cities
+                    <a class="nav-link {{ request()->routeIs('admin.districts.*') ? 'active' : '' }}" href="{{ route('admin.districts.index') }}">
+                        <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Districts
                     </a>
                 </li>
             </ul>

@@ -36,6 +36,8 @@ class DatabaseSeeder extends Seeder
             planSeeder::class,
             PropertySeeder::class,
             SubscriptionSeeder::class,
+            CitySeeder::class,
+            DistrictSeeder::class,
         ]);
     }
 }

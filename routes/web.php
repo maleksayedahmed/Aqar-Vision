@@ -34,8 +34,7 @@ Route::get('/', [UserHomeController::class, 'index'])->name('home');
 
 Route::post('/login/phone', [LoginWithPhoneController::class, 'sendOtp'])->name('login.phone.send');
 Route::post('/login/otp/verify', [LoginWithPhoneController::class, 'verifyOtp'])->name('login.phone.verify');
-Route::get('/api/locations/countries/{country}/cities', [LocationController::class, 'getCities'])->name('api.locations.cities');
-
+Route::get('/get-districts/{city}', [LocationController::class, 'getDistrictsByCity'])->name('districts.get');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

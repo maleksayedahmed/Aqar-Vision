@@ -4,11 +4,10 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header"><h3 class="card-title">Edit Country</h3></div>
-                <form action="{{ route('admin.countries.update', $country) }}" method="POST">
+                <div class="card-header"><h3 class="card-title">Create New District</h3></div>
+                <form action="{{ route('admin.districts.store') }}" method="POST">
                     @csrf
-                    @method('PUT')
-                    @include('admin.countries._form')
+                    @include('admin.districts._form')
                 </form>
             </div>
         </div>

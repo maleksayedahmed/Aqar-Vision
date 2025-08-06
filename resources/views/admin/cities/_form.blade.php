@@ -1,19 +1,5 @@
 <div class="card-body">
     <div class="form-group">
-        <label for="country_id">Country</label>
-        <select class="form-control @error('country_id') is-invalid @enderror" id="country_id" name="country_id" required>
-            <option value="">-- Select Country --</option>
-            @foreach ($countries as $country)
-                <option value="{{ $country->id }}" {{ old('country_id', $city->country_id ?? '') == $country->id ? 'selected' : '' }}>
-                    {{ $country->name }}
-                </option>
-            @endforeach
-        </select>
-        @error('country_id')
-            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
-    </div>
-    <div class="form-group">
         <label for="name">City Name</label>
         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $city->name ?? '') }}" required>
         @error('name')

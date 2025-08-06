@@ -6,8 +6,8 @@
             <div class="card mb-4">
                 <div class="card-header pb-0">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6>Countries</h6>
-                        <a href="{{ route('admin.countries.create') }}" class="btn btn-primary btn-sm">Create New Country</a>
+                        <h6>Districts</h6>
+                        <a href="{{ route('admin.districts.create') }}" class="btn btn-primary btn-sm">Create New District</a>
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -15,26 +15,26 @@
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Code</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">District Name</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">City</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                     <th class="text-secondary opacity-7"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($countries as $country)
+                                @forelse($districts as $district)
                                 <tr>
-                                    <td><p class="text-xs font-weight-bold mb-0 px-3">{{ $country->name }}</p></td>
-                                    <td><p class="text-xs font-weight-bold mb-0">{{ $country->code }}</p></td>
+                                    <td><p class="text-xs font-weight-bold mb-0 px-3">{{ $district->name }}</p></td>
+                                    <td><p class="text-xs font-weight-bold mb-0">{{ $district->city->name }}</p></td>
                                     <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm {{ $country->is_active ? 'bg-gradient-success' : 'bg-gradient-secondary' }}">
-                                            {{ $country->is_active ? 'Active' : 'Inactive' }}
+                                        <span class="badge badge-sm {{ $district->is_active ? 'bg-gradient-success' : 'bg-gradient-secondary' }}">
+                                            {{ $district->is_active ? 'Active' : 'Inactive' }}
                                         </span>
                                     </td>
                                     <td class="align-middle">
                                         <div class="d-flex justify-content-end gap-2">
-                                            <a href="{{ route('admin.countries.edit', $country) }}" class="text-secondary font-weight-bold text-xs">Edit</a>
-                                            <form action="{{ route('admin.countries.destroy', $country) }}" method="POST" class="d-inline">
+                                            <a href="{{ route('admin.districts.edit', $district) }}" class="text-secondary font-weight-bold text-xs">Edit</a>
+                                            <form action="{{ route('admin.districts.destroy', $district) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-danger font-weight-bold text-xs border-0 bg-transparent" onclick="return confirm('Are you sure?')">Delete</button>
@@ -43,7 +43,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <tr><td colspan="4" class="text-center py-4">No countries found.</td></tr>
+                                <tr><td colspan="4" class="text-center py-4">No districts found.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
