@@ -6,18 +6,27 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PropertyRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
     public function rules(): array
     {
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'city' => 'nullable|string|max:255',
-            'neighborhood' => 'nullable|string|max:255',
+
+            'district_id' => 'required|exists:districts,id',
+
             'street_width' => 'nullable|numeric',
             'facade' => 'nullable|string|max:255',
             'area_sq_meters' => 'nullable|numeric',
@@ -33,9 +42,16 @@ class PropertyRequest extends FormRequest
             'list_date' => 'nullable|date',
             'attributes' => 'nullable|array',
             'attributes.*' => 'nullable',
+            'photos' => 'nullable|array',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ];
     }
 
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [
@@ -44,6 +60,7 @@ class PropertyRequest extends FormRequest
             'property_type_id.required' => __('validation.required', ['attribute' => __('attributes.properties.type')]),
             'total_price.required' => __('validation.required', ['attribute' => __('attributes.properties.total_price')]),
             'listing_purpose.required' => __('validation.required', ['attribute' => __('attributes.properties.listing_purpose')]),
+            'district_id.required' => __('validation.required', ['attribute' => 'District']),
         ];
     }
 }

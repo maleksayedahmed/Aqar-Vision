@@ -8,6 +8,36 @@
         <textarea name="description" class="form-control" rows="3">{{ old('description', $property?->description) }}</textarea>
     </div>
 
+    <hr>
+    <h5>Location</h5>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="city_id">City</label>
+                <select name="city_id" id="city-select" class="form-control" required>
+                    <option value="">Select a City</option>
+                    @foreach ($cities as $city)
+                        <option value="{{ $city->id }}" 
+                            {{-- Pre-select the city if it exists from old input or the property's relationship --}}
+                            {{ old('city_id', $property?->district?->city_id) == $city->id ? 'selected' : '' }}>
+                            {{ $city->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="district_id">District</label>
+                <select name="district_id" id="district-select" class="form-control" required {{ old('city_id', $property?->district?->city_id) ? '' : 'disabled' }}>
+                    <option value="">Select a City First</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
@@ -100,6 +130,53 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // --- DYNAMIC CITY/DISTRICT DROPDOWN LOGIC ---
+        const citySelect = document.getElementById('city-select');
+        const districtSelect = document.getElementById('district-select');
+        const selectedDistrictId = "{{ old('district_id', $property?->district_id ?? '') }}";
+
+        function fetchDistricts(cityId, selectedDistrict = null) {
+            if (!cityId) {
+                districtSelect.innerHTML = '<option value="">Select a City First</option>';
+                districtSelect.disabled = true;
+                return;
+            }
+
+            // The URL to fetch districts from. Make sure this route is defined in your web.php or admin.php
+            const fetchUrl = `/get-districts/${cityId}`;
+
+            fetch(fetchUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok.');
+                    return response.json();
+                })
+                .then(districts => {
+                    districtSelect.innerHTML = '<option value="">Select a District</option>';
+                    districts.forEach(district => {
+                        const option = new Option(district.name, district.id);
+                        if (selectedDistrict == district.id) {
+                            option.selected = true;
+                        }
+                        districtSelect.add(option);
+                    });
+                    districtSelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error("Error fetching districts:", error);
+                    districtSelect.innerHTML = '<option value="">Could not load districts</option>';
+                });
+        }
+
+        citySelect.addEventListener('change', function () {
+            fetchDistricts(this.value);
+        });
+
+        // On page load, if a city is already selected (e.g., in an edit form), fetch its districts.
+        if (citySelect.value) {
+            fetchDistricts(citySelect.value, selectedDistrictId);
+        }
+        
+        // --- DYNAMIC ATTRIBUTES LOGIC ---
         const propertyTypeSelect = document.getElementById('property_type_id');
         const attributesContainer = document.getElementById('dynamic-attributes-container');
         const propertyData = @json($property?->services ?? new stdClass());
