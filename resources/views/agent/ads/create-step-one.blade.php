@@ -6,21 +6,29 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 @endpush
 
-@push('scripts')
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-@endpush
-
 @section('content')
 <main class="bg-[rgba(250,250,250,1)] px-4 lg:px-20 pt-6 pb-11">
+
+    {{-- Validation Errors --}}
+    @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl relative mb-4" role="alert">
+            <strong class="font-bold">يرجى تصحيح الأخطاء التالية:</strong>
+            <ul class="mt-2 list-disc list-inside text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <form method="POST" action="{{ route('agent.ads.store.step1') }}">
         @csrf
 
-        <section class="">
+        {{-- Top Header Section --}}
+        <section>
             <div class="flex w-full flex-col items-stretch gap-y-4 lg:flex-row lg:items-center lg:justify-between py-4" dir="rtl">
                 <a href="{{ route('agent.ads.create') }}" class="flex items-center gap-x-3">
-                    <img src="{{ asset('images/back-arrow.svg') }}">
+                    <img src="{{ asset('images/back-arrow.svg') }}" alt="Back">
                     <div class="text-right">
                         <h3 class="text-2xl lg:text-[26px] font-medium text-[rgba(48,62,124,1)]">أضف اعلان جديد</h3>
                         <p class="text-[14.3px] font-medium"><span class="mr-1 text-red-500">*</span>نرجو تعبئة البيانات بدقة</p>
@@ -29,9 +37,7 @@
 
                 <div class="hidden md:flex items-center gap-x-[27px]">
                     <span class="font-medium text-[16px] text-[rgba(48,62,124,1)]">بيانات العقار</span>
-                    <div class="flex items-center gap-x-2">
-                        <img src="{{ asset('images/rode.svg') }}">
-                    </div>
+                    <div class="flex items-center gap-x-2"><img src="{{ asset('images/rode.svg') }}" alt="Step indicator"></div>
                     <span class="font-medium text-[16px] text-[rgba(181,183,191,1)]">مستندات العقار</span>
                 </div>
 
@@ -39,10 +45,10 @@
                     <input type="hidden" name="ad_price_id" value="{{ $selectedAdPrice->id }}">
                     <button @click="open = !open" type="button" class="flex items-center justify-between bg-[rgba(0,0,0,0.02)] w-full h-[53px] hover:bg-gray-200 transition-colors px-4 py-2.5 rounded-xl text-lg lg:text-[20px] font-medium text-black">
                         <div class="flex items-center gap-x-2">
-                            <img src="{{ asset('images/star.png') }}">
+                            <img src="{{ asset('images/star.png') }}" alt="Ad Type">
                             <span>{{ $selectedAdPrice->name }}</span>
                         </div>
-                        <img src="{{ asset('images/Polygon.svg') }}">
+                        <img src="{{ asset('images/Polygon.svg') }}" alt="Dropdown arrow">
                     </button>
                     <div x-show="open" @click.away="open = false" style="display: none;" class="text-[13.6px] absolute right-0 top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-200 z-10 p-2">
                         @foreach($allAdPrices as $priceOption)
@@ -62,62 +68,53 @@
         <!-- Basic Info Section -->
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
             <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
-                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl">
-                    <img src="{{ asset('images/plaza.svg') }}">
-                </div>
+                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/plaza.svg') }}"></div>
                 <h2 class="text-base lg:text-[18px] font-bold">معلومات العقار الأساسية</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-16 gap-y-6">
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="title" class="w-[80px] shrink-0 text-[11px] font-medium">عنوان العقار<span class="text-red-500 mr-1">*</span></label>
-                    <input type="text" name="title" id="title" value="{{ old('title') }}" required placeholder="مثال: شقة ايجار مميزة" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <input type="text" name="title" id="title" value="{{ old('title') }}" required placeholder="مثال: شقة ايجار مميزة" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="age" class="w-[80px] shrink-0 text-[11px] font-medium">عمر العقار</label>
-                    <input type="text" name="age" id="age" value="{{ old('age') }}" placeholder="ادخل عمر العقار (اختياري)" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="transaction_type" class="w-[80px] shrink-0 text-[11px] font-medium">نوع المعاملة<span class="text-red-500 mr-1">*</span></label>
-                    <select name="transaction_type" id="transaction_type" required class="w-full h-[52px] text-[11px] appearance-none rounded-lg border border-gray-200 bg-white px-3 text-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
-                        <option value="sell" {{ old('transaction_type') == 'sell' ? 'selected' : '' }}>بيع</option>
-                        <option value="rent" {{ old('transaction_type') == 'rent' ? 'selected' : '' }}>إيجار</option>
+                    <label for="property_type_id" class="w-[80px] shrink-0 text-[11px] font-medium">نوع العقار<span class="text-red-500 mr-1">*</span></label>
+                    <select name="property_type_id" id="property_type_id" required class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <option value="">اختر نوع العقار</option>
+                        @foreach($propertyTypes as $type)
+                            <option value="{{ $type->id }}" {{ old('property_type_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="floor_number" class="w-[80px] shrink-0 text-[11px] font-medium">رقم الدور</label>
-                    <input type="text" name="floor_number" id="floor_number" value="{{ old('floor_number') }}" placeholder="ادخل رقم الدور" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <label for="listing_purpose" class="w-[80px] shrink-0 text-[11px] font-medium">نوع المعاملة<span class="text-red-500 mr-1">*</span></label>
+                    <select name="listing_purpose" id="listing_purpose" required class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <option value="rent" {{ old('listing_purpose') == 'rent' ? 'selected' : '' }}>إيجار</option>
+                        <option value="sale" {{ old('listing_purpose') == 'sale' ? 'selected' : '' }}>بيع</option>
+                    </select>
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="price" class="w-[80px] shrink-0 text-[11px] font-medium">سعر العقار</label>
-                    <input type="number" step="any" name="price" id="price" value="{{ old('price') }}" required placeholder="اضف سعر عقارك الذي تراه مناسب" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <label for="total_price" class="w-[80px] shrink-0 text-[11px] font-medium">سعر العقار<span class="text-red-500 mr-1">*</span></label>
+                    <input type="number" step="any" name="total_price" id="total_price" value="{{ old('total_price') }}" required placeholder="اضف سعر عقارك" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="finishing_status" class="w-[80px] shrink-0 text-[11px] font-medium">حالة التشطيب<span class="text-red-500 mr-1">*</span></label>
-                    <input type="text" name="finishing_status" id="finishing_status" value="{{ old('finishing_status') }}" required placeholder="نصف تشطيب - متشطب بالكامل" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <label for="area_sq_meters" class="w-[80px] shrink-0 text-[11px] font-medium">المساحة (م²)<span class="text-red-500 mr-1">*</span></label>
+                    <input type="number" step="any" name="area_sq_meters" id="area_sq_meters" value="{{ old('area_sq_meters') }}" required placeholder="ادخل المساحة بالمتر المربع" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="property_type" class="w-[80px] shrink-0 text-[11px] font-medium">نوع العقار<span class="text-red-500 mr-1">*</span></label>
-                    <input type="text" name="property_type" id="property_type" value="{{ old('property_type') }}" required placeholder="شقة - فيلا - أرض - مكتب" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="direction" class="w-[80px] shrink-0 text-[11px] font-medium">جهة العقار</label>
-                    <input type="text" name="direction" id="direction" value="{{ old('direction') }}" placeholder="شمالي - جنوبي - غربي - شرقي" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="bathrooms" class="w-[80px] shrink-0 text-[11px] font-medium">دورات المياة<span class="text-red-500 mr-1">*</span></label>
-                    <input type="number" name="bathrooms" id="bathrooms" value="{{ old('bathrooms') }}" required placeholder="ادخل عدد دورات المياة" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <label for="age_years" class="w-[80px] shrink-0 text-[11px] font-medium">عمر العقار</label>
+                    <input type="number" name="age_years" id="age_years" value="{{ old('age_years') }}" placeholder="ادخل عمر العقار (بالسنوات)" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="rooms" class="w-[80px] shrink-0 text-[11px] font-medium">عدد الغرف<span class="text-red-500 mr-1">*</span></label>
-                    <input type="number" name="rooms" id="rooms" value="{{ old('rooms') }}" required placeholder="اختر عدد الغرف" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <input type="number" name="rooms" id="rooms" value="{{ old('rooms') }}" required placeholder="ادخل عدد الغرف" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="area" class="w-[80px] shrink-0 text-[11px] font-medium">المساحة<span class="text-red-500 mr-1">*</span></label>
-                    <input type="number" step="any" name="area" id="area" value="{{ old('area') }}" required placeholder="ادخل المساحة" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <label for="bathrooms" class="w-[80px] shrink-0 text-[11px] font-medium">دورات المياة<span class="text-red-500 mr-1">*</span></label>
+                    <input type="number" name="bathrooms" id="bathrooms" value="{{ old('bathrooms') }}" required placeholder="ادخل عدد دورات المياة" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
                 <div class="col-span-1 md:col-span-2">
                     <label for="description" class="block mb-2 text-[11px] font-medium">الوصف التفصيلي</label>
-                    <textarea name="description" id="description" rows="5" placeholder="اكتب وصفاً تفصيلياً لعقارك..." class="w-full resize-none rounded-lg border border-gray-200 bg-white p-3 text-[11px] text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">{{ old('description') }}</textarea>
+                    <textarea name="description" id="description" rows="5" placeholder="اكتب وصفاً تفصيلياً لعقارك..." class="w-full resize-none rounded-lg border border-gray-200 bg-white p-3 text-[11px] focus:outline-none focus:ring-1 focus:ring-blue-500">{{ old('description') }}</textarea>
                 </div>
             </div>
         </section>
@@ -125,30 +122,34 @@
         <!-- Location Section -->
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
             <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
-                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl">
-                    <img src="{{ asset('images/location-05.svg') }}">
-                </div>
+                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/location-05.svg') }}"></div>
                 <h2 class="text-base lg:text-[18px] font-bold">موقع العقار</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-16 gap-y-6">
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="city" class="w-[80px] shrink-0 text-[11px] font-medium">المدينة<span class="text-red-500 mr-1">*</span></label>
-                    <input type="text" name="city" id="city" value="{{ old('city') }}" required placeholder="اختر المدينة" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <label for="city_id" class="w-[80px] shrink-0 text-[11px] font-medium">المدينة<span class="text-red-500 mr-1">*</span></label>
+                    <select name="city_id" id="city-select" required class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                        <option value="">اختر المدينة</option>
+                        @foreach($cities as $city)
+                            <option value="{{ $city->id }}" {{ old('city_id') == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="neighborhood" class="w-[80px] shrink-0 text-[11px] font-medium">اسم الحي<span class="text-red-500 mr-1">*</span></label>
-                    <input type="text" name="neighborhood" id="neighborhood" value="{{ old('neighborhood') }}" required placeholder="اسم الحي" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <label for="district_id" class="w-[80px] shrink-0 text-[11px] font-medium">الحي<span class="text-red-500 mr-1">*</span></label>
+                    <select name="district_id" id="district-select" required class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3" {{ old('city_id') ? '' : 'disabled' }}>
+                        <option value="">اختر المدينة أولاً</option>
+                    </select>
                 </div>
-                <div class="flex gap-3 items-center h-[52px]">
+                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="province" class="w-[80px] shrink-0 text-[11px] font-medium">المحافظة<span class="text-red-500 mr-1">*</span></label>
-                    <input type="text" name="province" id="province" value="{{ old('province') }}" required placeholder="اختر المحافظة" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <input type="text" name="province" id="province" value="{{ old('province') }}" required placeholder="ادخل اسم المحافظة" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="street" class="w-[80px] shrink-0 text-[11px] font-medium">اسم الشارع<span class="text-red-500 mr-1">*</span></label>
-                    <input type="text" name="street" id="street" value="{{ old('street') }}" required placeholder="اسم الشارع" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3 text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    <label for="street_name" class="w-[80px] shrink-0 text-[11px] font-medium">اسم الشارع<span class="text-red-500 mr-1">*</span></label>
+                    <input type="text" name="street_name" id="street_name" value="{{ old('street_name') }}" required placeholder="ادخل اسم الشارع" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
             </div>
-
             <div class="mt-8">
                 <label class="block mb-4 text-sm lg:text-lg font-medium text-gray-900">الموقع علي الخريطة</label>
                 <p class="text-sm text-gray-500 mb-4">اسحب الدبوس لتحديد الموقع الدقيق للعقار على الخريطة.</p>
@@ -161,62 +162,70 @@
         <!-- Features Section -->
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
             <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
-                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl">
-                    <img src="{{ asset('images/star-2.svg') }}">
-                </div>
+                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/star-2.svg') }}"></div>
                 <h2 class="text-base lg:text-[18px] font-bold">مميزات العقار</h2>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-6 gap-x-2">
-                <label class="flex items-center gap-x-2 cursor-pointer"><input type="checkbox" name="features[]" value="internet" class="form-checkbox h-5 w-5 text-blue-600"><span class="text-sm md:text-[18px]">إنترنت</span></label>
-                <label class="flex items-center gap-x-2 cursor-pointer"><input type="checkbox" name="features[]" value="central_ac" class="form-checkbox h-5 w-5 text-blue-600"><span class="text-sm md:text-[18px]">تكييف مركزي</span></label>
-                <label class="flex items-center gap-x-2 cursor-pointer"><input type="checkbox" name="features[]" value="parking" class="form-checkbox h-5 w-5 text-blue-600"><span class="text-sm md:text-[18px]">مواقف سيارات</span></label>
-                <label class="flex items-center gap-x-2 cursor-pointer"><input type="checkbox" name="features[]" value="pool" class="form-checkbox h-5 w-5 text-blue-600"><span class="text-sm md:text-[18px]">مسبح</span></label>
-                <label class="flex items-center gap-x-2 cursor-pointer"><input type="checkbox" name="features[]" value="elevator" class="form-checkbox h-5 w-5 text-blue-600"><span class="text-sm md:text-[18px]">مصعد</span></label>
-                <label class="flex items-center gap-x-2 cursor-pointer"><input type="checkbox" name="features[]" value="kitchen" class="form-checkbox h-5 w-5 text-blue-600"><span class="text-sm md:text-[18px]">مطبخ مجهز</span></label>
-                <label class="flex items-center gap-x-2 cursor-pointer"><input type="checkbox" name="features[]" value="security" class="form-checkbox h-5 w-5 text-blue-600"><span class="text-sm md:text-[18px]">أمن</span></label>
-                <label class="flex items-center gap-x-2 cursor-pointer"><input type="checkbox" name="features[]" value="garden" class="form-checkbox h-5 w-5 text-blue-600"><span class="text-sm md:text-[18px]">حديقة</span></label>
+                @foreach($features as $feature)
+                    <label class="flex items-center gap-x-2 cursor-pointer">
+                        <input type="checkbox" name="attributes[{{ str_replace(' ', '_', strtolower($feature->getTranslation('name', 'en'))) }}]" value="1" 
+                               @if(is_array(old('attributes')) && array_key_exists(str_replace(' ', '_', strtolower($feature->getTranslation('name', 'en'))), old('attributes'))) checked @endif
+                               class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300">
+                        <span class="text-sm md:text-[18px]">{{ $feature->name }}</span>
+                    </label>
+                @endforeach
             </div>
         </section>
         
         <!-- Additional Details Section -->
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
             <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
-                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl">
-                    <img src="{{ asset('images/details-list.svg') }}">
-                </div>
+                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/details-list.svg') }}"></div>
                 <h2 class="text-base lg:text-[18px] font-bold">تفاصيل اضافية</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-16 gap-y-6">
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="usage" class="w-[80px] shrink-0 text-[11px] font-medium">استخدام العقار</label>
-                    <input type="text" name="usage" id="usage" value="{{ old('usage') }}" placeholder="سكني" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                    <label for="finishing_status" class="w-[80px] shrink-0 text-[11px] font-medium">حالة التشطيب</label>
+                    <input type="text" name="finishing_status" id="finishing_status" value="{{ old('finishing_status') }}" placeholder="نصف تشطيب - متشطب بالكامل" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                </div>
+                 <div class="flex gap-3 items-center h-[52px]">
+                    <label for="facade" class="w-[80px] shrink-0 text-[11px] font-medium">جهة العقار</label>
+                    <input type="text" name="facade" id="facade" value="{{ old('facade') }}" placeholder="شمالي - جنوبي - غربي - شرقي" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                </div>
+                <div class="flex gap-3 items-center h-[52px]">
+                    <label for="floor_number" class="w-[80px] shrink-0 text-[11px] font-medium">رقم الدور</label>
+                    <input type="text" name="floor_number" id="floor_number" value="{{ old('floor_number') }}" placeholder="ادخل رقم الدور" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                </div>
+                <div class="flex gap-3 items-center h-[52px]">
+                    <label for="property_usage" class="w-[80px] shrink-0 text-[11px] font-medium">استخدام العقار</label>
+                    <input type="text" name="property_usage" id="property_usage" value="{{ old('property_usage') }}" placeholder="سكني" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="plan_number" class="w-[80px] shrink-0 text-[11px] font-medium">رقم المخطط</label>
-                    <input type="text" name="plan_number" id="plan_number" value="{{ old('plan_number') }}" placeholder="ادخل رقم المخطط" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                    <input type="text" name="plan_number" id="plan_number" value="{{ old('plan_number') }}" placeholder="ادخل رقم المخطط" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="mortgaged" class="w-[80px] shrink-0 text-[11px] font-medium">العقار مرهون</label>
-                    <select name="mortgaged" id="mortgaged" class="w-full h-[52px] text-[11px] appearance-none rounded-lg border border-gray-200 bg-white px-3">
-                        <option value="no" {{ old('mortgaged') == 'no' ? 'selected' : '' }}>لا</option>
-                        <option value="yes" {{ old('mortgaged') == 'yes' ? 'selected' : '' }}>نعم</option>
+                    <label for="is_mortgaged" class="w-[80px] shrink-0 text-[11px] font-medium">العقار مرهون</label>
+                    <select name="is_mortgaged" id="is_mortgaged" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                        <option value="0" {{ old('is_mortgaged') == '0' ? 'selected' : '' }}>لا</option>
+                        <option value="1" {{ old('is_mortgaged') == '1' ? 'selected' : '' }}>نعم</option>
                     </select>
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="furniture" class="w-[80px] shrink-0 text-[11px] font-medium">الأثاث</label>
-                    <input type="text" name="furniture" id="furniture" value="{{ old('furniture') }}" placeholder="غير مفروش" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                    <label for="furniture_status" class="w-[80px] shrink-0 text-[11px] font-medium">الأثاث</label>
+                    <input type="text" name="furniture_status" id="furniture_status" value="{{ old('furniture_status') }}" placeholder="غير مفروش" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="build_status" class="w-[80px] shrink-0 text-[11px] font-medium">حالة البناء</label>
-                    <input type="text" name="build_status" id="build_status" value="{{ old('build_status') }}" placeholder="جاهز - غير جاهز" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                    <label for="building_status" class="w-[80px] shrink-0 text-[11px] font-medium">حالة البناء</label>
+                    <input type="text" name="building_status" id="building_status" value="{{ old('building_status') }}" placeholder="جاهز - غير جاهز" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="building_number" class="w-[80px] shrink-0 text-[11px] font-medium">رقم المبنى</label>
-                    <input type="text" name="building_number" id="building_number" value="{{ old('building_number') }}" placeholder="ادخل رقم المبني" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                    <input type="text" name="building_number" id="building_number" value="{{ old('building_number') }}" placeholder="ادخل رقم المبني" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="postal_code" class="w-[80px] shrink-0 text-[11px] font-medium">الرمز البريدي</label>
-                    <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code') }}" placeholder="ادخل الرمز البريدي" class="w-full h-[52px] text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                    <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code') }}" placeholder="ادخل الرمز البريدي" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
             </div>
         </section>
@@ -233,29 +242,119 @@
 @endsection
 
 @push('scripts')
+    {{-- Leaflet JS for the map --}}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    {{-- Alpine JS for the ad type dropdown --}}
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // --- MAP LOGIC ---
         const defaultLat = parseFloat(document.getElementById('latitude').value) || 24.7136;
         const defaultLng = parseFloat(document.getElementById('longitude').value) || 46.6753;
-
         const latInput = document.getElementById('latitude');
         const lngInput = document.getElementById('longitude');
-
         const map = L.map('map').setView([defaultLat, defaultLng], 13);
-
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-
-        const marker = L.marker([defaultLat, defaultLng], {
-            draggable: true
-        }).addTo(map);
-
+        const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
         marker.on('dragend', function (e) {
             const newPosition = marker.getLatLng();
             latInput.value = newPosition.lat.toFixed(7);
             lngInput.value = newPosition.lng.toFixed(7);
         });
+
+        // --- DYNAMIC CITY/DISTRICT DROPDOWN LOGIC ---
+        const citySelect = document.getElementById('city-select');
+        const districtSelect = document.getElementById('district-select');
+        const selectedDistrictId = "{{ old('district_id', '') }}";
+
+        function fetchDistricts(cityId, selectedDistrict = null) {
+            if (!cityId) {
+                districtSelect.innerHTML = '<option value="">اختر المدينة أولاً</option>';
+                districtSelect.disabled = true;
+                return;
+            }
+            fetch(`/get-districts/${cityId}`)
+                .then(response => response.json())
+                .then(districts => {
+                    districtSelect.innerHTML = '<option value="">اختر الحي</option>';
+                    districts.forEach(district => {
+                        const option = new Option(district.name, district.id);
+                        if (selectedDistrict == district.id) {
+                            option.selected = true;
+                        }
+                        districtSelect.add(option);
+                    });
+                    districtSelect.disabled = false;
+                });
+        }
+
+        citySelect.addEventListener('change', function () { fetchDistricts(this.value); });
+        if (citySelect.value) { fetchDistricts(citySelect.value, selectedDistrictId); }
+
+        // --- DYNAMIC PROPERTY ATTRIBUTES LOGIC ---
+        const propertyTypeSelect = document.getElementById('property_type_id');
+        const attributesContainer = document.getElementById('dynamic-attributes-container');
+        const attributesSection = document.getElementById('dynamic-attributes-section');
+        const oldAttributes = @json(old('attributes') ?? []);
+
+        function fetchAndRenderAttributes(typeId) {
+            attributesContainer.innerHTML = '<p class="text-gray-500">جاري تحميل التفاصيل...</p>';
+            attributesSection.style.display = 'block';
+
+            if (!typeId) {
+                attributesSection.style.display = 'none';
+                return;
+            }
+            
+            fetch(`/admin/property-types/${typeId}/attributes`)
+                .then(response => response.json())
+                .then(attributes => {
+                    attributesContainer.innerHTML = '';
+                    if (attributes.length > 0) {
+                        let hasNonBoolean = false;
+                        attributes.forEach(attribute => {
+                            if (attribute.type === 'boolean') return;
+                            hasNonBoolean = true;
+
+                            const attributeSlug = attribute.name.en.toLowerCase().replace(/ /g, '_');
+                            const existingValue = oldAttributes[attributeSlug] || '';
+                            
+                            const div = document.createElement('div');
+                            div.className = 'flex gap-3 items-center h-[52px]';
+                            
+                            const label = document.createElement('label');
+                            label.className = 'w-[80px] shrink-0 text-[11px] font-medium';
+                            label.innerHTML = `${attribute.name.ar}`;
+
+                            const input = document.createElement('input');
+                            input.type = attribute.type === 'number' ? 'number' : 'text';
+                            input.name = `attributes[${attributeSlug}]`;
+                            input.className = 'w-full h-full text-[11px] rounded-lg border border-gray-200 px-3';
+                            input.placeholder = `ادخل ${attribute.name.ar}`;
+                            input.value = existingValue;
+                            
+                            div.appendChild(label);
+                            div.appendChild(input);
+                            attributesContainer.appendChild(div);
+                        });
+                        if (!hasNonBoolean) {
+                           attributesSection.style.display = 'none';
+                        }
+                    } else {
+                        attributesSection.style.display = 'none';
+                    }
+                });
+        }
+        
+        propertyTypeSelect.addEventListener('change', function() {
+            fetchAndRenderAttributes(this.value);
+        });
+
+        if (propertyTypeSelect.value) {
+            fetchAndRenderAttributes(propertyTypeSelect.value);
+        }
     });
 </script>
 @endpush

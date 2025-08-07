@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             SubscriptionSeeder::class,
             CitySeeder::class,
             DistrictSeeder::class,
+            PropertyAttributeSeeder::class,
         ]);
     }
 }

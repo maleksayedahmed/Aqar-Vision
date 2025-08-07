@@ -12,68 +12,65 @@ class Ad extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * This array is now updated to match the database and form fields.
      */
     protected $fillable = [
         // Foreign Keys
         'user_id',
         'ad_price_id',
-        
+        'property_type_id',
+        'district_id',
+
         // Ad Status
         'status',
         'expires_at',
 
-        // Step 1: Basic Info
+        // Property Details from Step 1
         'title',
-        'age',
-        'transaction_type',
-        'floor_number',
-        'price',
-        'finishing_status',
-        'property_type',
-        'direction',
-        'bathrooms',
-        'rooms',
-        'area',
         'description',
+        'listing_purpose',
+        'total_price',
+        'area_sq_meters',
+        'age_years',
+        'rooms',
+        'bathrooms',
+        'floor_number',
+        'finishing_status',
+        'facade',
 
-        // Step 1: Location Info
-        'city',
-        'neighborhood',
-        'province',
-        'street',
+        // Location Details
         'latitude',         
         'longitude',       
+        'street_name',
+        'province',
 
-        // Step 1: Features & Additional Details
-        'features', // This will store the array of selected features
-        'usage',
+        // Features & Additional Details
+        'features',
+        'property_usage',
         'plan_number',
-        'mortgaged',
-        'furniture',
-        'build_status',
+        'is_mortgaged',
+        'furniture_status',
+        'building_status',
         'building_number',
         'postal_code',
 
-        // Step 2: Media (Simple path storage)
+        // Media Paths
         'video_path',
-        'images', // This will store an array of image paths
+        'images',
     ];
 
     /**
      * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
      */
     protected $casts = [
         'expires_at' => 'datetime',
-        'price' => 'decimal:2',
-        'area' => 'decimal:2',
+        'total_price' => 'decimal:2',
+        'area_sq_meters' => 'decimal:2',
         'bathrooms' => 'integer',
         'rooms' => 'integer',
-        'features' => 'array', // Automatically convert the features array to/from JSON
-        'images' => 'array',   // Automatically convert the images array to/from JSON
+        'features' => 'array',
+        'images' => 'array',
+        'is_mortgaged' => 'boolean',
     ];
 
     /**
@@ -90,5 +87,21 @@ class Ad extends Model
     public function adPrice()
     {
         return $this->belongsTo(AdPrice::class);
+    }
+
+    /**
+     * Get the district for this ad.
+     */
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    /**
+     * Get the property type for this ad.
+     */
+    public function propertyType()
+    {
+        return $this->belongsTo(PropertyType::class);
     }
 }
