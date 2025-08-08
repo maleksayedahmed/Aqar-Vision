@@ -22,6 +22,7 @@ use App\Http\Controllers\Agent\ComplaintController;
 use App\Http\Controllers\Agent\TermsController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PropertySearchController;
+use App\Http\Controllers\Agent\NotificationController;
 
 
 /*
@@ -83,5 +84,6 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
 
     Route::get('/ads/create/step-2', [AdController::class, 'createStepTwo'])->name('ads.create.step2');
     Route::post('/ads/create/store', [AdController::class, 'storeAd'])->name('ads.store');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
 
 });

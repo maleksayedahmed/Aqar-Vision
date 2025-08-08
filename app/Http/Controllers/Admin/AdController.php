@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Notifications\AdStatusUpdated;
 
 class AdController extends Controller
 {
@@ -108,7 +109,16 @@ class AdController extends Controller
         $validatedData = $this->validateAd($request);
         $validatedData['updated_by'] = auth()->id();
 
+        // Get the status before updating
+        $originalStatus = $ad->status;
+        
         $ad->update($validatedData);
+
+        // Check if the status was changed to 'active' or 'rejected'
+        if ($validatedData['status'] !== $originalStatus && in_array($validatedData['status'], ['active', 'rejected'])) {
+            // Get the user who owns the ad and notify them
+            $ad->user->notify(new AdStatusUpdated($ad));
+        }
 
         return redirect()->route('admin.ads.index')->with('success', 'Ad updated successfully.');
     }
