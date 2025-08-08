@@ -70,6 +70,11 @@
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-list-rich"></use></svg> {{ __('attributes.property_attributes.title') }}
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.ads.*') ? 'active' : '' }}" href="{{ route('admin.ads.index') }}">
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-newspaper"></use></svg> Ads Management
+            </a>
+        </li>
 
         {{-- Locations Dropdown --}}
         <li class="nav-group {{ request()->routeIs('admin.districts.*') || request()->routeIs('admin.cities.*') ? 'show' : '' }}">

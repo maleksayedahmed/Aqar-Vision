@@ -20,8 +20,10 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UpgradeRequestController;
+use App\Http\Controllers\Admin\AdController;
 use App\Http\Middleware\Language;
 use Illuminate\Support\Facades\Route;
+
 
 Route::middleware(['auth' ,Language::class])
     ->prefix('admin')
@@ -58,6 +60,8 @@ Route::middleware(['auth' ,Language::class])
     Route::resource('property-purposes', PropertyPurposeController::class)->except('show');
     Route::post('property-purposes/{propertyPurpose}/toggle-status', [PropertyPurposeController::class, 'toggleStatus'])->name('property-purposes.toggle-status');
     Route::resource('property-attributes', PropertyAttributeController::class)->except('show');
+
+    Route::resource('ads', AdController::class);
 
     // Locations (Districts & Cities)
     Route::resource('districts', DistrictController::class)->except('show');
