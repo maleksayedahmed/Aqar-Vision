@@ -31,7 +31,7 @@ class UserController extends Controller
 
         if ($request->filled('role')) {
             $query->whereHas('roles', function ($q) use ($request) {
-                $q->where('name', $request->role);
+                $q->where('name', 'LIKE', '%' . $request->role . '%'); // Used LIKE for flexibility
             });
         }
 
@@ -60,13 +60,11 @@ class UserController extends Controller
 
         $user = User::create($data);
 
-        // Assign the role first
         $newRole = $request->role ?? null;
         if ($newRole) {
             $user->assignRole($newRole);
         }
 
-        // Now, check the role and handle the associated model logic
         $this->syncRoleBasedModels($user, $newRole);
 
         return redirect()->route('admin.users.index')
@@ -83,6 +81,7 @@ class UserController extends Controller
     }
 
     /**
+     * THIS IS THE MISSING METHOD
      * Update the specified resource in storage.
      */
     public function update(UpdateUserRequest $request, User $user)
@@ -99,16 +98,15 @@ class UserController extends Controller
 
         $user->update($data);
 
-        // Sync the role(s)
         $newRole = $request->role ?? null;
         $user->syncRoles($newRole ? [$newRole] : []);
 
-        // Now, check the role and handle the associated model logic
         $this->syncRoleBasedModels($user, $newRole);
 
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.updated_successfully'));
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -120,9 +118,12 @@ class UserController extends Controller
                 ->with('error', __('messages.cannot_delete_self'));
         }
 
-        // Also delete any associated agent or agency records
-        $user->agents()->delete();
-        $user->agency()->delete();
+        if ($user->agent) {
+            $user->agent()->delete();
+        }
+        if ($user->agency) {
+            $user->agency()->delete();
+        }
 
         $user->delete();
         return redirect()->route('admin.users.index')
@@ -144,27 +145,15 @@ class UserController extends Controller
             ->with('success', __('messages.status_updated_successfully'));
     }
 
-
     /**
      * A helper method to create or delete Agent/Agency records based on the user's role.
-     * This ensures data consistency when a user's role is changed.
-     *
-     * @param User $user The user being updated.
-     * @param ?string $newRoleName The name of the new role being assigned.
      */
     private function syncRoleBasedModels(User $user, ?string $newRoleName): void
     {
-        // --- Handle Agency Role ---
         if ($newRoleName === 'agency') {
-            // Create an Agency record if one doesn't already exist for this user
             if (!$user->agency) {
                 $defaultAgencyType = AgencyType::first();
-                if (!$defaultAgencyType) {
-                    // This prevents a database error if the agency_types table is empty.
-                    // You should seed this table with at least one default type.
-                    return;
-                }
-
+                if (!$defaultAgencyType) { return; }
                 Agency::create([
                     'user_id' => $user->id,
                     'agency_name' => $user->name,
@@ -173,30 +162,29 @@ class UserController extends Controller
                     'agency_type_id' => $defaultAgencyType->id,
                 ]);
             }
-            // CRITICAL: Clean up any old Agent record for this user
-            $user->agents()->delete();
-
-        // --- Handle Agent Role ---
+            if ($user->agent) {
+                $user->agent()->delete();
+            }
         } elseif ($newRoleName === 'agent') {
-            // Create an Agent record if one doesn't already exist for this user
-            if ($user->agents()->doesntExist()) {
-                // IMPORTANT: Ensure an agent_type with id=1 exists in your agent_types table.
+            if (!$user->agent) {
                 Agent::create([
                     'user_id' => $user->id,
                     'full_name' => $user->name,
                     'email' => $user->email,
                     'created_by' => auth()->id() ?? $user->id,
-                    'agent_type_id' => 1,
+                    'agent_type_id' => 1, // Assumes agent_type with ID 1 exists
                 ]);
             }
-            // CRITICAL: Clean up any old Agency record for this user
-            $user->agency()->delete();
-
-        // --- Handle all other roles (e.g., 'user', 'admin') ---
+            if ($user->agency) {
+                $user->agency()->delete();
+            }
         } else {
-            // If the user is not an agent or agency, ensure both related records are deleted.
-            $user->agents()->delete();
-            $user->agency()->delete();
+            if ($user->agent) {
+                $user->agent()->delete();
+            }
+            if ($user->agency) {
+                $user->agency()->delete();
+            }
         }
     }
 }
