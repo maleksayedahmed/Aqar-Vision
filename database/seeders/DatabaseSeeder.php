@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             DistrictSeeder::class,
             PropertyAttributeSeeder::class,
+            AgentSeeder::class,
         ]);
     }
 }

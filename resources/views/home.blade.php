@@ -96,7 +96,82 @@
     </section>
 
     <section class="max-w-[1325px] w-full mx-auto py-8 px-4 lg:px-0">
-        {{-- ... (The Hero Slider component remains the same) ... --}}
+
+        <!-- The Hero Slider Component (The code inside this component is the same) -->
+        <div
+            x-data="{
+                activeSlide: 0,
+                slides: [
+                    { headline: 'شفنا لك البيت، وبسعر السوق - كل شيء واضح', subheadline: 'مع عقار فيجن' },
+                    { headline: 'تحليلات دقيقة وتقارير مفصلة لكل عقار', subheadline: 'لاتخاذ أفضل قرار' },
+                    { headline: 'ابحث، قارن، واشترِ بثقة تامة', subheadline: 'مستقبلك يبدأ هنا' }
+                ]
+            }"
+            x-init="setInterval(() => { activeSlide = (activeSlide + 1) % slides.length }, 5000)"
+            class="relative rounded-2xl overflow-hidden bg-[rgba(236,238,249,1)] w-full"
+        >
+            <!-- Subtle background pattern -->
+            <div class="absolute bottom-0 left-0 opacity-40">
+                <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="pattern-squares" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <rect x="8" y="8" width="4" height="4" fill="#e0e7ff" />
+                        </pattern>
+                    </defs>
+                    <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-squares)" />
+                </svg>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="relative grid grid-cols-1 lg:grid-cols-2 items-center gap-0 lg:gap-8 py-6 px-4 md:py-[60px] md:px-[65px] z-10">
+
+                <!-- Text Content Column -->
+                <div class="flex flex-col items-center lg:items-start gap-y-8 text-center lg:text-right">
+                    <!-- Logo -->
+                    <img src="images/logo.png" class="w-[70px] h-[60px]" alt="logo">
+
+                    <!-- Headline Text Container -->
+                    <div class="relative min-h-[120px] md:min-h-[140px] w-full">
+                        <template x-for="(slide, index) in slides" :key="index">
+                            <div
+                                x-show="activeSlide === index"
+                                x-transition:enter="transition ease-out duration-500"
+                                x-transition:enter-start="opacity-0 transform -translate-y-4"
+                                x-transition:enter-end="opacity-100 transform translate-y-0"
+                                x-transition:leave="transition ease-in duration-300"
+                                x-transition:leave-start="opacity-100 transform translate-y-0"
+                                x-transition:leave-end="opacity-0 transform translate-y-4"
+                                class="absolute w-full space-y-2"
+                            >
+                                <h1 class="text-2xl md:text-3xl font-bold text-slate-800" x-text="slide.headline"></h1>
+                                <p class="text-2xl md:text-3xl font-bold">
+                                    <span class="text-slate-700">مع</span>
+                                    <span class="text-indigo-600" x-text="slide.subheadline.split(' ')[1]"></span>
+                                </p>
+                            </div>
+                        </template>
+                    </div>
+                    
+                    <!-- Slider Pagination Dots -->
+                    <div class="flex gap-x-2 items-center self-center lg:self-end lg:-ml-[8%]">
+                        <template x-for="(slide, index) in slides" :key="index">
+                            <button
+                                @click="activeSlide = index"
+                                class="h-1.5 rounded-full transition-all duration-300"
+                                :class="{ 'bg-indigo-600 w-8': activeSlide === index, 'bg-slate-300 w-1.5 hover:bg-slate-400': activeSlide !== index }"
+                            ></button>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Image Column -->
+                <div class="hidden lg:flex relative justify-center items-center h-full min-h-[250px] lg:min-h-0">
+                    <img src="images/home.png" alt="Modern house with red roof" class="relative lg:absolute mt-8 lg:mt-[150px] lg:-ml-[210px] w-[400px] sm:w-[300px] lg:w-[380px] h-auto object-contain">
+                </div>
+
+            </div>
+        </div>
+            
     </section>
 
     <section class="max-w-7xl w-[100%] mx-auto py-12 px-4">
@@ -119,7 +194,7 @@
                         <div class="slider-card bg-white border border-gray-100 rounded-xl w-[320px] flex-shrink-0 snap-start shadow-sm hover:shadow-lg transition-shadow duration-300">
                             <div>
                                 <div class="relative">
-                                    <img src="{{ optional($ad->getFirstMedia('images'))->getUrl('thumb') ?: 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-lg" alt="{{ $ad->title }}">
+                                    <img src="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-lg" alt="{{ $ad->title }}">
                                     <div class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">{{ $ad->listing_purpose == 'rent' ? 'إيجار' : 'بيع' }}</div>
                                     <button class="absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[rgba(242,242,242,1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg></button>
                                 </div>
@@ -167,7 +242,15 @@
                             <div class="self-end"><span class="bg-[#e6f6f0] text-[#1d8e5a] text-[11px] font-medium px-2 py-1 rounded-md">مسوق عقاري</span></div>
                             <div class="flex items-center gap-1 text-[rgba(48,62,124,1)]">
                                 <img src="{{ $agent->profile_photo_path ? Storage::url($agent->profile_photo_path) : asset('images/agent.png') }}" alt="{{ $agent->name }}" class="w-16 h-16 rounded-full object-cover border-2 border-white">
-                                <div class="space-y-1"><h3 class="font-medium text-lg text-[rgba(48,62,124,1)]">{{ $agent->name }}</h3></div>
+                                <div class="space-y-1">
+                                    
+                                    <div class="flex items-center gap-0.5 text-slate-500 text-[9px]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[rgba(217,222,242,1)]" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>{{ $agent->agent?->city?->name ?? 'غير محدد' }}</span>
+                                    </div>
+                                    <h3 class="font-medium text-lg text-[rgba(48,62,124,1)]">{{ $agent->name }}</h3></div>
                             </div>
                             <div class="flex justify-between items-center gap-[60px] pt-2">
                                 <div class="flex items-center gap-1.5 text-[rgba(48,62,124,1)] text-[8px] font-medium"><svg width="8" height="9" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75391 8.60121H3.31641V5.44201L1.75391 4.74756V8.60121ZM2.63281 5.76918H3.02344V6.35512H2.63281V5.76918ZM2.63281 6.55043H3.02344V7.13637H2.63281V6.55043ZM2.63281 7.33168H3.02344V7.91762H2.63281V7.33168ZM2.04688 5.76918H2.4375V6.35512H2.04688V5.76918ZM2.04688 6.55043H2.4375V7.13637H2.04688V6.55043ZM2.04688 7.33168H2.4375V7.91762H2.04688V7.33168Z" fill="#303E7C"/><path d="M-0.00390625 8.60121H1.55859V4.74756L-0.00390625 5.44201V8.60121ZM0.875 5.76918H1.26562V6.35512H0.875V5.76918ZM0.875 6.55043H1.26562V7.13637H0.875V6.55043ZM0.875 7.33168H1.26562V7.91762H0.875V7.33168ZM0.289062 5.76918H0.679688V6.35512H0.289062V5.76918ZM0.289062 6.55043H0.679688V7.13637H0.289062V6.55043ZM0.289062 7.33168H0.679688V7.91762H0.289062V7.33168Z" fill="#303E7C"/><path d="M2.33976 4.79273C2.33976 4.79326 2.3396 4.79377 2.3396 4.7943L3.45364 5.28943C3.48892 5.30512 3.51163 5.3401 3.51163 5.37867V8.60133H5.07413V0.436035L2.33976 1.3475V4.79273ZM3.99991 1.47242L4.78116 1.27711V1.66773L3.99991 1.86305V1.47242ZM3.99991 2.05836L4.78116 1.86305V2.25367L3.99991 2.44898V2.05836ZM3.99991 2.6443L4.78116 2.44898V2.83961L3.99991 3.03492V2.6443ZM3.99991 3.23023L4.78116 3.03492V3.42555L3.99991 3.62086V3.23023ZM3.99991 3.81617L4.78116 3.62086V4.01148L3.99991 4.2068V3.81617ZM3.99991 4.40211L4.78116 4.2068V4.59742L3.99991 4.79273V4.40211ZM3.99991 4.98805L4.78116 4.79273V5.18336L3.99991 5.37867V4.98805ZM3.99991 5.57398L4.78116 5.37867V5.7693L3.99991 5.96461V5.57398ZM2.82804 1.86305L3.60929 1.66773V2.05836L2.82804 2.25367V1.86305ZM2.82804 2.44898L3.60929 2.25367V2.6443L2.82804 2.83961V2.44898ZM2.82804 3.03492L3.60929 2.83961V3.23023L2.82804 3.42555V3.03492ZM2.82804 3.62086L3.60929 3.42555V3.81617L2.82804 4.01148V3.62086Z" fill="#303E7C"/><path d="M5.26953 0.436035V8.60133H8.00391V1.3475L5.26953 0.436035ZM6.34375 5.96461L5.5625 5.7693V5.37867L6.34375 5.57398V5.96461ZM6.34375 5.37867L5.5625 5.18336V4.79273L6.34375 4.98805V5.37867ZM6.34375 4.79273L5.5625 4.59742V4.2068L6.34375 4.40211V4.79273ZM6.34375 4.2068L5.5625 4.01148V3.62086L6.34375 3.81617V4.2068ZM6.34375 3.62086L5.5625 3.42555V3.03492L6.34375 3.23023V3.62086ZM6.34375 3.03492L5.5625 2.83961V2.44898L6.34375 2.6443V3.03492ZM6.34375 2.44898L5.5625 2.25367V1.86305L6.34375 2.05836V2.44898ZM6.34375 1.86305L5.5625 1.66773V1.27711L6.34375 1.47242V1.86305ZM7.51562 6.35523L6.73438 6.15992V5.7693L7.51562 5.96461V6.35523ZM7.51562 5.7693L6.73438 5.57398V5.18336L7.51562 5.37867V5.7693ZM7.51562 5.18336L6.73438 4.98805V4.59742L7.51562 4.79273V5.18336ZM7.51562 4.59742L6.73438 4.40211V4.01148L7.51562 4.2068V4.59742ZM7.51562 4.01148L6.73438 3.81617V3.42555L7.51562 3.62086V4.01148ZM7.51562 3.42555L6.73438 3.23023V2.83961L7.51562 3.03492V3.42555ZM7.51562 2.83961L6.73438 2.6443V2.25367L7.51562 2.44898V2.83961ZM7.51562 2.25367L6.73438 2.05836V1.66773L7.51562 1.86305V2.25367Z" fill="#303E7C"/></svg>                  
@@ -188,7 +271,24 @@
         </div>
     </section>
 
-    {{-- ... (CTA Section remains the same) ... --}}
+     <!-- world section -->
+    <section class="my-16 flex justify-center px-4">
+        <div class="w-full lg:w-[1120px] text-center p-6 md:p-8 lg:p-12 rounded-2xl bg-cover bg-center" style="background-image: url('images/world.png'); background-color: rgba(68, 112, 174, 1);">
+            
+            <h2 class="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
+                لديك عقار للبيع أو الإيجار؟ ابدأ إعلانك هنا!
+            </h2>
+            
+            <p class="text-white/90 text-base lg:text-lg mb-8 max-w-3xl mx-auto font-medium leading-relaxed">
+                يمكنك الآن إصدار رخصة إعلان لعقارك والوصول إلى آلاف المشترين أو المستأجرين المحتملين بكل سهولة. لديك حتى 3 إعلان متاح كحد أقصى لحسابك.
+            </p>
+            
+            <a href="#" class="inline-block bg-[#2C3F80] text-white font-semibold py-3 px-10 rounded-full hover:bg-opacity-90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#4A6C9B] focus:ring-white">
+                إصدار ترخيص اعلان
+            </a>
+            
+        </div>
+    </section>
 </main>
 @endsection
 
@@ -226,51 +326,89 @@
             setInitialState();
         }
 
-        // Property Slider Functionality
-        const sliderTrack = document.getElementById('sliderTrack');
-        if (sliderTrack) {
-            const nextBtn = document.getElementById('nextBtn');
-            const prevBtn = document.getElementById('prevBtn');
-            const cards = sliderTrack.querySelectorAll('.slider-card');
+        
+                // Property slider functionality
+    const sliderTrack = document.getElementById('sliderTrack');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const cards = document.querySelectorAll('.slider-card');
+    
+    let currentIndex = 0;
+    const cardWidth = 320; // Card width in pixels
+    const gap = 16; // Gap between cards (assuming 1rem = 16px)
+    const slideDistance = cardWidth + gap;
+    const maxIndex = cards.length - 1;
+    
+    // Function to update slider position
+    function updateSliderPosition() {
+        const translateX = currentIndex * slideDistance;
+        sliderTrack.style.transform = `translateX(${translateX}px)`;
+        
+        // Update button states
+        prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+        nextBtn.style.opacity = currentIndex === maxIndex ? '0.5' : '1';
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === maxIndex;
+    }
+    
+    // Next button click handler
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
             
-            if (cards.length > 0) {
-                let currentIndex = 0;
-                const cardWidth = 320;
-                const gap = 16;
-                const slideDistance = cardWidth + gap;
-                const maxIndex = cards.length > 1 ? cards.length - Math.floor(sliderTrack.parentElement.offsetWidth / slideDistance) : 0;
-
-                function updateSliderPosition() {
-                    const translateX = currentIndex * slideDistance * -1;
-                    sliderTrack.style.transform = `translateX(${translateX}px)`;
-                    
-                    if(prevBtn && nextBtn){
-                        prevBtn.disabled = currentIndex === 0;
-                        nextBtn.disabled = currentIndex >= maxIndex;
-                    }
-                }
-                
-                if (nextBtn) {
-                    nextBtn.addEventListener('click', () => {
-                        if (currentIndex < maxIndex) {
-                            currentIndex++;
-                            updateSliderPosition();
-                        }
-                    });
-                }
-                
-                if (prevBtn) {
-                    prevBtn.addEventListener('click', () => {
-                        if (currentIndex > 0) {
-                            currentIndex--;
-                            updateSliderPosition();
-                        }
-                    });
-                }
+            if (currentIndex < maxIndex) {
+                currentIndex++;
                 updateSliderPosition();
-                window.addEventListener('resize', updateSliderPosition);
+            }
+        });
+    }
+    
+    // Previous button click handler
+    prevBtn.addEventListener('click', function() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSliderPosition();
+        }
+    });
+    
+    // Initialize slider
+    updateSliderPosition();
+    
+    
+    // Optional: Add touch/swipe support for mobile
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+    
+    sliderTrack.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+    });
+    
+    sliderTrack.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        e.preventDefault();
+    });
+    
+    sliderTrack.addEventListener('touchend', function() {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const diffX = startX - currentX;
+        const threshold = 50; // Minimum swipe distance
+        
+        if (Math.abs(diffX) > threshold) {
+            if (diffX > 0 && currentIndex < maxIndex) {
+                // Swipe left - go to next
+                currentIndex++;
+                updateSliderPosition();
+            } else if (diffX < 0 && currentIndex > 0) {
+                // Swipe right - go to previous
+                currentIndex--;
+                updateSliderPosition();
             }
         }
+    }); 
 
         // Agents Slider Functionality
         const agentsSlider = document.querySelector('#agents-slider');

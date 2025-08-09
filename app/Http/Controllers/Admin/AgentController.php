@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AgentRequest;
-use App\Models\Agent;
+use App\Models\Agent; // <-- We will use this directly in the index method
+use App\Models\City;
 use App\Repositories\AgentRepository;
 use App\Repositories\AgentTypeRepository;
 use App\Repositories\AgencyRepository;
@@ -30,9 +31,16 @@ class AgentController extends Controller
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * THIS IS THE CORRECTED METHOD
+     */
     public function index()
     {
-        $agents = $this->agentRepository->paginate();
+        // Start the query directly on the Agent model to use eager loading
+        $agents = Agent::with(['user', 'agentType', 'agency', 'city'])
+                        ->latest() // Order by the newest agents first
+                        ->paginate(15); // Paginate the results
+
         return view('admin.agents.index', compact('agents'));
     }
 
@@ -41,7 +49,9 @@ class AgentController extends Controller
         $users = $this->userRepository->all();
         $agentTypes = $this->agentTypeRepository->getActive();
         $agencies = $this->agencyRepository->all();
-        return view('admin.agents.create', compact('users', 'agentTypes', 'agencies'));
+        $cities = City::where('is_active', true)->orderBy('name')->get();
+
+        return view('admin.agents.create', compact('users', 'agentTypes', 'agencies', 'cities'));
     }
 
     public function store(AgentRequest $request)
@@ -55,11 +65,13 @@ class AgentController extends Controller
 
     public function edit(Agent $agent)
     {
-        $agent->load('user', 'agentType', 'agency');
+        $agent->load('user', 'agentType', 'agency', 'city');
         $users = $this->userRepository->all();
         $agentTypes = $this->agentTypeRepository->getActive();
         $agencies = $this->agencyRepository->all();
-        return view('admin.agents.edit', compact('agent', 'users', 'agentTypes', 'agencies'));
+        $cities = City::where('is_active', true)->orderBy('name')->get();
+
+        return view('admin.agents.edit', compact('agent', 'users', 'agentTypes', 'agencies', 'cities'));
     }
 
     public function update(AgentRequest $request, Agent $agent)
@@ -77,4 +89,4 @@ class AgentController extends Controller
         return redirect()->route('admin.agents.index')
             ->with('success', __('messages.deleted_successfully'));
     }
-} 
+}

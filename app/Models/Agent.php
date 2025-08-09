@@ -16,6 +16,7 @@ class Agent extends Model
         'agent_type_id',
         'phone_number',
         'email',
+        'city_id',
         'license_number',
         'license_issue_date',
         'license_expiry_date',
@@ -45,6 +46,11 @@ class Agent extends Model
     public function agency()
     {
         return $this->belongsTo(Agency::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 
     public function licenses()

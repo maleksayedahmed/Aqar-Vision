@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\StoreUserRequest;
 use App\Http\Requests\Admin\User\UpdateUserRequest;
-use App\Models\Agent;
-use App\Models\Agency;
-use App\Models\AgencyType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +28,7 @@ class UserController extends Controller
 
         if ($request->filled('role')) {
             $query->whereHas('roles', function ($q) use ($request) {
-                $q->where('name', 'LIKE', '%' . $request->role . '%'); // Used LIKE for flexibility
+                $q->where('name', 'LIKE', '%' . $request->role . '%');
             });
         }
 
@@ -65,7 +62,8 @@ class UserController extends Controller
             $user->assignRole($newRole);
         }
 
-        $this->syncRoleBasedModels($user, $newRole);
+        // Automatic creation of Agent/Agency is removed to be handled explicitly or by a dedicated process.
+        // $this->syncRoleBasedModels($user, $newRole);
 
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.created_successfully'));
@@ -81,7 +79,6 @@ class UserController extends Controller
     }
 
     /**
-     * THIS IS THE MISSING METHOD
      * Update the specified resource in storage.
      */
     public function update(UpdateUserRequest $request, User $user)
@@ -101,12 +98,12 @@ class UserController extends Controller
         $newRole = $request->role ?? null;
         $user->syncRoles($newRole ? [$newRole] : []);
 
-        $this->syncRoleBasedModels($user, $newRole);
+        // Automatic creation/deletion of Agent/Agency is removed to be handled explicitly.
+        // $this->syncRoleBasedModels($user, $newRole);
 
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.updated_successfully'));
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -118,6 +115,8 @@ class UserController extends Controller
                 ->with('error', __('messages.cannot_delete_self'));
         }
 
+        // Note: Related agent/agency records will be handled by database constraints (e.g., onDelete('cascade'))
+        // or should be handled here if constraints are not set.
         if ($user->agent) {
             $user->agent()->delete();
         }
@@ -143,48 +142,5 @@ class UserController extends Controller
         $user->update(['is_active' => !$user->is_active]);
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.status_updated_successfully'));
-    }
-
-    /**
-     * A helper method to create or delete Agent/Agency records based on the user's role.
-     */
-    private function syncRoleBasedModels(User $user, ?string $newRoleName): void
-    {
-        if ($newRoleName === 'agency') {
-            if (!$user->agency) {
-                $defaultAgencyType = AgencyType::first();
-                if (!$defaultAgencyType) { return; }
-                Agency::create([
-                    'user_id' => $user->id,
-                    'agency_name' => $user->name,
-                    'email' => $user->email,
-                    'created_by' => auth()->id() ?? $user->id,
-                    'agency_type_id' => $defaultAgencyType->id,
-                ]);
-            }
-            if ($user->agent) {
-                $user->agent()->delete();
-            }
-        } elseif ($newRoleName === 'agent') {
-            if (!$user->agent) {
-                Agent::create([
-                    'user_id' => $user->id,
-                    'full_name' => $user->name,
-                    'email' => $user->email,
-                    'created_by' => auth()->id() ?? $user->id,
-                    'agent_type_id' => 1, // Assumes agent_type with ID 1 exists
-                ]);
-            }
-            if ($user->agency) {
-                $user->agency()->delete();
-            }
-        } else {
-            if ($user->agent) {
-                $user->agent()->delete();
-            }
-            if ($user->agency) {
-                $user->agency()->delete();
-            }
-        }
     }
 }

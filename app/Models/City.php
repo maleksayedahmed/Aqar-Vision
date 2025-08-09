@@ -15,4 +15,8 @@ class City extends Model
     {
         return $this->hasMany(District::class);
     }
+    public function agents()
+    {
+        return $this->hasMany(Agent::class);
+    }
 }
