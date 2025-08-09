@@ -19,6 +19,7 @@
                     <a href="{{ route('agent.notifications') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-[rgba(48,62,124,0.09)] text-[16px] transition-colors {{ request()->routeIs('agent.notifications') ? 'bg-[rgba(48,62,124,0.09)]' : '' }}">
                         <img src="{{ asset('images/bell.svg') }}">
                         <span>الاشعارات</span>
+                        @livewire('agent.notification-counter')
                     </a>
                 </li>
                 <li>

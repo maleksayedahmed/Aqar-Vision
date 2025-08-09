@@ -1,4 +1,4 @@
-<div class="bg-white rounded-2xl shadow-sm p-6 sm:p-8">
+<div class="bg-white rounded-2xl shadow-sm p-6 sm:p-8" wire:poll.10s>
 
     <!-- Header with Delete button -->
     <div class="flex justify-end mb-4">

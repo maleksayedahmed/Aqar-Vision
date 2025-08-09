@@ -10,6 +10,9 @@ class Notifications extends Component
 {
     use WithPagination;
 
+    // This listener will be triggered by the counter component
+    protected $listeners = ['refreshNotifications' => '$refresh'];
+
     public function markAsRead($notificationId)
     {
         $notification = Auth::user()->notifications()->find($notificationId);
@@ -25,7 +28,7 @@ class Notifications extends Component
 
     public function render()
     {
-        // Mark all visible notifications as read when the component renders
+        // Mark all visible unread notifications as read when the component renders
         Auth::user()->unreadNotifications->markAsRead();
         
         $notifications = Auth::user()->notifications()->paginate(10);
