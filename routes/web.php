@@ -38,6 +38,7 @@ Route::post('/login/phone', [LoginWithPhoneController::class, 'sendOtp'])->name(
 Route::post('/login/otp/verify', [LoginWithPhoneController::class, 'verifyOtp'])->name('login.phone.verify');
 Route::get('/get-districts/{city}', [LocationController::class, 'getDistrictsByCity'])->name('districts.get');
 Route::get('/properties', [PropertySearchController::class, 'index'])->name('properties.search');
+Route::get('/properties/{ad}', [PropertySearchController::class, 'show'])->name('properties.show');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

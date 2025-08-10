@@ -174,7 +174,7 @@
                         </div>
                         <div class="border-t border-gray-100 pt-5 mt-5 flex justify-between items-center">
                             <p class="text-lg font-bold text-indigo-700">{{ number_format($ad->total_price) }} <span class="text-xs font-medium text-slate-500">ر.س</span></p>
-                            <a href="#" class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800">رؤية التفاصيل</a>
+                            <a href="{{ route('properties.show', $ad->id) }}" class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800">رؤية التفاصيل</a>
                         </div>
                     </div>
                 </div>
