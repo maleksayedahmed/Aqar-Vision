@@ -8,7 +8,7 @@
                     <div class="card-header">
                         <h3 class="card-title">{{ __('attributes.property_attributes.edit') }}</h3>
                     </div>
-                    <form action="{{ route('admin.property-attributes.update', $propertyAttribute->id) }}" method="POST">
+                    <form action="{{ route('admin.property-attributes.update', $propertyAttribute->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         @include('admin.property-attributes._form', ['propertyAttribute' => $propertyAttribute])

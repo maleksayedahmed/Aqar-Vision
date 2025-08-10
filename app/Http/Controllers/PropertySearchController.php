@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ad;
 use App\Models\City;
+use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -42,7 +43,7 @@ class PropertySearchController extends Controller
             $query->where('listing_purpose', $request->listing_purpose);
         }
 
-        // Price Filter (handles ranges like "100000-500000" or open-ended like "500000")
+        // Price Filter (handles ranges and open-ended values)
         if ($request->filled('price_range')) {
             $range = explode('-', $request->price_range);
             if (isset($range[1]) && is_numeric($range[1])) {
@@ -106,6 +107,13 @@ class PropertySearchController extends Controller
         // Eager load all necessary relationships for the detail page to optimize queries
         $ad->load(['user.agent.city', 'district.city', 'propertyType']);
 
+        // Fetch all boolean attributes (features) to get their names AND icons.
+        // We use keyBy() to create an associative array (e.g., ['pool' => {Attribute Object}])
+        // which makes it very easy to look up in the Blade view.
+        $features = PropertyAttribute::where('type', 'boolean')
+            ->get()
+            ->keyBy(fn ($item) => str_replace(' ', '_', strtolower($item->getTranslation('name', 'en'))));
+
         // Optional: Get a few "similar" ads to display at the bottom
         $similarAds = Ad::where('status', 'active')
                         ->where('id', '!=', $ad->id) // Exclude the current ad
@@ -116,6 +124,7 @@ class PropertySearchController extends Controller
 
         return view('properties.show', [
             'ad' => $ad,
+            'features' => $features, // Pass the features collection to the view
             'similarAds' => $similarAds
         ]);
     }

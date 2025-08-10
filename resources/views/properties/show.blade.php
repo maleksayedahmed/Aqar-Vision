@@ -37,6 +37,7 @@
                         </button>
                         <div x-show="open" @click.away="open = false" x-cloak class="absolute left-0 z-10 mt-2 w-48 origin-top-right rounded-xl bg-white shadow-lg">
                             <div class="py-1">
+                                {{-- Add form submissions here to update status later --}}
                                 <a href="#" class="flex items-center justify-between border-b px-4 py-3 text-sm hover:bg-gray-50"><span>نشط</span></a>
                                 <a href="#" class="flex items-center justify-between border-b px-4 py-3 text-sm hover:bg-gray-50"><span>مباع</span></a>
                                 <a href="#" class="flex items-center justify-between px-4 py-3 text-sm text-red-600 hover:bg-red-50"><span>حذف</span></a>
@@ -143,10 +144,13 @@
                 <h2 class="text-[18px] font-medium mb-6 mt-[25px]">مميزات العقار</h2>
                 <div class="flex flex-wrap flex-row-reverse gap-4 w-full justify-center">
                     @foreach($ad->features as $key => $value)
-                        @if($value == "1")
+                        @if($value == "1" && isset($features[$key]))
+                            @php $feature = $features[$key]; @endphp
                             <div class="flex flex-col items-center justify-center text-center gap-2 bg-white rounded-xl p-3 shadow-sm min-w-[85px] min-h-[55px]">
-                                {{-- You can add icons here based on the key if you wish --}}
-                                <span class="text-[12px] font-medium text-gray-700">{{ __('features.' . $key, [], 'ar') }}</span>
+                                @if($feature->icon_path)
+                                    <img src="{{ Storage::url($feature->icon_path) }}" class="h-6 w-6" alt="{{ $feature->name }}">
+                                @endif
+                                <span class="text-[12px] font-medium text-gray-700">{{ $feature->name }}</span>
                             </div>
                         @endif
                     @endforeach
@@ -225,7 +229,6 @@
             const lat = {{ $ad->latitude ?? 'null' }};
             const lng = {{ $ad->longitude ?? 'null' }};
 
-            // Function to initialize the map
             const initMap = () => {
                 if (lat && lng) {
                     const map = L.map(mapElement).setView([lat, lng], 15);
@@ -240,7 +243,6 @@
                 }
             };
 
-            // Use Intersection Observer to initialize the map only when it becomes visible
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -250,7 +252,9 @@
                 });
             });
 
-            observer.observe(mapElement);
+            if (mapElement) {
+                observer.observe(mapElement);
+            }
         });
     </script>
-@endpush
+@endpush    

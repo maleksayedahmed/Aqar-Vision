@@ -18,6 +18,7 @@
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Icon</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">{{ __('attributes.property_attributes.name') }}</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">{{ __('attributes.property_attributes.type') }}</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">{{ __('attributes.property_attributes.created_at') }}</th>
@@ -28,6 +29,15 @@
                                     @forelse($attributes as $attribute)
                                         <tr>
                                             <td>
+                                                <div class="px-3">
+                                                    @if($attribute->icon_path)
+                                                        <img src="{{ Storage::url($attribute->icon_path) }}" alt="{{ $attribute->name }}" style="width: 30px; height: 30px; border-radius: 4px; object-fit: contain;">
+                                                    @else
+                                                        <span class="text-xs text-muted">No Icon</span>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td>
                                                 <p class="text-xs font-weight-bold mb-0 px-3">{{ $attribute->getTranslation('name', app()->getLocale()) }}</p>
                                             </td>
                                             <td>
@@ -37,19 +47,19 @@
                                                 <span class="text-secondary text-xs font-weight-bold">{{ $attribute->created_at->format('Y-m-d') }}</span>
                                             </td>
                                             <td class="align-middle">
-                                                <div class="d-flex justify-content-end gap-2">
+                                                <div class="d-flex justify-content-end gap-2 px-3">
                                                     <a href="{{ route('admin.property-attributes.edit', $attribute->id) }}" class="text-secondary font-weight-bold text-xs">{{ __('attributes.property_attributes.edit') }}</a>
                                                     <form action="{{ route('admin.property-attributes.destroy', $attribute->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="text-danger font-weight-bold text-xs border-0 bg-transparent">{{ __('attributes.property_attributes.delete') }}</button>
+                                                        <button type="submit" onclick="return confirm('Are you sure? This action cannot be undone.')" class="text-danger font-weight-bold text-xs border-0 bg-transparent">{{ __('attributes.property_attributes.delete') }}</button>
                                                     </form>
                                                 </div>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="text-center py-4">{{ __('attributes.property_attributes.no_records') }}</td>
+                                            <td colspan="5" class="text-center py-4">{{ __('attributes.property_attributes.no_records') }}</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

@@ -10,7 +10,7 @@ class PropertyAttribute extends Model
 {
     use HasFactory, HasTranslations;
 
-    protected $fillable = ['name', 'type'];
+    protected $fillable = ['name', 'type', 'icon_path'];
     public $translatable = ['name'];
 
     public function propertyTypes()
