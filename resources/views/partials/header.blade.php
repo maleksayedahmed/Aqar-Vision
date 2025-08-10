@@ -1,5 +1,3 @@
-{{-- This file now correctly handles both guest and authenticated user headers --}}
-
 @guest
 {{-- ============================================= --}}
 {{-- THIS HEADER IS SHOWN ONLY FOR GUESTS --}}
@@ -38,7 +36,6 @@
         </div>
     </div>
 </header>
-{{-- The Login Modal has been moved to its own partial file: login-modal.blade.php --}}
 @endguest
 
 

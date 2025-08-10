@@ -26,74 +26,69 @@
     </section>
 
     <!-- Main Form Container -->
-    <section class="bg-white flex flex-col items-center p-6 rounded-[20px] shadow-sm md:shadow-none mt-[-140px] md:mt-[-100px] w-[80%] lg:w-[878px] h-auto lg:h-auto gap-6 lg:gap-[40px]">
+<section class="bg-white flex flex-col items-center p-6 rounded-[20px] shadow-sm md:shadow-none mt-[-140px] md:mt-[-100px] w-[80%] lg:w-[878px] h-auto lg:h-auto gap-6 lg:gap-[40px]">
+    
+    <div class="inline-flex p-1 bg-white border border-gray-200 rounded-xl">
+        <button data-tab="buy" data-value="sale" class="toggle-btn px-8 py-2 text-sm font-semibold rounded-lg focus:outline-none transition-colors">
+            شراء
+        </button>
+        <button data-tab="rent" data-value="rent" class="toggle-btn active px-8 py-2 text-sm font-semibold rounded-lg focus:outline-none transition-colors">
+            إيجار
+        </button>
+    </div>
+
+    <form action="{{ route('properties.search') }}" method="GET" class="w-full">
+        <input type="hidden" name="listing_purpose" id="listing_purpose_input" value="rent">
         
-        <div class="inline-flex p-1 bg-white border border-gray-200 rounded-xl">
-            <button data-tab="buy" class="toggle-btn px-8 py-2 text-sm font-semibold rounded-lg focus:outline-none transition-colors">
-                شراء
+        <div class="flex flex-col-reverse lg:flex-row-reverse items-center gap-4 w-full">
+            
+            <button type="submit" class="flex items-center justify-center w-full lg:w-auto h-12 bg-[rgba(48,62,124,1)] text-white font-semibold rounded-lg px-10 hover:bg-indigo-800 focus:outline-none flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <span>بحث</span>
             </button>
-            <button data-tab="rent" class="toggle-btn active px-8 py-2 text-sm font-semibold rounded-lg focus:outline-none transition-colors">
-                إيجار
-            </button>
-        </div>
 
-        {{-- Main Search Form --}}
-        <form action="{{ route('properties.search') }}" method="GET" class="w-full">
-            <div class="flex flex-col-reverse lg:flex-row-reverse items-center gap-4 w-full">
-                
-                <button type="submit" class="flex items-center justify-center w-full lg:w-auto h-12 bg-[rgba(48,62,124,1)] text-white font-semibold rounded-lg px-10 hover:bg-indigo-800 focus:outline-none flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <span>بحث</span>
-                </button>
-
-                <!-- District Dropdown -->
-                <div class="w-full h-12 relative">
-                    <select name="district_id" id="district-select" class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pl-10 pr-4 cursor-pointer hover:border-indigo-400 transition-colors text-sm font-medium text-gray-700 disabled:bg-gray-100" disabled>
-                        <option value="">اختر المدينة أولاً</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                </div>
-                
-                <!-- City Dropdown -->
-                <div class="w-full h-12 relative">
-                    <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none"><img src="{{ asset('images/city.svg') }}" alt="City icon"></div>
-                    <select name="city_id" id="city-select" class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pr-12 pl-10 cursor-pointer hover:border-indigo-400 transition-colors text-sm font-medium text-gray-700">
-                        <option value="">المدينة</option>
-                        @foreach($cities as $city)
-                            <option value="{{ $city->id }}">{{ $city->name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                </div>
-                
-                <!-- Property Type Dropdown -->
-                <div class="w-full h-12 relative">
-                    <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none"><img src="{{ asset('images/aqar.svg') }}" alt="Property icon"></div>
-                    <select name="property_type_id" class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pr-12 pl-10 cursor-pointer hover:border-indigo-400 transition-colors text-sm font-medium text-gray-700">
-                        <option value="">نوع العقار</option>
-                        @foreach($propertyTypes as $propertyType)
-                            <option value="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
+            <!-- District Dropdown -->
+            <div class="w-full h-12 relative">
+                <select name="district_id" id="district-select" class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pl-10 pr-4 cursor-pointer hover:border-indigo-400 text-sm font-medium text-gray-700 disabled:bg-gray-100" disabled>
+                    <option value="">اختر المدينة أولاً</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                 </div>
             </div>
-        </form>
-    </section>
+            
+            <!-- City Dropdown -->
+            <div class="w-full h-12 relative">
+                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none"><img src="{{ asset('images/city.svg') }}" alt="City icon"></div>
+                <select name="city_id" id="city-select" class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pr-12 pl-10 cursor-pointer hover:border-indigo-400 text-sm font-medium text-gray-700">
+                    <option value="">المدينة</option>
+                    @foreach($cities as $city)
+                        <option value="{{ $city->id }}">{{ $city->name }}</option>
+                    @endforeach
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                </div>
+            </div>
+            
+            <!-- Property Type Dropdown -->
+            <div class="w-full h-12 relative">
+                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none"><img src="{{ asset('images/aqar.svg') }}" alt="Property icon"></div>
+                <select name="property_type_id" class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pr-12 pl-10 cursor-pointer hover:border-indigo-400 text-sm font-medium text-gray-700">
+                    <option value="">نوع العقار</option>
+                    @foreach($propertyTypes as $propertyType)
+                        <option value="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
+                    @endforeach
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
 
     <section class="max-w-[1325px] w-full mx-auto py-8 px-4 lg:px-0">
 
@@ -312,9 +307,12 @@
                     }
                 });
             }
-
+            const listingPurposeInput = document.getElementById('listing_purpose_input');
             buttons.forEach(clickedButton => {
                 clickedButton.addEventListener('click', () => {
+                    if (listingPurposeInput) {
+                    listingPurposeInput.value = clickedButton.dataset.value;
+                    }
                     buttons.forEach(button => {
                         button.classList.remove('active', ...activeClasses);
                         button.classList.add(...inactiveClasses);

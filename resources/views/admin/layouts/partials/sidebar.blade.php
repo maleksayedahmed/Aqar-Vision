@@ -43,6 +43,12 @@
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-handshake"></use></svg> {{ __('attributes.agencies.title') }}
             </a>
         </li>
+        {{-- ADDED THIS LINK FOR AGENTS --}}
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.agents.*') ? 'active' : '' }}" href="{{ route('admin.agents.index') }}">
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-user-follow"></use></svg> Agents
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.agency-types.*') ? 'active' : '' }}" href="{{ route('admin.agency-types.index') }}">
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-building"></use></svg> {{ __('attributes.agency_types.title') }}
@@ -53,6 +59,11 @@
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.properties.*') ? 'active' : '' }}" href="{{ route('admin.properties.index') }}">
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-house"></use></svg> Properties
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.ads.*') ? 'active' : '' }}" href="{{ route('admin.ads.index') }}">
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-newspaper"></use></svg> Ads Management
             </a>
         </li>
         <li class="nav-item">
@@ -68,11 +79,6 @@
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.property-attributes.*') ? 'active' : '' }}" href="{{ route('admin.property-attributes.index') }}">
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-list-rich"></use></svg> {{ __('attributes.property_attributes.title') }}
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('admin.ads.*') ? 'active' : '' }}" href="{{ route('admin.ads.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-newspaper"></use></svg> Ads Management
             </a>
         </li>
 
