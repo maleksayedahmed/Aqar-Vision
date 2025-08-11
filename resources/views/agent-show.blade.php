@@ -59,7 +59,17 @@
 
                 <!-- Right Side: Avatar -->
                 <div class="flex-shrink-0 self-center sm:self-start">
-                    <img src="{{ $agent->profile_photo_path ? Storage::url($agent->profile_photo_path) : asset('images/profile.png') }}" alt="{{ $agent->name }}" class="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover shadow-md">
+                    @if ($agent->profile_photo_path)
+                        {{-- If the agent has a profile picture, display it --}}
+                        <img src="{{ Storage::url($agent->profile_photo_path) }}" alt="{{ $agent->name }}" class="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover shadow-md">
+                    @else
+                        {{-- Otherwise, display the initials in a styled circle --}}
+                        <div class="flex items-center justify-center w-32 h-32 md:w-40 md:h-40 bg-indigo-100 rounded-full shadow-md">
+                            <span class="font-bold text-5xl text-indigo-500">
+                                {{ strtoupper(substr($agent->name, 0, 2)) }}
+                            </span>
+                        </div>
+                    @endif
                 </div>
             </div>
 
