@@ -77,9 +77,15 @@
                     <div class="relative">
                         <button id="user-menu-button" type="button" class="flex items-center gap-x-2 text-sm font-medium text-gray-700 rounded-full" aria-expanded="false" aria-haspopup="true">
                             <span class="sr-only">Open user menu</span>
-                            <div class="flex items-center justify-center w-9 h-9 bg-gray-200 rounded-full font-semibold text-gray-600 text-xs">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                            </div>
+                            @if (Auth::user()->profile_photo_path)
+                                {{-- If user has a photo, display it --}}
+                                <img class="w-9 h-9 rounded-full object-cover" src="{{ Storage::url(Auth::user()->profile_photo_path) }}" alt="{{ Auth::user()->name }}">
+                            @else
+                                {{-- Otherwise, display initials --}}
+                                <div class="flex items-center justify-center w-9 h-9 bg-gray-200 rounded-full font-semibold text-gray-600 text-xs">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                                </div>
+                            @endif
                             <span class="hidden lg:inline">{{ Auth::user()->name }}</span>
                             <svg class="w-2.5 h-2.5 ms-1 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 6" fill="none"><path d="M0.914031 1.71206L3.64411 4.898C3.68811 4.94932 3.7427 4.99052 3.80413 5.01877C3.86555 5.04702 3.93236 5.06164 3.99997 5.06164C4.06758 5.06164 4.13438 5.04702 4.19581 5.01877C4.25723 4.99052 4.31182 4.94932 4.35583 4.898L7.08591 1.71206C7.34645 1.40796 7.13044 0.938232 6.73005 0.938232H1.26911C0.868718 0.938232 0.652702 1.40796 0.914031 1.71206Z" fill="#0D1226"/></svg>
                         </button>

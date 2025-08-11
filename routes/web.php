@@ -42,6 +42,11 @@ Route::get('/properties/map', [PropertySearchController::class, 'map'])->name('p
 Route::get('/properties/{ad}', [PropertySearchController::class, 'show'])->name('properties.show');
 Route::get('/agents/{agent}', [PropertySearchController::class, 'showAgent'])->name('agents.show');
 
+
+
+ 
+
+
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
@@ -52,6 +57,23 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/upgrade-request', [UserRequestController::class, 'store'])->name('user.upgrade.request');
+
+
+
+
+     // ======================================================= //
+    // ADD THE NEW USER ROUTES HERE
+    // ======================================================= //
+
+ Route::get('/my-profile', [App\Http\Controllers\UserProfileController::class, 'edit'])->name('user.profile.edit');
+ Route::patch('/my-profile', [App\Http\Controllers\UserProfileController::class, 'update'])->name('user.profile.update');
+ Route::get('/my-ads', [App\Http\Controllers\UserAdsController::class, 'index'])->name('user.my-ads');
+ Route::get('/about-us', [App\Http\Controllers\AboutController::class, 'index'])->name('user.about-us');
+ Route::get('/terms-of-use', [App\Http\Controllers\TermsController::class, 'index'])->name('user.terms');
+     Route::get('/complaints', [App\Http\Controllers\ComplaintController::class, 'create'])->name('user.complaints.create');
+    Route::post('/complaints', [App\Http\Controllers\ComplaintController::class, 'store'])->name('user.complaints.store');
+
+
 });
 
 Route::middleware(['web'])->group(function () {
