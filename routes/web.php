@@ -40,6 +40,7 @@ Route::get('/get-districts/{city}', [LocationController::class, 'getDistrictsByC
 Route::get('/properties', [PropertySearchController::class, 'index'])->name('properties.search');
 Route::get('/properties/map', [PropertySearchController::class, 'map'])->name('properties.map');
 Route::get('/properties/{ad}', [PropertySearchController::class, 'show'])->name('properties.show');
+Route::get('/agents/{agent}', [PropertySearchController::class, 'showAgent'])->name('agents.show');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

@@ -6,6 +6,7 @@ use App\Models\Ad;
 use App\Models\City;
 use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -103,6 +104,59 @@ class PropertySearchController extends Controller
             'features' => $features,
             'similarAds' => $similarAds
         ]);
+    }
+    
+    /**
+     * Display the specified agent's public profile and listings.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $agent
+     * @return \Illuminate\View\View
+     */
+    public function showAgent(Request $request, User $agent)
+    {
+        // Ensure the user is a valid, active agent
+        if (!$agent->hasRole('agent') || !$agent->is_active) {
+            abort(404, 'Agent not found or is inactive.');
+        }
+
+        $agent->load(['agent.city']);
+        
+        // Get the sort option from the URL, default to 'latest' if not present
+        $sortBy = $request->input('sort', 'latest');
+        
+        // Set a default display text
+        $sortText = 'الأحدث';
+
+        // Start the query to get the agent's ads
+        $adsQuery = $agent->ads()
+                         ->where('status', 'active')
+                         ->with(['district.city', 'propertyType']);
+
+        // Apply sorting based on the 'sortBy' parameter
+        switch ($sortBy) {
+            case 'price_asc':
+                $adsQuery->orderBy('total_price', 'asc');
+                $sortText = 'السعر: من الأقل للأعلى';
+                break;
+            case 'price_desc':
+                $adsQuery->orderBy('total_price', 'desc');
+                $sortText = 'السعر: من الأعلى للأقل';
+                break;
+            case 'oldest':
+                $adsQuery->orderBy('created_at', 'asc');
+                $sortText = 'الأقدم';
+                break;
+            default: // 'latest'
+                $adsQuery->latest();
+                break;
+        }
+
+        // Paginate the sorted results and keep the sort parameter in the pagination links
+        $ads = $adsQuery->paginate(8)->withQueryString();
+
+        // Pass the new sorting variables to the view
+        return view('agent-show', compact('agent', 'ads', 'sortBy', 'sortText'));
     }
 
     /**
