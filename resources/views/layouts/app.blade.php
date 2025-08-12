@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon-light.png') }}" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon-dark.png') }}" media="(prefers-color-scheme: light)">
+
+
     {{-- The title will be dynamic for each page --}}
     <title>@yield('title', 'Aqarvision')</title>
 
