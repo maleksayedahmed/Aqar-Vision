@@ -42,6 +42,14 @@ Route::get('/properties/map', [PropertySearchController::class, 'map'])->name('p
 Route::get('/properties/{ad}', [PropertySearchController::class, 'show'])->name('properties.show');
 Route::get('/agents/{agent}', [PropertySearchController::class, 'showAgent'])->name('agents.show');
 
+Route::prefix('my-account/ads')->name('user.ads.')->group(function () {
+    Route::get('/create', [App\Http\Controllers\UserAdController::class, 'create'])->name('create');
+    Route::get('/create/step-1/{adPrice}', [App\Http\Controllers\UserAdController::class, 'createStepOne'])->name('create.step1');
+    Route::post('/create/step-1', [App\Http\Controllers\UserAdController::class, 'storeStepOne'])->name('store.step1');
+    Route::get('/create/step-2', [App\Http\Controllers\UserAdController::class, 'createStepTwo'])->name('create.step2');
+    Route::post('/create/store', [App\Http\Controllers\UserAdController::class, 'storeAd'])->name('store');
+});
+
 
 
  
@@ -103,6 +111,7 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
     Route::get('/terms-of-use', [TermsController::class, 'index'])->name('terms-of-use');
 
     Route::get('/ads/create', [AdController::class, 'create'])->name('ads.create');
+
 
     Route::get('/ads/create/step-1/{adPrice}', [AdController::class, 'createStepOne'])->name('ads.create.step1');
     Route::post('/ads/create/step-1', [AdController::class, 'storeStepOne'])->name('ads.store.step1');

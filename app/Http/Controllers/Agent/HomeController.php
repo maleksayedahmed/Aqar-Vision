@@ -16,6 +16,7 @@ class HomeController extends Controller
     {
         $agent = Agent::where('user_id', Auth::id())->first();
 
+
         if (!$agent) {
             // This is the confirmed fix. We redirect to the URL '/' because it has no name.
             return redirect('/')

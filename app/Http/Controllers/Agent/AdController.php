@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Agent;
 use App\Http\Controllers\Controller;
 use App\Models\Ad;
 use App\Models\AdPrice;
-use App\Models\City;
-use App\Models\PropertyAttribute;
-use App\Models\PropertyType;
+use App\Models\User;
+use App\Notifications\NewAdForApproval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 
@@ -30,8 +30,7 @@ class AdController extends Controller
         $deletedCount = (clone $baseQuery)->onlyTrashed()->count();
         $expiredCount = (clone $baseQuery)->where('status', 'expired')->count();
 
-        // Eager load relationships for efficiency
-        $query = Ad::where('user_id', $userId)->with('district.city', 'propertyType')->latest();
+        $query = Ad::where('user_id', $userId)->latest();
 
         switch ($tab) {
             case 'pending':
@@ -62,70 +61,62 @@ class AdController extends Controller
     }
 
     /**
-     * Show the first step for creating a new ad (selecting the ad type).
+     * Show the first step for creating a new ad (selecting the license type).
      */
     public function create()
     {
         $adPrices = AdPrice::where('is_active', true)->get();
-        if ($adPrices->isEmpty()) {
-            return redirect()->route('agent.home')->with('error', 'No ad packages are available at the moment.');
-        }
-        return redirect()->route('agent.ads.create.step1', ['adPrice' => $adPrices->first()->id]);
-    }
-
-    /**
-     * Show Step 1 of the ad creation form with all necessary dynamic data.
-     */
-    public function createStepOne(AdPrice $adPrice)
-    {
-        $allAdPrices = AdPrice::where('is_active', true)->get();
-        $cities = City::where('is_active', true)->orderBy('name')->get();
-        $propertyTypes = PropertyType::where('is_active', true)->whereNull('parent_id')->orderBy('name')->get();
-        $features = PropertyAttribute::where('type', 'boolean')->orderBy('name->en')->get();
-        $attributes = PropertyAttribute::where('type', '!=', 'boolean')->orderBy('name->en')->get();
-
-        return view('agent.ads.create-step-one', [
-            'selectedAdPrice' => $adPrice,
-            'allAdPrices' => $allAdPrices,
-            'cities' => $cities,
-            'propertyTypes' => $propertyTypes,
-            'features' => $features,
-            'attributes' => $attributes,
+        return view('agent.ads.create', [
+            'adPrices' => $adPrices,
+            'currentTab' => 'my-ads',
         ]);
     }
 
     /**
-     * Validate and store the data from Step 1 in the session.
+     * Show Step 1 of the ad creation form (Property Details).
+     */
+    public function createStepOne(AdPrice $adPrice)
+    {
+        $allAdPrices = AdPrice::where('is_active', true)->get();
+        return view('agent.ads.create-step-one', [
+            'selectedAdPrice' => $adPrice,
+            'allAdPrices' => $allAdPrices,
+        ]);
+    }
+
+    /**
+     * Store the data from Step 1 and proceed to the next step.
      */
     public function storeStepOne(Request $request)
     {
         $validatedData = $request->validate([
-            'ad_price_id' => 'required|exists:ad_prices,id',
-            'title' => 'required|string|max:255',
-            'property_type_id' => 'required|exists:property_types,id',
-            'listing_purpose' => 'required|in:sale,rent',
-            'total_price' => 'required|numeric|min:0',
-            'area_sq_meters' => 'required|numeric|min:0',
-            'description' => 'nullable|string|max:5000',
-            'district_id' => 'required|exists:districts,id',
-            'latitude' => 'required|numeric|between:-90,90',
-            'longitude' => 'required|numeric|between:-180,180',
-            'attributes' => 'nullable|array',
-            'province' => 'required|string|max:255',
-            'street_name' => 'required|string|max:255',
-            'property_usage' => 'nullable|string|max:255',
-            'plan_number' => 'nullable|string|max:255',
-            'is_mortgaged' => 'required|boolean',
-            'furniture_status' => 'nullable|string|max:255',
-            'building_status' => 'nullable|string|max:255',
-            'building_number' => 'nullable|string|max:255',
-            'postal_code' => 'nullable|string|max:255',
-            'age_years' => 'nullable|integer|min:0',
-            'floor_number' => 'nullable|string|max:50',
-            'finishing_status' => 'nullable|string|max:255',
-            'facade' => 'nullable|string|max:255',
-            'rooms' => 'required|integer|min:0',
-            'bathrooms' => 'required|integer|min:0',
+            'ad_price_id' => ['required', 'exists:ad_prices,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'age' => ['nullable', 'string', 'max:100'],
+            'transaction_type' => ['required', Rule::in(['sell', 'rent'])],
+            'floor_number' => ['nullable', 'string', 'max:50'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'finishing_status' => ['required', 'string'],
+            'property_type' => ['required', 'string'],
+            'direction' => ['nullable', 'string'],
+            'bathrooms' => ['required', 'integer', 'min:0'],
+            'rooms' => ['required', 'integer', 'min:0'],
+            'area' => ['required', 'numeric', 'min:0'],
+            'description' => ['nullable', 'string', 'max:5000'],
+            'city' => ['required', 'string'],
+            'neighborhood' => ['required', 'string'],
+            'province' => ['required', 'string'],
+            'street' => ['required', 'string'],
+            'latitude' => ['required', 'numeric', 'between:-90,90'],
+            'longitude' => ['required', 'numeric', 'between:-180,180'],
+            'features' => ['nullable', 'array'],
+            'usage' => ['nullable', 'string'],
+            'plan_number' => ['nullable', 'string'],
+            'mortgaged' => ['nullable', 'string'],
+            'furniture' => ['nullable', 'string'],
+            'build_status' => ['nullable', 'string'],
+            'building_number' => ['nullable', 'string'],
+            'postal_code' => ['nullable', 'string'],
         ]);
 
         $request->session()->put('ad_step_one_data', $validatedData);
@@ -143,14 +134,15 @@ class AdController extends Controller
             return redirect()->route('agent.ads.create');
         }
         $selectedAdPrice = AdPrice::find($stepOneData['ad_price_id']);
-        
+
         return view('agent.ads.create-step-two', [
             'selectedAdPrice' => $selectedAdPrice,
+            'currentTab' => 'my-ads',
         ]);
     }
 
     /**
-     * Combines data from Step 1 & 2 and creates a single Ad record.
+     * Store the ad with its media and complete the process.
      */
     public function storeAd(Request $request)
     {
@@ -168,9 +160,6 @@ class AdController extends Controller
         $adData = $stepOneData;
         $adData['user_id'] = Auth::id();
         $adData['status'] = 'pending';
-        
-        $adData['features'] = $adData['attributes'] ?? [];
-        unset($adData['attributes']);
 
         if ($request->hasFile('images')) {
             $imagePaths = [];
@@ -185,13 +174,18 @@ class AdController extends Controller
             $videoPath = $request->file('video')->store('ads/videos', 'public');
             $adData['video_path'] = $videoPath;
         }
-        
+
         $ad = Ad::create($adData);
-        
+
+        $admins = User::role('admin')->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new NewAdForApproval($ad));
+        }
+
         Session::forget('ad_step_one_data');
 
         return redirect()->route('agent.my-ads')->with([
-            'success' => 'تم رفع اعلان عقارك بنجاح وهو الآن قيد المراجعة.',
+            'success' => 'تم رفع اعلان عقارك بنجاح',
             'new_ad_id' => $ad->id
         ]);
     }
