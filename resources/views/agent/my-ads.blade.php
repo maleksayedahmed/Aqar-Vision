@@ -57,12 +57,12 @@
                     <div class="space-y-4">
                         @forelse ($ads as $ad)
                             <div class="bg-[rgba(249,250,252,1)] min-h-[162px] rounded-xl p-4 sm:p-5">
-                                <div class="flex flex-col md:flex-row items-start h-full md:items-center justify-between gap-y-4 gap-x-6">
+                                <div class="flex flex-col md:flex-row-reverse items-start h-[122px] md:items-center justify-between gap-y-4 gap-x-6">
                                     <div class="w-full h-full md:w-auto flex flex-row items-center md:flex-col md:items-end justify-between md:gap-y-4">
                                         <span class="bg-[rgba(221,162,80,0.18)] text-[rgba(221,162,80,1)] text-[10.4px] font-medium px-3 py-1 rounded-md self-start md:self-end">
                                             {{ optional($ad->adPrice)->name ?? 'مميز' }}
                                         </span>
-                                        <a href="#" class="w-[142px] inline-flex items-center text-[12px] gap-x-2 bg-[rgba(48,62,124,1)] justify-between text-white font-medium py-2 px-5 rounded-lg shadow-sm hover:bg-opacity-70 transition-colors">
+                                        <a href="{{ route('properties.show', $ad->id) }}" class="w-[142px] inline-flex items-center text-[12px] gap-x-2 bg-[rgba(48,62,124,1)] justify-between text-white font-medium py-2 px-5 rounded-lg shadow-sm hover:bg-opacity-70 transition-colors">
                                             <span>رؤية التفاصيل</span>
                                             <img src="{{ asset('images/next-arrow.svg') }}">
                                         </a>
@@ -70,16 +70,16 @@
                                     <div class="text-right flex flex-col h-full justify-between flex-grow">
                                         <div>
                                             <h3 class="font-semibold text-[rgba(26,26,26,1)] text-[14.5px]">{{ $ad->title }}</h3>
-                                            <div class="flex items-center justify-end gap-x-1 text-[10.2px] font-semibold text-[rgba(26,26,26,1)] mt-1">
-                                                <span>{{ $ad->location }}</span>
+                                            <div class="flex items-center gap-x-1 text-[10.2px] font-semibold text-[rgba(26,26,26,1)] mt-1">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[rgba(48,62,124,1)]" viewBox="0 0 20 20" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
                                                 </svg>
+                                                <span>{{ $ad->district?->city?->name }} - {{ $ad->district?->name }}</span>
                                             </div>
                                         </div>
-                                        <div class="flex items-center justify-end gap-x-1.5 text-xs text-gray-400 mt-4">
-                                            <span>تاريخ النشر: {{ $ad->created_at->format('d/m/Y') }}</span>
+                                        <div class="flex items-center gap-x-1.5 text-xs text-gray-400 mt-4">
                                             <img src="{{ asset('images/clock.svg') }}" alt="">
+                                            <span> {{ $ad->created_at->format('d/m/Y') }}</span>
                                         </div>
                                     </div>
                                 </div>
