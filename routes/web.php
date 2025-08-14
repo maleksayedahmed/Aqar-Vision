@@ -66,6 +66,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/upgrade-request', [UserRequestController::class, 'store'])->name('user.upgrade.request');
 
+     // CHAT ROUTES
+    Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{conversation}', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.show');
+    Route::get('/chat/start/{ad}', [App\Http\Controllers\ChatController::class, 'startChat'])->name('chat.start');
+
 
 
 

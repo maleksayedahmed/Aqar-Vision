@@ -13,9 +13,12 @@
 
     {{-- CSS Links using the asset() helper for proper URL generation --}}
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {{-- THIS REDUNDANT ALPINE.JS SCRIPT HAS BEEN REMOVED TO PREVENT CONFLICTS WITH LIVEWIRE --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+
+    {{-- This line is required for Livewire component styles --}}
+    @livewireStyles
 
     {{-- This allows adding extra styles from child pages if needed --}}
     @stack('styles')
@@ -223,8 +226,15 @@
             }
         }
     </script>
-
-    {{-- This allows adding extra scripts from child pages if needed --}}
+    
+    {{-- =============================================== --}}
+    {{-- THE CORRECT SCRIPT ORDER FOR LIVEWIRE --}}
+    {{-- =============================================== --}}
+    
+    {{-- 1. Load Livewire's core scripts FIRST --}}
+    @livewireScripts
+    
+    {{-- 2. Load any component-specific scripts AFTER Livewire --}}
     @stack('scripts')
 </body>
 </html>
