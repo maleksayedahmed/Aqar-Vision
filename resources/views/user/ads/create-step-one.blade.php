@@ -23,6 +23,7 @@
     <form method="POST" action="{{ route('user.ads.store.step1') }}">
         @csrf
 
+        {{-- Top Header Section --}}
         <section>
             <div class="flex w-full flex-col items-stretch gap-y-4 lg:flex-row lg:items-center lg:justify-between py-4" dir="rtl">
                 <div class="flex items-center gap-x-3">
@@ -32,13 +33,11 @@
                         <p class="text-[14.3px] font-medium"><span class="mr-1 text-red-500">*</span>نرجو تعبئة البيانات بدقة</p>
                     </div>
                 </div>
-
                 <div class="hidden md:flex items-center gap-x-[27px]">
                     <span class="font-medium text-[16px] text-[rgba(48,62,124,1)]">بيانات العقار</span>
                     <div class="flex items-center gap-x-2"><img src="{{ asset('images/rode.svg') }}" alt="Step indicator"></div>
                     <span class="font-medium text-[16px] text-[rgba(181,183,191,1)]">مستندات العقار</span>
                 </div>
-
                 <div class="relative w-full lg:w-[264px]" x-data="{ open: false }">
                     <input type="hidden" name="ad_price_id" value="{{ $selectedAdPrice->id }}">
                     <button @click="open = !open" type="button" class="flex items-center justify-between bg-[rgba(0,0,0,0.02)] w-full h-[53px] hover:bg-gray-200 transition-colors px-4 py-2.5 rounded-xl text-lg lg:text-[20px] font-medium text-black">
@@ -63,6 +62,7 @@
             </div>
         </section>
 
+        {{-- Basic Info Section --}}
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
             <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
                 <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/plaza.svg') }}"></div>
@@ -116,6 +116,7 @@
             </div>
         </section>
 
+        {{-- Location Section --}}
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
             <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
                 <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/location-05.svg') }}"></div>
@@ -155,6 +156,7 @@
             <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', '46.6753') }}">
         </section>
 
+        {{-- Features Section (Checkboxes) --}}
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
             <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
                 <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/star-2.svg') }}"></div>
@@ -162,9 +164,10 @@
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-6 gap-x-2">
                 @foreach($features as $feature)
+                    @php $slug = str_replace(' ', '_', strtolower($feature->getTranslation('name', 'en'))); @endphp
                     <label class="flex items-center gap-x-2 cursor-pointer">
-                        <input type="checkbox" name="attributes[{{ str_replace(' ', '_', strtolower($feature->getTranslation('name', 'en'))) }}]" value="1" 
-                               @if(is_array(old('attributes')) && array_key_exists(str_replace(' ', '_', strtolower($feature->getTranslation('name', 'en'))), old('attributes'))) checked @endif
+                        <input type="checkbox" name="attributes[{{ $slug }}]" value="1" 
+                               @if(is_array(old('attributes')) && array_key_exists($slug, old('attributes'))) checked @endif
                                class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300">
                         <span class="text-sm md:text-[18px]">{{ $feature->name }}</span>
                     </label>
@@ -172,32 +175,35 @@
             </div>
         </section>
         
+        {{-- Additional Details Section (Dropdowns, Text, Number) --}}
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
             <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
                 <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/details-list.svg') }}"></div>
                 <h2 class="text-base lg:text-[18px] font-bold">تفاصيل اضافية</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-16 gap-y-6">
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="finishing_status" class="w-[80px] shrink-0 text-[11px] font-medium">حالة التشطيب</label>
-                    <input type="text" name="finishing_status" id="finishing_status" value="{{ old('finishing_status') }}" placeholder="نصف تشطيب - متشطب بالكامل" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="facade" class="w-[80px] shrink-0 text-[11px] font-medium">جهة العقار</label>
-                    <input type="text" name="facade" id="facade" value="{{ old('facade') }}" placeholder="شمالي - جنوبي - غربي - شرقي" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="floor_number" class="w-[80px] shrink-0 text-[11px] font-medium">رقم الدور</label>
-                    <input type="text" name="floor_number" id="floor_number" value="{{ old('floor_number') }}" placeholder="ادخل رقم الدور" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="property_usage" class="w-[80px] shrink-0 text-[11px] font-medium">استخدام العقار</label>
-                    <input type="text" name="property_usage" id="property_usage" value="{{ old('property_usage') }}" placeholder="سكني" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="plan_number" class="w-[80px] shrink-0 text-[11px] font-medium">رقم المخطط</label>
-                    <input type="text" name="plan_number" id="plan_number" value="{{ old('plan_number') }}" placeholder="ادخل رقم المخطط" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
+                
+                @foreach ($attributes as $attribute)
+                    @php $slug = str_replace(' ', '_', strtolower($attribute->getTranslation('name', 'en'))); @endphp
+
+                    <div class="flex gap-3 items-center h-[52px]">
+                        <label for="attr-{{ $slug }}" class="w-[80px] shrink-0 text-[11px] font-medium">{{ $attribute->name }}</label>
+
+                        @if ($attribute->type === 'dropdown' && !empty($attribute->choices))
+                            <select name="attributes[{{ $slug }}]" id="attr-{{ $slug }}" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                                <option value="">اختر...</option>
+                                @foreach ($attribute->choices as $choice)
+                                    <option value="{{ $choice['en'] }}" {{ old('attributes.'.$slug) == $choice['en'] ? 'selected' : '' }}>
+                                        {{ $choice[app()->getLocale()] ?? $choice['en'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @else
+                            <input type="{{ $attribute->type }}" name="attributes[{{ $slug }}]" id="attr-{{ $slug }}" value="{{ old('attributes.'.$slug) }}" placeholder="{{ $attribute->name }}" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                        @endif
+                    </div>
+                @endforeach
+                
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="is_mortgaged" class="w-[80px] shrink-0 text-[11px] font-medium">العقار مرهون</label>
                     <select name="is_mortgaged" id="is_mortgaged" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
@@ -205,25 +211,10 @@
                         <option value="1" {{ old('is_mortgaged') == '1' ? 'selected' : '' }}>نعم</option>
                     </select>
                 </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="furniture_status" class="w-[80px] shrink-0 text-[11px] font-medium">الأثاث</label>
-                    <input type="text" name="furniture_status" id="furniture_status" value="{{ old('furniture_status') }}" placeholder="غير مفروش" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="building_status" class="w-[80px] shrink-0 text-[11px] font-medium">حالة البناء</label>
-                    <input type="text" name="building_status" id="building_status" value="{{ old('building_status') }}" placeholder="جاهز - غير جاهز" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="building_number" class="w-[80px] shrink-0 text-[11px] font-medium">رقم المبنى</label>
-                    <input type="text" name="building_number" id="building_number" value="{{ old('building_number') }}" placeholder="ادخل رقم المبني" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="postal_code" class="w-[80px] shrink-0 text-[11px] font-medium">الرمز البريدي</label>
-                    <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code') }}" placeholder="ادخل الرمز البريدي" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
             </div>
         </section>
 
+        {{-- Next Step Button --}}
         <div class="flex justify-center mt-12">
             <button type="submit" class="flex items-center justify-center gap-x-2 bg-[rgba(48,62,124,1)] hover:bg-blue-800 text-white text-[19px] font-medium py-3 px-8 sm:px-16 w-full sm:w-auto rounded-lg transition-colors">
                 <span>الخطوة التالية</span>

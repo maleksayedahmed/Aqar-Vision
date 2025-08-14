@@ -13,6 +13,8 @@ class PropertyAttributeController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
      */
     public function index(): View
     {
@@ -22,6 +24,8 @@ class PropertyAttributeController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -31,6 +35,9 @@ class PropertyAttributeController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param \App\Http\Requests\Admin\PropertyAttributeRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(PropertyAttributeRequest $request): RedirectResponse
     {
@@ -43,6 +50,15 @@ class PropertyAttributeController extends Controller
             $data['icon_path'] = $path;
         }
 
+        // If the type is 'dropdown', clean up any empty choice rows before saving.
+        if (isset($data['choices'])) {
+            $cleanedChoices = array_filter($data['choices'], function ($choice) {
+                return !empty($choice['en']) && !empty($choice['ar']);
+            });
+            // Re-index the array to prevent JSON from creating an object instead of an array
+            $data['choices'] = array_values($cleanedChoices);
+        }
+
         PropertyAttribute::create($data);
 
         return redirect()->route('admin.property-attributes.index')
@@ -51,6 +67,9 @@ class PropertyAttributeController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param \App\Models\PropertyAttribute $propertyAttribute
+     * @return \Illuminate\View\View
      */
     public function edit(PropertyAttribute $propertyAttribute): View
     {
@@ -59,6 +78,10 @@ class PropertyAttributeController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param \App\Http\Requests\Admin\PropertyAttributeRequest $request
+     * @param \App\Models\PropertyAttribute $propertyAttribute
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(PropertyAttributeRequest $request, PropertyAttribute $propertyAttribute): RedirectResponse
     {
@@ -75,6 +98,18 @@ class PropertyAttributeController extends Controller
             $data['icon_path'] = $path;
         }
 
+        // Handle the 'choices' field based on the selected 'type'
+        if ($data['type'] === 'dropdown' && isset($data['choices'])) {
+            $cleanedChoices = array_filter($data['choices'], function ($choice) {
+                return !empty($choice['en']) && !empty($choice['ar']);
+            });
+            // Re-index the array
+            $data['choices'] = array_values($cleanedChoices);
+        } else {
+            // If the type is NOT dropdown, ensure the choices are set to null to clear them from the database.
+            $data['choices'] = null;
+        }
+
         $propertyAttribute->update($data);
 
         return redirect()->route('admin.property-attributes.index')
@@ -83,6 +118,9 @@ class PropertyAttributeController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param \App\Models\PropertyAttribute $propertyAttribute
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(PropertyAttribute $propertyAttribute): RedirectResponse
     {

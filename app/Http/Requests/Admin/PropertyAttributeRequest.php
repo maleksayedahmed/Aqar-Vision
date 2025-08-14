@@ -21,6 +21,10 @@ class PropertyAttributeRequest extends FormRequest
             // CORRECTED: Use the new 'image_or_svg' custom rule.
             // 'file' ensures it's a file, 'max' checks the size in kilobytes.
             'icon' => ['nullable', 'file', 'image_or_svg', 'max:1024'], 
+
+            'choices' => ['nullable', 'array', 'required_if:type,dropdown'],
+            'choices.*.en' => ['required_with:choices', 'string', 'max:255'],
+            'choices.*.ar' => ['required_with:choices', 'string', 'max:255'],
         ];
     }
 

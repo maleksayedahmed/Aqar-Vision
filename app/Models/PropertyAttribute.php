@@ -10,8 +10,12 @@ class PropertyAttribute extends Model
 {
     use HasFactory, HasTranslations;
 
-    protected $fillable = ['name', 'type', 'icon_path'];
-    public $translatable = ['name'];
+    protected $fillable = ['name', 'type', 'icon_path', 'choices'];
+    public $translatable = ['name', 'choices'];
+
+    protected $casts = [
+        'choices' => 'array',
+    ];
 
     public function propertyTypes()
     {

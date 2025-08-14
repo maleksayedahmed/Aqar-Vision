@@ -27,7 +27,7 @@
         {{-- Top Header Section --}}
         <section>
             <div class="flex w-full flex-col items-stretch gap-y-4 lg:flex-row lg:items-center lg:justify-between py-4" dir="rtl">
-                <a href="{{ route('agent.ads.create') }}" class="flex items-center gap-x-3">
+                <a href="{{ route('agent.my-ads') }}" class="flex items-center gap-x-3">
                     <img src="{{ asset('images/back-arrow.svg') }}" alt="Back">
                     <div class="text-right">
                         <h3 class="text-2xl lg:text-[26px] font-medium text-[rgba(48,62,124,1)]">أضف اعلان جديد</h3>
@@ -167,9 +167,10 @@
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-6 gap-x-2">
                 @foreach($features as $feature)
+                    @php $slug = str_replace(' ', '_', strtolower($feature->getTranslation('name', 'en'))); @endphp
                     <label class="flex items-center gap-x-2 cursor-pointer">
-                        <input type="checkbox" name="attributes[{{ str_replace(' ', '_', strtolower($feature->getTranslation('name', 'en'))) }}]" value="1" 
-                               @if(is_array(old('attributes')) && array_key_exists(str_replace(' ', '_', strtolower($feature->getTranslation('name', 'en'))), old('attributes'))) checked @endif
+                        <input type="checkbox" name="attributes[{{ $slug }}]" value="1" 
+                               @if(is_array(old('attributes')) && array_key_exists($slug, old('attributes'))) checked @endif
                                class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300">
                         <span class="text-sm md:text-[18px]">{{ $feature->name }}</span>
                     </label>
@@ -184,48 +185,33 @@
                 <h2 class="text-base lg:text-[18px] font-bold">تفاصيل اضافية</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-16 gap-y-6">
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="finishing_status" class="w-[80px] shrink-0 text-[11px] font-medium">حالة التشطيب</label>
-                    <input type="text" name="finishing_status" id="finishing_status" value="{{ old('finishing_status') }}" placeholder="نصف تشطيب - متشطب بالكامل" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="facade" class="w-[80px] shrink-0 text-[11px] font-medium">جهة العقار</label>
-                    <input type="text" name="facade" id="facade" value="{{ old('facade') }}" placeholder="شمالي - جنوبي - غربي - شرقي" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="floor_number" class="w-[80px] shrink-0 text-[11px] font-medium">رقم الدور</label>
-                    <input type="text" name="floor_number" id="floor_number" value="{{ old('floor_number') }}" placeholder="ادخل رقم الدور" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="property_usage" class="w-[80px] shrink-0 text-[11px] font-medium">استخدام العقار</label>
-                    <input type="text" name="property_usage" id="property_usage" value="{{ old('property_usage') }}" placeholder="سكني" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="plan_number" class="w-[80px] shrink-0 text-[11px] font-medium">رقم المخطط</label>
-                    <input type="text" name="plan_number" id="plan_number" value="{{ old('plan_number') }}" placeholder="ادخل رقم المخطط" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
+                
+                @foreach ($attributes as $attribute)
+                    @php $slug = str_replace(' ', '_', strtolower($attribute->getTranslation('name', 'en'))); @endphp
+                    <div class="flex gap-3 items-center h-[52px]">
+                        <label for="attr-{{ $slug }}" class="w-[80px] shrink-0 text-[11px] font-medium">{{ $attribute->name }}</label>
+
+                        @if ($attribute->type === 'dropdown' && !empty($attribute->choices))
+                            <select name="attributes[{{ $slug }}]" id="attr-{{ $slug }}" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                                <option value="">اختر...</option>
+                                @foreach ($attribute->choices as $choice)
+                                    <option value="{{ $choice['en'] }}" {{ old('attributes.'.$slug) == $choice['en'] ? 'selected' : '' }}>
+                                        {{ $choice[app()->getLocale()] ?? $choice['en'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @else
+                            <input type="{{ $attribute->type }}" name="attributes[{{ $slug }}]" id="attr-{{ $slug }}" value="{{ old('attributes.'.$slug) }}" placeholder="{{ $attribute->name }}" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                        @endif
+                    </div>
+                @endforeach
+                
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="is_mortgaged" class="w-[80px] shrink-0 text-[11px] font-medium">العقار مرهون</label>
                     <select name="is_mortgaged" id="is_mortgaged" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                         <option value="0" {{ old('is_mortgaged') == '0' ? 'selected' : '' }}>لا</option>
                         <option value="1" {{ old('is_mortgaged') == '1' ? 'selected' : '' }}>نعم</option>
                     </select>
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="furniture_status" class="w-[80px] shrink-0 text-[11px] font-medium">الأثاث</label>
-                    <input type="text" name="furniture_status" id="furniture_status" value="{{ old('furniture_status') }}" placeholder="غير مفروش" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="building_status" class="w-[80px] shrink-0 text-[11px] font-medium">حالة البناء</label>
-                    <input type="text" name="building_status" id="building_status" value="{{ old('building_status') }}" placeholder="جاهز - غير جاهز" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="building_number" class="w-[80px] shrink-0 text-[11px] font-medium">رقم المبنى</label>
-                    <input type="text" name="building_number" id="building_number" value="{{ old('building_number') }}" placeholder="ادخل رقم المبني" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="postal_code" class="w-[80px] shrink-0 text-[11px] font-medium">الرمز البريدي</label>
-                    <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code') }}" placeholder="ادخل الرمز البريدي" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
             </div>
         </section>
@@ -242,21 +228,16 @@
 @endsection
 
 @push('scripts')
-    {{-- Leaflet JS for the map --}}
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    {{-- Alpine JS for the ad type dropdown --}}
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // --- MAP LOGIC ---
         const defaultLat = parseFloat(document.getElementById('latitude').value) || 24.7136;
         const defaultLng = parseFloat(document.getElementById('longitude').value) || 46.6753;
         const latInput = document.getElementById('latitude');
         const lngInput = document.getElementById('longitude');
         const map = L.map('map').setView([defaultLat, defaultLng], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map);
         const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
         marker.on('dragend', function (e) {
             const newPosition = marker.getLatLng();
@@ -264,7 +245,6 @@
             lngInput.value = newPosition.lng.toFixed(7);
         });
 
-        // --- DYNAMIC CITY/DISTRICT DROPDOWN LOGIC ---
         const citySelect = document.getElementById('city-select');
         const districtSelect = document.getElementById('district-select');
         const selectedDistrictId = "{{ old('district_id', '') }}";
@@ -281,80 +261,14 @@
                     districtSelect.innerHTML = '<option value="">اختر الحي</option>';
                     districts.forEach(district => {
                         const option = new Option(district.name, district.id);
-                        if (selectedDistrict == district.id) {
-                            option.selected = true;
-                        }
+                        if (selectedDistrict == district.id) { option.selected = true; }
                         districtSelect.add(option);
                     });
                     districtSelect.disabled = false;
                 });
         }
-
         citySelect.addEventListener('change', function () { fetchDistricts(this.value); });
         if (citySelect.value) { fetchDistricts(citySelect.value, selectedDistrictId); }
-
-        // --- DYNAMIC PROPERTY ATTRIBUTES LOGIC ---
-        const propertyTypeSelect = document.getElementById('property_type_id');
-        const attributesContainer = document.getElementById('dynamic-attributes-container');
-        const attributesSection = document.getElementById('dynamic-attributes-section');
-        const oldAttributes = @json(old('attributes') ?? []);
-
-        function fetchAndRenderAttributes(typeId) {
-            attributesContainer.innerHTML = '<p class="text-gray-500">جاري تحميل التفاصيل...</p>';
-            attributesSection.style.display = 'block';
-
-            if (!typeId) {
-                attributesSection.style.display = 'none';
-                return;
-            }
-            
-            fetch(`/admin/property-types/${typeId}/attributes`)
-                .then(response => response.json())
-                .then(attributes => {
-                    attributesContainer.innerHTML = '';
-                    if (attributes.length > 0) {
-                        let hasNonBoolean = false;
-                        attributes.forEach(attribute => {
-                            if (attribute.type === 'boolean') return;
-                            hasNonBoolean = true;
-
-                            const attributeSlug = attribute.name.en.toLowerCase().replace(/ /g, '_');
-                            const existingValue = oldAttributes[attributeSlug] || '';
-                            
-                            const div = document.createElement('div');
-                            div.className = 'flex gap-3 items-center h-[52px]';
-                            
-                            const label = document.createElement('label');
-                            label.className = 'w-[80px] shrink-0 text-[11px] font-medium';
-                            label.innerHTML = `${attribute.name.ar}`;
-
-                            const input = document.createElement('input');
-                            input.type = attribute.type === 'number' ? 'number' : 'text';
-                            input.name = `attributes[${attributeSlug}]`;
-                            input.className = 'w-full h-full text-[11px] rounded-lg border border-gray-200 px-3';
-                            input.placeholder = `ادخل ${attribute.name.ar}`;
-                            input.value = existingValue;
-                            
-                            div.appendChild(label);
-                            div.appendChild(input);
-                            attributesContainer.appendChild(div);
-                        });
-                        if (!hasNonBoolean) {
-                           attributesSection.style.display = 'none';
-                        }
-                    } else {
-                        attributesSection.style.display = 'none';
-                    }
-                });
-        }
-        
-        propertyTypeSelect.addEventListener('change', function() {
-            fetchAndRenderAttributes(this.value);
-        });
-
-        if (propertyTypeSelect.value) {
-            fetchAndRenderAttributes(propertyTypeSelect.value);
-        }
     });
 </script>
 @endpush

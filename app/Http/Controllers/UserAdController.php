@@ -7,14 +7,9 @@ use App\Models\AdPrice;
 use App\Models\City;
 use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\Rule;
-// Note: You might need to add this if you implement notifications later
-// use Illuminate\Support\Facades\Notification;
-// use App\Notifications\NewAdForApproval;
 
 class UserAdController extends Controller
 {
@@ -24,10 +19,12 @@ class UserAdController extends Controller
     public function create()
     {
         $adPrices = AdPrice::where('is_active', true)->get();
-        // Redirect to step 1 with the first available ad package
+        
         if ($adPrices->isEmpty()) {
             return redirect()->route('user.my-ads')->with('error', 'No ad packages are available at the moment.');
         }
+
+        // Automatically redirect to step 1 with the first available ad package
         return redirect()->route('user.ads.create.step1', ['adPrice' => $adPrices->first()->id]);
     }
 
@@ -39,14 +36,20 @@ class UserAdController extends Controller
         $allAdPrices = AdPrice::where('is_active', true)->get();
         $cities = City::where('is_active', true)->orderBy('name')->get();
         $propertyTypes = PropertyType::where('is_active', true)->whereNull('parent_id')->orderBy('name')->get();
+        
+        // Fetch boolean attributes for the "Features" checkbox section
         $features = PropertyAttribute::where('type', 'boolean')->orderBy('name->en')->get();
         
+        // Fetch all other attribute types (text, number, dropdown) for the "Additional Details" section
+        $attributes = PropertyAttribute::where('type', '!=', 'boolean')->orderBy('name->en')->get();
+
         return view('user.ads.create-step-one', [
             'selectedAdPrice' => $adPrice,
             'allAdPrices' => $allAdPrices,
             'cities' => $cities,
             'propertyTypes' => $propertyTypes,
             'features' => $features,
+            'attributes' => $attributes, // Pass the new variable to the view
         ]);
     }
 
@@ -55,7 +58,6 @@ class UserAdController extends Controller
      */
     public function storeStepOne(Request $request)
     {
-        // Using the same validation rules as the agent controller
         $validatedData = $request->validate([
             'ad_price_id' => 'required|exists:ad_prices,id',
             'title' => 'required|string|max:255',
@@ -69,20 +71,11 @@ class UserAdController extends Controller
             'longitude' => 'required|numeric|between:-180,180',
             'province' => 'required|string|max:255',
             'street_name' => 'required|string|max:255',
-            'property_usage' => 'nullable|string|max:255',
-            'plan_number' => 'nullable|string|max:255',
             'is_mortgaged' => 'required|boolean',
-            'furniture_status' => 'nullable|string|max:255',
-            'building_status' => 'nullable|string|max:255',
-            'building_number' => 'nullable|string|max:255',
-            'postal_code' => 'nullable|string|max:255',
             'age_years' => 'nullable|integer|min:0',
-            'floor_number' => 'nullable|string|max:50',
-            'finishing_status' => 'nullable|string|max:255',
-            'facade' => 'nullable|string|max:255',
             'rooms' => 'required|integer|min:0',
             'bathrooms' => 'required|integer|min:0',
-            'attributes' => 'nullable|array',
+            'attributes' => 'nullable|array', // This will now accept dropdown values too
         ]);
 
         $request->session()->put('ad_step_one_data', $validatedData);
@@ -124,8 +117,9 @@ class UserAdController extends Controller
 
         $adData = $stepOneData;
         $adData['user_id'] = Auth::id();
-        $adData['status'] = 'pending'; // Ads go to pending for admin approval
+        $adData['status'] = 'pending';
         
+        // Use 'features' column to store the JSON of attributes
         $adData['features'] = $adData['attributes'] ?? [];
         unset($adData['attributes']);
 
@@ -144,12 +138,6 @@ class UserAdController extends Controller
         }
         
         $ad = Ad::create($adData);
-        
-        // Optional: Notify admins about the new ad for approval
-        // $admins = User::role('admin')->get();
-        // if ($admins->isNotEmpty()) {
-        //     Notification::send($admins, new NewAdForApproval($ad));
-        // }
         
         Session::forget('ad_step_one_data');
 

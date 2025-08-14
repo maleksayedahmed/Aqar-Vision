@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header"><h3 class="card-title">Create New Ad</h3></div>
                 {{-- Point the form to the store route --}}
-                <form action="{{ route('admin.ads.store') }}" method="POST">
+                <form action="{{ route('admin.ads.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     {{-- Include the form partial, passing a new Ad model --}}
                     @include('admin.ads._form', ['ad' => new \App\Models\Ad()])

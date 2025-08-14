@@ -6,7 +6,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header"><h3 class="card-title">Edit Ad: {{ $ad->title }}</h3></div>
-                <form action="{{ route('admin.ads.update', $ad->id) }}" method="POST">
+                <form action="{{ route('admin.ads.update', $ad->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     @include('admin.ads._form')

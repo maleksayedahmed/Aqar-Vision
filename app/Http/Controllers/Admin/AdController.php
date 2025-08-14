@@ -11,6 +11,7 @@ use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use App\Notifications\AdStatusUpdated;
 
@@ -21,10 +22,8 @@ class AdController extends Controller
      */
     public function index(Request $request): View
     {
-        // Start query with eager loading to prevent N+1 issues
         $query = Ad::with(['user', 'district.city', 'propertyType']);
 
-        // Apply filters if they are present in the request
         if ($request->filled('search')) {
             $query->where('title', 'LIKE', '%' . $request->search . '%');
         }
@@ -35,10 +34,7 @@ class AdController extends Controller
             $query->whereHas('district', fn($q) => $q->where('city_id', $request->city_id));
         }
 
-        // Paginate the results and append query strings to pagination links
         $ads = $query->latest()->paginate(15)->withQueryString();
-        
-        // Get cities for the filter dropdown
         $cities = City::where('is_active', true)->orderBy('name')->get();
 
         return view('admin.ads.index', compact('ads', 'cities'));
@@ -49,13 +45,21 @@ class AdController extends Controller
      */
     public function create(): View
     {
-        // Get data for form dropdowns
         $cities = City::where('is_active', true)->orderBy('name')->get();
         $propertyTypes = PropertyType::where('is_active', true)->whereNull('parent_id')->orderBy('name')->get();
         $users = User::where('is_active', true)->orderBy('name')->get();
         $features = PropertyAttribute::where('type', 'boolean')->orderBy('name->en')->get();
+        $attributes = PropertyAttribute::where('type', '!=', 'boolean')->orderBy('name->en')->get();
 
-        return view('admin.ads.create', compact('cities', 'propertyTypes', 'users', 'features'));
+        return view('admin.ads.create', [
+            'ad' => new Ad(),
+            'cities' => $cities,
+            'propertyTypes' => $propertyTypes,
+            'users' => $users,
+            'features' => $features,
+            'attributes' => $attributes,
+            'districts' => [],
+        ]);
     }
 
     /**
@@ -65,18 +69,12 @@ class AdController extends Controller
     {
         $validatedData = $this->validateAd($request);
         $validatedData['created_by'] = auth()->id();
+        
+        $this->handleMediaAndFeatures($validatedData, new Ad(), $request);
 
         Ad::create($validatedData);
 
         return redirect()->route('admin.ads.index')->with('success', 'Ad created successfully.');
-    }
-    
-    /**
-     * Display the specified resource.
-     */
-    public function show(Ad $ad): View
-    {
-        return view('admin.ads.show', compact('ad'));
     }
 
     /**
@@ -85,20 +83,14 @@ class AdController extends Controller
     public function edit(Ad $ad): View
     {
         $ad->load(['district.city', 'user']);
-
-        // Get data for form dropdowns
         $cities = City::where('is_active', true)->orderBy('name')->get();
         $propertyTypes = PropertyType::where('is_active', true)->whereNull('parent_id')->orderBy('name')->get();
         $users = User::where('is_active', true)->orderBy('name')->get();
         $features = PropertyAttribute::where('type', 'boolean')->orderBy('name->en')->get();
-        
-        // Get districts for the currently selected city to pre-populate the dropdown
-        $districts = [];
-        if ($ad->district) {
-            $districts = District::where('city_id', $ad->district->city_id)->orderBy('name')->get();
-        }
+        $attributes = PropertyAttribute::where('type', '!=', 'boolean')->orderBy('name->en')->get();
+        $districts = $ad->district ? District::where('city_id', $ad->district->city_id)->orderBy('name')->get() : [];
 
-        return view('admin.ads.edit', compact('ad', 'cities', 'propertyTypes', 'users', 'features', 'districts'));
+        return view('admin.ads.edit', compact('ad', 'cities', 'propertyTypes', 'users', 'features', 'attributes', 'districts'));
     }
 
     /**
@@ -106,17 +98,16 @@ class AdController extends Controller
      */
     public function update(Request $request, Ad $ad): RedirectResponse
     {
-        $validatedData = $this->validateAd($request);
+        $validatedData = $this->validateAd($request, $ad);
         $validatedData['updated_by'] = auth()->id();
-
-        // Get the status before updating
+        
         $originalStatus = $ad->status;
+        
+        $this->handleMediaAndFeatures($validatedData, $ad, $request);
         
         $ad->update($validatedData);
 
-        // Check if the status was changed to 'active' or 'rejected'
         if ($validatedData['status'] !== $originalStatus && in_array($validatedData['status'], ['active', 'rejected'])) {
-            // Get the user who owns the ad and notify them
             $ad->user->notify(new AdStatusUpdated($ad));
         }
 
@@ -128,6 +119,15 @@ class AdController extends Controller
      */
     public function destroy(Ad $ad): RedirectResponse
     {
+        if ($ad->images) {
+            foreach ($ad->images as $imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+        }
+        if ($ad->video_path) {
+            Storage::disk('public')->delete($ad->video_path);
+        }
+
         $ad->delete();
         return redirect()->route('admin.ads.index')->with('success', 'Ad deleted successfully.');
     }
@@ -135,36 +135,65 @@ class AdController extends Controller
     /**
      * A private helper method to handle validation for both store and update.
      */
-    private function validateAd(Request $request): array
-{
-    return $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'nullable|string',
-        'user_id' => 'required|exists:users,id',
-        'status' => 'required|in:pending,active,rejected,expired',
-        'district_id' => 'required|exists:districts,id',
-        'property_type_id' => 'required|exists:property_types,id',
-        'listing_purpose' => 'required|in:sale,rent',
-        'total_price' => 'required|numeric|min:0',
-        'area_sq_meters' => 'required|numeric|min:0',
-        'rooms' => 'required|integer|min:0',
-        'bathrooms' => 'required|integer|min:0',
-        'age_years' => 'nullable|integer|min:0',
-        'floor_number' => 'nullable|string|max:255',
-        'province' => 'nullable|string|max:255',
-        'street_name' => 'nullable|string|max:255',
-        'finishing_status' => 'nullable|string|max:255',
-        'facade' => 'nullable|string|max:255',
-        'property_usage' => 'nullable|string|max:255',
-        'plan_number' => 'nullable|string|max:255',
-        'is_mortgaged' => 'required|boolean',
-        'furniture_status' => 'nullable|string|max:255',
-        'building_status' => 'nullable|string|max:255',
-        'building_number' => 'nullable|string|max:255',
-        'postal_code' => 'nullable|string|max:255',
-        'features' => 'nullable|array',
-        'latitude' => 'required|numeric|between:-90,90',
-        'longitude' => 'required|numeric|between:-180,180',
-    ]);
-}
+    private function validateAd(Request $request, Ad $ad = null): array
+    {
+        return $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'user_id' => 'required|exists:users,id',
+            'status' => 'required|in:pending,active,rejected,expired',
+            'district_id' => 'required|exists:districts,id',
+            'property_type_id' => 'required|exists:property_types,id',
+            'listing_purpose' => 'required|in:sale,rent',
+            'total_price' => 'required|numeric|min:0',
+            'area_sq_meters' => 'required|numeric|min:0',
+            'rooms' => 'required|integer|min:0',
+            'bathrooms' => 'required|integer|min:0',
+            'age_years' => 'nullable|integer|min:0',
+            'is_mortgaged' => 'required|boolean',
+            'features' => 'nullable|array',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:5120',
+            'video' => 'nullable|file|mimes:mp4,mov,webm|max:51200',
+            
+            // THE CRUCIAL FIX IS ADDING THIS LINE:
+            'delete_images' => 'nullable|array',
+        ]);
+    }
+    
+    /**
+     * A private helper method to process media and attributes for store/update actions.
+     */
+    private function handleMediaAndFeatures(array &$validatedData, Ad $ad, Request $request)
+    {
+        $currentImages = $ad->images ?? [];
+        if ($request->filled('delete_images')) {
+            $imagesToDelete = $request->input('delete_images');
+            foreach ($imagesToDelete as $imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+            $currentImages = array_diff($currentImages, $imagesToDelete);
+        }
+
+        $newImagePaths = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $imageFile) {
+                $newImagePaths[] = $imageFile->store('ads/images', 'public');
+            }
+        }
+        $validatedData['images'] = array_values(array_merge($currentImages, $newImagePaths));
+
+        if ($request->hasFile('video')) {
+            if ($ad->video_path) {
+                Storage::disk('public')->delete($ad->video_path);
+            }
+            $validatedData['video_path'] = $request->file('video')->store('ads/videos', 'public');
+        }
+        
+        if (isset($validatedData['features'])) {
+             $validatedData['features'] = array_filter($validatedData['features'], fn($value) => $value !== null && $value !== '');
+        }
+    }
 }
