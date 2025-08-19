@@ -1,4 +1,10 @@
-@extends('layouts.app')
+
+@if ($agent['id'])
+    @extends('layouts.agent')
+@else
+    @extends('layouts.app')
+@endif
+
 
 @section('title', 'رسائلي')
 

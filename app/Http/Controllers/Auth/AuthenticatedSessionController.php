@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\Agent;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -27,6 +28,13 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        // Check if the authenticated user is an agent
+        $agent = Agent::where('user_id', Auth::id())->first();
+
+        if ($agent->has_visited_active) {
+            return redirect()->intended(route('agent.home', absolute: false));
+        }
 
         return redirect()->intended(route('home', absolute: false));
     }

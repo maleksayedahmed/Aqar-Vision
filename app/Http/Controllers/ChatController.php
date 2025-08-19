@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ad;
+use App\Models\Agent;
 use App\Models\Conversation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class ChatController extends Controller
 {
     public function index()
     {
-        return view('chat.index');
+        $agent = Agent::where('user_id', Auth::id())->first();
+
+        return view('chat.index', ['agent' => $agent]);
     }
 
     public function startChat(Ad $ad)

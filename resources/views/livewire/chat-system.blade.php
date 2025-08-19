@@ -4,6 +4,11 @@
       class="flex flex-col lg:flex-row-reverse justify-center bg-[rgba(250,250,250,1)] p-4 md:p-8 gap-[12px]"
       wire:poll.5s="loadMessages">
 
+      <style>
+        .space-y-8 > :not([hidden]) ~ :not([hidden]){
+            margin-top: 12px !important;
+        }
+      </style>
     <!-- left-col (Chat Window) -->
     <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col w-full max-w-[844px]" dir="rtl">
 
@@ -41,12 +46,12 @@
             </div>
 
             <!-- Chat Messages -->
-            <div x-ref="chatBox" class="flex-grow space-y-8 overflow-y-auto px-2">
+            <div x-ref="chatBox" class="flex-grow space-y-8 overflow-y-auto h-[500px] px-2">
                 {{-- THE FIX: Loop over $chatMessages instead of $messages --}}
                 @forelse ($chatMessages as $message)
                     @if ($message->user_id == auth()->id())
                         <!-- Outgoing Message -->
-                        <div class="flex justify-end">
+                        <div class="flex justify-e.space-y-8 > :not([hidden]) ~ :not([hidden])nd">
                             <div class="flex flex-col items-end">
                                 <div class="bg-gray-100 text-gray-800 p-3 rounded-2xl rounded-br-none max-w-xs">
                                     <p class="text-right">{{ $message->body }}</p>
