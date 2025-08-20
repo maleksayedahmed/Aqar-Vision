@@ -17,6 +17,7 @@ class AdPrice extends Model
         'type',
         'is_active',
         'description',
+        'icon_path',
         'created_by',
         'updated_by'
     ];
@@ -38,4 +39,4 @@ class AdPrice extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-} 
+}

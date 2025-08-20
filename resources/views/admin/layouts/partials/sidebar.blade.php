@@ -43,7 +43,6 @@
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-handshake"></use></svg> {{ __('attributes.agencies.title') }}
             </a>
         </li>
-        {{-- ADDED THIS LINK FOR AGENTS --}}
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.agents.*') ? 'active' : '' }}" href="{{ route('admin.agents.index') }}">
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-user-follow"></use></svg> Agents

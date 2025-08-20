@@ -42,26 +42,42 @@
                 </div>
 
                 <div class="relative w-full lg:w-[264px]" x-data="{ open: false }">
-                    <input type="hidden" name="ad_price_id" value="{{ $selectedAdPrice->id }}">
-                    <button @click="open = !open" type="button" class="flex items-center justify-between bg-[rgba(0,0,0,0.02)] w-full h-[53px] hover:bg-gray-200 transition-colors px-4 py-2.5 rounded-xl text-lg lg:text-[20px] font-medium text-black">
-                        <div class="flex items-center gap-x-2">
-                            <img src="{{ asset('images/star.png') }}" alt="Ad Type">
-                            <span>{{ $selectedAdPrice->name }}</span>
-                        </div>
-                        <img src="{{ asset('images/Polygon.svg') }}" alt="Dropdown arrow">
-                    </button>
-                    <div x-show="open" @click.away="open = false" style="display: none;" class="text-[13.6px] absolute right-0 top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-200 z-10 p-2">
-                        @foreach($allAdPrices as $priceOption)
-                            <a href="{{ route('agent.ads.create.step1', $priceOption) }}" class="flex items-center gap-[8px] w-full p-3 text-right hover:bg-gray-100 rounded-lg transition-colors">
-                                <img src="{{ asset('images/star.png') }}" alt="Ad Type Icon">
-                                <div class="flex flex-col">
-                                    <span class="font-bold text-[rgba(13,18,38,1)]">{{ $priceOption->name }}</span>
-                                    <span class="text-[9.75px] font-medium text-[rgba(151,151,151,1)]">متبقي 4 اعلانات هذا الشهر.</span>
-                                </div>
-                            </a>
-                        @endforeach
-                    </div>
+    <input type="hidden" name="ad_price_id" value="{{ $selectedAdPrice->id }}">
+    <button @click="open = !open" type="button" class="flex items-center justify-between bg-[rgba(0,0,0,0.02)] w-full h-[53px] hover:bg-gray-200 transition-colors px-4 py-2.5 rounded-xl text-lg lg:text-[20px] font-medium text-black">
+        <div class="flex items-center gap-x-2">
+            
+            {{-- FIX #1: Use the icon from the SELECTED ad price --}}
+            @if($selectedAdPrice->icon_path)
+                <img src="{{ Storage::url($selectedAdPrice->icon_path) }}" alt="{{ $selectedAdPrice->name }} Icon" class="w-8 h-8">
+            @else
+                <img src="{{ asset('images/star.png') }}" alt="Default Ad Type Icon" class="w-8 h-8">
+            @endif
+
+            <span>{{ $selectedAdPrice->name }}</span>
+        </div>
+        <img src="{{ asset('images/Polygon.svg') }}" alt="Dropdown arrow">
+    </button>
+    <div x-show="open" @click.away="open = false" style="display: none;" class="text-[13.6px] absolute right-0 top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-200 z-10 p-2">
+        @foreach($allAdPrices as $priceOption)
+            <a href="{{ route('agent.ads.create.step1', $priceOption) }}" class="flex items-center gap-[8px] w-full p-3 text-right hover:bg-gray-100 rounded-lg transition-colors">
+
+                {{-- FIX #2: Use Storage::url() to get the correct path for uploaded files --}}
+                @if($priceOption->icon_path)
+                    <img src="{{ Storage::url($priceOption->icon_path) }}" alt="{{ $priceOption->name }} Icon" class="w-8 h-8">
+                @else
+                    <img src="{{ asset('images/star.png') }}" alt="Default Ad Type Icon" class="w-8 h-8">
+                @endif
+                
+                <div class="flex flex-col">
+                    <span class="font-bold text-[rgba(13,18,38,1)]">{{ $priceOption->name }}</span>
+                    <span class="text-[9.75px] font-medium text-[rgba(151,151,151,1)]">
+                        متبقي {{ $remainingAds[$priceOption->type] ?? 0 }} اعلانات هذا الشهر.
+                    </span>
                 </div>
+            </a>
+        @endforeach
+    </div>
+</div>
             </div>
         </section>
 

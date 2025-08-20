@@ -8,6 +8,7 @@ use App\Models\AdPrice;
 use App\Models\City;
 use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
+use App\Models\Subscription; // <-- IMPORTED Subscription model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -67,19 +68,56 @@ class AdController extends Controller
      */
     public function createStepOne(AdPrice $adPrice)
     {
+        $user = Auth::user();
         $allAdPrices = AdPrice::where('is_active', true)->get();
+
+        // --- START: Logic to calculate remaining ads ---
+        $activeSubscription = Subscription::where('user_id', $user->id)
+            ->where('status', 'active')
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->with('plan')
+            ->first();
+
+        // Initialize remaining ads with 0 for all possible types
+        $remainingAds = [];
+        foreach ($allAdPrices as $price) {
+            $remainingAds[$price->type] = 0;
+        }
+
+        if ($activeSubscription && $activeSubscription->plan) {
+            $plan = $activeSubscription->plan;
+            $totals = [
+                'regular'  => $plan->ads_regular,
+                'featured' => $plan->ads_featured,
+                'premium'  => $plan->ads_premium,
+                'map'      => $plan->ads_map,
+            ];
+
+            // Count ads used by the user within the current subscription period
+            $usedAdsCount = Ad::where('user_id', $user->id)
+                ->whereBetween('ads.created_at', [$activeSubscription->start_date, $activeSubscription->end_date])
+                ->join('ad_prices', 'ads.ad_price_id', '=', 'ad_prices.id')
+                ->selectRaw('ad_prices.type, count(ads.id) as count')
+                ->groupBy('ad_prices.type')
+                ->pluck('count', 'type');
+
+            // Calculate the difference
+            foreach ($totals as $type => $total) {
+                $remainingAds[$type] = max(0, $total - ($usedAdsCount[$type] ?? 0));
+            }
+        }
+        // --- END: Logic to calculate remaining ads ---
+
         $cities = City::where('is_active', true)->orderBy('name')->get();
         $propertyTypes = PropertyType::where('is_active', true)->whereNull('parent_id')->orderBy('name')->get();
-        
-        // Fetch boolean attributes for the "Features" checkbox section
         $features = PropertyAttribute::where('type', 'boolean')->orderBy('name->en')->get();
-        
-        // Fetch all other attribute types (text, number, dropdown) for the "Additional Details" section
         $attributes = PropertyAttribute::where('type', '!=', 'boolean')->orderBy('name->en')->get();
 
         return view('agent.ads.create-step-one', [
             'selectedAdPrice' => $adPrice,
             'allAdPrices' => $allAdPrices,
+            'remainingAds' => $remainingAds, // <-- PASS the new variable to the view
             'cities' => $cities,
             'propertyTypes' => $propertyTypes,
             'features' => $features,
@@ -127,7 +165,7 @@ class AdController extends Controller
             return redirect()->route('agent.ads.create');
         }
         $selectedAdPrice = AdPrice::find($stepOneData['ad_price_id']);
-        
+
         return view('agent.ads.create-step-two', [
             'selectedAdPrice' => $selectedAdPrice,
         ]);
@@ -152,7 +190,7 @@ class AdController extends Controller
         $adData = $stepOneData;
         $adData['user_id'] = Auth::id();
         $adData['status'] = 'pending';
-        
+
         $adData['features'] = $adData['attributes'] ?? [];
         unset($adData['attributes']);
 
@@ -169,9 +207,9 @@ class AdController extends Controller
             $videoPath = $request->file('video')->store('ads/videos', 'public');
             $adData['video_path'] = $videoPath;
         }
-        
+
         $ad = Ad::create($adData);
-        
+
         Session::forget('ad_step_one_data');
 
         return redirect()->route('agent.my-ads')->with([
