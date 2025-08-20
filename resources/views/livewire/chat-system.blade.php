@@ -51,7 +51,7 @@
                 @forelse ($chatMessages as $message)
                     @if ($message->user_id == auth()->id())
                         <!-- Outgoing Message -->
-                        <div class="flex justify-e.space-y-8 > :not([hidden]) ~ :not([hidden])nd">
+                        <div class="flex justify-end">
                             <div class="flex flex-col items-end">
                                 <div class="bg-gray-100 text-gray-800 p-3 rounded-2xl rounded-br-none max-w-xs">
                                     <p class="text-right">{{ $message->body }}</p>

@@ -11,13 +11,16 @@
 
     {{-- CSS Links using the asset() helper --}}
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {{-- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     {{-- The asset() helper generates the correct URL to your public assets --}}
     <link rel="stylesheet" href="{{ asset('assets/style/main.css') }}">
 
+    @livewireStyles
+
     {{-- This allows adding extra styles from child pages if needed --}}
     @stack('styles')
+
 </head>
 <body class="bg-white">
 
@@ -41,6 +44,7 @@
         // A better long-term solution is to move this to public/assets/js/app.js
         // and link it with <script src="{{ asset('assets/js/app.js') }}"></script>
     </script>
+    @livewireScripts
 
     {{-- This allows adding extra scripts from child pages if needed --}}
     @stack('scripts')
