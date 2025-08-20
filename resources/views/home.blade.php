@@ -198,7 +198,7 @@
                                         <span class="flex items-center gap-0.5 font-semibold text-black"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[rgba(48,62,124,1)]" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>{{ $ad->district?->city?->name }} - {{ $ad->district?->name }}</span>
                                         <span class="flex items-center gap-0.5"><img src="{{ asset('images/clock.svg') }}"> {{ $ad->created_at->format('d/m/Y') }}</span>
                                     </div>
-                                    <div class="space-y-1.5"><h3 class="text-lg font-bold text-slate-800 leading-tight">{{ $ad->title }}</h3><p class="text-xs text-slate-500">{{ Str::limit($ad->description, 100) }}</p></div> 
+                                    <div class="space-y-1.5"><h3 class="text-lg font-bold text-slate-800 leading-tight">{{ Str::limit($ad->title, 100) }}</h3><p class="text-xs text-slate-500">{{ Str::limit($ad->description, 40) }}</p></div> 
                                     <div class="flex gap-2 text-sm">
                                         <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/building.svg') }}" class="h-4 w-4"> {{ $ad->propertyType?->name }}</span>
                                         <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/bath.svg') }}" class="h-4 w-4"> {{ $ad->bathrooms }} حمام</span>

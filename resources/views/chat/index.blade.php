@@ -1,9 +1,12 @@
 
 @if ($agent['id'])
+   <?php $layout = 'layouts.agent'; ?>
     @extends('layouts.agent')
 @else
-    @extends('layouts.app')
+<?php $layout = 'layouts.app'; ?>
 @endif
+
+@extends($layout)  
 
 
 @section('title', 'رسائلي')

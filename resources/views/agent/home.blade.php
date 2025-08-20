@@ -9,50 +9,47 @@
     <main class="flex lg:px-20 px-4  flex-col items-center lg:min-h-screen pt-[60px] pb-8 lg:pb-[140px]">
 
     <div class="w-full">
-        <div class="bg-[rgba(249,250,252,1)] rounded-2xl p-6 sm:p-8 shadow-sm">
+    <div class="bg-[rgba(249,250,252,1)] rounded-2xl p-6 sm:p-8 shadow-sm">
 
-            <!-- Section Title -->
-            <div class="text-right mb-6 sm:mb-8">
-                <h3 class="text-[22px] font-bold">ملخص إعلاناتك المتبقية</h3>
+        <!-- Section Title -->
+        <div class="text-right mb-6 sm:mb-8">
+            <h3 class="text-[22px] font-bold">ملخص إعلاناتك المتبقية</h3>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-y-6">
+
+            <!-- Stat: Featured Ad -->
+            <div class="flex flex-col items-center text-center px-2">
+                <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان مميز</p>
+                <p class="text-[37.3px] font-bold text-[rgba(203,84,75,1)] my-1">{{ $remainingAds['featured'] }}</p>
+                <p class="text-xs text-gray-400">إعلان متبقي</p>
             </div>
 
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-y-6">
+            <!-- Stat: Normal Ad -->
+            <div class="flex flex-col items-center text-center px-2 border-r-2 border-gray-200 md:border-r-2 mt-0">
+                <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان عادي</p>
+                <p class="text-[37.3px] font-bold text-[rgba(102,102,102,1)] my-1">{{ $remainingAds['normal'] }}</p>
+                <p class="text-xs text-gray-400">إعلان متبقي</p>
+            </div>
 
-                <!-- Stat: Featured Ad -->
-                <div class="flex flex-col items-center text-center px-2">
-                    <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان مميز</p>
-                    <p class="text-[37.3px] font-bold text-[rgba(203,84,75,1)] my-1">5</p>
-                    <p class="text-xs text-gray-400">إعلان متبقي</p>
-                </div>
-
-                <!-- Stat: Normal Ad -->
-                <div class="flex flex-col items-center text-center px-2 border-r-2 border-gray-200 md:border-r-2 mt-0">
-                    <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان عادي</p>
-                    <p class="text-[37.3px] font-bold text-[rgba(102,102,102,1)] my-1">7</p>
-                    <p class="text-xs text-gray-400">إعلان متبقي</p>
-                </div>
-
-                <!-- Stat: Exceptional Ad -->
-                <div class="flex flex-col items-center text-center px-2 border-r-2 border-gray-200">
-                    <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان استثنائي</p>
-                    <p class="text-[37.3px] font-bold text-[rgba(221,162,80,1)] my-1">3</p>
-                    <p class="text-xs text-gray-400">إعلان متبقي</p>
-                </div>
+            <!-- Stat: Exceptional Ad -->
+            <div class="flex flex-col items-center text-center px-2 border-r-2 border-gray-200">
+                <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان استثنائي</p>
+                <p class="text-[37.3px] font-bold text-[rgba(221,162,80,1)] my-1">{{ $remainingAds['premium'] }}</p>
+                <p class="text-xs text-gray-400">إعلان متبقي</p>
+            </div>
 
 
-                <!-- Stat: Map Ad -->
-                <div class="flex flex-col items-center text-center px-2 border-r-2 border-gray-200">
-                    <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان علي الخريطة</p>
-                    <p class="text-[37.3px] font-bold text-[rgba(113,183,159,1)] my-1">5</p>
-                    <p class="text-xs text-gray-400">إعلان متبقي</p>
-                </div>
-
-
-
+            <!-- Stat: Map Ad -->
+            <div class="flex flex-col items-center text-center px-2 border-r-2 border-gray-200">
+                <p class="text-[rgba(153,153,153,1)] font-bold text-[18.65px]">إعلان علي الخريطة</p>
+                <p class="text-[37.3px] font-bold text-[rgba(113,183,159,1)] my-1">{{ $remainingAds['map'] }}</p>
+                <p class="text-xs text-gray-400">إعلان متبقي</p>
             </div>
         </div>
     </div>
+</div>
 
      <section class=" w-full mx-auto py-8 px-4 lg:px-0">
 
@@ -135,137 +132,68 @@
 
 
     <!-- Active Ads Section -->
-      <section class="w-full py-8">
+ <section class="w-full py-8">
     <div class="w-full">
-        <!-- Section Header - Now responsive -->
+        <!-- Section Header -->
         <div class="flex flex-col items-start gap-4 mb-8 sm:flex-row sm:items-center sm:justify-between">
             <h2 class="text-2xl font-bold font-madani text-rgba(26,26,26,1) sm:text-[26px]">
                 اعلانات مفعلة
             </h2>
-            <a href="#" class="flex items-center self-stretch gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-[rgba(217,222,242,1)] rounded-lg sm:self-auto sm:px-6 sm:py-3 hover:bg-gray-50 transition-colors">
+            <a href="{{ route('agent.my-ads', ['tab' => 'active']) }}" class="flex items-center self-stretch gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-[rgba(217,222,242,1)] rounded-lg sm:self-auto sm:px-6 sm:py-3 hover:bg-gray-50 transition-colors">
                 <span class="font-medium text-[14.64px] text-[rgba(48,62,124,1)]">رؤية الكل</span>
-                <img src="images/view-all-arrow.svg" alt="">
+                <img src="{{ asset('images/view-all-arrow.svg') }}" alt="">
             </a>
         </div>
 
-        <!-- Ads Grid - Already responsive, no changes needed here -->
+        <!-- Ads Grid -->
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 
-            <!-- Ad Card 1 -->
-            <!-- Changed h-[156px] to min-h-[156px] for flexibility on small screens -->
-            <div class="bg-[rgba(249,250,252,1)] min-h-[156px] rounded-xl shadow-sm p-5 flex items-center justify-between gap-4">
-                <!-- Left Side -->
-                <div class="flex flex-col justify-between h-full text-right">
-                    <div class="flex flex-col gap-2 text-right">
-                    <!-- Responsive font size -->
-                    <h3 class="font-semibold text-base sm:text-[17.49px] text-[rgba(26,26,26,1)]">فيلا متشطبة مميزة</h3>
-                    <!-- Responsive font size -->
-                    <p class="flex items-center gap-1 text-xs sm:text-[12.24px] text-[rgba(26,26,26,1)]">
-                        <svg class="w-3 h-3 text-[#303F7C]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
-                        <span>الرياض - الشرقية</span>
-                    </p>
+            @forelse ($activeAds as $ad)
+                <div class="bg-[rgba(249,250,252,1)] min-h-[156px] rounded-xl shadow-sm p-5 flex items-center justify-between gap-4">
+                    <!-- Left Side -->
+                    <div class="flex flex-col justify-between h-full text-right">
+                        <div class="flex flex-col gap-2 text-right">
+                            <h3 class="font-semibold text-base sm:text-[17.49px] text-[rgba(26,26,26,1)]">{{ $ad->title }}</h3>
+                            <p class="flex items-center gap-1 text-xs sm:text-[12.24px] text-[rgba(26,26,26,1)]">
+                                <svg class="w-3 h-3 text-[#303F7C]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                                {{-- Use optional() helper to prevent errors if relations are null --}}
+                                <span>{{ optional($ad->district->city)->name }} - {{ optional($ad->district)->name }}</span>
+                            </p>
+                        </div>
+                        <p class="flex items-center gap-1 text-[10.49px] text-[rgba(204,204,204,1)]">
+                            <img src="{{ asset('images/clock.svg') }}" alt="">
+                            <span>{{ $ad->created_at->format('d/m/Y') }}</span>
+                        </p>
                     </div>
-                    <p class="flex items-center gap-1 text-[10.49px] text-[rgba(204,204,204,1)]">
-                        <img src="images/clock.svg" alt="">
-                        <span>20/6/2025</span>
-                    </p>
-                </div>
-                <!-- Right Side -->
-
-                <div class="flex flex-col items-end justify-between h-full text-left">
-                    <!-- Responsive padding and font size -->
-                    <span class="text-xs sm:text-[12.55px] font-medium px-3 sm:px-[18px] py-1 rounded-md bg-[rgba(230,230,230,1)] text-[rgba(153,153,153,1)]">عادي</span>
-                    <!-- Responsive padding -->
-                    <a href="#" class="bg-[rgba(48,62,124,1)] text-white flex items-center gap-3 text-[12px] font-medium px-4 sm:px-6 py-2 rounded-lg hover:bg-opacity-50 transition-colors">
-                        <span>رؤية التفاصيل</span>
-                        <img src="images/next-arrow.svg" alt="">
-                    </a>
-                </div>
-            </div>
-
-            <!-- Ad Card 2 -->
-            <div class="bg-[rgba(249,250,252,1)] min-h-[156px] rounded-xl shadow-sm p-5 flex items-center justify-between gap-4">
-                <!-- Left Side -->
-                <div class="flex flex-col justify-between h-full text-right">
-                    <div class="flex flex-col gap-2 text-right">
-                    <h3 class="font-semibold text-base sm:text-[17.49px] text-[rgba(26,26,26,1)]">فيلا متشطبة مميزة</h3>
-                    <p class="flex items-center gap-1 text-xs sm:text-[12.24px] text-[rgba(26,26,26,1)]">
-                        <svg class="w-3 h-3 text-[#303F7C]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
-                        <span>الرياض - الشرقية</span>
-                    </p>
+                    <!-- Right Side -->
+                    <div class="flex flex-col items-end justify-between h-full text-left">
+                        {{-- Dynamically set the badge style and text based on ad type --}}
+                        @php
+                            $badgeClass = 'bg-[rgba(230,230,230,1)] text-[rgba(153,153,153,1)]'; // Default for normal
+                            if (optional($ad->adPrice)->type == 'featured') {
+                                $badgeClass = 'bg-[rgba(221,162,80,0.18)] text-[rgba(221,162,80,1)]';
+                            } elseif (optional($ad->adPrice)->type == 'premium') {
+                                $badgeClass = 'bg-blue-100 text-blue-800'; // Example for premium
+                            }
+                        @endphp
+                        <span class="text-xs sm:text-[12.55px] font-medium px-3 sm:px-[18px] py-1 rounded-md {{ $badgeClass }}">
+                            {{ optional($ad->adPrice)->name ?? 'عادي' }}
+                        </span>
+                        <a href="{{ route('properties.show', $ad) }}" class="bg-[rgba(48,62,124,1)] text-white flex items-center gap-3 text-[12px] font-medium px-4 sm:px-6 py-2 rounded-lg hover:bg-opacity-50 transition-colors">
+                            <span>رؤية التفاصيل</span>
+                            <img src="{{ asset('images/next-arrow.svg') }}" alt="">
+                        </a>
                     </div>
-                    <p class="flex items-center gap-1 text-[10.49px] text-[rgba(204,204,204,1)]">
-                        <img src="images/clock.svg" alt="">
-                        <span>20/6/2025</span>
-                    </p>
                 </div>
-                <!-- Right Side -->
-
-                <div class="flex flex-col items-end justify-between h-full text-left">
-                    <span class="text-xs sm:text-[12.55px] font-medium px-3 sm:px-[18px] py-1 rounded-md bg-[rgba(221,162,80,0.18)] text-[rgba(221,162,80,1)]">مميز</span>
-                    <a href="#" class="bg-[rgba(48,62,124,1)] text-white flex items-center gap-3 text-[12px] font-medium px-4 sm:px-6 py-2 rounded-lg hover:bg-opacity-50 transition-colors">
-                        <span>رؤية التفاصيل</span>
-                        <img src="images/next-arrow.svg" alt="">
-                    </a>
+            @empty
+                <div class="md:col-span-2 text-center py-12 bg-gray-50 rounded-lg">
+                    <p class="text-gray-500 font-medium">لا توجد إعلانات مفعلة حالياً.</p>
                 </div>
-            </div>
-            <!-- Ad Card 3 -->
-            <div class="bg-[rgba(249,250,252,1)] min-h-[156px] rounded-xl shadow-sm p-5 flex items-center justify-between gap-4">
-                <!-- Left Side -->
-                <div class="flex flex-col justify-between h-full text-right">
-                    <div class="flex flex-col gap-2 text-right">
-                    <h3 class="font-semibold text-base sm:text-[17.49px] text-[rgba(26,26,26,1)]">فيلا متشطبة مميزة</h3>
-                    <p class="flex items-center gap-1 text-xs sm:text-[12.24px] text-[rgba(26,26,26,1)]">
-                        <svg class="w-3 h-3 text-[#303F7C]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
-                        <span>الرياض - الشرقية</span>
-                    </p>
-                    </div>
-                    <p class="flex items-center gap-1 text-[10.49px] text-[rgba(204,204,204,1)]">
-                        <img src="images/clock.svg" alt="">
-                        <span>20/6/2025</span>
-                    </p>
-                </div>
-                <!-- Right Side -->
-
-                <div class="flex flex-col items-end justify-between h-full text-left">
-                    <span class="text-xs sm:text-[12.55px] font-medium px-3 sm:px-[18px] py-1 rounded-md bg-[rgba(230,230,230,1)] text-[rgba(153,153,153,1)]">عادي</span>
-                    <a href="#" class="bg-[rgba(48,62,124,1)] text-white flex items-center gap-3 text-[12px] font-medium px-4 sm:px-6 py-2 rounded-lg hover:bg-opacity-50 transition-colors">
-                        <span>رؤية التفاصيل</span>
-                        <img src="images/next-arrow.svg" alt="">
-                    </a>
-                </div>
-            </div>
-
-            <!-- Ad Card 4 -->
-            <div class="bg-[rgba(249,250,252,1)] min-h-[156px] rounded-xl shadow-sm p-5 flex items-center justify-between gap-4">
-                <!-- Left Side -->
-                <div class="flex flex-col justify-between h-full text-right">
-                    <div class="flex flex-col gap-2 text-right">
-                    <h3 class="font-semibold text-base sm:text-[17.49px] text-[rgba(26,26,26,1)]">فيلا متشطبة مميزة</h3>
-                    <p class="flex items-center gap-1 text-xs sm:text-[12.24px] text-[rgba(26,26,26,1)]">
-                        <svg class="w-3 h-3 text-[#303F7C]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
-                        <span>الرياض - الشرقية</span>
-                    </p>
-                    </div>
-                    <p class="flex items-center gap-1 text-[10.49px] text-[rgba(204,204,204,1)]">
-                        <img src="images/clock.svg" alt="">
-                        <span>20/6/2025</span>
-                    </p>
-                </div>
-                <!-- Right Side -->
-
-                <div class="flex flex-col items-end justify-between h-full text-left">
-                    <span class="text-xs sm:text-[12.55px] font-medium px-3 sm:px-[18px] py-1 rounded-md bg-[rgba(230,230,230,1)] text-[rgba(153,153,153,1)]">عادي</span>
-                    <a href="#" class="bg-[rgba(48,62,124,1)] text-white flex items-center gap-3 text-[12px] font-medium px-4 sm:px-6 py-2 rounded-lg hover:bg-opacity-50 transition-colors">
-                        <span>رؤية التفاصيل</span>
-                        <img src="images/next-arrow.svg" alt="">
-                    </a>
-                </div>
-            </div>
+            @endforelse
 
         </div>
     </div>
-</section>
+</section>  
     </main>
 
 @endsection
