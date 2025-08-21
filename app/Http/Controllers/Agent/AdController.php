@@ -57,10 +57,13 @@ class AdController extends Controller
     public function create()
     {
         $adPrices = AdPrice::where('is_active', true)->get();
+        
         if ($adPrices->isEmpty()) {
             return redirect()->route('agent.home')->with('error', 'No ad packages are available at the moment.');
         }
-        return redirect()->route('agent.ads.create.step1', ['adPrice' => $adPrices->first()->id]);
+
+        // Now, it will load the view and pass the ad packages to it.
+        return view('agent.ads.create', ['adPrices' => $adPrices]);
     }
 
     /**

@@ -19,7 +19,7 @@ class AdPriceSeeder extends Seeder
                 'duration_days' => 30,
                 'type' => 'regular',
                 'description' => ['ar' => 'إعلان عادي لمدة 30 يوم', 'en' => 'Regular ad for 30 days'],
-                'icon_path' => 'images/normal ad.png', // Icon for regular ad
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile('ad-price-icons', new \Illuminate\Http\File(public_path('images/normal ad.png'))),
                 'is_active' => true
             ],
             [
@@ -28,7 +28,7 @@ class AdPriceSeeder extends Seeder
                 'duration_days' => 30,
                 'type' => 'featured',
                 'description' => ['ar' => 'إعلان مميز لمدة 30 يوم مع ظهور في الصفحة الرئيسية', 'en' => 'Featured ad for 30 days with homepage visibility'],
-                'icon_path' => 'images/ad-types/second ad.png', // Icon for featured ad
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile('ad-price-icons', new \Illuminate\Http\File(public_path('images/second ad.png'))),
                 'is_active' => true
             ],
             [
@@ -37,7 +37,7 @@ class AdPriceSeeder extends Seeder
                 'duration_days' => 30,
                 'type' => 'premium',
                 'description' => ['ar' => 'إعلان استثنائي لمدة 30 يوم مع ظهور في الصفحة الرئيسية وترتيب أول', 'en' => 'Premium ad for 30 days with homepage visibility and top ranking'],
-                'icon_path' => 'images/ad-types/diamond ad.png', // Icon for premium ad
+                'icon_path' => public_path('images/diamond ad.png'), // Icon for premium ad
                 'is_active' => true
             ]
         ];

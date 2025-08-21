@@ -26,7 +26,11 @@
 <body class="bg-white">
 
     {{-- 1. Include the Header Partial --}}
-    @include('partials.header')
+    @if (Auth::user()->agent)
+        @include('partials.agent-header')
+    @else
+        @include('partials.header')
+    @endif
 
     {{-- 2. This is where the unique page content will be injected --}}
     <main>
@@ -34,7 +38,12 @@
     </main>
 
     {{-- 3. Include the Footer Partial --}}
-    @include('partials.footer')
+    @if (Auth::user()->agent)
+        @include('partials.agent-footer')
+    @else
+        @include('partials.footer')
+    @endif
+    
 
     {{-- For guests, include all modals needed for the auth flow --}}
     @guest

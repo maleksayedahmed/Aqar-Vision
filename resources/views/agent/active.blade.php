@@ -24,7 +24,7 @@
                     لوحة تحكمك السريعة لإدارة عقاراتك واستكشاف الفرص.
                 </p>
 
-                <a href="{{-- route('agent.packages.subscribe') --}}" class="bg-[rgba(79,171,232,1)] text-[19px] text-white py-3 px-8 rounded-lg hover:bg-[#4a95c8] transition-colors">
+                <a href="{{ route('agent.packages') }}" class="bg-[rgba(79,171,232,1)] text-[19px] text-white py-3 px-8 rounded-lg hover:bg-[#4a95c8] transition-colors">
                     اشترك بباقتك الان
                 </a>
             </div>

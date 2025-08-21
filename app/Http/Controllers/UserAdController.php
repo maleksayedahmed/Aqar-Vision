@@ -23,9 +23,7 @@ class UserAdController extends Controller
         if ($adPrices->isEmpty()) {
             return redirect()->route('user.my-ads')->with('error', 'No ad packages are available at the moment.');
         }
-
-        // Automatically redirect to step 1 with the first available ad package
-        return redirect()->route('user.ads.create.step1', ['adPrice' => $adPrices->first()->id]);
+        return view('user.ads.create', ['adPrices' => $adPrices]);
     }
 
     /**
