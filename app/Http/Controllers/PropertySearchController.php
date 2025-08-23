@@ -52,12 +52,13 @@ class PropertySearchController extends Controller
     {
         // Start the base query for active ads
         $query = Ad::where('status', 'active')->with(['district.city', 'propertyType']);
-        
+
         // Apply all the filters from the request using the helper method
         $this->applyFilters($request, $query);
 
-        // For the map, we get ALL results with minimal columns to keep it fast.
-        $allAdsForMap = $query->get(['id', 'title', 'latitude', 'longitude', 'total_price']);
+        // ** THIS IS THE MODIFIED LINE **
+        // For the map, we now get the 'images' column as well.
+        $allAdsForMap = (clone $query)->get(['id', 'title', 'latitude', 'longitude', 'total_price', 'images']);
 
         // For the cards below the map, we get a PAGINATED list of the first 4 results.
         // We clone the query to start fresh before adding pagination.
@@ -85,7 +86,7 @@ class PropertySearchController extends Controller
     {
         // Eager load all necessary relationships for the detail page to optimize queries
         $ad->load(['user.agent.city', 'district.city', 'propertyType']);
-        
+
         // Fetch all boolean attributes (features) to get their names AND icons.
         $features = PropertyAttribute::where('type', 'boolean')
             ->get()
@@ -105,7 +106,7 @@ class PropertySearchController extends Controller
             'similarAds' => $similarAds
         ]);
     }
-    
+
     /**
      * Display the specified agent's public profile and listings.
      *
@@ -121,10 +122,10 @@ class PropertySearchController extends Controller
         }
 
         $agent->load(['agent.city']);
-        
+
         // Get the sort option from the URL, default to 'latest' if not present
         $sortBy = $request->input('sort', 'latest');
-        
+
         // Set a default display text
         $sortText = 'الأحدث';
 
@@ -193,7 +194,7 @@ class PropertySearchController extends Controller
                 $query->where('total_price', '>=', $range[0]);
             }
         }
-        
+
         // Rooms Filter
         if ($request->filled('rooms')) {
             if (str_contains($request->rooms, '+')) {
@@ -211,7 +212,7 @@ class PropertySearchController extends Controller
                 $query->where('bathrooms', '=', (int)$request->bathrooms);
             }
         }
-        
+
         // Area Filter
         if ($request->filled('area_range')) {
              $range = explode('-', $request->area_range);

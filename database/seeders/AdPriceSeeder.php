@@ -37,7 +37,7 @@ class AdPriceSeeder extends Seeder
                 'duration_days' => 30,
                 'type' => 'premium',
                 'description' => ['ar' => 'إعلان استثنائي لمدة 30 يوم مع ظهور في الصفحة الرئيسية وترتيب أول', 'en' => 'Premium ad for 30 days with homepage visibility and top ranking'],
-                'icon_path' => public_path('images/diamond ad.png'), // Icon for premium ad
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile('ad-price-icons', new \Illuminate\Http\File(public_path('images/diamond ad.png'))),
                 'is_active' => true
             ]
         ];

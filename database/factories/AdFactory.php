@@ -7,6 +7,7 @@ use App\Models\District;
 use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage; // <-- 1. IMPORT STORAGE FACADE
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ad>
@@ -26,6 +27,44 @@ class AdFactory extends Factory
         $districtIds = District::pluck('id');
         $adPriceIds = AdPrice::pluck('id');
 
+        // --- START: Image Handling Logic ---
+
+        // 2. Define your source images
+        $sourceImages = [
+            'property1.png', 'property2.png', 'property3.png',
+            'property4.png', 'property5.png', 'property6.png', 'property7.png'
+        ];
+
+        $uploadedImagePaths = [];
+
+        // 3. Ensure the destination directory exists in storage/app/public/ads/images
+        Storage::disk('public')->makeDirectory('ads/images');
+
+        // 4. Loop through each source image, copy it to storage with a unique name
+        foreach ($sourceImages as $imageName) {
+            $sourcePath = public_path('images/' . $imageName);
+
+            // Make sure the source file actually exists before trying to copy it
+            if (file_exists($sourcePath)) {
+                $newFileName = uniqid() . '-' . $imageName;
+                
+                // Copy the file from public/images to storage/app/public/ads/images
+                Storage::disk('public')->put(
+                    'ads/images/' . $newFileName,
+                    file_get_contents($sourcePath)
+                );
+
+                // Store the new relative path for the database
+                $uploadedImagePaths[] = 'ads/images/' . $newFileName;
+            }
+        }
+        
+        // 5. Shuffle the array to make the "thumbnail" (the first image) random
+        shuffle($uploadedImagePaths);
+
+        // --- END: Image Handling Logic ---
+
+
         return [
             // Foreign Keys
             'user_id' => $userIds->random(),
@@ -38,7 +77,7 @@ class AdFactory extends Factory
             'expires_at' => now()->addDays(30),
 
             // Property Details
-            'title' => 'إعلان عقار مميز: ' . $this->faker->words(3, true),
+            'title' => 'فيلا للبيع في حي ' . $this->faker->words(2, true),
             'description' => $this->faker->paragraph(4),
             'listing_purpose' => $this->faker->randomElement(['sale', 'rent']),
             'total_price' => $this->faker->numberBetween(250000, 4000000),
@@ -66,7 +105,7 @@ class AdFactory extends Factory
             'postal_code' => $this->faker->postcode(),
 
             // Media Paths (as JSON arrays)
-            'images' => [],
+            'images' => $uploadedImagePaths, 
             'video_path' => null,
             'features' => [],
         ];

@@ -5,8 +5,13 @@
 @push('styles')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <style>
-        /* Give the map a significant height on the page */
         #search-map { height: 65vh; }
+        
+        /* This CSS removes the default gray square background from Leaflet's custom icons */
+        .custom-leaflet-icon {
+            background: transparent;
+            border: none;
+        }
     </style>
 @endpush
 
@@ -154,7 +159,7 @@
                  <p class="text-sm text-gray-500 mb-1 px-3">نتائج البحث على الخريطة:</p>
                  <div class="flex items-center gap-3">
                     <h2 class="text-3xl font-normal text-[rgba(48,62,124,1)]">العقارات المتاحة</h2>
-                    <span class="text-xs font-medium bg-gray-200 text-[rgba(48,62,124,1)] px-1.5 py-0.5 border-[0.5px] border-[rgba(48,62,124,1)] bg-[rgba(48,62,124,0.06)] rounded-md">{{ $ads->count() }}</span>
+                    <span class="text-xs font-medium bg-gray-200 text-[rgba(48,62,124,1)] px-1.5 py-0.5 border-[0.5px] border-[rgba(48,62,124,1)] bg-[rgba(48,62,124,0.06)] rounded-md">{{ $ads->total() }}</span>
                  </div>
             </div>
         </div>
@@ -167,7 +172,7 @@
                     <!-- Image Section -->
                     <div class="relative">
                         <a href="{{ route('properties.show', $ad->id) }}">
-                            <img src="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-lg" alt="{{ $ad->title }}">
+                            <img src="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-t-lg" alt="{{ $ad->title }}">
                         </a>
                         <div class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">{{ $ad->listing_purpose == 'rent' ? 'إيجار' : 'بيع' }}</div>
                         <button class="absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[rgba(242,242,242,1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg></button>
@@ -203,42 +208,8 @@
     </div>
 
     <div class="flex justify-center items-center py-[60px]">
-    @if ($ads->hasPages())
-        <nav class="flex items-center gap-3 flex-row-reverse" aria-label="Pagination">
-            {{-- Next Page Link --}}
-            @if ($ads->hasMorePages())
-                <a href="{{ $ads->nextPageUrl() }}" class="text-sm text-gray-600 hover:text-gray-900">التالي</a>
-            @endif
-
-            {{-- Pagination Elements --}}
-            {{-- This loops through the pages and the "..." separator --}}
-            @foreach ($ads->links()->elements as $element)
-                {{-- "Three Dots" Separator --}}
-                @if (is_string($element))
-                    <span class="flex items-center justify-center w-10 h-10 rounded-full text-gray-500">{{ $element }}</span>
-                @endif
-                
-                {{-- Array Of Page Links --}}
-                @if (is_array($element))
-                    @foreach ($element as $page => $url)
-                        @if ($page == $ads->currentPage())
-                            {{-- Current, active page --}}
-                            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-[rgba(48,63,125,1)] text-white text-sm font-medium" aria-current="page">{{ $page }}</span>
-                        @else
-                            {{-- Other page links --}}
-                            <a href="{{ $url }}" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 text-sm font-medium">{{ $page }}</a>
-                        @endif
-                    @endforeach
-                @endif
-            @endforeach
-
-            {{-- Previous Page Link --}}
-            @if (!$ads->onFirstPage())
-                <a href="{{ $ads->previousPageUrl() }}" class="text-sm text-gray-600 hover:text-gray-900">السابق</a>
-            @endif
-        </nav>
-    @endif
-</div>
+        {{ $ads->links() }}
+    </div>
 </section>
 </main>
 @endsection
@@ -250,55 +221,35 @@
         
         const filterForm = document.getElementById('filter-form');
         
-        // --- SCRIPT FOR CUSTOM DROPDOWN FILTERS ---
         document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
             const button = wrapper.querySelector('.custom-select-button');
             const menu = wrapper.querySelector('.dropdown-menu');
             if (!button || !menu) return;
-
-            const buttonTextSpan = button.querySelector('span');
             const filterName = wrapper.dataset.filterName;
             const hiddenInput = filterForm.querySelector(`input[name="${filterName}"]`);
-
             button.addEventListener('click', event => {
                 event.stopPropagation();
-                document.querySelectorAll('.dropdown-menu').forEach(m => {
-                    if (m !== menu) m.classList.add('hidden');
-                });
+                document.querySelectorAll('.dropdown-menu').forEach(m => { if (m !== menu) m.classList.add('hidden'); });
                 menu.classList.toggle('hidden');
             });
-
             menu.querySelectorAll('.select-option').forEach(option => {
                 option.addEventListener('click', event => {
                     event.preventDefault();
-                    if (hiddenInput) {
-                        hiddenInput.value = option.dataset.value;
-                    }
+                    if (hiddenInput) hiddenInput.value = option.dataset.value;
                     filterForm.submit();
                 });
             });
         });
 
-        // --- SCRIPT FOR ROOMS & BATHROOMS DROPDOWN ---
         const roomsBathroomsWrapper = Array.from(document.querySelectorAll('.custom-select-wrapper')).find(el => !el.dataset.filterName);
         if (roomsBathroomsWrapper) {
             const roomsHiddenInput = filterForm.querySelector('input[name="rooms"]');
             const bathroomsHiddenInput = filterForm.querySelector('input[name="bathrooms"]');
-
             roomsBathroomsWrapper.querySelectorAll('.room-option').forEach(option => {
-                option.addEventListener('click', e => {
-                    e.preventDefault();
-                    if (roomsHiddenInput) roomsHiddenInput.value = option.dataset.value;
-                    filterForm.submit();
-                });
+                option.addEventListener('click', e => { e.preventDefault(); if (roomsHiddenInput) roomsHiddenInput.value = option.dataset.value; filterForm.submit(); });
             });
-
             roomsBathroomsWrapper.querySelectorAll('.bathroom-option').forEach(option => {
-                option.addEventListener('click', e => {
-                    e.preventDefault();
-                    if (bathroomsHiddenInput) bathroomsHiddenInput.value = option.dataset.value;
-                    filterForm.submit();
-                });
+                option.addEventListener('click', e => { e.preventDefault(); if (bathroomsHiddenInput) bathroomsHiddenInput.value = option.dataset.value; filterForm.submit(); });
             });
         }
 
@@ -306,23 +257,17 @@
             document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.add('hidden'));
         });
 
-        // --- DYNAMIC DISTRICT LOADING LOGIC FOR CUSTOM DROPDOWN ---
         const districtWrapper = document.querySelector('[data-filter-name="district_id"]');
         const cityIdInput = filterForm.querySelector('input[name="city_id"]');
-        const initialCityId = cityIdInput ? cityIdInput.value : null;
-
-        if (districtWrapper) {
+        if (districtWrapper && cityIdInput) {
             const districtOptionsList = districtWrapper.querySelector('#district-options');
             const districtButton = districtWrapper.querySelector('.custom-select-button');
-            const districtHiddenInput = filterForm.querySelector('input[name="district_id"]');
-            
             function fetchDistricts(cityId) {
                 if (!cityId) {
                     districtOptionsList.innerHTML = '<li><a class="block px-4 py-2 text-sm text-gray-400">اختر مدينة أولاً</a></li>';
                     districtButton.disabled = true;
                     return;
                 }
-
                 fetch(`/get-districts/${cityId}`)
                     .then(response => response.json())
                     .then(districts => {
@@ -331,10 +276,8 @@
                             districts.forEach(district => {
                                 const li = document.createElement('li');
                                 const a = document.createElement('a');
-                                a.href = '#';
-                                a.className = 'select-option block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white';
-                                a.dataset.value = district.id;
-                                a.textContent = district.name;
+                                a.href = '#'; a.className = 'select-option block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white';
+                                a.dataset.value = district.id; a.textContent = district.name;
                                 li.appendChild(a);
                                 districtOptionsList.appendChild(li);
                             });
@@ -344,16 +287,14 @@
                         }
                     });
             }
-            if (initialCityId) {
-                fetchDistricts(initialCityId);
-            }
+            if (cityIdInput.value) fetchDistricts(cityIdInput.value);
         }
 
         // --- SCRIPT FOR THE SEARCH MAP ---
         const mapElement = document.getElementById('search-map');
         const adsData = @json($allAdsForMap);
 
-        if (mapElement && adsData.length > 0) {
+        if (mapElement && adsData && adsData.length > 0) {
             const mapCenter = [adsData[0].latitude, adsData[0].longitude] ?? [24.7136, 46.6753];
             const map = L.map(mapElement).setView(mapCenter, 10);
 
@@ -363,12 +304,32 @@
 
             adsData.forEach(ad => {
                 if (ad.latitude && ad.longitude) {
-                    const marker = L.marker([ad.latitude, ad.longitude]).addTo(map);
+                    
+                    let thumbnailUrl = 'https://placehold.co/48x48/3B4A7A/ffffff?text=AD';
+                    if (ad.images && ad.images.length > 0) {
+                        thumbnailUrl = `/storage/${ad.images[0]}`;
+                    }
+                    
+                    const iconHtml = `
+                        <div style="background-image: url(${thumbnailUrl});" class="w-10 h-10 bg-cover bg-center rounded-full border-2 border-cyan-400 shadow-lg p-1 bg-white">
+                        </div>
+                    `;
+                    
+                    const customIcon = L.divIcon({
+                        html: iconHtml,
+                        className: 'custom-leaflet-icon',
+                        iconSize: [40, 40],
+                        iconAnchor: [20, 40],
+                        popupAnchor: [0, -40]
+                    });
+
+                    const marker = L.marker([ad.latitude, ad.longitude], { icon: customIcon }).addTo(map);
+                    
                     const popupContent = `
-                        <div class="text-right font-sans p-1">
+                        <div class="text-right font-sans p-1" style="min-width: 150px;">
                             <h3 class="font-bold text-md mb-1">${ad.title}</h3>
                             <p class="text-sm text-gray-600">${Number(ad.total_price).toLocaleString()} ر.س</p>
-                            <a href="/properties/${ad.id}" class="text-blue-500 hover:underline font-semibold text-xs">رؤية التفاصيل</a>
+                            <a href="/properties/${ad.id}" class="text-blue-500 hover:underline font-semibold text-xs" target="_blank">رؤية التفاصيل</a>
                         </div>
                     `;
                     marker.bindPopup(popupContent);
