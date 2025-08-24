@@ -16,47 +16,38 @@
             </div>
         </div>
 
-        <!-- UPDATED: Point action to the 'register' route and add @csrf token -->
-        <form action="{{ route('register') }}" method="POST">
+        <form id="signup-form" action="{{ route('register') }}" method="POST">
             @csrf
             
             <div class="mb-4">
-                <label for="name" class="block text-[11px] font-medium mb-2">الاسم</label>
-                <input type="text" name="name" id="name" value="{{ old('name') }}" required class="text-[11px] block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#303f7d]">
-                @error('name')
-                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                @enderror
+                <label for="signup-name" class="block text-[11px] font-medium mb-2">الاسم</label>
+                <input type="text" name="name" id="signup-name" value="{{ old('name') }}" required class="text-[11px] block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#303f7d]">
+                <span class="error-message text-red-500 text-xs mt-1" data-field="name"></span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 <div>
-                    <label for="phone" class="block font-medium text-[11px] mb-2">أدخل رقم الهاتف</label>
+                    <label for="signup-phone" class="block font-medium text-[11px] mb-2">أدخل رقم الهاتف</label>
                     <div class="flex rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-[#303f7d]">
-                        <input type="tel" name="phone" id="phone" value="{{ old('phone') }}" required class="text-[11px] flex-1 block w-full px-4 py-3 border-0 rounded-lg placeholder-gray-400 focus:ring-0">
+                        <input type="tel" name="phone" id="signup-phone" value="{{ old('phone') }}" required class="text-[11px] flex-1 block w-full px-4 py-3 border-0 rounded-lg placeholder-gray-400 focus:ring-0">
                         <div class="inline-flex items-center px-3 border-r gap-2 border-gray-300 text-gray-600 text-[15px]">
                             <span>966+</span>
                             <img src="{{ asset('images/saudi_flag.png') }}" alt="Saudi Arabia Flag" class="w-5 h-auto">
                         </div>
                     </div>
-                     @error('phone')
-                        <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                    @enderror
+                     <span class="error-message text-red-500 text-xs mt-1" data-field="phone"></span>
                 </div>
 
                 <div>
-                    <label for="email" class="block text-[11px] font-medium mb-2">البريد الإلكتروني</label>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}" required class="text-[11px] block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#303f7d]">
-                    @error('email')
-                        <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                    @enderror
+                    <label for="signup-email" class="block text-[11px] font-medium mb-2">البريد الإلكتروني</label>
+                    <input type="email" name="email" id="signup-email" value="{{ old('email') }}" required class="text-[11px] block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#303f7d]">
+                    <span class="error-message text-red-500 text-xs mt-1" data-field="email"></span>
                 </div>
                 
                 <div>
-                    <label for="password" class="block font-medium text-[11px] mb-2">كلمة المرور</label>
-                    <input type="password" name="password" id="password" required class="text-[11px] block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#303f7d]">
-                     @error('password')
-                        <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                    @enderror
+                    <label for="signup-password" class="block font-medium text-[11px] mb-2">كلمة المرور</label>
+                    <input type="password" name="password" id="signup-password" required class="text-[11px] block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#303f7d]">
+                    <span class="error-message text-red-500 text-xs mt-1" data-field="password"></span>
                 </div>
 
                 <div>
@@ -73,16 +64,18 @@
                     <label for="terms" class="text-gray-800">
                         اوافق على <a href="#" class="font-medium text-blue-600 hover:text-blue-500">الشروط والاحكام للاستمرار</a>
                     </label>
-                    @error('terms')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
+                    <span class="error-message text-red-500 text-xs mt-1 block" data-field="terms"></span>
                 </div>
             </div>
 
             <div class="mt-8 flex justify-center">
-                <button type="submit" class="max-w-[313px] w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-medium text-white bg-[rgba(48,62,124,1)] hover:bg-[#29366d]">
-                    سجل الآن
-                </button>
+                <button type="submit" class="max-w-[313px] w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-medium text-white bg-[rgba(48,62,124,1)] hover:bg-[#29366d] disabled:opacity-75">
+        <svg class="spinner hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span class="button-text">سجل الآن</span>
+    </button>
             </div>
         </form>
 

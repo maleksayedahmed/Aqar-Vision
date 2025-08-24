@@ -19,39 +19,42 @@
         <h2 class="text-[16px] font-bold text-gray-800 my-6">تسجيل الدخول باستخدام البريد الإلكتروني</h2>
         
         <!-- Login Form -->
-        <form action="{{ route('login') }}" method="POST" class="w-full space-y-5">
+        <form id="login-email-form" action="{{ route('login') }}" method="POST" class="w-full space-y-5">
             @csrf
             <div>
-                <label for="email" class="block text-[11px] font-medium mb-2">البريد الإلكتروني</label>
+                <label for="login-email" class="block text-[11px] font-medium mb-2">البريد الإلكتروني</label>
                 <div class="relative">
-                    <input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="أدخل البريد الإلكتروني" class="w-full border border-[rgba(216,218,220,1)] text-gray-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#303F7C]" required>
+                    <input type="email" name="email" id="login-email" value="{{ old('email') }}" placeholder="أدخل البريد الإلكتروني" class="w-full border border-[rgba(216,218,220,1)] text-gray-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#303F7C]" required>
                 </div>
-                {{-- This will show any authentication errors from Laravel --}}
-                @error('email')
-                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                @enderror
+                {{-- This span will hold AJAX errors for the email field --}}
+                <span class="error-message text-red-500 text-xs mt-1" data-field="email"></span>
             </div>
 
             <div>
-                <label for="password" class="block text-[11px] font-medium mb-2">كلمة المرور</label>
+                <label for="login-password" class="block text-[11px] font-medium mb-2">كلمة المرور</label>
                 <div class="relative">
                     <button type="button" class="absolute inset-y-0 left-0 pl-4 flex items-center" onclick="togglePasswordVisibility(this)">
                         <img src="{{ asset('images/hide.svg') }}" alt="Toggle visibility">
                     </button>
-                    <input type="password" name="password" id="password" placeholder="أدخل كلمة المرور" class="w-full border border-[rgba(216,218,220,1)] text-gray-700 rounded-lg py-3 px-4 pl-12 focus:outline-none focus:ring-2 focus:ring-[#303F7C]" required>
+                    <input type="password" name="password" id="login-password" placeholder="أدخل كلمة المرور" class="w-full border border-[rgba(216,218,220,1)] text-gray-700 rounded-lg py-3 px-4 pl-12 focus:outline-none focus:ring-2 focus:ring-[#303F7C]" required>
                 </div>
-                 @error('password')
-                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                @enderror
+                {{-- This span will hold AJAX errors for the password field --}}
+                <span class="error-message text-red-500 text-xs mt-1" data-field="password"></span>
                 <div class="text-left mt-2">
-                    <a href="{{ route('password.request') }}" class="text-sm text-gray-500 hover:text-blue-600 hover:underline">هل نسيت كلمة المرور؟</a>
+                    @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="text-sm text-gray-500 hover:text-blue-600 hover:underline">هل نسيت كلمة المرور؟</a>
+                    @endif
                 </div>
             </div>
             
             <div class="pt-3">
-                <button type="submit" class="w-full bg-[#303F7C] text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm">
-                    تسجيل الدخول
-                </button>
+                <button type="submit" class="w-full bg-[#303F7C] text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center disabled:opacity-75">
+        <svg class="spinner hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span class="button-text">تسجيل الدخول</span>
+    </button>
             </div>
         </form>
 

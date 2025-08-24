@@ -253,5 +253,6 @@
     
     {{-- 2. Load any component-specific scripts AFTER Livewire --}}
     @stack('scripts')
+    <script src="{{ asset('assets/js/auth-modals.js') }}"></script>
 </body>
 </html>
