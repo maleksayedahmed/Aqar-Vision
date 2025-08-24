@@ -4,6 +4,7 @@
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
+                {{-- Filter Card --}}
                 <div class="card mb-4">
                     <div class="card-header pb-0">
                         <h6>Filters</h6>
@@ -22,7 +23,7 @@
                                             <option value="">-- All Roles --</option>
                                             @foreach($roles as $role)
                                                 <option value="{{ $role->name }}" {{ request('role') == $role->name ? 'selected' : '' }}>
-                                                    {{ $role->name }}
+                                                    {{ ucfirst($role->name) }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -37,6 +38,7 @@
                     </div>
                 </div>
 
+                {{-- Users Table Card --}}
                 <div class="card mb-4">
                     <div class="card-header pb-0">
                         <div class="d-flex justify-content-between align-items-center">
@@ -74,7 +76,7 @@
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div>
-                                                        <img src="{{ $user->profile_photo_url ?? 'https://via.placeholder.com/40' }}"
+                                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=random"
                                                             class="avatar avatar-sm me-3" alt="{{ $user->name }}">
                                                     </div>
                                                     <div class="d-flex flex-column justify-content-center">
@@ -94,7 +96,7 @@
                                                 <form action="{{ route('admin.users.toggle-status', $user->id) }}"
                                                     method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-link text-sm mb-0 px-0">
+                                                    <button type="submit" class="btn btn-link text-sm mb-0 px-0" data-toggle="tooltip" title="Click to toggle status">
                                                         <span
                                                             class="badge badge-sm {{ $user->is_active ? 'bg-gradient-success' : 'bg-gradient-secondary' }}">
                                                             {{ $user->is_active ? __('attributes.users.active') : __('attributes.users.inactive') }}
@@ -114,7 +116,7 @@
                                                         {{ __('attributes.users.edit') }}
                                                     </a>
                                                     <form action="{{ route('admin.users.destroy', $user->id) }}"
-                                                        method="POST" class="d-inline">
+                                                        method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"
@@ -137,9 +139,12 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        {{ $users->links() }}
-                    </div>
+                    @if ($users->hasPages())
+                        <div class="card-footer d-flex justify-content-center">
+                            {{-- This line explicitly tells Laravel to use its built-in Bootstrap 4 styling --}}
+                            {{ $users->appends(request()->query())->links('pagination::bootstrap-4') }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

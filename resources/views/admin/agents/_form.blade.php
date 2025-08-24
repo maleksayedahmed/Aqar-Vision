@@ -18,21 +18,21 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="full_name">{{ __('attributes.agents.full_name') }}</label>
-                <input type="text" class="form-control @error('full_name') is-invalid @enderror" id="full_name" name="full_name" value="{{ old('full_name', $agent?->full_name) }}" required>
+                <input type="text" class="form-control @error('full_name') is-invalid @enderror" id="full_name" name="full_name" value="{{ old('full_name', $agent?->full_name) }}" readonly required>
                 @error('full_name')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="email">{{ __('attributes.agents.email') }}</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $agent?->email) }}">
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $agent?->email) }}" readonly>
                 @error('email')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="phone_number">{{ __('attributes.agents.phone_number') }}</label>
-                <input type="text" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" value="{{ old('phone_number', $agent?->phone_number) }}">
+                <input type="text" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" value="{{ old('phone_number', $agent?->phone_number) }}" readonly>
                 @error('phone_number')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
             </div>
         </div>
@@ -124,3 +124,60 @@
     <button type="submit" class="btn btn-primary">{{ __('attributes.agents.messages.save') }}</button>
     <a href="{{ route('admin.agents.index') }}" class="btn btn-default">{{ __('attributes.agents.messages.cancel') }}</a>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const userSelect = document.getElementById('user_id');
+        const fullNameInput = document.getElementById('full_name');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone_number');
+
+        // Function to fetch and fill user data
+        const fillUserData = (userId) => {
+            if (!userId) {
+                fullNameInput.value = '';
+                emailInput.value = '';
+                phoneInput.value = '';
+                return;
+            }
+
+            // Fetch user details from our new endpoint
+            // Using template literals to build the URL
+            fetch(`/admin/users/${userId}/details`)
+                .then(response => {
+                    if (!response.ok) {
+                        // Better error handling for the user
+                        console.error('Server responded with an error:', response.status);
+                        throw new Error('User not found or server error.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Populate fields, providing empty strings as a fallback
+                    fullNameInput.value = data.name || '';
+                    emailInput.value = data.email || '';
+                    phoneInput.value = data.phone || '';
+                })
+                .catch(error => {
+                    console.error('Error fetching user details:', error);
+                    // Provide user feedback on the form itself
+                    fullNameInput.value = 'Could not load user data.';
+                    emailInput.value = '';
+                    phoneInput.value = '';
+                });
+        };
+
+        // Add event listener to the dropdown to trigger the fetch
+        userSelect.addEventListener('change', function () {
+            fillUserData(this.value);
+        });
+
+        // If a user is already selected on page load (important for edit forms),
+        // trigger the function to fill the data immediately.
+        if (userSelect.value) {
+            fillUserData(userSelect.value);
+        }
+    });
+</script>
+@endpush

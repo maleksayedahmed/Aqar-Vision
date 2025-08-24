@@ -34,6 +34,7 @@ Route::middleware(['auth' ,Language::class])
 
     // Users & Roles
     Route::resource('users', UserController::class)->except('show');
+    Route::get('users/{user}/details', [UserController::class, 'getDetails'])->name('users.details'); 
     Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
     Route::resource('roles', RoleController::class)->except('show');
 

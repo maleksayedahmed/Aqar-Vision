@@ -4,6 +4,7 @@
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
+                {{-- Filter Card --}}
                 <div class="card mb-4">
                     <div class="card-header pb-0">
                         <h6>Filters</h6>
@@ -12,28 +13,36 @@
                         <form action="{{ route('admin.properties.index') }}" method="GET">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <input type="text" name="search" class="form-control" placeholder="Search by Title..." value="{{ request('search') }}">
+                                    <div class="form-group">
+                                        <input type="text" name="search" class="form-control" placeholder="Search by Title..." value="{{ request('search') }}">
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="text" name="city" class="form-control" placeholder="Search by City..." value="{{ request('city') }}">
+                                    <div class="form-group">
+                                        <input type="text" name="city" class="form-control" placeholder="Search by City..." value="{{ request('city') }}">
+                                    </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <select name="status" class="form-control">
-                                        <option value="">-- All Statuses --</option>
-                                        <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>Available</option>
-                                        <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>Sold</option>
-                                        <option value="rented" {{ request('status') == 'rented' ? 'selected' : '' }}>Rented</option>
-                                    </select>
+                                    <div class="form-group">
+                                        <select name="status" class="form-control">
+                                            <option value="">-- All Statuses --</option>
+                                            <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>Available</option>
+                                            <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>Sold</option>
+                                            <option value="rented" {{ request('status') == 'rented' ? 'selected' : '' }}>Rented</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <select name="property_type_id" class="form-control">
-                                        <option value="">-- All Types --</option>
-                                        @foreach($propertyTypes as $type)
-                                            <option value="{{ $type->id }}" {{ request('property_type_id') == $type->id ? 'selected' : '' }}>
-                                                {{ $type->getTranslation('name', app()->getLocale()) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <div class="form-group">
+                                        <select name="property_type_id" class="form-control">
+                                            <option value="">-- All Types --</option>
+                                            @foreach($propertyTypes as $type)
+                                                <option value="{{ $type->id }}" {{ request('property_type_id') == $type->id ? 'selected' : '' }}>
+                                                    {{ $type->getTranslation('name', app()->getLocale()) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-md-2">
                                     <button type="submit" class="btn btn-primary">Filter</button>
@@ -44,6 +53,7 @@
                     </div>
                 </div>
 
+                {{-- Properties Table Card --}}
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h6 class="mb-0">Properties</h6>
@@ -68,21 +78,26 @@
                                                 <p class="text-xs font-weight-bold mb-0 px-3">{{ $property->title }}</p>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $property->propertyType?->getTranslation('name', app()->getLocale()) }}</p>
+                                                <p class="text-xs font-weight-bold mb-0">{{ optional($property->propertyType)->getTranslation('name', app()->getLocale()) }}</p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <span class="badge badge-sm bg-gradient-info">{{ $property->status }}</span>
+                                                <span class="badge badge-sm 
+                                                    @if($property->status == 'available') bg-gradient-success
+                                                    @elseif($property->status == 'sold') bg-gradient-danger
+                                                    @else bg-gradient-info @endif">
+                                                    {{ ucfirst($property->status) }}
+                                                </span>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ $property->user?->name }}</span>
+                                                <span class="text-secondary text-xs font-weight-bold">{{ optional($property->user)->name ?? 'N/A' }}</span>
                                             </td>
                                             <td class="align-middle">
-                                                <div class="d-flex justify-content-end gap-2">
-                                                    <a href="{{ route('admin.properties.edit', $property->id) }}" class="text-secondary font-weight-bold text-xs">Edit</a>
-                                                    <form action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-inline">
+                                                <div class="d-flex justify-content-end gap-2 px-3">
+                                                    <a href="{{ route('admin.properties.edit', $property->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" title="Edit Property">Edit</a>
+                                                    <form action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="text-danger font-weight-bold text-xs border-0 bg-transparent">Delete</button>
+                                                        <button type="submit" class="text-danger font-weight-bold text-xs border-0 bg-transparent" data-toggle="tooltip" title="Delete Property">Delete</button>
                                                     </form>
                                                 </div>
                                             </td>
@@ -95,8 +110,9 @@
                         </div>
                     </div>
                     @if($properties->hasPages())
-                        <div class="card-footer">
-                            {{ $properties->links() }}
+                        <div class="card-footer d-flex justify-content-center">
+                            {{-- This line uses Bootstrap 4 styling and keeps the filter parameters in the links --}}
+                            {{ $properties->appends(request()->query())->links('pagination::bootstrap-4') }}
                         </div>
                     @endif
                 </div>

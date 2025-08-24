@@ -4,6 +4,7 @@
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
+            {{-- Filter Card --}}
             <div class="card mb-4">
                 <div class="card-header pb-0">
                     <h6>Filters</h6>
@@ -12,24 +13,30 @@
                     <form action="{{ route('admin.ads.index') }}" method="GET">
                         <div class="row">
                             <div class="col-md-3">
-                                <input type="text" name="search" class="form-control" placeholder="Search by Title..." value="{{ request('search') }}">
+                                <div class="form-group">
+                                    <input type="text" name="search" class="form-control" placeholder="Search by Title..." value="{{ request('search') }}">
+                                </div>
                             </div>
                             <div class="col-md-3">
-                                <select name="city_id" class="form-control">
-                                    <option value="">-- All Cities --</option>
-                                    @foreach($cities as $city)
-                                        <option value="{{ $city->id }}" {{ request('city_id') == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="form-group">
+                                    <select name="city_id" class="form-control">
+                                        <option value="">-- All Cities --</option>
+                                        @foreach($cities as $city)
+                                            <option value="{{ $city->id }}" {{ request('city_id') == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-3">
-                                <select name="status" class="form-control">
-                                    <option value="">-- All Statuses --</option>
-                                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                                    <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Expired</option>
-                                </select>
+                                <div class="form-group">
+                                    <select name="status" class="form-control">
+                                        <option value="">-- All Statuses --</option>
+                                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                                        <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                        <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Expired</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-3">
                                 <button type="submit" class="btn btn-primary">Filter</button>
@@ -40,6 +47,7 @@
                 </div>
             </div>
 
+            {{-- Ads Table Card --}}
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">All Ads</h6>
@@ -50,7 +58,7 @@
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Title</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Ad Details</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Location</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Agent</th>
@@ -60,26 +68,41 @@
                             <tbody>
                                 @forelse($ads as $ad)
                                     <tr>
-                                        <td><p class="text-xs font-weight-bold mb-0 px-3">{{ $ad->title }}</p></td>
-                                        <td><p class="text-xs font-weight-bold mb-0">{{ $ad->district?->city?->name }} - {{ $ad->district?->name }}</p></td>
+                                        <td>
+                                            <div class="d-flex px-2 py-1">
+                                                <div>
+                                                    @if(!empty($ad->images) && isset($ad->images[0]))
+                                                        <img src="{{ Storage::url($ad->images[0]) }}" class="avatar avatar-sm me-3" alt="{{ $ad->title }} thumbnail">
+                                                    @else
+                                                        {{-- Fallback placeholder --}}
+                                                        <img src="https://via.placeholder.com/40/DEE2E6/868E96?text=Ad" class="avatar avatar-sm me-3" alt="No image">
+                                                    @endif
+                                                </div>
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="mb-0 text-sm">{{ $ad->title }}</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><p class="text-xs font-weight-bold mb-0">{{ optional($ad->district->city)->name }} - {{ optional($ad->district)->name }}</p></td>
                                         <td class="align-middle text-center text-sm">
                                             <span class="badge badge-sm 
                                                 @if($ad->status == 'active') bg-gradient-success
                                                 @elseif($ad->status == 'pending') bg-gradient-warning
+                                                @elseif($ad->status == 'rejected') bg-gradient-danger
                                                 @else bg-gradient-secondary @endif">
                                                 {{ ucfirst($ad->status) }}
                                             </span>
                                         </td>
                                         <td class="align-middle text-center">
-                                            <span class="text-secondary text-xs font-weight-bold">{{ $ad->user?->name }}</span>
+                                            <span class="text-secondary text-xs font-weight-bold">{{ optional($ad->user)->name }}</span>
                                         </td>
                                         <td class="align-middle">
-                                            <div class="d-flex justify-content-end gap-2">
-                                                <a href="{{ route('admin.ads.edit', $ad->id) }}" class="text-secondary font-weight-bold text-xs">Edit</a>
-                                                <form action="{{ route('admin.ads.destroy', $ad->id) }}" method="POST" class="d-inline">
+                                            <div class="d-flex justify-content-end gap-2 px-3">
+                                                <a href="{{ route('admin.ads.edit', $ad->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" title="Edit Ad">Edit</a>
+                                                <form action="{{ route('admin.ads.destroy', $ad->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="text-danger font-weight-bold text-xs border-0 bg-transparent" onclick="return confirm('Are you sure?')">Delete</button>
+                                                    <button type="submit" class="text-danger font-weight-bold text-xs border-0 bg-transparent" data-toggle="tooltip" title="Delete Ad">Delete</button>
                                                 </form>
                                             </div>
                                         </td>
@@ -92,8 +115,9 @@
                     </div>
                 </div>
                 @if($ads->hasPages())
-                    <div class="card-footer">
-                        {{ $ads->links() }}
+                    <div class="card-footer d-flex justify-content-center">
+                        {{-- This line uses Bootstrap 4 styling and keeps the filter parameters in the links --}}
+                        {{ $ads->appends(request()->query())->links('pagination::bootstrap-4') }}
                     </div>
                 @endif
             </div>

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\StoreUserRequest;
 use App\Http\Requests\Admin\User\UpdateUserRequest;
 use App\Models\User;
+use App\Models\Agent;
+use App\Models\AgentType; // <-- IMPORT THE AGENT TYPE MODEL
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -56,14 +58,32 @@ class UserController extends Controller
         $data['is_active'] = $request->has('is_active');
 
         $user = User::create($data);
-
         $newRole = $request->role ?? null;
         if ($newRole) {
             $user->assignRole($newRole);
         }
 
-        // Automatic creation of Agent/Agency is removed to be handled explicitly or by a dedicated process.
-        // $this->syncRoleBasedModels($user, $newRole);
+        if ($newRole === 'agent') {
+            // Find a default agent type to assign
+            $defaultAgentType = AgentType::where('is_active', true)->orderBy('id')->first();
+
+            // Safety check: Make sure an agent type exists
+            if (!$defaultAgentType) {
+                // Manually delete the user we just created to avoid an orphaned user account
+                $user->delete();
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Cannot create agent profile because no active Agent Types are configured. Please create an Agent Type first.');
+            }
+
+            Agent::create([
+                'user_id' => $user->id,
+                'full_name' => $user->name,
+                'email' => $user->email,
+                'phone_number' => $user->phone,
+                'agent_type_id' => $defaultAgentType->id, // Assign the default type ID
+            ]);
+        }
 
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.created_successfully'));
@@ -84,22 +104,45 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
+        $originalRole = $user->roles->first()?->name;
+        $newRole = $request->role ?? null;
 
         if ($request->filled('password')) {
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
         }
-
         $data['is_active'] = $request->has('is_active');
-
         $user->update($data);
 
-        $newRole = $request->role ?? null;
-        $user->syncRoles($newRole ? [$newRole] : []);
+        // Logic for syncing agent profiles
+        if ($newRole === 'agent' && $originalRole !== 'agent') {
+            $defaultAgentType = AgentType::where('is_active', true)->orderBy('id')->first();
 
-        // Automatic creation/deletion of Agent/Agency is removed to be handled explicitly.
-        // $this->syncRoleBasedModels($user, $newRole);
+            if (!$defaultAgentType) {
+                // Don't change the role if we can't create the agent profile
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Cannot assign agent role because no active Agent Types are configured. Please create an Agent Type first.');
+            }
+
+            Agent::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'full_name' => $user->name,
+                    'email' => $user->email,
+                    'phone_number' => $user->phone,
+                    'agent_type_id' => $defaultAgentType->id, // Assign the default type ID
+                ]
+            );
+        }
+        elseif ($newRole !== 'agent' && $originalRole === 'agent') {
+            // Find and delete the associated agent record
+            $user->agent()->delete();
+        }
+
+        // Finally, sync the role in the users table
+        $user->syncRoles($newRole ? [$newRole] : []);
 
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.updated_successfully'));
@@ -115,14 +158,8 @@ class UserController extends Controller
                 ->with('error', __('messages.cannot_delete_self'));
         }
 
-        // Note: Related agent/agency records will be handled by database constraints (e.g., onDelete('cascade'))
-        // or should be handled here if constraints are not set.
-        if ($user->agent) {
-            $user->agent()->delete();
-        }
-        if ($user->agency) {
-            $user->agency()->delete();
-        }
+        $user->agent()->delete();
+        $user->agency()->delete();
 
         $user->delete();
         return redirect()->route('admin.users.index')
@@ -138,7 +175,6 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')
                 ->with('error', __('messages.cannot_deactivate_self'));
         }
-
         $user->update(['is_active' => !$user->is_active]);
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.status_updated_successfully'));
