@@ -27,7 +27,7 @@
                                     لديك حق 3 إعلان متاح كحد أقصى لحسابك العادي.
                                 </p>
                             </div>
-                            <a href="#" class="text-[11px] w-[125px] h-[32px] inline-flex items-center justify-center gap-x-2 whitespace-nowrap bg-[rgba(79,171,232,1)] text-white font-medium py-3 px-5 rounded-lg shadow-sm hover:bg-opacity-90 transition-colors flex-shrink-0">
+                            <a href="{{ route('user.ads.create') }}" class="text-[11px] w-[125px] h-[32px] inline-flex items-center justify-center gap-x-2 whitespace-nowrap bg-[rgba(79,171,232,1)] text-white font-medium py-3 px-5 rounded-lg shadow-sm hover:bg-opacity-90 transition-colors flex-shrink-0">
                                 <img src="{{ asset('images/plus.svg') }}">
                                 <span>أضف إعلان</span>
                             </a>
