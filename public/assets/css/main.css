@@ -60,6 +60,9 @@
   body {
     font-family: "IBMPlexSansArabic", sans-serif;
   }
+  .IBM {
+    font-family: 'IBMPlexSansArabic';
+  }
 
 .font-madani {
     font-family: 'Madani Arabic', sans-serif;

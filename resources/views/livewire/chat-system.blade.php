@@ -4,19 +4,17 @@
       class="flex flex-col lg:flex-row-reverse justify-center bg-[rgba(250,250,250,1)] p-4 md:p-8 gap-[12px]"
       wire:poll.5s="loadMessages">
 
-      <style>
-        .space-y-8 > :not([hidden]) ~ :not([hidden]){
-            margin-top: 12px !important;
-        }
-      </style>
     <!-- left-col (Chat Window) -->
     <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col w-full max-w-[844px]" dir="rtl">
 
         @if ($selectedConversation)
-            <!-- Property Info Header -->
+            {{-- This header will ONLY be displayed if the conversation is linked to an Ad --}}
+            @if ($selectedConversation->ad)
             <div class="bg-[rgba(249,250,252,1)] rounded p-4 flex flex-col md:flex-row justify-between items-center md:items-start gap-4 mb-8">
                 <div class="flex flex-col items-center gap-4 flex-shrink-0">
-                    <img src="{{ !empty($selectedConversation->ad->images) ? Storage::url($selectedConversation->ad->images[0]) : 'https://placehold.co/128x128/3B4A7A/ffffff?text=AD' }}" class="w-32 h-32 rounded object-cover" alt="Property Image">
+                    <a href="{{ route('properties.show', $selectedConversation->ad) }}">
+                        <img src="{{ !empty($selectedConversation->ad->images) ? Storage::url($selectedConversation->ad->images[0]) : 'https://placehold.co/128x128/3B4A7A/ffffff?text=AD' }}" class="w-32 h-32 rounded object-cover" alt="Property Image">
+                    </a>
                 </div>
 
                 <div class="flex-grow text-right flex flex-col w-full">
@@ -44,10 +42,11 @@
                     </div>
                 </div>
             </div>
+            @endif
+            {{-- End of the conditional header --}}
 
             <!-- Chat Messages -->
-            <div x-ref="chatBox" class="flex-grow space-y-8 overflow-y-auto h-[500px] px-2">
-                {{-- THE FIX: Loop over $chatMessages instead of $messages --}}
+            <div x-ref="chatBox" class="flex-grow space-y-4 overflow-y-auto h-[500px] px-2">
                 @forelse ($chatMessages as $message)
                     @if ($message->user_id == auth()->id())
                         <!-- Outgoing Message -->
@@ -78,7 +77,7 @@
             </div>
 
             <!-- Message Input -->
-            <div class="mt-6 pt-4">
+            <div class="mt-6 pt-4 border-t">
                 <form wire:submit.prevent="sendMessage" class="bg-[rgba(249,250,252,1)] rounded-xl p-2 flex flex-row-reverse items-center gap-3">
                      <button type="submit" class="bg-[#3B4A7A] p-2.5 rounded-lg text-white flex-shrink-0">
                         <img src="{{ asset('images/send.svg') }}">
@@ -86,7 +85,7 @@
                      <button type="button" class="text-gray-500 p-2.5 flex-shrink-0">
                         <img src="{{ asset('images/camera.svg') }}">
                      </button>
-                     <input type="text" wire:model.defer="newMessage" placeholder="اكتب رسالتك هنا" class="w-full bg-transparent focus:outline-none text-right placeholder-gray-400">
+                     <input type="text" wire:model="newMessage" placeholder="اكتب رسالتك هنا" class="w-full bg-transparent focus:outline-none text-right placeholder-gray-400">
                 </form>
             </div>
         @else
@@ -104,9 +103,9 @@
                 @php $otherUser = $conversation->otherUser(); @endphp
                 <div wire:click="selectConversation({{ $conversation->id }})" class="{{ $selectedConversation?->id == $conversation->id ? 'bg-[rgba(249,250,252,1)]' : '' }} rounded-md p-2 pl-4 hover:bg-gray-100 cursor-pointer flex items-center justify-between" dir="rtl">
                     <div class="flex items-center gap-3">
-                        <img src="{{ $otherUser->profile_photo_path ? Storage::url($otherUser->profile_photo_path) : 'https://ui-avatars.com/api/?name='.urlencode($otherUser->name).'&background=EBF4FF&color=3B4A7A' }}" alt="{{ $otherUser->name }}" class="w-[56px] h-[56px] rounded-lg object-cover">
+                        <img src="{{ optional($otherUser)->profile_photo_path ? Storage::url($otherUser->profile_photo_path) : 'https://ui-avatars.com/api/?name='.urlencode(optional($otherUser)->name).'&background=EBF4FF&color=3B4A7A' }}" alt="{{ optional($otherUser)->name }}" class="w-[56px] h-[56px] rounded-lg object-cover">
                         <div>
-                            <h3 class="font-medium text-[rgba(26,32,29,1)] text-sm">{{ $otherUser->name }}</h3>
+                            <h3 class="font-medium text-[rgba(26,32,29,1)] text-sm">{{ optional($otherUser)->name }}</h3>
                             <p class="text-xs {{ $conversation->unread_count > 0 ? 'text-black font-bold' : 'text-gray-400' }}">
                                 {{ Str::limit(data_get($conversation, 'lastMessage.body'), 20) }}
                             </p>
