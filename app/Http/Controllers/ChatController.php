@@ -4,28 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Ad;
 use App\Models\Conversation;
+use App\Models\User; // <-- IMPORT THE USER MODEL
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    /**
-     * Display the chat interface.
-     * It dynamically determines which layout to use based on the user's role.
-     */
     public function index()
     {
         $user = Auth::user();
-        $layout = 'layouts.app'; // Default to the regular user layout
-
-        // Check if the user has an associated agent profile.
-        if ($user && $user->agent) {
-            $layout = 'layouts.agent'; // If they are an agent, use the agent layout.
-        }
-        
-        // Get the conversation ID from the route or query string
+        $layout = $user && $user->agent ? 'layouts.agent' : 'layouts.app';
         $conversationId = request()->query('conversation');
 
-        // Return the view and pass the correct layout name and conversation ID.
         return view('chat.index', [
             'layout' => $layout,
             'conversationId' => $conversationId,
@@ -33,7 +22,7 @@ class ChatController extends Controller
     }
 
     /**
-     * Start a new chat with the owner of an ad.
+     * Start a new chat related to a specific Ad.
      */
     public function startChat(Ad $ad)
     {
@@ -44,7 +33,6 @@ class ChatController extends Controller
             return redirect()->back()->with('error', 'لا يمكنك بدء محادثة مع نفسك.');
         }
 
-        // Find or create the conversation
         $conversation = Conversation::firstOrCreate(
             [
                 'ad_id' => $ad->id,
@@ -52,6 +40,44 @@ class ChatController extends Controller
                 'receiver_id' => $receiverId,
             ]
         );
+
+        return redirect()->route('chat.index', ['conversation' => $conversation->id]);
+    }
+
+    /**
+     * ** NEW METHOD **
+     * Start a new direct chat with a User, not related to an Ad.
+     */
+    public function startChatWithUser(User $user)
+    {
+        $sender = Auth::user();
+        $receiver = $user;
+
+        if ($sender->id == $receiver->id) {
+            return redirect()->back()->with('error', 'لا يمكنك بدء محادثة مع نفسك.');
+        }
+
+        // Find a conversation that is DIRECT (ad_id is null) between these two users.
+        // The query checks for both directions (sender->receiver and receiver->sender).
+        $conversation = Conversation::whereNull('ad_id')
+            ->where(function ($query) use ($sender, $receiver) {
+                $query->where('sender_id', $sender->id)
+                      ->where('receiver_id', $receiver->id);
+            })
+            ->orWhere(function ($query) use ($sender, $receiver) {
+                $query->where('sender_id', $receiver->id)
+                      ->where('receiver_id', $sender->id);
+            })
+            ->first();
+
+        // If no direct conversation exists, create one.
+        if (!$conversation) {
+            $conversation = Conversation::create([
+                'ad_id' => null, // Explicitly set ad_id to null
+                'sender_id' => $sender->id,
+                'receiver_id' => $receiver->id,
+            ]);
+        }
 
         return redirect()->route('chat.index', ['conversation' => $conversation->id]);
     }
