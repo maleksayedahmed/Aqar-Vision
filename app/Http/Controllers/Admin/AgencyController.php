@@ -26,9 +26,20 @@ class AgencyController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $agencies = $this->agencyRepository->paginate();
+        $query = Agency::query()->with(['user', 'agencyType']);
+
+        if ($request->filled('search')) {
+            $query->where('agency_name', 'LIKE', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('accreditation_status')) {
+            $query->where('accreditation_status', 'LIKE', '%' . $request->accreditation_status . '%');
+        }
+
+        $agencies = $query->latest()->paginate(10)->withQueryString();
+
         return view('admin.agencies.index', compact('agencies'));
     }
 
@@ -43,9 +54,9 @@ class AgencyController extends Controller
     {
         $data = $request->validated();
         $data['created_by'] = auth()->id();
-        
+
         $this->agencyRepository->create($data);
-        
+
         return redirect()->route('admin.agencies.index')
             ->with('success', __('messages.created_successfully'));
     }
@@ -62,9 +73,9 @@ class AgencyController extends Controller
     {
         $data = $request->validated();
         $data['updated_by'] = auth()->id();
-        
+
         $this->agencyRepository->update($agency->id, $data);
-        
+
         return redirect()->route('admin.agencies.index')
             ->with('success', __('messages.updated_successfully'));
     }
@@ -76,10 +87,8 @@ class AgencyController extends Controller
             ->with('success', __('messages.deleted_successfully'));
     }
 
-    public function updateAccreditationStatus(Request $request, $id)
+    public function updateAccreditationStatus(Request $request, Agency $agency)
     {
-        $agency = $this->agencyRepository->find($id);
-
         $accreditedStatus    = ['en' => 'Accredited', 'ar' => 'معتمد'];
         $notAccreditedStatus = ['en' => 'Not Accredited', 'ar' => 'غير معتمد'];
 
@@ -89,8 +98,8 @@ class AgencyController extends Controller
             $newStatus = $accreditedStatus;
         }
 
-        $this->agencyRepository->update($id, ['accreditation_status' => $newStatus]);
-        
+        $this->agencyRepository->update($agency->id, ['accreditation_status' => $newStatus]);
+
         return redirect()->route('admin.agencies.index')
             ->with('success', __('messages.status_updated_successfully'));
     }

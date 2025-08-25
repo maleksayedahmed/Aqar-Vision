@@ -14,6 +14,7 @@ return [
         'created_at' => 'تاريخ الإنشاء',
         'active' => 'نشط',
         'inactive' => 'غير نشط',
+        'is_active' => 'فعال',
         'no_role' => 'لا يوجد دور',
         'no_records' => 'لا يوجد مستخدمين',
         'password' => 'كلمة المرور',
@@ -131,6 +132,14 @@ return [
         'related_entities' => 'الكيانات المرتبطة',
     ],
 
+    // Properties
+    'properties' => [
+        'purpose' => 'غرض العقار',
+        'type' => 'نوع العقار',
+        'total_price' => 'السعر الإجمالي',
+        'listing_purpose' => 'الغرض من العرض',
+    ],
+
     // Property Purposes
     'property_purposes' => [
         'title' => 'أغراض العقارات',
@@ -191,6 +200,56 @@ return [
         ],
         'created_at' => 'تاريخ الإنشاء',
         'no_records' => 'لم يتم العثور على سمات.',
+    ],
+
+    // Plans
+    'plans' => [
+        'title' => 'خطط الاشتراك',
+        'create' => 'إنشاء خطة',
+        'edit' => 'تعديل الخطة',
+        'delete' => 'حذف',
+        'name' => 'اسم الخطة',
+        'name_en' => 'الاسم (انجليزي)',
+        'name_ar' => 'الاسم (عربي)',
+        'target_type' => 'النوع المستهدف',
+        'price_monthly' => 'السعر الشهري',
+        'ads_regular' => 'عدد الإعلانات العادية',
+        'ads_featured' => 'عدد الإعلانات المميزة',
+        'ads_premium' => 'عدد الإعلانات البريميوم',
+        'ads_map' => 'عدد إعلانات الخريطة',
+        'agent_seats' => 'عدد مقاعد الوكلاء',
+        'description' => 'الوصف',
+        'description_en' => 'الوصف (انجليزي)',
+        'description_ar' => 'الوصف (عربي)',
+        'no_records' => 'لم يتم العثور على خطط.',
+    ],
+
+    // Ad Prices
+    'ad_prices' => [
+        'title' => 'أسعار الإعلانات الفردية',
+        'create' => 'إنشاء سعر إعلان',
+        'edit' => 'تعديل سعر إعلان',
+        'delete' => 'حذف',
+        'name' => 'الاسم',
+        'price' => 'السعر',
+        'duration_days' => 'المدة (بالأيام)',
+        'type' => 'نوع الإعلان',
+        'is_active' => 'فعال',
+        'no_records' => 'لم يتم العثور على أسعار إعلانات.',
+    ],
+
+    // Subscriptions
+    'subscriptions' => [
+        'title' => 'الاشتراكات',
+        'create' => 'إنشاء اشتراك',
+        'edit' => 'تعديل الاشتراك',
+        'delete' => 'حذف',
+        'user' => 'المستخدم',
+        'plan' => 'الخطة',
+        'start_date' => 'تاريخ البدء',
+        'end_date' => 'تاريخ الانتهاء',
+        'status' => 'الحالة',
+        'no_records' => 'لم يتم العثور على اشتراكات.',
     ],
 
     // Messages

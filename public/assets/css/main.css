@@ -1,0 +1,130 @@
+/* @font-face {
+  font-family: 'Madani Arabic';
+  src: url('../fonts/alfont_com_Madani-Arabic-Medium-1.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+} */
+
+@font-face {
+  font-family: 'Madani Arabic';
+  src: url('/fonts/alfont_com_Madani-Arabic-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'IBMPlexSansArabic';
+  src: url('/fonts/IBMPlexSansArabic-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'IBMPlexSansArabic';
+  src: url('/fonts/IBMPlexSansArabic-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+}
+@font-face {
+  font-family: 'IBMPlexSansArabic';
+  src: url('/fonts/IBMPlexSansArabic-Light.ttf') format('truetype');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'IBMPlexSansArabic';
+  src: url('/fonts/IBMPlexSansArabic-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'IBMPlexSansArabic';
+  src: url('/fonts/IBMPlexSansArabic-Medium.ttf') format('truetype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'IBMPlexSansArabic';
+  src: url('/fonts/IBMPlexSansArabic-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'IBMPlexSansArabic';
+  src: url('/fonts/IBMPlexSansArabic-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+    font-family: "Mishafi Gold Regular";
+    src: url("https://db.onlinewebfonts.com/t/7d39006149fa1fb38ce32ed0d77006b0.eot");
+    src: url("https://db.onlinewebfonts.com/t/7d39006149fa1fb38ce32ed0d77006b0.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/7d39006149fa1fb38ce32ed0d77006b0.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/7d39006149fa1fb38ce32ed0d77006b0.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/7d39006149fa1fb38ce32ed0d77006b0.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/7d39006149fa1fb38ce32ed0d77006b0.svg#Mishafi Gold Regular")format("svg");
+}
+  body {
+    font-family: "IBMPlexSansArabic", sans-serif;
+  }
+
+.font-madani {
+    font-family: 'Madani Arabic', sans-serif;
+  }
+        .slider-container {
+      overflow: hidden;
+    }
+    .slider-track {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      gap: 1.5rem;
+    }
+    .slider-card {
+      flex: 0 0 320px;
+      width: 320px;
+    }
+    .slider-container::-webkit-scrollbar {
+      display: none;
+    }
+    .slider-container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+        user-select: none; /* Prevents text selection while dragging */
+      }
+
+      /* Cursor styles for better UX */
+      #agents-slider {
+        cursor: grab;
+      }
+      #agents-slider.active {
+        cursor: grabbing;
+      }
+      @media (max-width: 768px) {
+            .hero-bg {
+                background-size: cover;
+                background-position: center top;
+            }
+        }
+
+         /* Utility to hide scrollbar but keep functionality */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+    /* Change cursor to show it's being dragged */
+    .grabbing {
+        cursor: grabbing;
+    }
+  .custom-select-arrow {
+      -webkit-appearance: none; /* Remove default arrow for Safari/Chrome */
+      -moz-appearance: none;    /* Remove default arrow for Firefox */
+      appearance: none;         /* Remove default arrow for other browsers */
+      background-image: none;   /* Ensure no background image is used */
+  }

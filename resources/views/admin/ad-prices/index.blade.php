@@ -1,67 +1,67 @@
-@extends('layouts.admin')
+@extends('admin.layouts.app')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Ad Prices</h3>
-                    <div class="card-tools">
-                        <a href="{{ route('admin.ad-prices.create') }}" class="btn btn-primary btn-sm">
-                            Add New Price
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    @if(session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Duration (Days)</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($prices as $price)
-                                <tr>
-                                    <td>{{ $price->getTranslation('name', app()->getLocale()) }}</td>
-                                    <td>{{ number_format($price->price, 2) }}</td>
-                                    <td>{{ $price->duration_days }}</td>
-                                    <td>{{ ucfirst($price->type) }}</td>
-                                    <td>
-                                        <span class="badge badge-{{ $price->is_active ? 'success' : 'danger' }}">
-                                            {{ $price->is_active ? 'Active' : 'Inactive' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('admin.ad-prices.edit', $price) }}" class="btn btn-sm btn-info">
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('admin.ad-prices.destroy', $price) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <h3 class="card-title">Ad Packages</h3>
+            <a href="{{ route('admin.ad-prices.create') }}" class="btn btn-primary btn-sm">Create New</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                    <tr>
+                        <th>Icon</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                        <th class="w-1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($prices as $price)
+                        <tr>
+                            <td>
+                                @if($price->icon_path)
+                                    {{-- Use Storage::url() to get the correct public path --}}
+                                    <img src="{{ Storage::url($price->icon_path) }}" alt="icon" class="avatar">
+                                @else
+                                    <span class="avatar" style="background-color: #eee"></span>
+                                @endif
+                            </td>
+                            <td>{{ $price->name }}</td>
+                            <td><span class="badge bg-secondary">{{ $price->type }}</span></td>
+                            <td>{{ $price->price }} SAR</td>
+                            <td>{{ $price->duration_days }} days</td>
+                            <td>
+                                @if($price->is_active)
+                                    <span class="badge bg-success">Active</span>
+                                @else
+                                    <span class="badge bg-danger">Inactive</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="btn-list flex-nowrap">
+                                    <a href="{{ route('admin.ad-prices.edit', $price) }}" class="btn btn-sm btn-primary">Edit</a>
+                                    <form action="{{ route('admin.ad-prices.destroy', $price) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center">No ad packages found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            {{ $prices->links() }}
         </div>
     </div>
-</div>
-@endsection 
+@endsection

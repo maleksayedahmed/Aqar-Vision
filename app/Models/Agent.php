@@ -16,6 +16,7 @@ class Agent extends Model
         'agent_type_id',
         'phone_number',
         'email',
+        'city_id',
         'license_number',
         'license_issue_date',
         'license_expiry_date',
@@ -24,6 +25,7 @@ class Agent extends Model
         'agency_id',
         'created_by',
         'updated_by',
+        'has_visited_active',
     ];
 
     protected $casts = [
@@ -46,6 +48,11 @@ class Agent extends Model
         return $this->belongsTo(Agency::class);
     }
 
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
     public function licenses()
     {
         return $this->hasMany(License::class);
@@ -60,4 +67,4 @@ class Agent extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-} 
+}

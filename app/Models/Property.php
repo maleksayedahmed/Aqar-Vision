@@ -2,38 +2,57 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Property extends Model
+class Property extends Model implements HasMedia
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes, InteractsWithMedia;
 
+    /**
+     * The attributes that are mass assignable.
+     * UPDATED: Added 'district_id' and removed 'city', 'neighborhood'.
+     */
     protected $fillable = [
-        'title',
-        'description',
-        'city',
-        'neighborhood',
-        'street_width',
-        'facade',
-        'area_sq_meters',
-        'purpose_id',
-        'price_per_unit',
-        'total_price',
-        'property_type_id',
-        'age_years',
-        'services',
-        'listing_purpose',
-        'contact_number',
-        'encumbrances',
-        'status',
-        'list_date',
-        'sold_rented_date',
-        'agent_id',
-        'user_id',
-        'created_by',
-        'updated_by'
-    ];
+    'title',
+    'description',
+    'district_id',
+    'street_width',
+    'facade',
+    'area_sq_meters',
+    'purpose_id',
+    'price_per_unit',
+    'total_price',
+    'property_type_id',
+    'age_years', 
+    'services',
+    'listing_purpose',
+    'contact_number',
+    'encumbrances',
+    'status',
+    'list_date',
+    'sold_rented_date',
+    'agent_id',
+    'user_id',
+    'created_by',
+    'updated_by',
+
+    'floor_number',
+    'finishing_status',
+    'street_name',
+    'province',
+    'property_usage',
+    'is_mortgaged',
+    'building_status',
+    'plan_number',
+    'furniture_status',
+    'building_number',
+    'postal_code',
+];
 
     protected $casts = [
         'street_width' => 'decimal:2',
@@ -44,6 +63,23 @@ class Property extends Model
         'list_date' => 'date',
         'sold_rented_date' => 'date',
     ];
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+              ->width(150)
+              ->height(150)
+              ->sharpen(10);
+    }
+
+    /**
+     * ADDED: This is the missing relationship method that causes the error.
+     * A Property belongs to a District.
+     */
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
 
     public function purpose()
     {
@@ -79,4 +115,4 @@ class Property extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-} 
+}
