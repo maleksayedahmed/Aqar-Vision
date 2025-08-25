@@ -118,9 +118,9 @@
             <p class="max-w-3xl text-[15px] mx-auto text-[rgba(102,102,102,1)] font-medium leading-relaxed mb-4">
                 إذا كنت وسيطًا عقاريًا أو لديك عدد كبير من العقارات، قم بترقية حسابك إلى حساب عقاري للاستفادة من باقات متعددة للإعلانات وميزات إدارة متقدمة حول نوع الحساب وابدأ الرحلة.
             </p>
-            <a href="#" class="bg-[#303F7C] text-white font-bold py-3 px-12 rounded-lg hover:bg-opacity-90 transition-colors shadow-md">
-                تحويل الحساب
-            </a>
+            <button type="button" id="open-upgrade-modal" class="bg-[#303F7C] text-white font-bold py-3 px-12 rounded-lg hover:bg-opacity-90 transition-colors shadow-md">
+            تحويل الحساب
+        </button>
         </div>
     </div>
 </section>
