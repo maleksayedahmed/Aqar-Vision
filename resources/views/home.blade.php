@@ -173,7 +173,11 @@
         <div class="flex justify-between items-center mb-8">
             <div class="space-y-1">
                 <h2 class="text-xl font-bold text-slate-800 md:text-3xl">أحدث العقارات</h2>
-                <p class="text-xs sm:text-sm text-slate-500">اكتشف أحدث العروض العقارية المضافة يوميًا.</p>
+                <p class="text-xs sm:text-sm text-slate-500 p   t-2">
+                 اكتشف أحدث العروض العقارية المضافة يوميًا
+<br>فلل، شقق، واستوديوهات بتشطيبات مميزة وأسعار منافسة، في أفضل أحياء الرياض والمملكة.
+                </p>
+                
             </div>
             <a href="{{ route('properties.search') }}" class="text-sm flex items-center gap-2 bg-indigo-50 text-indigo-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
                 <span>رؤية الكل</span>
@@ -218,6 +222,48 @@
             </div>
         </div>
     </section>
+
+    @if($featuredAds->isNotEmpty())
+<section class="max-w-7xl w-full mx-auto py-12 px-4 bg-gray-50 rounded-2xl">
+    <div class="flex justify-between items-center mb-8">
+        <div class="space-y-1">
+            <h2 class="text-xl font-bold text-slate-800 md:text-3xl">أبـرز العقارات</h2>
+            <p class="text-xs sm:text-sm text-slate-500">عقارات مميزة نوصي بها.</p>
+        </div>
+        <a href="{{ route('properties.search', ['type' => 'featured']) }}" class="text-sm flex items-center gap-2 bg-indigo-50 text-indigo-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
+            <span>رؤية الكل</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7" /></svg>
+        </a>
+    </div>
+
+    {{-- Grid for Featured Ads --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        @foreach ($featuredAds as $ad)
+            <div class="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300">
+                <div>
+                    <div class="relative">
+                        <a href="{{ route('properties.show', $ad->id) }}">
+                            <img src="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-t-lg" alt="{{ $ad->title }}">
+                        </a>
+                        {{-- A slightly different badge for featured items --}}
+                        <div class="absolute top-2 right-2 bg-amber-400 text-gray-900 text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.868 2.884c.321-.772 1.305-.772 1.626 0l1.373 3.303a1 1 0 00.95.69h3.468c.851 0 1.21.976.544 1.49l-2.807 2.04a1 1 0 00-.364 1.118l1.07 3.303c.321.772-.639 1.42-1.34 1.01l-2.807-2.04a1 1 0 00-1.175 0l-2.807 2.04c-.701.41-1.66-.238-1.34-1.01l1.07-3.303a1 1 0 00-.364-1.118l-2.807-2.04c-.666-.514-.307-1.49.544-1.49h3.468a1 1 0 00.95-.69l1.373-3.303z" clip-rule="evenodd" /></svg>
+                            <span>مميز</span>
+                        </div>
+                    </div>
+                    <div class="p-4 space-y-3">
+                         <h3 class="text-lg font-bold text-slate-800 leading-tight">{{ Str::limit($ad->title, 100) }}</h3>
+                         <div class="flex justify-between items-center">
+                            <p class="text-lg font-bold text-indigo-700">{{ number_format($ad->total_price) }} <span class="text-xs font-medium text-slate-500">ر.س</span></p>
+                            <a href="{{ route('properties.show', $ad->id) }}" class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-indigo-800 transition-colors">التفاصيل</a>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</section>
+@endif
 
     <section class="py-10 w-[98%] bg-white">
         <div class="max-w-7xl mx-auto">

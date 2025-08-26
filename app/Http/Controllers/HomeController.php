@@ -19,13 +19,25 @@ class HomeController extends Controller
         $cities = City::where('is_active', true)->orderBy('name')->get();
         $propertyTypes = PropertyType::where('is_active', true)->whereNull('parent_id')->orderBy('name')->get();
 
-        // CORRECTED: Removed 'media' from the with() call
+        // Query for "Latest Ads"
         $latestAds = Ad::where('status', 'active')
                        ->with(['district.city', 'propertyType'])
                        ->latest()
                        ->take(8)
                        ->get();
+                       
+        // ** NEW QUERY for "Featured Ads" **
+        // Fetches active ads that are linked to an AdPrice of type 'featured'.
+        $featuredAds = Ad::where('status', 'active')
+                        ->whereHas('adPrice', function ($query) {
+                            $query->where('type', 'featured');
+                        })
+                        ->with(['district.city', 'propertyType'])
+                        ->latest()
+                        ->take(4) // Let's show fewer featured ads to make them special
+                        ->get();
 
+        // Query for Agents
         $agents = User::whereHas('roles', function ($query) {
                         $query->where('name', 'agent');
                     })
@@ -35,6 +47,7 @@ class HomeController extends Controller
                     ->take(10)
                     ->get();
 
-        return view('home', compact('cities', 'propertyTypes', 'latestAds', 'agents'));
+        // Pass the new $featuredAds variable to the view
+        return view('home', compact('cities', 'propertyTypes', 'latestAds', 'featuredAds', 'agents'));
     }
 }
