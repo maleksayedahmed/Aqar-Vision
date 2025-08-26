@@ -10,11 +10,12 @@ use App\Models\PropertyType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\JsonResponse;
 
 class UserAdController extends Controller
 {
     /**
-     * Show the first step for creating a new ad (selecting the license/package type).
+     * Show the page to select an ad package.
      */
     public function create()
     {
@@ -34,11 +35,7 @@ class UserAdController extends Controller
         $allAdPrices = AdPrice::where('is_active', true)->get();
         $cities = City::where('is_active', true)->orderBy('name')->get();
         $propertyTypes = PropertyType::where('is_active', true)->whereNull('parent_id')->orderBy('name')->get();
-        
-        // Fetch boolean attributes for the "Features" checkbox section
         $features = PropertyAttribute::where('type', 'boolean')->orderBy('name->en')->get();
-        
-        // Fetch all other attribute types (text, number, dropdown) for the "Additional Details" section
         $attributes = PropertyAttribute::where('type', '!=', 'boolean')->orderBy('name->en')->get();
 
         return view('user.ads.create-step-one', [
@@ -47,7 +44,7 @@ class UserAdController extends Controller
             'cities' => $cities,
             'propertyTypes' => $propertyTypes,
             'features' => $features,
-            'attributes' => $attributes, // Pass the new variable to the view
+            'attributes' => $attributes,
         ]);
     }
 
@@ -73,7 +70,7 @@ class UserAdController extends Controller
             'age_years' => 'nullable|integer|min:0',
             'rooms' => 'required|integer|min:0',
             'bathrooms' => 'required|integer|min:0',
-            'attributes' => 'nullable|array', // This will now accept dropdown values too
+            'attributes' => 'nullable|array',
         ]);
 
         $request->session()->put('ad_step_one_data', $validatedData);
@@ -96,9 +93,24 @@ class UserAdController extends Controller
             'selectedAdPrice' => $selectedAdPrice,
         ]);
     }
+    
+    /**
+     * Handle AJAX video uploads from the Uppy library.
+     */
+    public function uploadVideo(Request $request)
+    {
+        $request->validate([
+            'video' => ['required', 'file', 'mimes:mp4,mov,webm', 'max:51200'], // 50MB
+        ]);
+
+        // Store the file and return its path in a JSON response.
+        $path = $request->file('video')->store('ads/videos', 'public');
+
+        return response()->json(['path' => $path]);
+    }
 
     /**
-     * Combines data from both steps and creates the Ad record.
+     * Combines data from both steps and creates the final Ad record.
      */
     public function storeAd(Request $request)
     {
@@ -106,18 +118,17 @@ class UserAdController extends Controller
         if (!$stepOneData) {
             return redirect()->route('user.ads.create')->with('error', 'انتهت صلاحية الجلسة. الرجاء البدء من جديد.');
         }
-
+        dd($request);
+        // The 'video' field is now a string (the path), not a file.
         $request->validate([
             'images.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:5120'],
-            'video' => ['nullable', 'file', 'mimes:mp4,mov,webm', 'max:51200'],
-            'terms' => ['accepted'],
+            'video'    => ['nullable', 'string'],
+            'terms'    => ['accepted'],
         ]);
 
         $adData = $stepOneData;
         $adData['user_id'] = Auth::id();
         $adData['status'] = 'pending';
-        
-        // Use 'features' column to store the JSON of attributes
         $adData['features'] = $adData['attributes'] ?? [];
         unset($adData['attributes']);
 
@@ -130,9 +141,8 @@ class UserAdController extends Controller
             $adData['images'] = $imagePaths;
         }
 
-        if ($request->hasFile('video')) {
-            $videoPath = $request->file('video')->store('ads/videos', 'public');
-            $adData['video_path'] = $videoPath;
+        if ($request->filled('video')) {
+            $adData['video_path'] = $request->video;
         }
         
         $ad = Ad::create($adData);

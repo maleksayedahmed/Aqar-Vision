@@ -50,6 +50,7 @@ Route::prefix('my-account/ads')->name('user.ads.')->group(function () {
     Route::post('/create/step-1', [App\Http\Controllers\UserAdController::class, 'storeStepOne'])->name('store.step1');
     Route::get('/create/step-2', [App\Http\Controllers\UserAdController::class, 'createStepTwo'])->name('create.step2');
     Route::post('/create/store', [App\Http\Controllers\UserAdController::class, 'storeAd'])->name('store');
+     Route::post('/upload-video', [App\Http\Controllers\UserAdController::class, 'uploadVideo'])->name('uploadVideo');
 });
 
 
