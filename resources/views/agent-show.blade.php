@@ -2,6 +2,10 @@
 
 @section('title', 'ملف المسوق: ' . $agent->name)
 
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+@endpush
+
 @section('content')
 <main class="flex flex-col items-center justify-center min-h-screen pt-[35px]">
     <!-- Agent Profile Section -->
@@ -89,12 +93,15 @@
                         <img src="{{ asset('images/phone.svg') }}">
                         <span>اتصال</span>
                     </a>
-                    
-                    <!-- Message Button -->
-                    <a href="mailto:{{ $agent->email }}" class="w-full sm:w-auto py-2 px-8 flex items-center justify-center gap-2 rounded-2xl border-[1px] border-[rgba(48,63,125,1)] text-[rgba(48,63,125,1)] hover:bg-indigo-100/50 transition-colors text-[20px] font-medium">
-                        <img src="{{ asset('images/message.svg') }}" alt="Message Icon">
-                        <span>راسلني</span>
-                    </a>
+                    @auth
+                        @if(auth()->id() != $agent->id)
+                            <!-- Message Button -->
+                            <a href="{{ route('chat.start.user', $agent) }}" class="w-full sm:w-auto py-2 px-8 flex items-center justify-center gap-2 rounded-2xl border-[1px] border-[rgba(48,63,125,1)] text-[rgba(48,63,125,1)] hover:bg-indigo-100/50 transition-colors text-[20px] font-medium">
+                                <img src="{{ asset('images/message.svg') }}" alt="Message Icon">
+                                <span>راسلني</span>
+                            </a>
+                        @endif
+                    @endauth
                     
                     <!-- WhatsApp Button -->
                     <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $agent->phone) }}" target="_blank" title="WhatsApp" class="w-full sm:w-[66px] h-[50px] flex items-center justify-center rounded-2xl border-[1px] border-[rgba(27,177,105,1)] text-[#25D366] hover:bg-green-100/50 transition-colors">

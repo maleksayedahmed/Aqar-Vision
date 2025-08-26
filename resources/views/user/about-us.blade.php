@@ -9,7 +9,9 @@
         <div class="flex flex-col lg:flex-row gap-4">
 
             <!-- User Sidebar Navigation -->
-            @include('partials.user_sidebar')
+            @auth
+                @include('partials.user_sidebar')
+            @endauth
 
             <!-- Main Content Section -->
             <section class="h-full w-full">

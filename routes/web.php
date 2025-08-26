@@ -41,6 +41,8 @@ Route::get('/properties', [PropertySearchController::class, 'index'])->name('pro
 Route::get('/properties/map', [PropertySearchController::class, 'map'])->name('properties.map');
 Route::get('/properties/{ad}', [PropertySearchController::class, 'show'])->name('properties.show');
 Route::get('/agents/{agent}', [PropertySearchController::class, 'showAgent'])->name('agents.show');
+  Route::get('/about-us', [App\Http\Controllers\AboutController::class, 'index'])->name('user.about-us');
+
 
 Route::prefix('my-account/ads')->name('user.ads.')->group(function () {
     Route::get('/create', [App\Http\Controllers\UserAdController::class, 'create'])->name('create');
@@ -48,6 +50,7 @@ Route::prefix('my-account/ads')->name('user.ads.')->group(function () {
     Route::post('/create/step-1', [App\Http\Controllers\UserAdController::class, 'storeStepOne'])->name('store.step1');
     Route::get('/create/step-2', [App\Http\Controllers\UserAdController::class, 'createStepTwo'])->name('create.step2');
     Route::post('/create/store', [App\Http\Controllers\UserAdController::class, 'storeAd'])->name('store');
+     Route::post('/upload-video', [App\Http\Controllers\UserAdController::class, 'uploadVideo'])->name('uploadVideo');
 });
 
 
@@ -70,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/{conversation}', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.show');
     Route::get('/chat/start/{ad}', [App\Http\Controllers\ChatController::class, 'startChat'])->name('chat.start');
+    Route::get('/chat/start/user/{user}', [App\Http\Controllers\ChatController::class, 'startChatWithUser'])->name('chat.start.user');
 
 
 
@@ -81,7 +85,6 @@ Route::middleware('auth')->group(function () {
  Route::get('/my-profile', [App\Http\Controllers\UserProfileController::class, 'edit'])->name('user.profile.edit');
  Route::patch('/my-profile', [App\Http\Controllers\UserProfileController::class, 'update'])->name('user.profile.update');
  Route::get('/my-ads', [App\Http\Controllers\UserAdsController::class, 'index'])->name('user.my-ads');
- Route::get('/about-us', [App\Http\Controllers\AboutController::class, 'index'])->name('user.about-us');
  Route::get('/terms-of-use', [App\Http\Controllers\TermsController::class, 'index'])->name('user.terms');
      Route::get('/complaints', [App\Http\Controllers\ComplaintController::class, 'create'])->name('user.complaints.create');
     Route::post('/complaints', [App\Http\Controllers\ComplaintController::class, 'store'])->name('user.complaints.store');

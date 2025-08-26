@@ -5,89 +5,86 @@ namespace App\Livewire;
 use App\Models\Conversation;
 use App\Models\Message;
 use Livewire\Component;
+use Livewire\WithFileUploads; // Trait for handling file uploads
 use Illuminate\Support\Facades\Auth;
 
 class ChatSystem extends Component
 {
+    use WithFileUploads; // Use the file upload trait
+
     public $conversations;
     public $selectedConversation;
-    public $chatMessages; // RENAMED from $messages to avoid Livewire conflicts
+    public $chatMessages;
     public $newMessage;
-    
-    protected $listeners = ['refreshConversations' => '$refresh'];
+    public $photo; // Property to hold the uploaded photo
 
     public function mount($conversationId = null)
     {
-        // Eager load all relationships needed for the conversation list on initial load
         $this->conversations = Conversation::where('sender_id', auth()->id())
             ->orWhere('receiver_id', auth()->id())
-            ->with([
-                'lastMessage', 
-                'sender:id,name,profile_photo_path', // Load only necessary columns for performance
-                'receiver:id,name,profile_photo_path'
-            ])
+            ->with(['lastMessage', 'sender:id,name,profile_photo_path', 'receiver:id,name,profile_photo_path'])
             ->latest('updated_at')
             ->get();
 
         if ($conversationId) {
             $this->selectConversation($conversationId);
         } elseif ($this->conversations->isNotEmpty()) {
-            // If no specific conversation is requested, select the most recent one by default
             $this->selectConversation($this->conversations->first()->id);
         }
     }
 
     public function selectConversation($conversationId)
     {
-        // Eager load all relationships needed for the chat header to prevent errors
-        $this->selectedConversation = Conversation::with([
-            'ad.district.city', 
-            'ad.propertyType'
-        ])->findOrFail($conversationId);
-
-        // Mark all messages in this conversation from the other user as "read"
-        Message::where('conversation_id', $conversationId)
-            ->where('user_id', '!=', auth()->id())
-            ->update(['is_read' => true]);
-            
-        $this->loadMessages();
+        $this->selectedConversation = Conversation::with(['ad.district.city', 'ad.propertyType'])->findOrFail($conversationId);
         
-        // Dispatch browser event to trigger JavaScript (e.g., for scrolling)
+        Message::where('conversation_id', $conversationId)
+               ->where('user_id', '!=', auth()->id())
+               ->update(['is_read' => true]);
+               
+        $this->loadMessages();
+        $this->reset(['newMessage', 'photo']); // Reset inputs when changing conversation
         $this->dispatch('chat-selected');
     }
 
     public function sendMessage()
     {
-        $this->validate(['newMessage' => 'required|string']);
+        // Require either text or a photo, but not necessarily both
+        $this->validate([
+            'newMessage' => 'required_without:photo|nullable|string|max:1000',
+            'photo'      => 'required_without:newMessage|nullable|image|max:2048', // 2MB Max
+        ]);
 
         if (!$this->selectedConversation) {
-            return; // Exit if no conversation is selected to prevent errors
+            return;
+        }
+
+        $imagePath = null;
+        if ($this->photo) {
+            // Store the uploaded image in the 'public/chat-images' directory
+            $imagePath = $this->photo->store('chat-images', 'public');
         }
 
         Message::create([
             'conversation_id' => $this->selectedConversation->id,
-            'user_id' => auth()->id(),
-            'body' => $this->newMessage,
+            'user_id'         => auth()->id(),
+            'body'            => $this->newMessage,
+            'image_path'      => $imagePath, // Save the path to the database
         ]);
 
-        // This updates the `updated_at` timestamp on the conversation,
-        // which brings it to the top of the conversation list.
-        $this->selectedConversation->touch(); 
+        $this->selectedConversation->touch(); // Update conversation timestamp
 
-        $this->newMessage = ''; // Reset the input field after sending
+        // Reset the input fields after sending
+        $this->reset(['newMessage', 'photo']);
 
-        $this->loadMessages(); // Reload messages to show the new one instantly
-        
-        // Dispatch browser event to scroll the chat box down
+        $this->loadMessages();
         $this->dispatch('message-sent');
     }
 
     public function loadMessages()
     {
         if ($this->selectedConversation) {
-            // RENAMED from $this->messages to $this->chatMessages
             $this->chatMessages = Message::where('conversation_id', $this->selectedConversation->id)
-                ->with('user:id,name,profile_photo_path') // Load sender info efficiently
+                ->with('user:id,name,profile_photo_path')
                 ->orderBy('created_at', 'asc')
                 ->get();
         }
@@ -95,8 +92,6 @@ class ChatSystem extends Component
 
     public function render()
     {
-        // This runs on every update, including polling, to refresh the conversation list
-        // This is how new messages from other users appear in the list.
         $this->conversations = Conversation::where('sender_id', auth()->id())
             ->orWhere('receiver_id', auth()->id())
             ->with(['lastMessage', 'sender:id,name,profile_photo_path', 'receiver:id,name,profile_photo_path'])

@@ -2,38 +2,43 @@
 
 @section('title', 'أضف اعلان جديد - الخطوة 2')
 
+@push('styles')
+    {{-- Uppy's CSS is required for the video uploader's UI --}}
+    <link href="https://releases.transloadit.com/uppy/v3.1.0/uppy.min.css" rel="stylesheet">
+@endpush
+
 @section('content')
 <main class="bg-[rgba(250,250,250,1)] px-4 lg:px-20 pt-6 pb-11">
 
-    <form method="POST" action="{{ route('user.ads.store') }}" enctype="multipart/form-data">
+    {{-- The form now needs the enctype for the standard image uploads --}}
+    <form id="ad-step-two-form" method="POST" action="{{ route('user.ads.store') }}" enctype="multipart/form-data">
         @csrf
+        
+        {{-- This hidden input will be populated by Uppy with the uploaded video's path --}}
+        <input type="hidden" name="video" id="video-path">
 
         <section class="">
             <div class="flex w-full flex-col items-stretch gap-y-4 lg:flex-row lg:items-center lg:justify-between py-4" dir="rtl">
                 <a href="{{ route('user.ads.create.step1', $selectedAdPrice) }}" class="flex items-center gap-x-3">
-                    <img src="{{ asset('images/back-arrow.svg') }}">
+                    <img src="{{ asset('images/back-arrow.svg') }}" alt="Back Arrow">
                     <div class="text-right">
                         <h3 class="text-2xl lg:text-[26px] font-medium text-[rgba(48,62,124,1)]">أضف اعلان جديد</h3>
                         <p class="text-[14.3px] font-medium"><span class="mr-1 text-red-500">*</span>نرجو تعبئة البيانات بدقة</p>
                     </div>
                 </a>
-
                 <div class="hidden md:flex items-center gap-x-[27px]">
                     <span class="font-medium text-[16px] text-[rgba(181,183,191,1)]">بيانات العقار</span>
-                    <div class="flex items-center gap-x-2">
-                        <img src="{{ asset('images/rode-active.svg') }}">
-                    </div>
+                    <div class="flex items-center gap-x-2"><img src="{{ asset('images/rode-active.svg') }}"></div>
                     <span class="font-medium text-[16px] text-[rgba(48,62,124,1)]">مستندات العقار</span>
                 </div>
-
                 <div class="relative w-full lg:w-[264px]">
-                    <button type="button" class="flex items-center justify-between bg-[rgba(0,0,0,0.02)] w-full h-[53px] px-4 py-2.5 rounded-xl text-lg lg:text-[20px] font-medium text-black">
+                    <div class="flex items-center justify-between bg-[rgba(0,0,0,0.02)] w-full h-[53px] px-4 py-2.5 rounded-xl text-lg lg:text-[20px] font-medium text-black">
                         <div class="flex items-center gap-x-2">
-                            <img src="{{ asset('images/star.png') }}">
+                            <img src="{{ $selectedAdPrice->icon_path ? Storage::url($selectedAdPrice->icon_path) : asset('images/star.png') }}" alt="Ad Type Icon" class="w-8 h-8">
                             <span>{{ $selectedAdPrice->name }}</span>
                         </div>
-                        <img src="{{ asset('images/Polygon.svg') }}">
-                    </button>
+                        <img src="{{ asset('images/Polygon.svg') }}" alt="Dropdown Arrow">
+                    </div>
                 </div>
             </div>
         </section>
@@ -46,50 +51,42 @@
                 <h2 class="text-base lg:text-[18px] font-bold">صور وفيديوهات العقار</h2>
             </div>
 
-            <div class="bg-[rgba(243,246,255,1)] p-4 md:p-6 rounded-lg border-r-4 border-[rgba(98,150,209,1)]">
+            {{-- ** THIS IS THE RESTORED INSTRUCTIONS BLOCK ** --}}
+            <div class="bg-[rgba(243,246,255,1)] p-4 md:p-6 rounded-lg border-r-4 border-[rgba(98,150,209,1)] mb-8">
                 <div class="text-gray-800 space-y-4 text-[16.3px] font-medium">
                     <p class="font-bold text-lg">إرشادات هامة لرفع الوسائط:</p>
                     <div>
                         <p class="font-bold mb-2">• الصور:</p>
                         <ul class="space-y-2 pr-4 md:pr-6 text-[rgba(48,62,124,1)]">
                             <li>• يُفضل رفع صور عالية الجودة وواضحة للعقار من زوايا مختلفة.</li>
-                            <li>• تأكد من أن الصور مضاءة جيدًا ولا تحتوي على علامات مائية أو نصوص إضافية.</li>
-                            <li>• الأبعاد الموصى بها: 1280x720 بكسل أو أعلى.</li>
                             <li>• الحد الأقصى لحجم الصورة: 5 ميجابايت.</li>
-                            <li>• يمكنك تعيين صورة رئيسية واحدة ستظهر كأول صورة للإعلان.</li>
                         </ul>
                     </div>
                     <div>
                         <p class="font-bold mb-2 mt-4">• الفيديوهات:</p>
                         <ul class="space-y-2 pr-4 md:pr-6 text-[rgba(48,62,124,1)]">
-                            <li>• يمكنك رفع فيديو واحد للعقار يعرض تفاصيله بشكل أفضل.</li>
-                            <li>• يجب أن يكون الفيديو قصيرًا وواضحًا (لا يزيد عن دقيقة).</li>
-                            <li>• تأكد من جودة الصوت والصورة.</li>
+                            <li>• يمكنك رفع فيديو واحد فقط للعقار.</li>
                             <li>• صيغ الفيديو المدعومة: MP4, MOV, WebM.</li>
                             <li>• الحد الأقصى لحجم الفيديو: 50 ميجابايت.</li>
                         </ul>
                     </div>
-                    <p class="text-[rgba(48,62,124,1)]">لا تتردد في حذف أي وسائط غير مرغوب فيها باستخدام زر (X).</p>
                 </div>
             </div>
 
+            {{-- Standard Image Upload --}}
+            <div class="mb-8">
+                <label for="images" class="block text-sm font-medium text-gray-700">صور العقار (يمكنك اختيار عدة صور)</label>
+                <input type="file" name="images[]" id="images" multiple class="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+                @error('images.*') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+            </div>
+
+            <hr>
+
+            {{-- Uppy Video Upload Area --}}
             <div class="mt-8">
-                <div id="drop-zone" class="flex h-36 w-full items-center justify-center rounded-xl border-2 border-dashed border-gray-300 transition-colors">
-                    <label for="file-upload" class="cursor-pointer text-center text-base text-gray-400 sm:text-lg">
-                        اسحب الصور والفيديوهات وأفلتها هنا، أو
-                        <span class="font-semibold text-sky-500 hover:text-sky-600">انقر للتحميل</span>
-                        <input id="file-upload" name="images[]" type="file" class="sr-only" multiple accept="image/*,video/mp4,video/mov,video/webm">
-                    </label>
-                </div>
-                <div class="mt-6 border-b border-gray-200">
-                    <nav class="-mb-px flex gap-x-4 sm:gap-x-8" aria-label="Tabs">
-                        <button type="button" data-type="image" class="tab-btn whitespace-nowrap border-b-2 border-sky-500 px-1 py-4 text-base font-medium text-sky-500 sm:text-lg" aria-current="page">الصور</button>
-                        <button type="button" data-type="video" class="tab-btn whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-gray-500 hover:text-gray-700 sm:text-lg">الفيديوهات</button>
-                    </nav>
-                </div>
-                <div id="thumbnail-container" class="mt-6 flex flex-wrap justify-center gap-4 sm:justify-end">
-                    <!-- JavaScript will insert thumbnails here -->
-                </div>
+                <label class="block text-sm font-medium text-gray-700">فيديو العقار (فيديو واحد فقط)</label>
+                <div id="video-uploader" class="mt-2"></div>
+                <div id="uppy-error-message" class="text-red-500 text-xs mt-2"></div>
             </div>
         </section>
 
@@ -99,111 +96,88 @@
                     <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                 </div>
                 <div class="text-sm leading-6">
-                    <label for="terms" class="block text-[14.25px] font-bold text-[rgba(13,18,38,1)]">أقر بأن جميع المعلومات المقدمة صحيحة، وأتحمل المسؤولية الكاملة عنها.</label>
-                    <p class="mt-1 text-[13px] font-medium text-[rgba(13,18,38,1)]">يرجى التأكد من دقة المعلومات المدخلة. فأنت تتحمل المسؤولية الكاملة عنها. قد يؤدي تقديم بيانات غير صحيحة <br> إلى رفض الطلب أو اتخاذ إجراءات قانونية.</p>
+                    <label for="terms" class="block text-[14.25px] font-bold">أقر بأن جميع المعلومات المقدمة صحيحة.</label>
                 </div>
             </div>
+            @error('terms') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
         </div>
 
         <div class="flex justify-center mt-12">
-            <button type="submit" class="flex items-center justify-center gap-x-2 bg-[rgba(48,62,124,1)] hover:bg-blue-800 text-white text-base sm:text-[19px] font-medium py-3 px-8 sm:px-16 w-full sm:w-auto rounded-lg transition-colors">
-                <img src="{{ asset('images/publish.svg') }}">
+            <button type="submit" id="submit-button" class="flex items-center justify-center gap-x-2 bg-[rgba(48,62,124,1)] text-white text-lg font-medium py-3 px-16 rounded-lg transition-colors disabled:opacity-50">
                 <span>نشر العقار</span>
             </button>
         </div>
     </form>
 </main>
-
-<script>
-// This script is identical to the agent's version and will work here without changes.
-// It handles the drag-and-drop, file previews, and tab switching for media uploads.
-document.addEventListener('DOMContentLoaded', () => {
-    const dropZone = document.getElementById('drop-zone');
-    const fileInput = document.getElementById('file-upload');
-    const thumbnailContainer = document.getElementById('thumbnail-container');
-    const tabs = document.querySelectorAll('.tab-btn');
-
-    let uploadedFiles = [];
-    let activeTab = 'image';
-
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropZone.addEventListener(eventName, preventDefaults, false);
-        document.body.addEventListener(eventName, preventDefaults, false);
-    });
-    ['dragenter', 'dragover'].forEach(eventName => dropZone.addEventListener(eventName, () => dropZone.classList.add('border-sky-500', 'bg-sky-50'), false));
-    ['dragleave', 'drop'].forEach(eventName => dropZone.addEventListener(eventName, () => dropZone.classList.remove('border-sky-500', 'bg-sky-50'), false));
-    dropZone.addEventListener('drop', (e) => handleFiles(e.dataTransfer.files), false);
-    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            activeTab = tab.dataset.type;
-            tabs.forEach(t => {
-                t.classList.remove('border-sky-500', 'text-sky-500');
-                t.classList.add('border-transparent', 'text-gray-500');
-                t.removeAttribute('aria-current');
-            });
-            tab.classList.add('border-sky-500', 'text-sky-500');
-            tab.classList.remove('border-transparent', 'text-gray-500');
-            tab.setAttribute('aria-current', 'page');
-            renderThumbnails();
-        });
-    });
-
-    function handleFiles(files) {
-        const newFiles = [...files].filter(file => file.type.startsWith('image/') || file.type.startsWith('video/'));
-        if (newFiles.length > 0) {
-            uploadedFiles.push(...newFiles);
-            updateFileInput();
-            renderThumbnails();
-        }
-    }
-    
-    function renderThumbnails() {
-        thumbnailContainer.innerHTML = '';
-        const filesToRender = uploadedFiles.filter(file => file.type.startsWith(activeTab + '/'));
-        filesToRender.forEach((file, index) => {
-            const reader = new FileReader();
-            const thumbDiv = document.createElement('div');
-            thumbDiv.className = 'relative h-24 w-32 shrink-0';
-            
-            reader.onload = function(e) {
-                let mediaElement;
-                if (file.type.startsWith('image/')) {
-                    mediaElement = document.createElement('img');
-                } else {
-                    mediaElement = document.createElement('video');
-                }
-                mediaElement.className = 'h-full w-full rounded-lg object-cover';
-                mediaElement.src = e.target.result;
-                thumbDiv.appendChild(mediaElement);
-            }
-            reader.readAsDataURL(file);
-
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.className = 'absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600';
-            deleteButton.innerHTML = `<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`;
-            deleteButton.onclick = () => {
-                uploadedFiles.splice(uploadedFiles.indexOf(file), 1);
-                updateFileInput();
-                renderThumbnails();
-            };
-            thumbDiv.appendChild(deleteButton);
-            thumbnailContainer.appendChild(thumbDiv);
-        });
-    }
-
-    function updateFileInput() {
-        const dataTransfer = new DataTransfer();
-        uploadedFiles.forEach(file => dataTransfer.items.add(file));
-        fileInput.files = dataTransfer.files;
-    }
-});
-</script>
 @endsection
+
+@push('scripts')
+    <script type="module">
+        import { Uppy, Dashboard, XHRUpload } from "https://releases.transloadit.com/uppy/v3.1.0/uppy.min.mjs";
+        import ar_SA from "https://esm.sh/@uppy/locales/lib/ar_SA.js";
+
+        const submitButton = document.getElementById('submit-button');
+        const videoPathInput = document.getElementById('video-path');
+        const uppyErrorMessage = document.getElementById('uppy-error-message');
+
+        const uppy = new Uppy({
+            id: 'videoUploader',
+            autoProceed: true,
+            locale: ar_SA,
+            restrictions: {
+                maxNumberOfFiles: 1,
+                maxFileSize: 51200 * 1024, // 50MB
+                allowedFileTypes: ['video/*']
+            }
+        });
+
+        uppy.use(Dashboard, {
+            inline: true,
+            target: '#video-uploader',
+            height: 300,
+            proudlyDisplayPoweredByUppy: false,
+            note: 'فيديو واحد فقط، أقصى حجم 50 ميجابايت',
+            hideUploadButton: true,
+        });
+
+        uppy.use(XHRUpload, {
+            endpoint: '{{ route("user.ads.uploadVideo") }}',
+            fieldName: 'video',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json',
+            },
+        });
+
+        uppy.on('file-added', (file) => {
+            submitButton.disabled = true;
+            submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+            uppyErrorMessage.textContent = '';
+        });
+
+        uppy.on('upload-success', (file, response) => {
+            videoPathInput.value = response.body.path;
+            submitButton.disabled = false;
+            submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            console.log('Uppy upload successful:', response.body.path);
+            
+        });
+
+        uppy.on('file-removed', (file) => {
+            videoPathInput.value = '';
+            submitButton.disabled = false;
+            submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+
+        uppy.on('upload-error', (file, error, response) => {
+            console.error('Uppy upload error:', { error, response });
+            uppyErrorMessage.textContent = 'فشل رفع الفيديو. يرجى التأكد من أن حجمه أقل من 50 ميجابايت.';
+            submitButton.disabled = false;
+            submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+
+        uppy.on('restriction-failed', (file, error) => {
+            uppyErrorMessage.textContent = error.message;
+        });
+    </script>
+@endpush
