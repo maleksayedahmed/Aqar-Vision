@@ -73,4 +73,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ad::class);
     }
+
+    /**
+     * Get all upgrade requests for the user.
+     */
+    public function upgradeRequests()
+    {
+        return $this->hasMany(UpgradeRequest::class);
+    }
+
+    /**
+     * Get the latest upgrade request for the user.
+     */
+    public function latestUpgradeRequest()
+    {
+        return $this->hasOne(UpgradeRequest::class)->latestOfMany();
+    }
 }

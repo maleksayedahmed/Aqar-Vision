@@ -20,7 +20,7 @@ class UserAdController extends Controller
     public function create()
     {
         $adPrices = AdPrice::where('is_active', true)->get();
-        
+
         if ($adPrices->isEmpty()) {
             return redirect()->route('user.my-ads')->with('error', 'No ad packages are available at the moment.');
         }
@@ -88,12 +88,12 @@ class UserAdController extends Controller
             return redirect()->route('user.ads.create');
         }
         $selectedAdPrice = AdPrice::find($stepOneData['ad_price_id']);
-        
+
         return view('user.ads.create-step-two', [
             'selectedAdPrice' => $selectedAdPrice,
         ]);
     }
-    
+
     /**
      * Handle AJAX video uploads from the Uppy library.
      */
@@ -118,7 +118,6 @@ class UserAdController extends Controller
         if (!$stepOneData) {
             return redirect()->route('user.ads.create')->with('error', 'انتهت صلاحية الجلسة. الرجاء البدء من جديد.');
         }
-        dd($request);
         // The 'video' field is now a string (the path), not a file.
         $request->validate([
             'images.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:5120'],
@@ -144,9 +143,9 @@ class UserAdController extends Controller
         if ($request->filled('video')) {
             $adData['video_path'] = $request->video;
         }
-        
+
         $ad = Ad::create($adData);
-        
+
         Session::forget('ad_step_one_data');
 
         return redirect()->route('user.my-ads')->with([

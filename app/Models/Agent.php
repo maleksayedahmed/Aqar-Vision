@@ -17,7 +17,6 @@ class Agent extends Model
         'phone_number',
         'email',
         'city_id',
-        'license_number',
         'license_issue_date',
         'license_expiry_date',
         'national_id',

@@ -52,7 +52,7 @@
     @else
         @include('partials.footer')
     @endauth
-    
+
 
     {{-- For guests, include all modals needed for the auth flow --}}
     @guest
@@ -62,7 +62,7 @@
         @include('partials.login-phone-modal')
         @include('partials.login-otp-modal')
     @endguest
-    
+
 
     @auth
 {{-- ================================================= --}}
@@ -70,7 +70,7 @@
 {{-- ================================================= --}}
 <div id="upgrade-account-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300">
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg m-4 p-8 relative flex flex-col items-center">
-        
+
         <!-- Close Button -->
         <button id="close-upgrade-modal" class="absolute top-4 left-4 w-6 h-6 bg-gray-200 text-gray-800 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors" aria-label="Close modal">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -82,7 +82,7 @@
         <!-- Heading -->
         <h2 class="text-xl font-bold text-gray-800 my-4">طلب ترقية الحساب</h2>
         <p class="text-sm text-gray-500 mb-6 text-center">اختر الدور الذي ترغب في الترقية إليه. ستتم مراجعة طلبك من قبل الإدارة.</p>
-        
+
         <!-- Upgrade Form -->
         <form id="upgrade-request-form" action="{{ route('user.upgrade.request') }}" method="POST" class="w-full space-y-5">
             @csrf
@@ -90,7 +90,7 @@
 
             <fieldset class="space-y-4">
                 <legend class="sr-only">Select a role</legend>
-                
+
                 <!-- Agent Option -->
                 <div class="relative">
                     <input class="sr-only peer" type="radio" value="agent" name="requested_role" id="role_agent" checked>
@@ -101,7 +101,7 @@
                         </div>
                     </label>
                 </div>
-                
+
                 <!-- Agency Option -->
                 <div class="relative">
                     <input class="sr-only peer" type="radio" value="agency" name="requested_role" id="role_agency">
@@ -113,7 +113,31 @@
                     </label>
                 </div>
             </fieldset>
-            
+
+            <!-- FAL License Field (only shown for agent requests) -->
+            <div id="fal-license-field" class="space-y-4">
+                <div class="space-y-2">
+                    <label for="upgrade_fal_license" class="block text-sm font-medium text-gray-700">رقم رخصة فال (اختياري)</label>
+                    <input type="text" name="fal_license" id="upgrade_fal_license"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="أدخل رقم رخصة فال">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="upgrade_license_issue_date" class="block text-sm font-medium text-gray-700">تاريخ إصدار الرخصة (اختياري)</label>
+                        <input type="date" name="license_issue_date" id="upgrade_license_issue_date"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="upgrade_license_expiry_date" class="block text-sm font-medium text-gray-700">تاريخ انتهاء الرخصة (اختياري)</label>
+                        <input type="date" name="license_expiry_date" id="upgrade_license_expiry_date"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+            </div>
+
             <div class="pt-3">
                 <button type="submit" class="w-full bg-[#303F7C] text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center disabled:opacity-75">
                     <svg class="spinner hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -132,7 +156,7 @@
 {{-- ================================================= --}}
 <div id="success-alert-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300">
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm m-4 pt-10 pb-8 relative flex flex-col items-center transform transition-all scale-95 opacity-0">
-        
+
         <!-- Icon -->
         <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center absolute -top-10">
             <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -141,7 +165,7 @@
         <!-- Heading -->
         <h2 id="success-alert-title" class="text-2xl font-bold text-gray-800 my-4">تم بنجاح</h2>
         <p id="success-alert-message" class="text-base text-gray-500 mb-8 text-center px-4">تم إرسال طلبك بنجاح.</p>
-        
+
         <button id="close-success-alert" class="bg-[#303F7C] text-white font-bold py-3 px-12 rounded-lg hover:bg-opacity-90 transition-colors shadow-md">
             حسناً
         </button>
@@ -204,7 +228,7 @@
             // All Buttons that control modals
             const openLoginModalBtn = document.getElementById('open-login-modal');
             const closeButtons = document.querySelectorAll('#close-login-modal, #close-signup-modal, #close-login-email-modal, #close-login-phone-modal, #close-otp-modal');
-            
+
             const switchToSignupBtns = document.querySelectorAll('#switch-to-signup-modal, #switch-to-signup-from-email-modal, #switch-to-signup-from-phone-modal, #switch-to-signup-from-otp-modal');
             const switchToLoginBtns = document.querySelectorAll('#switch-to-login-modal, #back-to-initial-login-modal, #back-to-initial-login-from-phone');
             const switchToLoginEmailBtn = document.getElementById('switch-to-login-email-modal');
@@ -220,7 +244,7 @@
 
             // Event Listeners
             if (openLoginModalBtn) openLoginModalBtn.addEventListener('click', () => showModal(loginModal));
-            
+
             closeButtons.forEach(btn => btn && btn.addEventListener('click', closeAllModals));
             switchToSignupBtns.forEach(btn => btn && btn.addEventListener('click', () => showModal(signupModal)));
             switchToLoginBtns.forEach(btn => btn && btn.addEventListener('click', () => showModal(loginModal)));
@@ -228,7 +252,7 @@
             if (switchToLoginEmailBtn) switchToLoginEmailBtn.addEventListener('click', () => showModal(loginEmailModal));
             if (switchToLoginPhoneBtn) switchToLoginPhoneBtn.addEventListener('click', () => showModal(loginPhoneModal));
             if (backToLoginPhoneBtn) backToLoginPhoneBtn.addEventListener('click', () => showModal(loginPhoneModal));
-            
+
             // Background click to close
             allModals.forEach(modal => {
                 if (modal) modal.addEventListener('click', (e) => {
@@ -328,14 +352,14 @@
             }
         }
     </script>
-    
+
     {{-- =============================================== --}}
     {{-- THE CORRECT SCRIPT ORDER FOR LIVEWIRE --}}
     {{-- =============================================== --}}
-    
+
     {{-- 1. Load Livewire's core scripts FIRST --}}
     @livewireScripts
-    
+
     {{-- 2. Load any component-specific scripts AFTER Livewire --}}
     @stack('scripts')
     <script src="{{ asset('assets/js/auth-modals.js') }}"></script>

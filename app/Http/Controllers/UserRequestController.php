@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\UpgradeRequest;
 use App\Models\User;
 use App\Models\Agent;
+use App\Models\Agency;
 use App\Models\AgentType;
+use App\Models\AgencyType;
+use App\Models\License;
+use App\Models\LicenseType;
 use App\Notifications\UserUpgradeRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,52 +21,133 @@ class UserRequestController extends Controller
 {
     public function store(Request $request): JsonResponse|RedirectResponse
     {
-        // Only allow 'agent' role for this request
-        $request->validate(['requested_role' => 'required|in:agent']);
+        // Validate required data and role type
+        $request->validate([
+            'requested_role' => 'required|in:agent,agency',
+            'fal_license' => 'nullable|string|max:255',
+            'license_issue_date' => 'nullable|date',
+            'license_expiry_date' => 'nullable|date|after:license_issue_date'
+        ]);
 
         $user = Auth::user();
 
-        // Prevent agents from submitting another request
-        if ($user->agent) {
-            return response()->json(['message' => 'Your account is already an agent account.', 'error' => true], 403);
+        // Check if user has required data for upgrade request
+        if (empty($user->name) || empty($user->phone)) {
+            return response()->json([
+                'message' => 'يجب إكمال جميع البيانات الشخصية (الاسم ورقم الهاتف) قبل إرسال طلب الترقية.',
+                'error' => true
+            ], 422);
         }
 
-        // Prevent duplicate pending requests
-        if (UpgradeRequest::where('user_id', $user->id)->where('status', 'pending')->exists()) {
-            $message = 'You already have a pending upgrade request.';
-            return response()->json(['message' => $message, 'error' => true], 409);
-        }
-        
-        // Find a default agent type to assign
-        $defaultAgentType = AgentType::where('is_active', true)->orderBy('id')->first();
-        if (!$defaultAgentType) {
-            $message = 'Cannot process request because no Agent Types are configured by the admin.';
-            return response()->json(['message' => $message, 'error' => true], 500);
+        // Prevent agents/agencies from submitting another request
+        if ($user->agent || $user->agency) {
+            return response()->json([
+                'message' => 'حسابك بالفعل حساب عقاري.',
+                'error' => true
+            ], 403);
         }
 
-        // 1. Create the UpgradeRequest record
+        // Check for existing requests
+        $existingRequest = $user->latestUpgradeRequest;
+        if ($existingRequest) {
+            if ($existingRequest->status === 'pending') {
+                return response()->json([
+                    'message' => 'لديك طلب ترقية قيد المراجعة بالفعل.',
+                    'error' => true
+                ], 409);
+            }
+
+            if ($existingRequest->status === 'approved') {
+                return response()->json([
+                    'message' => 'تم الموافقة على طلب الترقية الخاص بك بالفعل.',
+                    'error' => true
+                ], 409);
+            }
+        }
+
+        // Find default type to assign based on requested role
+        if ($request->requested_role === 'agent') {
+            $defaultAgentType = AgentType::where('is_active', true)->orderBy('id')->first();
+            if (!$defaultAgentType) {
+                return response()->json([
+                    'message' => 'لا يمكن معالجة الطلب لأنه لم يتم تكوين أنواع العقاريين من قبل الإدارة.',
+                    'error' => true
+                ], 500);
+            }
+        } else {
+            $defaultAgencyType = AgencyType::where('is_active', true)->orderBy('id')->first();
+            if (!$defaultAgencyType) {
+                return response()->json([
+                    'message' => 'لا يمكن معالجة الطلب لأنه لم يتم تكوين أنواع الشركات العقارية من قبل الإدارة.',
+                    'error' => true
+                ], 500);
+            }
+        }
+
+        // 1. Create license record if license data is provided
+        $licenseId = null;
+        if ($request->filled('fal_license') && $request->requested_role === 'agent') {
+            // Find or create FAL license type
+            $falLicenseType = LicenseType::where('name->en', 'FAL License')->first();
+            if (!$falLicenseType) {
+                $falLicenseType = LicenseType::create([
+                    'name' => ['en' => 'FAL License', 'ar' => 'رخصة فال'],
+                    'description' => ['en' => 'FAL License for Real Estate Agents', 'ar' => 'رخصة فال للوسطاء العقاريين'],
+                    'is_active' => true,
+                ]);
+            }
+
+            $license = License::create([
+                'license_type_id' => $falLicenseType->id,
+                'license_number' => $request->fal_license,
+                'issue_date' => $request->license_issue_date,
+                'expiry_date' => $request->license_expiry_date,
+                'issuer' => 'FAL', // Default issuer for FAL licenses
+            ]);
+
+            $licenseId = $license->id;
+        }
+
+        // 2. Create the UpgradeRequest record
         $newRequest = UpgradeRequest::create([
             'user_id' => $user->id,
-            'requested_role' => $request->requested_role, // will be 'agent'
-        ]);
-        
-        // 2. Create the corresponding Agent record immediately.
-        // It's "inactive" by nature because the user's role is not yet 'agent'.
-        Agent::create([
-            'user_id' => $user->id,
-            'full_name' => $user->name,
-            'email' => $user->email,
-            'phone_number' => $user->phone,
-            'agent_type_id' => $defaultAgentType->id,
+            'requested_role' => $request->requested_role,
+            'license_id' => $licenseId,
         ]);
 
-        // 3. Notify admins
+        // 3. Create the corresponding Agent/Agency record immediately for requests
+        if ($request->requested_role === 'agent') {
+            $agent = Agent::create([
+                'user_id' => $user->id,
+                'full_name' => $user->name,
+                'email' => $user->email,
+                'phone_number' => $user->phone,
+                'agent_type_id' => $defaultAgentType->id,
+            ]);
+
+            // Link license to agent if created
+            if ($licenseId) {
+                License::find($licenseId)->update(['agent_id' => $agent->id]);
+            }
+        } elseif ($request->requested_role === 'agency') {
+            Agency::create([
+                'user_id' => $user->id,
+                'agency_name' => $user->name,
+                'email' => $user->email,
+                'phone_number' => $user->phone,
+                'agency_type_id' => $defaultAgencyType->id,
+            ]);
+        }
+
+        // 4. Notify admins
         $admins = User::role('admin')->get();
         if ($admins->isNotEmpty()) {
             Notification::send($admins, new UserUpgradeRequest($newRequest));
         }
-        
-        $message = 'تم إرسال طلب الترقية بنجاح!';
-        return response()->json(['message' => $message, 'success' => true]);
+
+        return response()->json([
+            'message' => 'تم إرسال طلب الترقية بنجاح! ستتم مراجعة طلبك من قبل الإدارة.',
+            'success' => true
+        ]);
     }
 }
