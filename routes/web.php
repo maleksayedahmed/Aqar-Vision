@@ -33,6 +33,7 @@ use App\Http\Controllers\Agent\NotificationController;
 
 // Homepage Route
 Route::get('/', [UserHomeController::class, 'index'])->name('home');
+Route::get('/all-agents', [UserHomeController::class, 'allAgents'])->name('all.agents');
 
 Route::post('/login/phone', [LoginWithPhoneController::class, 'sendOtp'])->name('login.phone.send');
 Route::post('/login/otp/verify', [LoginWithPhoneController::class, 'verifyOtp'])->name('login.phone.verify');
@@ -55,7 +56,7 @@ Route::prefix('my-account/ads')->name('user.ads.')->group(function () {
 
 
 
- 
+
 
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
@@ -68,6 +69,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/upgrade-request', [UserRequestController::class, 'store'])->name('user.upgrade.request');
+
+    // Favorites Routes
+    Route::get('/favorites', [App\Http\Controllers\FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/toggle', [App\Http\Controllers\FavoriteController::class, 'toggle'])->name('favorites.toggle');
+    Route::post('/favorites', [App\Http\Controllers\FavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites', [App\Http\Controllers\FavoriteController::class, 'destroy'])->name('favorites.destroy');
 
      // CHAT ROUTES
     Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');

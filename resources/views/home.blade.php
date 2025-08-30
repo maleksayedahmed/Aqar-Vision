@@ -6,28 +6,28 @@
 
 <main class="flex flex-col items-center justify-center min-h-screen pt-[35px]">
     <section class="w-[98%] h-[369px] rounded-[20px] shadow-[0_100px_100px_-60px_rgba(0,0,0,0.2)]">
-        
+
         <div class="flex text-center w-[100%] h-[369px] rounded-[20px] items-center flex-col mb-8 bg-[linear-gradient(89.78deg,rgba(44,63,128,0)_0.27%,#4461A6_66.85%,#2C3F80_99.9%)] bg-cover bg-center pt-[40px] pb-[150px]" style="background-image: linear-gradient(89.78deg, rgba(44,63,128,0) 0.27%, #4461A6 66.85%, #2C3F80 99.9%), url('{{ asset('images/homebanner.jpg') }}');">
             <img src="{{ asset('images/logo_sm.png') }}" width="30px" alt="logo">
-            
+
             <!-- Main Title -->
             <div>
                 <h1 class="text-[42px] md:text-5xl font-bold text-white mb-4">
                     شُــــفنـا لـك بيــت
                 </h1>
-                
+
                 <!-- Subtitle -->
                 <p class="text-white/90 text-[14px] md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
                     اكتشف عقارات حقيقية بأسعار السوق، وخل قرارك مبني على وضوح <br> وثقة.
                 </p>
             </div>
-            
+
         </div>
     </section>
 
     <!-- Main Form Container -->
 <section class="bg-white flex flex-col items-center p-6 rounded-[20px] shadow-sm md:shadow-none mt-[-140px] md:mt-[-100px] w-[80%] lg:w-[878px] h-auto lg:h-auto gap-6 lg:gap-[40px]">
-    
+
     <div class="inline-flex p-1 bg-white border border-gray-200 rounded-xl">
         <button data-tab="buy" data-value="sale" class="toggle-btn px-8 py-2 text-sm font-semibold rounded-lg focus:outline-none transition-colors">
             شراء
@@ -39,9 +39,9 @@
 
     <form action="{{ route('properties.search') }}" method="GET" class="w-full">
         <input type="hidden" name="listing_purpose" id="listing_purpose_input" value="rent">
-        
+
         <div class="flex flex-col-reverse lg:flex-row-reverse items-center gap-4 w-full">
-            
+
             <button type="submit" class="flex items-center justify-center w-full lg:w-auto h-12 bg-[rgba(48,62,124,1)] text-white font-semibold rounded-lg px-10 hover:bg-indigo-800 focus:outline-none flex-shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -58,7 +58,7 @@
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                 </div>
             </div>
-            
+
             <!-- City Dropdown -->
             <div class="w-full h-12 relative">
                 <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none"><img src="{{ asset('images/city.svg') }}" alt="City icon"></div>
@@ -72,7 +72,7 @@
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                 </div>
             </div>
-            
+
             <!-- Property Type Dropdown -->
             <div class="w-full h-12 relative">
                 <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none"><img src="{{ asset('images/aqar.svg') }}" alt="Property icon"></div>
@@ -146,7 +146,7 @@
                             </div>
                         </template>
                     </div>
-                    
+
                     <!-- Slider Pagination Dots -->
                     <div class="flex gap-x-2 items-center self-center lg:self-end lg:-ml-[8%]">
                         <template x-for="(slide, index) in slides" :key="index">
@@ -166,7 +166,7 @@
 
             </div>
         </div>
-            
+
     </section>
 
     <section class="max-w-7xl w-[100%] mx-auto py-12 px-4">
@@ -177,7 +177,7 @@
                  اكتشف أحدث العروض العقارية المضافة يوميًا
                 <br>فلل، شقق، واستوديوهات بتشطيبات مميزة وأسعار منافسة، في أفضل أحياء الرياض والمملكة.
                 </p>
-                
+
             </div>
             <a href="{{ route('properties.search') }}" class="text-sm flex items-center gap-2 bg-indigo-50 text-indigo-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
                 <span>رؤية الكل</span>
@@ -195,14 +195,25 @@
                                 <div class="relative">
                                     <img src="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-lg" alt="{{ $ad->title }}">
                                     <div class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">{{ $ad->listing_purpose == 'rent' ? 'إيجار' : 'بيع' }}</div>
-                                    <button class="absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[rgba(242,242,242,1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg></button>
+
+                                    @if (auth()->user())
+                                    <button class="favorite-btn absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"
+                                            data-ad-id="{{ $ad->id }}"
+                                            data-favorited="{{ in_array($ad->id, $favoriteAdIds) ? 'true' : 'false' }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ in_array($ad->id, $favoriteAdIds) ? 'text-red-500' : 'text-[rgba(242,242,242,1)]' }}"
+                                            fill="{{ in_array($ad->id, $favoriteAdIds) ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                        </svg>
+                                    </button>
+                                    @endif
+
                                 </div>
                                 <div class="p-3 space-y-[23px]">
                                     <div class="flex justify-between items-center text-xs text-[rgba(204,204,204,1)]">
                                         <span class="flex items-center gap-0.5 font-semibold text-black"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[rgba(48,62,124,1)]" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>{{ $ad->district?->city?->name }} - {{ $ad->district?->name }}</span>
                                         <span class="flex items-center gap-0.5"><img src="{{ asset('images/clock.svg') }}"> {{ $ad->created_at->format('d/m/Y') }}</span>
                                     </div>
-                                    <div class="space-y-1.5"><h3 class="text-lg font-bold text-slate-800 leading-tight">{{ Str::limit($ad->title, 100) }}</h3><p class="text-xs text-slate-500">{{ Str::limit($ad->description, 40) }}</p></div> 
+                                    <div class="space-y-1.5"><h3 class="text-lg font-bold text-slate-800 leading-tight">{{ Str::limit($ad->title, 100) }}</h3><p class="text-xs text-slate-500">{{ Str::limit($ad->description, 40) }}</p></div>
                                     <div class="flex gap-2 text-sm">
                                         <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/building.svg') }}" class="h-4 w-4"> {{ $ad->propertyType?->name }}</span>
                                         <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/bath.svg') }}" class="h-4 w-4"> {{ $ad->bathrooms }} حمام</span>
@@ -250,6 +261,14 @@
                              <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.868 2.884c.321-.772 1.305-.772 1.626 0l1.373 3.303a1 1 0 00.95.69h3.468c.851 0 1.21.976.544 1.49l-2.807 2.04a1 1 0 00-.364 1.118l1.07 3.303c.321.772-.639 1.42-1.34 1.01l-2.807-2.04a1 1 0 00-1.175 0l-2.807 2.04c-.701.41-1.66-.238-1.34-1.01l1.07-3.303a1 1 0 00-.364-1.118l-2.807-2.04c-.666-.514-.307-1.49.544-1.49h3.468a1 1 0 00.95-.69l1.373-3.303z" clip-rule="evenodd" /></svg>
                             <span>مميز</span>
                         </div>
+                        <button class="favorite-btn absolute top-2 left-2 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"
+                                data-ad-id="{{ $ad->id }}"
+                                data-favorited="{{ in_array($ad->id, $favoriteAdIds) ? 'true' : 'false' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ in_array($ad->id, $favoriteAdIds) ? 'text-red-500' : 'text-[rgba(242,242,242,1)]' }}"
+                                 fill="{{ in_array($ad->id, $favoriteAdIds) ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                            </svg>
+                        </button>
                     </div>
                     <div class="p-4 space-y-3">
                          <h3 class="text-lg font-bold text-slate-800 leading-tight">{{ Str::limit($ad->title, 100) }}</h3>
@@ -269,7 +288,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="flex justify-between items-center mb-8">
                 <h2 class="text-xl font-bold text-slate-800 md:text-3xl">وكلاء العقارات</h2>
-                <a href="#" class="text-sm flex items-center gap-2 bg-indigo-50 text-indigo-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
+                <a href="{{ route('all.agents') }}" class="text-sm flex items-center gap-2 bg-indigo-50 text-indigo-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
                     <span>رؤية الكل</span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7" /></svg>
                 </a>
@@ -284,7 +303,7 @@
                             <div class="flex items-center gap-1 text-[rgba(48,62,124,1)]">
                                 <img src="{{ $agent->profile_photo_path ? Storage::url($agent->profile_photo_path) : asset('images/agent.png') }}" alt="{{ $agent->name }}" class="w-16 h-16 rounded-full object-cover border-2 border-white">
                                 <div class="space-y-1">
-                                    
+
                                     <div class="flex items-center gap-0.5 text-slate-500 text-[9px]">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[rgba(217,222,242,1)]" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
@@ -294,7 +313,7 @@
                                     <h3 class="font-medium text-lg text-[rgba(48,62,124,1)]">{{ $agent->name }}</h3></div>
                             </div>
                             <div class="flex justify-between items-center gap-[60px] pt-2">
-                                <div class="flex items-center gap-1.5 text-[rgba(48,62,124,1)] text-[8px] font-medium"><svg width="8" height="9" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75391 8.60121H3.31641V5.44201L1.75391 4.74756V8.60121ZM2.63281 5.76918H3.02344V6.35512H2.63281V5.76918ZM2.63281 6.55043H3.02344V7.13637H2.63281V6.55043ZM2.63281 7.33168H3.02344V7.91762H2.63281V7.33168ZM2.04688 5.76918H2.4375V6.35512H2.04688V5.76918ZM2.04688 6.55043H2.4375V7.13637H2.04688V6.55043ZM2.04688 7.33168H2.4375V7.91762H2.04688V7.33168Z" fill="#303E7C"/><path d="M-0.00390625 8.60121H1.55859V4.74756L-0.00390625 5.44201V8.60121ZM0.875 5.76918H1.26562V6.35512H0.875V5.76918ZM0.875 6.55043H1.26562V7.13637H0.875V6.55043ZM0.875 7.33168H1.26562V7.91762H0.875V7.33168ZM0.289062 5.76918H0.679688V6.35512H0.289062V5.76918ZM0.289062 6.55043H0.679688V7.13637H0.289062V6.55043ZM0.289062 7.33168H0.679688V7.91762H0.289062V7.33168Z" fill="#303E7C"/><path d="M2.33976 4.79273C2.33976 4.79326 2.3396 4.79377 2.3396 4.7943L3.45364 5.28943C3.48892 5.30512 3.51163 5.3401 3.51163 5.37867V8.60133H5.07413V0.436035L2.33976 1.3475V4.79273ZM3.99991 1.47242L4.78116 1.27711V1.66773L3.99991 1.86305V1.47242ZM3.99991 2.05836L4.78116 1.86305V2.25367L3.99991 2.44898V2.05836ZM3.99991 2.6443L4.78116 2.44898V2.83961L3.99991 3.03492V2.6443ZM3.99991 3.23023L4.78116 3.03492V3.42555L3.99991 3.62086V3.23023ZM3.99991 3.81617L4.78116 3.62086V4.01148L3.99991 4.2068V3.81617ZM3.99991 4.40211L4.78116 4.2068V4.59742L3.99991 4.79273V4.40211ZM3.99991 4.98805L4.78116 4.79273V5.18336L3.99991 5.37867V4.98805ZM3.99991 5.57398L4.78116 5.37867V5.7693L3.99991 5.96461V5.57398ZM2.82804 1.86305L3.60929 1.66773V2.05836L2.82804 2.25367V1.86305ZM2.82804 2.44898L3.60929 2.25367V2.6443L2.82804 2.83961V2.44898ZM2.82804 3.03492L3.60929 2.83961V3.23023L2.82804 3.42555V3.03492ZM2.82804 3.62086L3.60929 3.42555V3.81617L2.82804 4.01148V3.62086Z" fill="#303E7C"/><path d="M5.26953 0.436035V8.60133H8.00391V1.3475L5.26953 0.436035ZM6.34375 5.96461L5.5625 5.7693V5.37867L6.34375 5.57398V5.96461ZM6.34375 5.37867L5.5625 5.18336V4.79273L6.34375 4.98805V5.37867ZM6.34375 4.79273L5.5625 4.59742V4.2068L6.34375 4.40211V4.79273ZM6.34375 4.2068L5.5625 4.01148V3.62086L6.34375 3.81617V4.2068ZM6.34375 3.62086L5.5625 3.42555V3.03492L6.34375 3.23023V3.62086ZM6.34375 3.03492L5.5625 2.83961V2.44898L6.34375 2.6443V3.03492ZM6.34375 2.44898L5.5625 2.25367V1.86305L6.34375 2.05836V2.44898ZM6.34375 1.86305L5.5625 1.66773V1.27711L6.34375 1.47242V1.86305ZM7.51562 6.35523L6.73438 6.15992V5.7693L7.51562 5.96461V6.35523ZM7.51562 5.7693L6.73438 5.57398V5.18336L7.51562 5.37867V5.7693ZM7.51562 5.18336L6.73438 4.98805V4.59742L7.51562 4.79273V5.18336ZM7.51562 4.59742L6.73438 4.40211V4.01148L7.51562 4.2068V4.59742ZM7.51562 4.01148L6.73438 3.81617V3.42555L7.51562 3.62086V4.01148ZM7.51562 3.42555L6.73438 3.23023V2.83961L7.51562 3.03492V3.42555ZM7.51562 2.83961L6.73438 2.6443V2.25367L7.51562 2.44898V2.83961ZM7.51562 2.25367L6.73438 2.05836V1.66773L7.51562 1.86305V2.25367Z" fill="#303E7C"/></svg>                  
+                                <div class="flex items-center gap-1.5 text-[rgba(48,62,124,1)] text-[8px] font-medium"><svg width="8" height="9" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75391 8.60121H3.31641V5.44201L1.75391 4.74756V8.60121ZM2.63281 5.76918H3.02344V6.35512H2.63281V5.76918ZM2.63281 6.55043H3.02344V7.13637H2.63281V6.55043ZM2.63281 7.33168H3.02344V7.91762H2.63281V7.33168ZM2.04688 5.76918H2.4375V6.35512H2.04688V5.76918ZM2.04688 6.55043H2.4375V7.13637H2.04688V6.55043ZM2.04688 7.33168H2.4375V7.91762H2.04688V7.33168Z" fill="#303E7C"/><path d="M-0.00390625 8.60121H1.55859V4.74756L-0.00390625 5.44201V8.60121ZM0.875 5.76918H1.26562V6.35512H0.875V5.76918ZM0.875 6.55043H1.26562V7.13637H0.875V6.55043ZM0.875 7.33168H1.26562V7.91762H0.875V7.33168ZM0.289062 5.76918H0.679688V6.35512H0.289062V5.76918ZM0.289062 6.55043H0.679688V7.13637H0.289062V6.55043ZM0.289062 7.33168H0.679688V7.91762H0.289062V7.33168Z" fill="#303E7C"/><path d="M2.33976 4.79273C2.33976 4.79326 2.3396 4.79377 2.3396 4.7943L3.45364 5.28943C3.48892 5.30512 3.51163 5.3401 3.51163 5.37867V8.60133H5.07413V0.436035L2.33976 1.3475V4.79273ZM3.99991 1.47242L4.78116 1.27711V1.66773L3.99991 1.86305V1.47242ZM3.99991 2.05836L4.78116 1.86305V2.25367L3.99991 2.44898V2.05836ZM3.99991 2.6443L4.78116 2.44898V2.83961L3.99991 3.03492V2.6443ZM3.99991 3.23023L4.78116 3.03492V3.42555L3.99991 3.62086V3.23023ZM3.99991 3.81617L4.78116 3.62086V4.01148L3.99991 4.2068V3.81617ZM3.99991 4.40211L4.78116 4.2068V4.59742L3.99991 4.79273V4.40211ZM3.99991 4.98805L4.78116 4.79273V5.18336L3.99991 5.37867V4.98805ZM3.99991 5.57398L4.78116 5.37867V5.7693L3.99991 5.96461V5.57398ZM2.82804 1.86305L3.60929 1.66773V2.05836L2.82804 2.25367V1.86305ZM2.82804 2.44898L3.60929 2.25367V2.6443L2.82804 2.83961V2.44898ZM2.82804 3.03492L3.60929 2.83961V3.23023L2.82804 3.42555V3.03492ZM2.82804 3.62086L3.60929 3.42555V3.81617L2.82804 4.01148V3.62086Z" fill="#303E7C"/><path d="M5.26953 0.436035V8.60133H8.00391V1.3475L5.26953 0.436035ZM6.34375 5.96461L5.5625 5.7693V5.37867L6.34375 5.57398V5.96461ZM6.34375 5.37867L5.5625 5.18336V4.79273L6.34375 4.98805V5.37867ZM6.34375 4.79273L5.5625 4.59742V4.2068L6.34375 4.40211V4.79273ZM6.34375 4.2068L5.5625 4.01148V3.62086L6.34375 3.81617V4.2068ZM6.34375 3.62086L5.5625 3.42555V3.03492L6.34375 3.23023V3.62086ZM6.34375 3.03492L5.5625 2.83961V2.44898L6.34375 2.6443V3.03492ZM6.34375 2.44898L5.5625 2.25367V1.86305L6.34375 2.05836V2.44898ZM6.34375 1.86305L5.5625 1.66773V1.27711L6.34375 1.47242V1.86305ZM7.51562 6.35523L6.73438 6.15992V5.7693L7.51562 5.96461V6.35523ZM7.51562 5.7693L6.73438 5.57398V5.18336L7.51562 5.37867V5.7693ZM7.51562 5.18336L6.73438 4.98805V4.59742L7.51562 4.79273V5.18336ZM7.51562 4.59742L6.73438 4.40211V4.01148L7.51562 4.2068V4.59742ZM7.51562 4.01148L6.73438 3.81617V3.42555L7.51562 3.62086V4.01148ZM7.51562 3.42555L6.73438 3.23023V2.83961L7.51562 3.03492V3.42555ZM7.51562 2.83961L6.73438 2.6443V2.25367L7.51562 2.44898V2.83961ZM7.51562 2.25367L6.73438 2.05836V1.66773L7.51562 1.86305V2.25367Z" fill="#303E7C"/></svg>
                                     <span>+{{ $agent->ads_count }} عقار</span>
                                 </div>
                                 <div class="flex items-center gap-1">
@@ -315,19 +334,19 @@
      <!-- world section -->
     <section class="my-16 flex justify-center px-4">
         <div class="w-full lg:w-[1120px] text-center p-6 md:p-8 lg:p-12 rounded-2xl bg-cover bg-center" style="background-image: url('images/world.png'); background-color: rgba(68, 112, 174, 1);">
-            
+
             <h2 class="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
                 لديك عقار للبيع أو الإيجار؟ ابدأ إعلانك هنا!
             </h2>
-            
+
             <p class="text-white/90 text-base lg:text-lg mb-8 max-w-3xl mx-auto font-medium leading-relaxed">
                 يمكنك الآن إصدار رخصة إعلان لعقارك والوصول إلى آلاف المشترين أو المستأجرين المحتملين بكل سهولة. لديك حتى 3 إعلان متاح كحد أقصى لحسابك.
             </p>
-            
+
             <a href="{{ route('user.ads.create') }}" class="inline-block bg-[#2C3F80] text-white font-semibold py-3 px-10 rounded-full hover:bg-opacity-90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#4A6C9B] focus:ring-white">
                 إصدار ترخيص اعلان
             </a>
-            
+
         </div>
     </section>
 </main>
@@ -341,7 +360,7 @@
         if (buttons.length) {
             const activeClasses = ['bg-indigo-100', 'text-indigo-700', 'shadow-sm'];
             const inactiveClasses = ['text-gray-500', 'hover:bg-gray-50'];
-            
+
             function setInitialState() {
                 buttons.forEach(button => {
                     if (button.classList.contains('active')) {
@@ -370,42 +389,42 @@
             setInitialState();
         }
 
-        
+
                 // Property slider functionality
     const sliderTrack = document.getElementById('sliderTrack');
     const nextBtn = document.getElementById('nextBtn');
     const prevBtn = document.getElementById('prevBtn');
     const cards = document.querySelectorAll('.slider-card');
-    
+
     let currentIndex = 0;
     const cardWidth = 320; // Card width in pixels
     const gap = 16; // Gap between cards (assuming 1rem = 16px)
     const slideDistance = cardWidth + gap;
     const maxIndex = cards.length - 1;
-    
+
     // Function to update slider position
     function updateSliderPosition() {
         const translateX = currentIndex * slideDistance;
         sliderTrack.style.transform = `translateX(${translateX}px)`;
-        
+
         // Update button states
         prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
         nextBtn.style.opacity = currentIndex === maxIndex ? '0.5' : '1';
         prevBtn.disabled = currentIndex === 0;
         nextBtn.disabled = currentIndex === maxIndex;
     }
-    
+
     // Next button click handler
     if (nextBtn) {
         nextBtn.addEventListener('click', function() {
-            
+
             if (currentIndex < maxIndex) {
                 currentIndex++;
                 updateSliderPosition();
             }
         });
     }
-    
+
     // Previous button click handler
     prevBtn.addEventListener('click', function() {
         if (currentIndex > 0) {
@@ -413,34 +432,34 @@
             updateSliderPosition();
         }
     });
-    
+
     // Initialize slider
     updateSliderPosition();
-    
-    
+
+
     // Optional: Add touch/swipe support for mobile
     let startX = 0;
     let currentX = 0;
     let isDragging = false;
-    
+
     sliderTrack.addEventListener('touchstart', function(e) {
         startX = e.touches[0].clientX;
         isDragging = true;
     });
-    
+
     sliderTrack.addEventListener('touchmove', function(e) {
         if (!isDragging) return;
         currentX = e.touches[0].clientX;
         e.preventDefault();
     });
-    
+
     sliderTrack.addEventListener('touchend', function() {
         if (!isDragging) return;
         isDragging = false;
-        
+
         const diffX = startX - currentX;
         const threshold = 50; // Minimum swipe distance
-        
+
         if (Math.abs(diffX) > threshold) {
             if (diffX > 0 && currentIndex < maxIndex) {
                 // Swipe left - go to next
@@ -452,7 +471,7 @@
                 updateSliderPosition();
             }
         }
-    }); 
+    });
 
         // Agents Slider Functionality
         const agentsSlider = document.querySelector('#agents-slider');
@@ -462,6 +481,94 @@
             agentsSlider.addEventListener('mouseleave', () => { isDown = false; agentsSlider.classList.remove('active'); });
             agentsSlider.addEventListener('mouseup', () => { isDown = false; agentsSlider.classList.remove('active'); });
             agentsSlider.addEventListener('mousemove', (e) => { if (isDown) { e.preventDefault(); const x = e.pageX - agentsSlider.offsetLeft; agentsSlider.scrollLeft = scrollLeft - (x - startX) * 2; } });
+        }
+
+        // Favorite functionality
+        document.querySelectorAll('.favorite-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                @auth
+                const adId = this.dataset.adId;
+                const isFavorited = this.dataset.favorited === 'true';
+
+                // Optimistic UI update
+                updateFavoriteButton(this, !isFavorited);
+
+                fetch('/favorites/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        ad_id: adId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        this.dataset.favorited = data.is_favorited;
+                        updateFavoriteButton(this, data.is_favorited);
+
+                        // Show success message
+                        showNotification(data.message, 'success');
+                    } else {
+                        // Revert optimistic update on error
+                        updateFavoriteButton(this, isFavorited);
+                        this.dataset.favorited = isFavorited;
+                        showNotification(data.message || 'حدث خطأ', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Revert optimistic update on error
+                    updateFavoriteButton(this, isFavorited);
+                    this.dataset.favorited = isFavorited;
+                    showNotification('حدث خطأ في الشبكة', 'error');
+                });
+                @else
+                // Redirect to login if not authenticated
+                window.location.href = '/login';
+                @endauth
+            });
+        });
+
+        function updateFavoriteButton(button, isFavorited) {
+            const svg = button.querySelector('svg');
+            if (isFavorited) {
+                svg.setAttribute('fill', 'currentColor');
+                svg.classList.remove('text-[rgba(242,242,242,1)]');
+                svg.classList.add('text-red-500');
+            } else {
+                svg.setAttribute('fill', 'none');
+                svg.classList.remove('text-red-500');
+                svg.classList.add('text-[rgba(242,242,242,1)]');
+            }
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            notification.textContent = message;
+
+            // Add to DOM
+            document.body.appendChild(notification);
+
+            // Slide in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Slide out and remove
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
         }
     });
 </script>

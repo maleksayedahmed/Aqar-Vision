@@ -89,4 +89,20 @@ class User extends Authenticatable
     {
         return $this->hasOne(UpgradeRequest::class)->latestOfMany();
     }
+
+    /**
+     * Get all favorite ads for the user.
+     */
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * Get all favorite ads for the user with ad details.
+     */
+    public function favoriteAds()
+    {
+        return $this->belongsToMany(Ad::class, 'favorites')->withTimestamps();
+    }
 }
