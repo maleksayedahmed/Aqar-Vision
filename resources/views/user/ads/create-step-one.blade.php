@@ -26,13 +26,13 @@
         {{-- Top Header Section --}}
         <section>
             <div class="flex w-full flex-col items-stretch gap-y-4 lg:flex-row lg:items-center lg:justify-between py-4" dir="rtl">
-                <div class="flex items-center gap-x-3">
+                <a href="{{ route('user.ads.create') }}" class="flex items-center gap-x-3">
                     <img src="{{ asset('images/back-arrow.svg') }}" alt="Back">
                     <div class="text-right">
                         <h3 class="text-2xl lg:text-[26px] font-medium text-[rgba(48,62,124,1)]">أضف اعلان جديد</h3>
                         <p class="text-[14.3px] font-medium"><span class="mr-1 text-red-500">*</span>نرجو تعبئة البيانات بدقة</p>
                     </div>
-                </div>
+                </a>
                 <div class="hidden md:flex items-center gap-x-[27px]">
                     <span class="font-medium text-[16px] text-[rgba(48,62,124,1)]">بيانات العقار</span>
                     <div class="flex items-center gap-x-2"><img src="{{ asset('images/rode.svg') }}" alt="Step indicator"></div>
@@ -42,7 +42,7 @@
                     <input type="hidden" name="ad_price_id" value="{{ $selectedAdPrice->id }}">
                     <button @click="open = !open" type="button" class="flex items-center justify-between bg-[rgba(0,0,0,0.02)] w-full h-[53px] hover:bg-gray-200 transition-colors px-4 py-2.5 rounded-xl text-lg lg:text-[20px] font-medium text-black">
                         <div class="flex items-center gap-x-2">
-                            <img src="{{ asset('images/star.png') }}" alt="Ad Type">
+                            <img src="{{ $selectedAdPrice->icon_path ? Storage::url($selectedAdPrice->icon_path) : asset('images/star.png') }}" class="w-8 h-8" alt="Ad Type">
                             <span>{{ $selectedAdPrice->name }}</span>
                         </div>
                         <img src="{{ asset('images/Polygon.svg') }}" alt="Dropdown arrow">
@@ -50,9 +50,10 @@
                     <div x-show="open" @click.away="open = false" style="display: none;" class="text-[13.6px] absolute right-0 top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-200 z-10 p-2">
                         @foreach($allAdPrices as $priceOption)
                             <a href="{{ route('user.ads.create.step1', $priceOption) }}" class="flex items-center gap-[8px] w-full p-3 text-right hover:bg-gray-100 rounded-lg transition-colors">
-                                <img src="{{ asset('images/star.png') }}" alt="Ad Type Icon">
+                                <img src="{{ $priceOption->icon_path ? Storage::url($priceOption->icon_path) : asset('images/star.png') }}" class="w-8 h-8" alt="Ad Type Icon">
                                 <div class="flex flex-col">
                                     <span class="font-bold text-[rgba(13,18,38,1)]">{{ $priceOption->name }}</span>
+                                    {{-- You would need to pass remaining ad counts for this to be dynamic --}}
                                     <span class="text-[9.75px] font-medium text-[rgba(151,151,151,1)]">متبقي 4 اعلانات هذا الشهر.</span>
                                 </div>
                             </a>
@@ -100,14 +101,6 @@
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="age_years" class="w-[80px] shrink-0 text-[11px] font-medium">عمر العقار</label>
                     <input type="number" name="age_years" id="age_years" value="{{ old('age_years') }}" placeholder="ادخل عمر العقار (بالسنوات)" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="rooms" class="w-[80px] shrink-0 text-[11px] font-medium">عدد الغرف<span class="text-red-500 mr-1">*</span></label>
-                    <input type="number" name="rooms" id="rooms" value="{{ old('rooms') }}" required placeholder="ادخل عدد الغرف" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                </div>
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="bathrooms" class="w-[80px] shrink-0 text-[11px] font-medium">دورات المياة<span class="text-red-500 mr-1">*</span></label>
-                    <input type="number" name="bathrooms" id="bathrooms" value="{{ old('bathrooms') }}" required placeholder="ادخل عدد دورات المياة" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
                 </div>
                 <div class="col-span-1 md:col-span-2">
                     <label for="description" class="block mb-2 text-[11px] font-medium">الوصف التفصيلي</label>
@@ -175,7 +168,7 @@
             </div>
         </section>
         
-        {{-- Additional Details Section (Dropdowns, Text, Number) --}}
+        {{-- Additional Details Section --}}
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
             <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
                 <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/details-list.svg') }}"></div>
@@ -183,9 +176,11 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-16 gap-y-6">
                 
+                {{-- These fields are now rendered dynamically from the attributes table --}}
                 @foreach ($attributes as $attribute)
-                    @php $slug = str_replace(' ', '_', strtolower($attribute->getTranslation('name', 'en'))); @endphp
-
+                    @php 
+                        $slug = str_replace(' ', '_', strtolower($attribute->getTranslation('name', 'en'))); 
+                    @endphp
                     <div class="flex gap-3 items-center h-[52px]">
                         <label for="attr-{{ $slug }}" class="w-[80px] shrink-0 text-[11px] font-medium">{{ $attribute->name }}</label>
 
@@ -203,14 +198,6 @@
                         @endif
                     </div>
                 @endforeach
-                
-                <div class="flex gap-3 items-center h-[52px]">
-                    <label for="is_mortgaged" class="w-[80px] shrink-0 text-[11px] font-medium">العقار مرهون</label>
-                    <select name="is_mortgaged" id="is_mortgaged" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                        <option value="0" {{ old('is_mortgaged') == '0' ? 'selected' : '' }}>لا</option>
-                        <option value="1" {{ old('is_mortgaged') == '1' ? 'selected' : '' }}>نعم</option>
-                    </select>
-                </div>
             </div>
         </section>
 

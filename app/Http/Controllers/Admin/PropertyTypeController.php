@@ -57,6 +57,7 @@ class PropertyTypeController extends Controller
 
     public function update(PropertyTypeRequest $request, PropertyType $propertyType)
     {
+        
         $data = $request->validated();
         $data['updated_by'] = auth()->id();
         $data['is_active'] = $request->has('is_active');

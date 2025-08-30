@@ -25,10 +25,7 @@
             <div class="form-group">
                 <label for="type">{{ __('attributes.property_attributes.type') }}</label>
                 <select class="form-control @error('type') is-invalid @enderror" name="type" id="type" required>
-                    <option value="text" {{ old('type', $propertyAttribute?->type) == 'text' ? 'selected' : '' }}>{{ __('attributes.property_attributes.types.text') }}</option>
-                    <option value="number" {{ old('type', $propertyAttribute?->type) == 'number' ? 'selected' : '' }}>{{ __('attributes.property_attributes.types.number') }}</option>
-                    <option value="boolean" {{ old('type', $propertyAttribute?->type) == 'boolean' ? 'selected' : '' }}>{{ __('attributes.property_attributes.types.boolean') }}</option>
-                    {{-- ADDED: Dropdown option --}}
+                    <option value="boolean" {{ old('type', $propertyAttribute?->type) == 'boolean' ? 'selected' : '' }}>{{ __('attributes.property_attributes.types.boolean') }} (Checkbox)</option>
                     <option value="dropdown" {{ old('type', $propertyAttribute?->type) == 'dropdown' ? 'selected' : '' }}>Dropdown</option>
                 </select>
                 @error('type')
@@ -56,14 +53,17 @@
         </div>
     @endif
 
-    {{-- START: New section for managing dropdown choices --}}
+    {{-- Section for managing dropdown choices --}}
     <div id="choices-container" style="display: none;">
         <hr class="my-4">
         <h5>Dropdown Choices</h5>
         <div id="choices-wrapper">
-            {{-- Loop through existing choices if editing --}}
-            @if(old('choices') || $propertyAttribute?->choices)
-                @foreach(old('choices', $propertyAttribute?->choices ?? []) as $index => $choice)
+            @php
+                // Safely prepare the choices array, ensuring it's always an array
+                $choices = old('choices', is_array($propertyAttribute?->choices) ? $propertyAttribute->choices : []);
+            @endphp
+            @if(!empty($choices))
+                @foreach($choices as $index => $choice)
                     <div class="row align-items-center choice-row mb-2">
                         <div class="col-md-5">
                             <input type="text" name="choices[{{ $index }}][en]" class="form-control" placeholder="Choice (English)" value="{{ $choice['en'] ?? '' }}">
@@ -80,7 +80,6 @@
         </div>
         <button type="button" id="add-choice-btn" class="btn btn-success btn-sm mt-2">Add Choice</button>
     </div>
-    {{-- END: New section --}}
 </div>
 <div class="card-footer">
     <button type="submit" class="btn btn-primary">{{ __('attributes.messages.save') }}</button>
@@ -94,7 +93,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const choicesContainer = document.getElementById('choices-container');
     const addChoiceBtn = document.getElementById('add-choice-btn');
     const choicesWrapper = document.getElementById('choices-wrapper');
-    let choiceIndex = {{ count(old('choices', $propertyAttribute?->choices ?? [])) }};
+    
+    // Safely calculate the initial index to prevent the count() error
+    let choiceIndex = {{ is_array(old('choices', $propertyAttribute?->choices)) ? count(old('choices', $propertyAttribute->choices)) : 0 }};
 
     function toggleChoicesVisibility() {
         if (typeSelect.value === 'dropdown') {
@@ -123,13 +124,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     choicesWrapper.addEventListener('click', function (e) {
-        if (e.target.classList.contains('remove-choice-btn')) {
+        if (e.target && e.target.classList.contains('remove-choice-btn')) {
             e.target.closest('.choice-row').remove();
         }
     });
 
     typeSelect.addEventListener('change', toggleChoicesVisibility);
-    toggleChoicesVisibility(); // Initial check on page load
+    
+    // Initial check on page load to show/hide the choices section correctly
+    toggleChoicesVisibility();
 });
 </script>
 @endpush

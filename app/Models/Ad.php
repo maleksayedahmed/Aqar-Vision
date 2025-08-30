@@ -12,7 +12,7 @@ class Ad extends Model
 
     /**
      * The attributes that are mass assignable.
-     * This array is now updated to match the database and form fields.
+     * This array is now updated to remove the old, fixed columns.
      */
     protected $fillable = [
         // Foreign Keys
@@ -25,18 +25,13 @@ class Ad extends Model
         'status',
         'expires_at',
 
-        // Property Details from Step 1
+        // Core Property Details
         'title',
         'description',
         'listing_purpose',
         'total_price',
         'area_sq_meters',
         'age_years',
-        'rooms',
-        'bathrooms',
-        'floor_number',
-        'finishing_status',
-        'facade',
 
         // Location Details
         'latitude',         
@@ -44,12 +39,10 @@ class Ad extends Model
         'street_name',
         'province',
 
-        // Features & Additional Details
+        // Features & Additional Details (Now includes all dynamic attributes)
         'features',
         'property_usage',
         'plan_number',
-        'is_mortgaged',
-        'furniture_status',
         'building_status',
         'building_number',
         'postal_code',
@@ -66,11 +59,8 @@ class Ad extends Model
         'expires_at' => 'datetime',
         'total_price' => 'decimal:2',
         'area_sq_meters' => 'decimal:2',
-        'bathrooms' => 'integer',
-        'rooms' => 'integer',
-        'features' => 'array',
+        'features' => 'array', // This is now the main field for dynamic attributes
         'images' => 'array',
-        'is_mortgaged' => 'boolean',
     ];
 
     /**
