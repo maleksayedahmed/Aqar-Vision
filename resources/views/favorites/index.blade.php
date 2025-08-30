@@ -11,35 +11,9 @@ use Illuminate\Support\Facades\Storage;
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
         <div class="flex flex-col lg:flex-row gap-8">
 
-            <!-- Sidebar Navigation -->
-            <aside class="w-full lg:w-[250px] lg:flex-shrink-0">
-                <div class="bg-white p-4 rounded-xl shadow-sm h-full">
-                    <nav>
-                        <ul class="space-y-1">
-                            <li>
-                                <a href="{{ route('profile.edit') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
-                                    <img src="{{ asset('images/account.svg') }}">
-                                    <span>حسابي</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('favorites.index') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] bg-[rgba(48,62,124,0.09)] hover:bg-gray-100 font-normal text-[16px] transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                                    </svg>
-                                    <span>المفضلة</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-gray-100 text-[16px] transition-colors">
-                                    <img src="{{ asset('images/bell.svg') }}">
-                                    <span>الاشعارات</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </aside>
+            @auth
+                @include('partials.user_sidebar')
+            @endauth
 
             <!-- Main Content -->
             <div class="flex-1">
@@ -95,21 +69,21 @@ use Illuminate\Support\Facades\Storage;
                                             <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md">
                                                 <img src="{{ asset('images/building.svg') }}" class="h-4 w-4">
                                                 {{ $ad->propertyType?->name }}
-                                            </span>
+                                             </span>
                                             <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md">
                                                 <img src="{{ asset('images/bath.svg') }}" class="h-4 w-4">
                                                 {{ $ad->bathrooms }} حمام
-                                            </span>
+                                             </span>
                                             <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md">
                                                 <img src="{{ asset('images/bed.svg') }}" class="h-4 w-4">
                                                 {{ $ad->rooms }} غرف نوم
-                                            </span>
+                                             </span>
                                         </div>
                                         <div class="border-t border-gray-100 pt-4 mt-4 flex justify-between items-center">
                                             <p class="text-lg font-bold text-indigo-700">
                                                 {{ number_format($ad->total_price) }}
                                                 <span class="text-xs font-medium text-slate-500">ر.س</span>
-                                            </p>
+                                             </p>
                                             <a href="{{ route('properties.show', $ad->id) }}" class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800 transition-colors">
                                                 رؤية التفاصيل
                                             </a>
