@@ -57,7 +57,7 @@ class AdController extends Controller
     public function create()
     {
         $adPrices = AdPrice::where('is_active', true)->get();
-        
+
         if ($adPrices->isEmpty()) {
             return redirect()->route('agent.home')->with('error', 'No ad packages are available at the moment.');
         }
@@ -212,7 +212,6 @@ class AdController extends Controller
         }
 
         $ad = Ad::create($adData);
-
         Session::forget('ad_step_one_data');
 
         return redirect()->route('agent.my-ads')->with([

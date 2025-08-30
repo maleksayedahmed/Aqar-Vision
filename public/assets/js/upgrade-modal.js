@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const openModalBtn = document.getElementById('open-upgrade-modal');
     const closeModalBtn = document.getElementById('close-upgrade-modal');
     const upgradeForm = document.getElementById('upgrade-request-form');
+    const falLicenseField = document.getElementById('fal-license-field');
 
     // --- Selectors for the new Success Alert ---
     const successAlert = document.getElementById('success-alert-modal');
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeSuccessAlertBtn = document.getElementById('close-success-alert');
 
     if (!upgradeModal || !openModalBtn || !closeModalBtn || !upgradeForm || !successAlert) {
-        return; 
+        return;
     }
 
     const showUpgradeModal = () => upgradeModal.classList.remove('hidden');
@@ -31,11 +32,29 @@ document.addEventListener('DOMContentLoaded', function () {
         successAlert.querySelector('.transform').classList.add('scale-95', 'opacity-0');
         setTimeout(() => {
             successAlert.classList.add('hidden');
+            // Reload the page after closing success modal to show updated status
+            window.location.reload();
         }, 300); // Match the transition duration
     };
 
+    // Show/hide FAL license field based on selected role
+    const toggleFalLicenseField = () => {
+        const selectedRole = upgradeForm.querySelector('input[name="requested_role"]:checked');
+        if (falLicenseField) {
+            if (selectedRole && selectedRole.value === 'agent') {
+                falLicenseField.style.display = 'block';
+            } else {
+                falLicenseField.style.display = 'none';
+            }
+        }
+    };
+
     // Event listeners
-    openModalBtn.addEventListener('click', showUpgradeModal);
+    openModalBtn.addEventListener('click', () => {
+        showUpgradeModal();
+        toggleFalLicenseField(); // Show/hide field when modal opens
+    });
+
     closeModalBtn.addEventListener('click', hideUpgradeModal);
     closeSuccessAlertBtn.addEventListener('click', hideSuccessAlert);
 
@@ -45,6 +64,16 @@ document.addEventListener('DOMContentLoaded', function () {
      successAlert.addEventListener('click', (event) => {
         if (event.target === successAlert) hideSuccessAlert();
     });
+
+    // Listen for role changes
+    upgradeForm.addEventListener('change', function(e) {
+        if (e.target.name === 'requested_role') {
+            toggleFalLicenseField();
+        }
+    });
+
+    // Initialize field visibility
+    toggleFalLicenseField();
 
 
     // AJAX form submission
@@ -56,14 +85,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const buttonText = button.querySelector('.button-text');
         const errorDiv = document.getElementById('upgrade-form-error');
 
+        // Get selected role
+        const selectedRole = upgradeForm.querySelector('input[name="requested_role"]:checked');
+        if (!selectedRole) {
+            errorDiv.textContent = 'يرجى اختيار نوع الحساب المطلوب.';
+            errorDiv.classList.remove('hidden');
+            return;
+        }
+
         button.disabled = true;
         spinner.classList.remove('hidden');
         buttonText.classList.add('hidden');
         errorDiv.classList.add('hidden');
-        
+
         const formData = new FormData(upgradeForm);
-        // We only allow upgrading to agent now, so we can hardcode it or ensure radio is set
-        formData.set('requested_role', 'agent'); 
 
         try {
             const response = await fetch(upgradeForm.action, {
@@ -75,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             if (!response.ok) {
-                errorDiv.textContent = data.message || 'An unknown error occurred.';
+                errorDiv.textContent = data.message || 'حدث خطأ غير معروف.';
                 errorDiv.classList.remove('hidden');
             } else {
                 hideUpgradeModal();
@@ -83,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
         } catch (error) {
-            errorDiv.textContent = 'A network error occurred. Please try again.';
+            errorDiv.textContent = 'حدث خطأ في الشبكة. يرجى المحاولة مرة أخرى.';
             errorDiv.classList.remove('hidden');
         } finally {
             button.disabled = false;

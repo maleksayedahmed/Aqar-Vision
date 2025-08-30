@@ -12,6 +12,7 @@ class UpgradeRequest extends Model
     protected $fillable = [
         'user_id',
         'requested_role',
+        'license_id',
         'status',
         'admin_notes',
         'processed_by',
@@ -35,5 +36,10 @@ class UpgradeRequest extends Model
     public function processor()
     {
         return $this->belongsTo(User::class, 'processed_by');
+    }
+
+    public function license()
+    {
+        return $this->belongsTo(License::class);
     }
 }

@@ -34,7 +34,7 @@ Route::middleware(['auth' ,Language::class])
 
     // Users & Roles
     Route::resource('users', UserController::class)->except('show');
-    Route::get('users/{user}/details', [UserController::class, 'getDetails'])->name('users.details'); 
+    Route::get('users/{user}/details', [UserController::class, 'getDetails'])->name('users.details');
     Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
     Route::resource('roles', RoleController::class)->except('show');
 
@@ -78,5 +78,5 @@ Route::middleware(['auth' ,Language::class])
 
     Route::get('upgrade-requests', [UpgradeRequestController::class, 'index'])->name('upgrade-requests.index');
     Route::post('upgrade-requests/{upgradeRequest}/approve', [UpgradeRequestController::class, 'approve'])->name('upgrade-requests.approve');
-    Route::delete('upgrade-requests/{upgradeRequest}/reject', [UpgradeRequestController::class, 'reject'])->name('upgrade-requests.reject');
+    Route::post('upgrade-requests/{upgradeRequest}/reject', [UpgradeRequestController::class, 'reject'])->name('upgrade-requests.reject');
 });

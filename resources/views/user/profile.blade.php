@@ -4,6 +4,44 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Listen for upgrade modal form changes to show/hide FAL license field
+            const upgradeForm = document.getElementById('upgrade-request-form');
+            const falLicenseContainer = document.querySelector('[data-fal-license-container]');
+
+            if (upgradeForm && falLicenseContainer) {
+                upgradeForm.addEventListener('change', function(e) {
+                    if (e.target.name === 'requested_role') {
+                        if (e.target.value === 'agent') {
+                            falLicenseContainer.style.display = 'block';
+                        } else {
+                            falLicenseContainer.style.display = 'none';
+                        }
+                    }
+                });
+            }
+
+            // Password confirmation validation
+            const passwordField = document.getElementById('password');
+            const confirmPasswordField = document.getElementById('password_confirmation');
+
+            if (passwordField && confirmPasswordField) {
+                function validatePasswordMatch() {
+                    if (passwordField.value && confirmPasswordField.value) {
+                        if (passwordField.value !== confirmPasswordField.value) {
+                            confirmPasswordField.setCustomValidity('كلمات المرور غير متطابقة');
+                        } else {
+                            confirmPasswordField.setCustomValidity('');
+                        }
+                    }
+                }
+
+                passwordField.addEventListener('input', validatePasswordMatch);
+                confirmPasswordField.addEventListener('input', validatePasswordMatch);
+            }
+        });
+    </script>
 @endpush
 
 @section('content')
@@ -33,7 +71,7 @@
                     <!-- Profile Header -->
                     <div class="mb-10 flex flex-col gap-y-6 sm:flex-row sm:justify-between items-start">
                         <div class="relative flex items-center gap-x-4 sm:gap-x-[45px]">
-                            
+
                             <!-- Profile Picture -->
                             <div class="w-24 h-24 sm:w-28 sm:h-28">
                                 <img x-show="!photoPreview" src="{{ $user->profile_photo_path ? Storage::url($user->profile_photo_path) : asset('images/profile.png') }}" alt="صورة الملف الشخصي" class="w-full h-full rounded-full object-cover border-4 border-black shadow-md">
@@ -41,7 +79,7 @@
                                       x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                                 </span>
                             </div>
-                            
+
                             <!-- Camera Button -->
                             <div class="absolute top-[70px] sm:top-[80px]">
                                 <label for="profile_photo" class="bg-[#303E7C] text-white w-[42px] h-[30px] flex items-center justify-center rounded-full hover:bg-opacity-90 transition-colors cursor-pointer" aria-label="تغيير الصورة">
@@ -88,13 +126,55 @@
                             @error('phone')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
 
-                        <div class="md:col-span-2">
-                            <label for="fal_license" class="block text-[11px] font-medium mb-2">رخصة فال</label>
-                            <input type="text" id="fal_license" name="fal_license" value="{{ old('fal_license', optional($user->agent)->license_number) }}"
-                                   class="w-full md:w-[405px] h-[50px] text-[11px] font-medium border border-gray-200 text-gray-700 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#303F7C] focus:border-transparent">
-                            @error('fal_license')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                        <div>
+                            <label for="email" class="block text-[11px] font-medium mb-2">البريد الإلكتروني</label>
+                            <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required
+                                   class="w-full h-[50px] text-[11px] font-medium border border-gray-200 text-gray-700 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#303F7C] focus:border-transparent">
+                            @error('email')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
-                        
+
+                        <div>
+                            <label for="password" class="block text-[11px] font-medium mb-2">كلمة المرور الجديدة (اختياري)</label>
+                            <input type="password" id="password" name="password"
+                                   class="w-full h-[50px] text-[11px] font-medium border border-gray-200 text-gray-700 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#303F7C] focus:border-transparent">
+                            @error('password')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                        </div>
+
+                        <div>
+                            <label for="password_confirmation" class="block text-[11px] font-medium mb-2">تأكيد كلمة المرور</label>
+                            <input type="password" id="password_confirmation" name="password_confirmation"
+                                   class="w-full h-[50px] text-[11px] font-medium border border-gray-200 text-gray-700 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#303F7C] focus:border-transparent">
+                            @error('password_confirmation')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                        </div>
+
+                        @php
+                            $latestRequest = $user->latestUpgradeRequest;
+                            $showFalLicense = $user->agent && ($latestRequest && $latestRequest->requested_role === 'agent');
+                        @endphp
+
+                        @if($showFalLicense)
+                            <div class="md:col-span-2" data-fal-license-container>
+                                <label for="fal_license" class="block text-[11px] font-medium mb-2">رخصة فال</label>
+                                <input type="text" id="fal_license" name="fal_license" value="{{ old('fal_license', optional($latestRequest && $latestRequest->license)->license_number ?? optional($user->agent->licenses->where('license_type_id', 1)->first())->license_number) }}"
+                                       class="w-full md:w-[405px] h-[50px] text-[11px] font-medium border border-gray-200 text-gray-700 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#303F7C] focus:border-transparent">
+                                @error('fal_license')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                            </div>
+
+                            <div data-fal-license-container>
+                                <label for="license_issue_date" class="block text-[11px] font-medium mb-2">تاريخ إصدار الرخصة</label>
+                                <input type="date" id="license_issue_date" name="license_issue_date" value="{{ old('license_issue_date', optional($latestRequest && $latestRequest->license)->issue_date?->format('Y-m-d') ?? optional($user->agent->licenses->where('license_type_id', 1)->first())->issue_date?->format('Y-m-d')) }}"
+                                       class="w-full h-[50px] text-[11px] font-medium border border-gray-200 text-gray-700 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#303F7C] focus:border-transparent">
+                                @error('license_issue_date')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                            </div>
+
+                            <div data-fal-license-container>
+                                <label for="license_expiry_date" class="block text-[11px] font-medium mb-2">تاريخ انتهاء الرخصة</label>
+                                <input type="date" id="license_expiry_date" name="license_expiry_date" value="{{ old('license_expiry_date', optional($latestRequest && $latestRequest->license)->expiry_date?->format('Y-m-d') ?? optional($user->agent->licenses->where('license_type_id', 1)->first())->expiry_date?->format('Y-m-d')) }}"
+                                       class="w-full h-[50px] text-[11px] font-medium border border-gray-200 text-gray-700 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#303F7C] focus:border-transparent">
+                                @error('license_expiry_date')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                            </div>
+                        @endif
+
                     </div>
 
                     <div class="mt-10 text-center">
@@ -110,19 +190,91 @@
 
 <!-- CTA Section -->
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 py-4 mt-4">
-    <div class="bg-[url('{{ asset('images/adsbanner.png') }}')] lg:h-[225px] bg-cover bg-center rounded-2xl shadow-sm overflow-hidden relative p-8 lg:p-4">
-        <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('{{ asset('images/bg-pattern.png') }}');"></div>
-        <div class="relative z-10 flex flex-col items-center text-center">
-            <img src="{{ asset('images/logo.png') }}" class="w-[45px] h-[35px] mb-4" alt="logo">
-            <h2 class="text-[15px] font-bold text-[rgba(26,26,26,1)] mb-2">هل انت عقاري؟</h2>
-            <p class="max-w-3xl text-[15px] mx-auto text-[rgba(102,102,102,1)] font-medium leading-relaxed mb-4">
-                إذا كنت وسيطًا عقاريًا أو لديك عدد كبير من العقارات، قم بترقية حسابك إلى حساب عقاري للاستفادة من باقات متعددة للإعلانات وميزات إدارة متقدمة حول نوع الحساب وابدأ الرحلة.
-            </p>
-            <button type="button" id="open-upgrade-modal" class="bg-[#303F7C] text-white font-bold py-3 px-12 rounded-lg hover:bg-opacity-90 transition-colors shadow-md">
-            تحويل الحساب
-        </button>
+    @php
+        $latestRequest = $user->latestUpgradeRequest;
+        $isAgent = $user->agent !== null;
+        $isAgency = $user->agency !== null;
+        $showCTA = !$isAgent && !$isAgency && (!$latestRequest || $latestRequest->status === 'rejected');
+        $hasPendingRequest = $latestRequest && $latestRequest->status === 'pending';
+        $hasApprovedRequest = $latestRequest && $latestRequest->status === 'approved';
+        $hasRejectedRequest = $latestRequest && $latestRequest->status === 'rejected';
+    @endphp
+
+    @if($showCTA)
+        <div class="bg-[url('{{ asset('images/adsbanner.png') }}')] lg:h-[225px] bg-cover bg-center rounded-2xl shadow-sm overflow-hidden relative p-8 lg:p-4">
+            <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('{{ asset('images/bg-pattern.png') }}');"></div>
+            <div class="relative z-10 flex flex-col items-center text-center">
+                <img src="{{ asset('images/logo.png') }}" class="w-[45px] h-[35px] mb-4" alt="logo">
+                <h2 class="text-[15px] font-bold text-[rgba(26,26,26,1)] mb-2">هل انت عقاري؟</h2>
+                <p class="max-w-3xl text-[15px] mx-auto text-[rgba(102,102,102,1)] font-medium leading-relaxed mb-4">
+                    إذا كنت وسيطًا عقاريًا أو لديك عدد كبير من العقارات، قم بترقية حسابك إلى حساب عقاري للاستفادة من باقات متعددة للإعلانات وميزات إدارة متقدمة حول نوع الحساب وابدأ الرحلة.
+                </p>
+                <button type="button" id="open-upgrade-modal" class="bg-[#303F7C] text-white font-bold py-3 px-12 rounded-lg hover:bg-opacity-90 transition-colors shadow-md">
+                    تحويل الحساب
+                </button>
+            </div>
         </div>
-    </div>
+    @endif
+
+    @if($hasPendingRequest)
+        <div class="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="mr-3">
+                    <h3 class="text-lg font-medium text-blue-800">طلب ترقية الحساب قيد المراجعة</h3>
+                    <div class="mt-2 text-sm text-blue-700">
+                        <p>تم إرسال طلبك لترقية الحساب إلى <strong>{{ $latestRequest->requested_role === 'agent' ? 'وسيط عقاري' : 'شركة عقارية' }}</strong> بتاريخ {{ $latestRequest->created_at->format('d/m/Y') }}.</p>
+                        <p class="mt-1">ستتم مراجعة طلبك من قبل الإدارة وسيتم إشعارك بالنتيجة قريباً.</p>
+                    </div>
+                    <div class="mt-3">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            قيد المراجعة
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if($hasRejectedRequest)
+        <div class="bg-red-50 border-l-4 border-red-400 p-6 rounded-lg">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <svg class="h-8 w-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                </div>
+                <div class="mr-3">
+                    <h3 class="text-lg font-medium text-red-800">تم رفض طلب ترقية الحساب</h3>
+                    <div class="mt-2 text-sm text-red-700">
+                        <p>تم رفض طلبك لترقية الحساب إلى <strong>{{ $latestRequest->requested_role === 'agent' ? 'وسيط عقاري' : 'شركة عقارية' }}</strong> بتاريخ {{ $latestRequest->processed_at ? $latestRequest->processed_at->format('d/m/Y') : 'غير محدد' }}.</p>
+                        @if($latestRequest->admin_notes)
+                            <div class="mt-3 p-3 bg-red-100 rounded-lg">
+                                <p class="font-medium text-red-800">سبب الرفض:</p>
+                                <p class="mt-1">{{ $latestRequest->admin_notes }}</p>
+                            </div>
+                        @endif
+                        <p class="mt-3">يمكنك إرسال طلب جديد بعد تحسين البيانات المطلوبة.</p>
+                    </div>
+                    <div class="mt-3">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            مرفوض
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </section>
 </main>
 
