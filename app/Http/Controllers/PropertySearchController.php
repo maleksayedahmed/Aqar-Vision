@@ -52,16 +52,14 @@ class PropertySearchController extends Controller
     {
         // Start the base query for active ads
         $query = Ad::where('status', 'active')->with(['district.city', 'propertyType']);
-
+        
         // Apply all the filters from the request using the helper method
         $this->applyFilters($request, $query);
 
-        // ** THIS IS THE MODIFIED LINE **
-        // For the map, we now get the 'images' column as well.
+        // For the map, we get ALL results with minimal columns to keep it fast.
         $allAdsForMap = (clone $query)->get(['id', 'title', 'latitude', 'longitude', 'total_price', 'images']);
 
         // For the cards below the map, we get a PAGINATED list of the first 4 results.
-        // We clone the query to start fresh before adding pagination.
         $paginatedAds = (clone $query)->latest()->paginate(4)->withQueryString();
 
         // Get data for the filter dropdowns
@@ -84,15 +82,15 @@ class PropertySearchController extends Controller
      */
     public function show(Ad $ad): View
     {
-        // Eager load all necessary relationships for the detail page to optimize queries
+        // Eager load relationships for efficiency
         $ad->load(['user.agent.city', 'district.city', 'propertyType']);
-
-        // Fetch all boolean attributes (features) to get their names AND icons.
-        $features = PropertyAttribute::where('type', 'boolean')
-            ->get()
+        
+        // Fetch ALL attributes from the database and key them by their English slug
+        // for easy lookup in the Blade view.
+        $allAttributes = PropertyAttribute::all()
             ->keyBy(fn ($item) => str_replace(' ', '_', strtolower($item->getTranslation('name', 'en'))));
 
-        // Optional: Get a few "similar" ads to display at the bottom
+        // Get a few "similar" ads to display at the bottom
         $similarAds = Ad::where('status', 'active')
                         ->where('id', '!=', $ad->id)
                         ->where('district_id', $ad->district_id)
@@ -102,11 +100,11 @@ class PropertySearchController extends Controller
 
         return view('properties.show', [
             'ad' => $ad,
-            'features' => $features,
+            'allAttributes' => $allAttributes, // Pass the correct variable to the view
             'similarAds' => $similarAds
         ]);
     }
-
+    
     /**
      * Display the specified agent's public profile and listings.
      *
@@ -122,10 +120,10 @@ class PropertySearchController extends Controller
         }
 
         $agent->load(['agent.city']);
-
+        
         // Get the sort option from the URL, default to 'latest' if not present
         $sortBy = $request->input('sort', 'latest');
-
+        
         // Set a default display text
         $sortText = 'الأحدث';
 
@@ -194,25 +192,21 @@ class PropertySearchController extends Controller
                 $query->where('total_price', '>=', $range[0]);
             }
         }
-
-        // Rooms Filter
+        
+        // Rooms Filter (Note: This will no longer work with the new structure, but left for reference)
         if ($request->filled('rooms')) {
-            if (str_contains($request->rooms, '+')) {
-                $query->where('rooms', '>=', (int)$request->rooms);
-            } else {
-                $query->where('rooms', '=', (int)$request->rooms);
-            }
+            $value = (int) $request->rooms;
+            $operator = str_contains($request->rooms, '+') ? '>=' : '=';
+            $query->whereJsonContains('features->rooms', $value, $operator); // Example of how to query JSON
         }
 
         // Bathrooms Filter
         if ($request->filled('bathrooms')) {
-             if (str_contains($request->bathrooms, '+')) {
-                $query->where('bathrooms', '>=', (int)$request->bathrooms);
-            } else {
-                $query->where('bathrooms', '=', (int)$request->bathrooms);
-            }
+            $value = (int) $request->bathrooms;
+            $operator = str_contains($request->bathrooms, '+') ? '>=' : '=';
+            $query->whereJsonContains('features->bathrooms', $value, $operator);
         }
-
+        
         // Area Filter
         if ($request->filled('area_range')) {
              $range = explode('-', $request->area_range);

@@ -66,10 +66,9 @@ class UserAdController extends Controller
             'longitude' => 'required|numeric|between:-180,180',
             'province' => 'required|string|max:255',
             'street_name' => 'required|string|max:255',
-            'is_mortgaged' => 'required|boolean',
             'age_years' => 'nullable|integer|min:0',
-            'rooms' => 'required|integer|min:0',
-            'bathrooms' => 'required|integer|min:0',
+            
+            // The 'attributes' array now handles all the other dynamic fields
             'attributes' => 'nullable|array',
         ]);
 
@@ -97,13 +96,12 @@ class UserAdController extends Controller
     /**
      * Handle AJAX video uploads from the Uppy library.
      */
-    public function uploadVideo(Request $request)
+    public function uploadVideo(Request $request): JsonResponse
     {
         $request->validate([
             'video' => ['required', 'file', 'mimes:mp4,mov,webm', 'max:51200'], // 50MB
         ]);
 
-        // Store the file and return its path in a JSON response.
         $path = $request->file('video')->store('ads/videos', 'public');
 
         return response()->json(['path' => $path]);
@@ -118,8 +116,7 @@ class UserAdController extends Controller
         if (!$stepOneData) {
             return redirect()->route('user.ads.create')->with('error', 'انتهت صلاحية الجلسة. الرجاء البدء من جديد.');
         }
-        dd($request);
-        // The 'video' field is now a string (the path), not a file.
+
         $request->validate([
             'images.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:5120'],
             'video'    => ['nullable', 'string'],
