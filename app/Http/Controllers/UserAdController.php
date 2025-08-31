@@ -11,13 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
 
 class UserAdController extends Controller
 {
     /**
      * Show the page to select an ad package.
      */
-    public function create()
+    public function create(): RedirectResponse|\Illuminate\View\View
     {
         $adPrices = AdPrice::where('is_active', true)->get();
 
@@ -30,7 +32,7 @@ class UserAdController extends Controller
     /**
      * Show Step 1 of the ad creation form (Property Details).
      */
-    public function createStepOne(AdPrice $adPrice)
+    public function createStepOne(AdPrice $adPrice): \Illuminate\View\View
     {
         $allAdPrices = AdPrice::where('is_active', true)->get();
         $cities = City::where('is_active', true)->orderBy('name')->get();
@@ -51,7 +53,7 @@ class UserAdController extends Controller
     /**
      * Validate and store the data from Step 1 in the session.
      */
-    public function storeStepOne(Request $request)
+    public function storeStepOne(Request $request): RedirectResponse
     {
         $validatedData = $request->validate([
             'ad_price_id' => 'required|exists:ad_prices,id',
@@ -67,8 +69,6 @@ class UserAdController extends Controller
             'province' => 'required|string|max:255',
             'street_name' => 'required|string|max:255',
             'age_years' => 'nullable|integer|min:0',
-            
-            // The 'attributes' array now handles all the other dynamic fields
             'attributes' => 'nullable|array',
         ]);
 
@@ -80,19 +80,19 @@ class UserAdController extends Controller
     /**
      * Show Step 2 of the ad creation form (Media Uploads).
      */
-    public function createStepTwo(Request $request)
+    public function createStepTwo(Request $request): RedirectResponse|\Illuminate\View\View
     {
         $stepOneData = $request->session()->get('ad_step_one_data');
         if (!$stepOneData) {
             return redirect()->route('user.ads.create');
         }
         $selectedAdPrice = AdPrice::find($stepOneData['ad_price_id']);
-
+        
         return view('user.ads.create-step-two', [
             'selectedAdPrice' => $selectedAdPrice,
         ]);
     }
-
+    
     /**
      * Handle AJAX video uploads from the Uppy library.
      */
@@ -110,7 +110,7 @@ class UserAdController extends Controller
     /**
      * Combines data from both steps and creates the final Ad record.
      */
-    public function storeAd(Request $request)
+    public function storeAd(Request $request): RedirectResponse
     {
         $stepOneData = Session::pull('ad_step_one_data');
         if (!$stepOneData) {
@@ -125,7 +125,8 @@ class UserAdController extends Controller
 
         $adData = $stepOneData;
         $adData['user_id'] = Auth::id();
-        $adData['status'] = 'pending';
+        $adData['status'] = 'pending'; // Admin status starts as pending
+        // The `user_status` will default to 'available' via the database migration
         $adData['features'] = $adData['attributes'] ?? [];
         unset($adData['attributes']);
 
@@ -141,14 +142,51 @@ class UserAdController extends Controller
         if ($request->filled('video')) {
             $adData['video_path'] = $request->video;
         }
-
+        
         $ad = Ad::create($adData);
-
+        
         Session::forget('ad_step_one_data');
 
         return redirect()->route('user.my-ads')->with([
             'success' => 'تم رفع اعلان عقارك بنجاح وهو الآن قيد المراجعة.',
             'new_ad_id' => $ad->id
         ]);
+    }
+
+    /**
+     * Update the user-controlled status of the specified ad.
+     */
+    public function updateStatus(Request $request, Ad $ad): RedirectResponse
+    {
+        if (auth()->id() !== $ad->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($ad->status !== 'active') {
+            return redirect()->back()->with('error', 'You cannot change the status of an ad that is not approved.');
+        }
+
+        $validated = $request->validate([
+            'user_status' => ['required', Rule::in(['available', 'sold', 'unavailable'])]
+        ]);
+
+        $ad->update(['user_status' => $validated['user_status']]);
+
+        return redirect()->back()->with('success', 'Ad status has been updated successfully!');
+    }
+
+    /**
+     * Remove the specified ad from storage.
+     */
+    public function destroy(Ad $ad): RedirectResponse
+    {
+        if (auth()->id() !== $ad->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        $ad->delete();
+
+        $redirectRoute = auth()->user()->agent ? 'agent.my-ads' : 'user.my-ads';
+        return redirect()->route($redirectRoute)->with('success', 'Ad has been deleted successfully.');
     }
 }

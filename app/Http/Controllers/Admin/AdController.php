@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use App\Notifications\AdStatusUpdated;
+use Illuminate\Http\JsonResponse;
 
 class AdController extends Controller
 {
@@ -196,4 +197,45 @@ class AdController extends Controller
              $validatedData['features'] = array_filter($validatedData['features'], fn($value) => $value !== null && $value !== '');
         }
     }
+
+    public function approve(Ad $ad): RedirectResponse
+    {
+        if ($ad->status === 'pending') {
+            $ad->update(['status' => 'active']);
+            $ad->user->notify(new AdStatusUpdated($ad));
+            return back()->with('success', 'Ad approved successfully.');
+        }
+        return back()->with('error', 'This ad is not pending approval.');
+    }
+    /**
+     * Reject a pending ad with a reason.
+     */
+    public function reject(Request $request, Ad $ad): RedirectResponse|JsonResponse
+    {
+        if ($ad->status === 'pending') {
+            $request->validate(['rejection_reason' => 'nullable|string|max:1000']);
+            
+            $ad->status = 'rejected';
+            // Optional: Save the rejection reason if you have a column for it
+            // $ad->rejection_reason = $request->rejection_reason;
+            $ad->save();
+            
+            $ad->user->notify(new AdStatusUpdated($ad, $request->rejection_reason));
+
+            // This is still correct for AJAX requests
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Ad rejected successfully.']);
+            }
+
+            return back()->with('success', 'Ad rejected successfully.');
+        }
+
+        // This is still correct for AJAX requests
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'This ad is not pending approval.'], 422);
+        }
+        
+        return back()->with('error', 'This ad is not pending approval.');
+    }
+
 }

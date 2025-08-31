@@ -23,6 +23,7 @@ class Ad extends Model
 
         // Ad Status
         'status',
+        'user_status',
         'expires_at',
 
         // Core Property Details

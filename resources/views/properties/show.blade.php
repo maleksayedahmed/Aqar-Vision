@@ -3,33 +3,70 @@
 @section('title', $ad->title)
 
 @push('styles')
-    {{-- Leaflet CSS for the map --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <style>
-        /* Ensures the map container has a defined height, crucial for Leaflet to initialize correctly */
         #detail-map { height: 100%; min-height: 256px; }
     </style>
 @endpush
 
 @push('scripts')
-    {{-- Alpine.js is needed for the image gallery and dropdowns --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 @endpush
 
 @section('content')
-<main class="flex flex-col items-center justify-center min-h-screen pt-[35px]">
+<main class="flex flex-col items-center justify-center min-h-screen pt-[35px]" x-data="{ deleteModalOpen: false }">
 
 <section class="bg-white w-full">
-    
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {{-- Agent Control Panel: Only shows if the logged-in user owns this ad --}}
         @if(auth()->check() && auth()->id() == $ad->user_id)
+            @php
+                $routePrefix = auth()->user()->agent ? 'agent.ads.' : 'user.ads.';
+            @endphp
             <div class="flex w-full items-center justify-end bg-white py-6" dir="rtl">
                 <div class="flex items-center gap-x-2">
-                    <a href="#" class="flex items-center gap-x-1.5 rounded-xl bg-gray-100 py-2 pl-3 pr-4 text-sm font-medium text-gray-600 hover:bg-gray-200">
-                        <img src="{{ asset('images/pen.svg') }}" alt="Edit">
-                        <span>تعديل</span>
-                    </a>
+                    {{-- Status Badge --}}
+                    @php
+                        $statusText = '';
+                        $statusBgClass = 'bg-gray-200';
+                        $statusTextClass = 'text-gray-600';
+
+                        if ($ad->status === 'pending') {
+                            $statusText = 'قيد المراجعة';
+                            $statusBgClass = 'bg-yellow-100';
+                            $statusTextClass = 'text-yellow-800';
+                        } elseif ($ad->status === 'rejected') {
+                            $statusText = 'مرفوض';
+                            $statusBgClass = 'bg-red-100';
+                            $statusTextClass = 'text-red-800';
+                        } elseif ($ad->status === 'active') {
+                            if ($ad->user_status === 'available') {
+                                $statusText = 'نشط';
+                                $statusBgClass = 'bg-green-100';
+                                $statusTextClass = 'text-green-800';
+                            } elseif ($ad->user_status === 'sold') {
+                                $statusText = 'مباع';
+                                $statusBgClass = 'bg-blue-100';
+                                $statusTextClass = 'text-blue-800';
+                            } elseif ($ad->user_status === 'unavailable') {
+                                $statusText = 'غير متاح';
+                                $statusBgClass = 'bg-gray-200';
+                                $statusTextClass = 'text-gray-600';
+                            }
+                        }
+                    @endphp
+                    <div class="px-4 py-2 text-sm font-semibold rounded-lg {{ $statusBgClass }} {{ $statusTextClass }}">
+                        {{ $statusText }}
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-x-2">
+                    {{-- The Delete button is now separate and triggers the modal --}}
+                    <button @click="deleteModalOpen = true" type="button" class="flex items-center gap-x-1.5 rounded-xl bg-gray-100 p-2 text-sm font-medium text-red-600 hover:bg-red-100">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.58.22-2.365.468a.75.75 0 10.23 1.482l.149-.046a.75.75 0 01.704.016l.995.497a.75.75 0 01.363.633V16.25a.75.75 0 01-.75.75h-2.5a.75.75 0 010-1.5h2V6.087a2.25 2.25 0 012.25-2.25h.5a2.25 2.25 0 012.25 2.25v10.163h2a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75V6.087a.75.75 0 01.363-.633l.995-.497a.75.75 0 01.704-.016l.149.046a.75.75 0 10.23-1.482A41.31 41.31 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5z" clip-rule="evenodd" /></svg>
+                        <span>حذف</span>
+                    </button>
+
+                    @if($ad->status === 'active')
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center gap-x-2 rounded-xl border border-slate-400 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50">
                             <span>تغيير حالة العقار</span>
@@ -37,18 +74,18 @@
                         </button>
                         <div x-show="open" @click.away="open = false" x-cloak class="absolute left-0 z-10 mt-2 w-48 origin-top-right rounded-xl bg-white shadow-lg">
                             <div class="py-1">
-                                {{-- Add form submissions here to update status later --}}
-                                <a href="#" class="flex items-center justify-between border-b px-4 py-3 text-sm hover:bg-gray-50"><span>نشط</span></a>
-                                <a href="#" class="flex items-center justify-between border-b px-4 py-3 text-sm hover:bg-gray-50"><span>مباع</span></a>
-                                <a href="#" class="flex items-center justify-between px-4 py-3 text-sm text-red-600 hover:bg-red-50"><span>حذف</span></a>
+                                <form action="{{ route($routePrefix . 'updateStatus', $ad) }}" method="POST"><input type="hidden" name="user_status" value="available"> @csrf @method('PATCH') <button type="submit" class="w-full text-right block border-b px-4 py-3 text-sm hover:bg-gray-50">نشط (متاح)</button></form>
+                                <form action="{{ route($routePrefix . 'updateStatus', $ad) }}" method="POST"><input type="hidden" name="user_status" value="sold"> @csrf @method('PATCH') <button type="submit" class="w-full text-right block border-b px-4 py-3 text-sm hover:bg-gray-50">مباع</button></form>
+                                <form action="{{ route($routePrefix . 'updateStatus', $ad) }}" method="POST"><input type="hidden" name="user_status" value="unavailable"> @csrf @method('PATCH') <button type="submit" class="w-full text-right block px-4 py-3 text-sm hover:bg-gray-50">غير نشط</button></form>
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
+                {{-- ** END: THIS IS THE MODIFIED SECTION ** --}}
             </div>
         @endif
 
-        <!-- Image Gallery powered by Alpine.js -->
         <div x-data="{ 
                 images: {{ json_encode($ad->images ?? []) }}, 
                 currentIndex: 0,
@@ -58,13 +95,10 @@
                 select(index) { this.currentIndex = index; }
             }">
             
-            <!-- Thumbnail Gallery -->
             @if(!empty($ad->images) && count($ad->images) > 1)
             <div class="flex justify-center flex-wrap gap-3 mb-6">
                 <template x-for="(image, index) in images" :key="index">
-                    <button @click="select(index)" 
-                            :class="{ 'border-blue-600 opacity-100': currentIndex === index, 'border-transparent opacity-70': currentIndex !== index }"
-                            class="thumbnail-btn w-32 h-20 rounded-lg overflow-hidden border-2 hover:opacity-100 transition-all">
+                    <button @click="select(index)" :class="{ 'border-blue-600 opacity-100': currentIndex === index, 'border-transparent opacity-70': currentIndex !== index }" class="thumbnail-btn w-32 h-20 rounded-lg overflow-hidden border-2 hover:opacity-100 transition-all">
                         <img :src="'{{ Storage::url('') }}' + image" :alt="'Thumbnail ' + (index + 1)" class="w-full h-full object-cover">
                     </button>
                 </template>
@@ -72,7 +106,6 @@
             @endif
 
             <div class="grid grid-cols-1 {{ $ad->video_path ? 'lg:grid-cols-2' : '' }} gap-6">
-                <!-- Main Image Slider -->
                 <div class="relative w-full h-96 rounded-xl overflow-hidden">
                     <img x-bind:src="currentImage" alt="{{ $ad->title }}" class="w-full h-full object-cover transition-opacity duration-300">
                     <div x-show="images.length > 1" class="absolute inset-0 flex items-center justify-between px-4">
@@ -80,7 +113,6 @@
                         <button @click="next()" class="bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></button>
                     </div>
                 </div>
-                <!-- Video Player (only shows if a video exists) -->
                 @if($ad->video_path)
                 <div class="relative w-full h-96 rounded-xl overflow-hidden group bg-black">
                     <video controls class="w-full h-full object-cover" poster="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : '' }}">
@@ -97,9 +129,7 @@
 <div dir="rtl" class="p-4 sm:p-6 md:p-8 w-full">
     <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 w-full">
 
-        <!-- Main Content Column -->
         <div class="w-full space-y-8">
-            <!-- Header Section -->
             <div class="bg-[rgba(242,242,242,0.35)] rounded-3xl p-5 shadow-sm">
                 <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
                     <div>
@@ -116,21 +146,18 @@
                 </div>
             </div>
 
-            <!-- Property Details -->
             <div class="bg-[rgba(242,242,242,0.35)] rounded-3xl p-8 shadow-sm">
                 <h2 class="text-[18px] font-medium mb-3">تفاصيل العقار</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-8 gap-x-4 text-center">
                     <div class="flex gap-[10px] items-center justify-center"><img src="{{ asset('images/area.svg') }}"><div class="flex flex-col"><p class="font-bold text-[14.8px]">{{ $ad->area_sq_meters }}م²</p><span class="text-[9px]">المساحة</span></div></div>
-                    
                     @foreach($ad->features as $slug => $value)
                         @php $attribute = $allAttributes->get($slug); @endphp
                         @if($attribute && $attribute->type !== 'boolean' && $value)
                             <div class="flex gap-[10px] items-center justify-center">
                                 @if($attribute->icon_path)
-                                    <img src="{{ Storage::url($attribute->icon_path) }}" class="h-[19px] w-[19px]" alt="{{ $attribute->name }}">
+                                    <img src="{{ Storage::url($attribute->icon_path) }}" class="h-8 w-8" alt="{{ $attribute->name }}">
                                 @else
-                                    {{-- You can use a generic icon as a fallback if one isn't specified --}}
-                                    {{-- <img src="{{ asset('images/details-list.svg') }}" class="h-[19px] w-[19px]"> --}}
+                                    <img src="{{ asset('images/details-list.svg') }}" class="h-8 w-8">
                                 @endif
                                 <div class="flex flex-col">
                                     <p class="font-bold text-[14.8px]">{{ $value }}</p>
@@ -153,7 +180,7 @@
                                 @if($attribute->icon_path)
                                     <img src="{{ Storage::url($attribute->icon_path) }}" class="h-6 w-6" alt="{{ $attribute->name }}">
                                 @else
-                                    <div class="h-6 w-6"></div> {{-- Placeholder for alignment if no icon --}}
+                                    <div class="h-6 w-6"></div>
                                 @endif
                                 <span class="text-[12px] font-medium text-gray-700">{{ $attribute->name }}</span>
                             </div>
@@ -177,13 +204,10 @@
             </div>
         </div>
 
-        <!-- Sidebar Column -->
         <div class="w-full lg:w-[280px] flex-shrink-0 space-y-6">
             <div class="relative bg-[rgba(250,250,250,1)] rounded-2xl p-5 shadow-sm">
                 <div class="flex flex-col gap-2 items-center text-center">
-                    <div class="flex items-center justify-between w-full">
-                        <h2 class="text-[18px] font-medium text-[rgba(26,26,26,1)]">تفاصيل المعلن</h2>
-                    </div>
+                    <h2 class="text-[18px] font-medium text-[rgba(26,26,26,1)] self-start">تفاصيل المعلن</h2>
                     <img class="w-[70px] h-[70px] rounded-full object-cover" src="{{ optional($ad->user)->profile_photo_path ? Storage::url($ad->user->profile_photo_path) : 'https://ui-avatars.com/api/?name='.urlencode(optional($ad->user)->name).'&color=7F9CF5&background=EBF4FF' }}" alt="{{ optional($ad->user)->name }}">
                     <h3 class="text-[18px] font-medium text-[rgba(48,62,124,1)]">{{ optional($ad->user)->name }}</h3>
                     @if(optional($ad->user)->hasRole('agent'))
@@ -213,6 +237,24 @@
         </div>
     </div>
 </div>
+
+@if(auth()->check() && auth()->id() == $ad->user_id)
+<div x-show="deleteModalOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60" @keydown.escape.window="deleteModalOpen = false">
+    <div x-show="deleteModalOpen" x-transition @click.away="deleteModalOpen = false" class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+        <h3 class="text-lg font-bold text-gray-900">تأكيد الحذف</h3>
+        <p class="mt-2 text-sm text-gray-600">هل أنت متأكد من رغبتك في حذف هذا الإعلان؟ لا يمكن التراجع عن هذا الإجراء.</p>
+        <div class="mt-6 flex justify-end gap-3">
+            <button @click="deleteModalOpen = false" type="button" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">إلغاء</button>
+            <form action="{{ route($routePrefix . 'destroy', $ad) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">نعم، قم بالحذف</button>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
+
 </main>
 @endsection
 
@@ -223,7 +265,6 @@
             const mapElement = document.getElementById('detail-map');
             const lat = {{ $ad->latitude ?? 'null' }};
             const lng = {{ $ad->longitude ?? 'null' }};
-
             if (mapElement && lat && lng) {
                 const map = L.map(mapElement).setView([lat, lng], 15);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

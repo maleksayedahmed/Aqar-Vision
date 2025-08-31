@@ -51,6 +51,9 @@ Route::prefix('my-account/ads')->name('user.ads.')->group(function () {
     Route::get('/create/step-2', [App\Http\Controllers\UserAdController::class, 'createStepTwo'])->name('create.step2');
     Route::post('/create/store', [App\Http\Controllers\UserAdController::class, 'storeAd'])->name('store');
      Route::post('/upload-video', [App\Http\Controllers\UserAdController::class, 'uploadVideo'])->name('uploadVideo');
+
+         Route::patch('/{ad}/status', [App\Http\Controllers\UserAdController::class, 'updateStatus'])->name('updateStatus');
+    Route::delete('/{ad}', [App\Http\Controllers\UserAdController::class, 'destroy'])->name('destroy');
 });
 
 
@@ -68,6 +71,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/upgrade-request', [UserRequestController::class, 'store'])->name('user.upgrade.request');
+    
 
      // CHAT ROUTES
     Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
@@ -88,6 +92,7 @@ Route::middleware('auth')->group(function () {
  Route::get('/terms-of-use', [App\Http\Controllers\TermsController::class, 'index'])->name('user.terms');
      Route::get('/complaints', [App\Http\Controllers\ComplaintController::class, 'create'])->name('user.complaints.create');
     Route::post('/complaints', [App\Http\Controllers\ComplaintController::class, 'store'])->name('user.complaints.store');
+     Route::get('/my-notifications', [App\Http\Controllers\UserNotificationController::class, 'index'])->name('user.notifications');
 
 
 });
@@ -127,5 +132,7 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
     Route::get('/ads/create/step-2', [AdController::class, 'createStepTwo'])->name('ads.create.step2');
     Route::post('/ads/create/store', [AdController::class, 'storeAd'])->name('ads.store');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
+        Route::patch('/ads/{ad}/status', [App\Http\Controllers\Agent\AdController::class, 'updateStatus'])->name('ads.updateStatus');
+    Route::delete('/ads/{ad}', [App\Http\Controllers\Agent\AdController::class, 'destroy'])->name('ads.destroy');
 
 });
