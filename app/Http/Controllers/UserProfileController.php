@@ -8,20 +8,31 @@ use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\License;
 use App\Models\LicenseType;
+use Illuminate\Support\Facades\Auth;    // <-- Import Auth
+use Illuminate\Http\RedirectResponse; // <-- Import RedirectResponse
+use Illuminate\View\View;            // <-- Import View
 
 class UserProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Display the user's profile form OR redirect if they are an agent.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function edit(Request $request)
+    public function edit(Request $request): View|RedirectResponse
     {
-        $user = $request->user();
+        $user = Auth::user(); // Get the currently authenticated user
 
-        // Load the latest upgrade request and agent with licenses if exists
+        // ** THIS IS THE FIX **
+        // Check if the authenticated user has an associated agent profile.
+        if ($user && $user->agent) {
+            // If they are an agent, redirect them immediately to the agent profile page.
+            return redirect()->route('agent.profile.edit');
+        }
+
+        // If the code reaches here, the user is NOT an agent.
+        // Proceed with the original logic for a regular user.
         $user->load(['latestUpgradeRequest.license', 'agent.licenses']);
 
         return view('user.profile', [
@@ -35,7 +46,7 @@ class UserProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $user = $request->user();
 
@@ -67,58 +78,41 @@ class UserProfileController extends Controller
 
         // Handle the profile photo upload
         if ($request->hasFile('profile_photo')) {
-            // Delete the old photo if it exists to save space
             if ($user->profile_photo_path) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
-
-            // Store the new photo and update the path on the user model
             $path = $request->file('profile_photo')->store('profile-photos', 'public');
             $user->profile_photo_path = $path;
         }
 
-        // Save the user model with updated information
         $user->save();
 
         // Handle the FAL license for agents only
         if ($user->agent && ($request->filled('fal_license') || $request->filled('license_issue_date') || $request->filled('license_expiry_date'))) {
-            // Find or create FAL license type
-            $falLicenseType = LicenseType::where('name->en', 'FAL License')->first();
-            if (!$falLicenseType) {
-                $falLicenseType = LicenseType::create([
+            $falLicenseType = LicenseType::firstOrCreate(
+                ['name->en' => 'FAL License'],
+                [
                     'name' => ['en' => 'FAL License', 'ar' => 'رخصة فال'],
                     'description' => ['en' => 'FAL License for Real Estate Agents', 'ar' => 'رخصة فال للوسطاء العقاريين'],
                     'is_active' => true,
-                ]);
-            }
-
-            // Find existing license or create new one
-            $license = $user->agent->licenses()->where('license_type_id', $falLicenseType->id)->first();
+                ]
+            );
 
             $licenseData = [
                 'license_type_id' => $falLicenseType->id,
                 'agent_id' => $user->agent->id,
                 'issuer' => 'FAL',
+                'license_number' => $request->fal_license,
+                'issue_date' => $request->license_issue_date,
+                'expiry_date' => $request->license_expiry_date,
             ];
-
-            if ($request->filled('fal_license')) {
-                $licenseData['license_number'] = $request->fal_license;
-            }
-            if ($request->filled('license_issue_date')) {
-                $licenseData['issue_date'] = $request->license_issue_date;
-            }
-            if ($request->filled('license_expiry_date')) {
-                $licenseData['expiry_date'] = $request->license_expiry_date;
-            }
-
-            if ($license) {
-                $license->update($licenseData);
-            } else {
-                License::create($licenseData);
-            }
+            
+            $user->agent->licenses()->updateOrCreate(
+                ['license_type_id' => $falLicenseType->id],
+                $licenseData
+            );
         }
 
-        // Redirect back to the profile page with a success message
         return redirect()->route('user.profile.edit')->with('status', 'profile-updated');
     }
 }
