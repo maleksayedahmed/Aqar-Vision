@@ -28,7 +28,7 @@
                         <a href="{{ route('home') }}" class="text-[16px] {{ request()->routeIs('home') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">الرئيسية</a>
                         <a href="{{ route('all.agents') }}" class="text-[16px] {{ request()->routeIs('all.agents') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">وسطاء العقاريون</a>
                         <a href="{{ route('user.about-us') }}" class="text-[16px] {{ request()->routeIs('user.about-us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">نبذة عنا</a>
-                        <a href="#" class="text-[16px] text-[#303f7d] font-medium hover:text-[#6381ff]">تواصل معنا</a>
+                        <a href="{{ route('contact.us') }}" class="text-[16px] {{ request()->routeIs('contact.us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">تواصل معنا</a>
                     </nav>
                     <div class="hidden md:flex">
                             <button class="flex items-center gap-x-2 text-sm bg-gray-200 hover:bg-gray-300 p-0.5 rounded-lg transition-colors">

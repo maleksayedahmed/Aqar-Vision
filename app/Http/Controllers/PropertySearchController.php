@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Ad;
 use App\Models\City;
+use App\Models\Favorite;
 use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 
@@ -34,11 +36,15 @@ class PropertySearchController extends Controller
         // Get data for the filter dropdowns on the results page
         $cities = City::where('is_active', true)->orderBy('name')->get();
         $propertyTypes = PropertyType::where('is_active', true)->whereNull('parent_id')->orderBy('name')->get();
-
+$favoriteAdIds = [];
+        if (Auth::check()) {
+            $favoriteAdIds = Favorite::where('user_id', Auth::id())->pluck('ad_id')->toArray();
+        }
         return view('properties.index', [
             'ads' => $ads,
             'cities' => $cities,
             'propertyTypes' => $propertyTypes,
+            'favoriteAdIds' => $favoriteAdIds,
         ]);
     }
 
@@ -52,7 +58,7 @@ class PropertySearchController extends Controller
     {
         // Start the base query for active ads
         $query = Ad::where('status', 'active')->with(['district.city', 'propertyType']);
-        
+
         // Apply all the filters from the request using the helper method
         $this->applyFilters($request, $query);
 
@@ -65,12 +71,16 @@ class PropertySearchController extends Controller
         // Get data for the filter dropdowns
         $cities = City::where('is_active', true)->orderBy('name')->get();
         $propertyTypes = PropertyType::where('is_active', true)->whereNull('parent_id')->orderBy('name')->get();
-
+$favoriteAdIds = [];
+        if (Auth::check()) {
+            $favoriteAdIds = Favorite::where('user_id', Auth::id())->pluck('ad_id')->toArray();
+        }
         return view('properties.map', [
             'allAdsForMap' => $allAdsForMap, // This is for the map markers
             'ads' => $paginatedAds,          // This is for the cards and pagination links
             'cities' => $cities,
             'propertyTypes' => $propertyTypes,
+            'favoriteAdIds' => $favoriteAdIds,
         ]);
     }
 
@@ -84,7 +94,7 @@ class PropertySearchController extends Controller
     {
         // Eager load relationships for efficiency
         $ad->load(['user.agent.city', 'district.city', 'propertyType']);
-        
+
         // Fetch ALL attributes from the database and key them by their English slug
         // for easy lookup in the Blade view.
         $allAttributes = PropertyAttribute::all()
@@ -104,7 +114,7 @@ class PropertySearchController extends Controller
             'similarAds' => $similarAds
         ]);
     }
-    
+
     /**
      * Display the specified agent's public profile and listings.
      *
@@ -120,10 +130,10 @@ class PropertySearchController extends Controller
         }
 
         $agent->load(['agent.city']);
-        
+
         // Get the sort option from the URL, default to 'latest' if not present
         $sortBy = $request->input('sort', 'latest');
-        
+
         // Set a default display text
         $sortText = 'الأحدث';
 
@@ -153,9 +163,12 @@ class PropertySearchController extends Controller
 
         // Paginate the sorted results and keep the sort parameter in the pagination links
         $ads = $adsQuery->paginate(8)->withQueryString();
-
+$favoriteAdIds = [];
+        if (Auth::check()) {
+            $favoriteAdIds = Favorite::where('user_id', Auth::id())->pluck('ad_id')->toArray();
+        }
         // Pass the new sorting variables to the view
-        return view('agent-show', compact('agent', 'ads', 'sortBy', 'sortText'));
+        return view('agent-show', compact('agent', 'ads', 'sortBy', 'sortText', 'favoriteAdIds'));
     }
 
     /**
@@ -192,7 +205,7 @@ class PropertySearchController extends Controller
                 $query->where('total_price', '>=', $range[0]);
             }
         }
-        
+
         // Rooms Filter (Note: This will no longer work with the new structure, but left for reference)
         if ($request->filled('rooms')) {
             $value = (int) $request->rooms;
@@ -206,7 +219,7 @@ class PropertySearchController extends Controller
             $operator = str_contains($request->bathrooms, '+') ? '>=' : '=';
             $query->whereJsonContains('features->bathrooms', $value, $operator);
         }
-        
+
         // Area Filter
         if ($request->filled('area_range')) {
              $range = explode('-', $request->area_range);

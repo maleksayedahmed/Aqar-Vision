@@ -71,4 +71,9 @@ class HomeController extends Controller
 
         return view('all-agents', compact('agents'));
     }
+
+    public function contactUs(): View
+    {
+        return view('contact-us');
+    }
 }

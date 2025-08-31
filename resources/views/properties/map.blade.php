@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <style>
         #search-map { height: 65vh; }
-        
+
         /* This CSS removes the default gray square background from Leaflet's custom icons */
         .custom-leaflet-icon {
             background: transparent;
@@ -31,7 +31,7 @@
 
             <!-- Top row: Filters and View Toggle -->
             <div class="flex flex-col-reverse items-center justify-between gap-4">
-                
+
                 <!-- Filters Container (Using fully-styled custom dropdowns) -->
                 <div class="flex flex-wrap items-center w-full gap-3 justify-between">
 
@@ -76,7 +76,7 @@
                             </ul>
                         </div>
                     </div>
-                    
+
                     <!-- Dropdown: Price -->
                     <div class="relative custom-select-wrapper" data-filter-name="price_range">
                         <button type="button" class="custom-select-button flex w-full justify-between items-center gap-[120px] px-5 py-3.5 bg-[rgba(249,249,249,1)] rounded-lg text-sm text-[rgba(52,72,152,1)] font-normal hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">
@@ -117,7 +117,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Dropdown: Area -->
                     <div class="relative custom-select-wrapper" data-filter-name="area_range">
                         <button type="button" class="custom-select-button flex w-full justify-between items-center gap-[120px] px-5 py-3.5 bg-[rgba(249,249,249,1)] rounded-lg text-sm text-[rgba(52,72,152,1)] font-normal hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- View Toggle -->
                 <div id="view-toggle" class="inline-flex p-1 bg-gray-200 rounded-full self-end">
                     <a href="{{ route('properties.search', request()->query()) }}" class="view-toggle-btn flex items-center gap-2 p-3 text-sm font-semibold rounded-full text-gray-600 hover:bg-gray-100">
@@ -150,10 +150,10 @@
             </div>
         </form>
     </div>
-    
+
     <div class="border-t border-gray-200 mt-6 pt-6 px-3">
         <div id="search-map" class="w-full rounded-lg z-0"></div>
-        
+
         <div class="flex items-end justify-between mt-8">
             <div>
                  <p class="text-sm text-gray-500 mb-1 px-3">نتائج البحث على الخريطة:</p>
@@ -175,7 +175,16 @@
                             <img src="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-t-lg" alt="{{ $ad->title }}">
                         </a>
                         <div class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">{{ $ad->listing_purpose == 'rent' ? 'إيجار' : 'بيع' }}</div>
-                        <button class="absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[rgba(242,242,242,1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg></button>
+                        @if (auth()->user())
+                                    <button class="favorite-btn absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"
+                                            data-ad-id="{{ $ad->id }}"
+                                            data-favorited="{{ in_array($ad->id, $favoriteAdIds) ? 'true' : 'false' }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ in_array($ad->id, $favoriteAdIds) ? 'text-red-500' : 'text-[rgba(242,242,242,1)]' }}"
+                                            fill="{{ in_array($ad->id, $favoriteAdIds) ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                        </svg>
+                                    </button>
+                                    @endif
                     </div>
                     <!-- Details Section -->
                     <div class="p-3 space-y-[23px]">
@@ -189,7 +198,7 @@
                         <div class="space-y-1.5">
                             <h3 class="text-lg font-bold text-slate-800 leading-tight">{{ Str::limit($ad->title, 25) }}</h3>
                             <p class="text-xs text-slate-500">{{ Str::limit($ad->description, 100) }}</p>
-                        </div> 
+                        </div>
                         <div class="flex gap-2 text-sm">
                             <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/building.svg') }}" class="h-4 w-4"> {{ $ad->propertyType?->name ?? 'N/A' }}</span>
                             <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/bath.svg') }}" class="h-4 w-4"> {{ $ad->bathrooms }} حمام</span>
@@ -218,9 +227,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        
+
         const filterForm = document.getElementById('filter-form');
-        
+
         document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
             const button = wrapper.querySelector('.custom-select-button');
             const menu = wrapper.querySelector('.dropdown-menu');
@@ -304,17 +313,17 @@
 
             adsData.forEach(ad => {
                 if (ad.latitude && ad.longitude) {
-                    
+
                     let thumbnailUrl = 'https://placehold.co/48x48/3B4A7A/ffffff?text=AD';
                     if (ad.images && ad.images.length > 0) {
                         thumbnailUrl = `/storage/${ad.images[0]}`;
                     }
-                    
+
                     const iconHtml = `
                         <div style="background-image: url(${thumbnailUrl});" class="w-10 h-10 bg-cover bg-center rounded-full border-2 border-cyan-400 shadow-lg p-1 bg-white">
                         </div>
                     `;
-                    
+
                     const customIcon = L.divIcon({
                         html: iconHtml,
                         className: 'custom-leaflet-icon',
@@ -324,7 +333,7 @@
                     });
 
                     const marker = L.marker([ad.latitude, ad.longitude], { icon: customIcon }).addTo(map);
-                    
+
                     const popupContent = `
                         <div class="text-right font-sans p-1" style="min-width: 150px;">
                             <h3 class="font-bold text-md mb-1">${ad.title}</h3>
@@ -339,5 +348,92 @@
              mapElement.innerHTML = '<div class="flex items-center justify-center h-full bg-gray-100 text-gray-500 rounded-lg">لا توجد نتائج لعرضها على الخريطة</div>';
         }
     });
+
+    document.querySelectorAll('.favorite-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                @auth
+                const adId = this.dataset.adId;
+                const isFavorited = this.dataset.favorited === 'true';
+
+                // Optimistic UI update
+                updateFavoriteButton(this, !isFavorited);
+
+                fetch('/favorites/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        ad_id: adId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        this.dataset.favorited = data.is_favorited;
+                        updateFavoriteButton(this, data.is_favorited);
+
+                        // Show success message
+                        showNotification(data.message, 'success');
+                    } else {
+                        // Revert optimistic update on error
+                        updateFavoriteButton(this, isFavorited);
+                        this.dataset.favorited = isFavorited;
+                        showNotification(data.message || 'حدث خطأ', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Revert optimistic update on error
+                    updateFavoriteButton(this, isFavorited);
+                    this.dataset.favorited = isFavorited;
+                    showNotification('حدث خطأ في الشبكة', 'error');
+                });
+                @else
+                // Redirect to login if not authenticated
+                window.location.href = '/login';
+                @endauth
+            });
+        });
+
+        function updateFavoriteButton(button, isFavorited) {
+            const svg = button.querySelector('svg');
+            if (isFavorited) {
+                svg.setAttribute('fill', 'currentColor');
+                svg.classList.remove('text-[rgba(242,242,242,1)]');
+                svg.classList.add('text-red-500');
+            } else {
+                svg.setAttribute('fill', 'none');
+                svg.classList.remove('text-red-500');
+                svg.classList.add('text-[rgba(242,242,242,1)]');
+            }
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            notification.textContent = message;
+
+            // Add to DOM
+            document.body.appendChild(notification);
+
+            // Slide in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Slide out and remove
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
     </script>
 @endpush

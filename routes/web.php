@@ -34,6 +34,7 @@ use App\Http\Controllers\Agent\NotificationController;
 // Homepage Route
 Route::get('/', [UserHomeController::class, 'index'])->name('home');
 Route::get('/all-agents', [UserHomeController::class, 'allAgents'])->name('all.agents');
+Route::get('/contact-us', [UserHomeController::class, 'contactUs'])->name('contact.us');
 
 Route::post('/login/phone', [LoginWithPhoneController::class, 'sendOtp'])->name('login.phone.send');
 Route::post('/login/otp/verify', [LoginWithPhoneController::class, 'verifyOtp'])->name('login.phone.verify');
