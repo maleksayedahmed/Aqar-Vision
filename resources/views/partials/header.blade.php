@@ -44,7 +44,7 @@
 
             <!-- Right side Controls -->
             <div class="flex items-center gap-x-4 lg:gap-x-[45px]">
-                <a href="{{ route('properties.map') }}" class="hidden lg:flex bg-[rgba(48,63,125,1)] hover:bg-blue-700 text-white px-4 py-2 rounded-lg items-center gap-2 transition-colors duration-200 text-sm font-medium shadow-sm">
+                <a href="{{ route('properties.map') }}" class="hidden lg:flex bg-[rgba(48,63,125,1)] hover:bg-[rgba(48,63,125,0.9)] text-white px-4 py-2 rounded-lg items-center gap-2 transition-colors duration-200 text-sm font-medium shadow-sm">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2C6.686 2 4 4.686 4 8c0 4.28 6 10 6 10s6-5.72 6-10c0-3.314-2.686-6-6-6zm0 8.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd"></path></svg>
                     <span>بحث علي الخريطة </span>
                 </a>

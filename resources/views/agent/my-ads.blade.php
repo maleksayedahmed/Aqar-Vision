@@ -62,10 +62,16 @@
                                         <span class="bg-[rgba(221,162,80,0.18)] text-[rgba(221,162,80,1)] text-[10.4px] font-medium px-3 py-1 rounded-md self-start md:self-end">
                                             {{ optional($ad->adPrice)->name ?? 'مميز' }}
                                         </span>
-                                        <a href="{{ route('properties.show', $ad->id) }}" class="w-[142px] inline-flex items-center text-[12px] gap-x-2 bg-[rgba(48,62,124,1)] justify-between text-white font-medium py-2 px-5 rounded-lg shadow-sm hover:bg-opacity-70 transition-colors">
-                                            <span>رؤية التفاصيل</span>
-                                            <img src="{{ asset('images/next-arrow.svg') }}">
-                                        </a>
+                                        <div class="flex items-center gap-2">
+                                            <a href="{{ route('agent.ads.edit.step1', $ad) }}" class="text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 py-2 px-4 rounded-lg">
+                                                تعديل
+                                            </a>
+                                        
+                                            <a href="{{ route('properties.show', $ad->id) }}" class="w-[142px] inline-flex items-center text-[12px] gap-x-2 bg-[rgba(48,62,124,1)] justify-between text-white font-medium py-2 px-5 rounded-lg shadow-sm hover:bg-opacity-70 transition-colors">
+                                                <span>رؤية التفاصيل</span>
+                                                <img src="{{ asset('images/next-arrow.svg') }}">
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="text-right flex flex-col h-full justify-between flex-grow">
                                         <div>

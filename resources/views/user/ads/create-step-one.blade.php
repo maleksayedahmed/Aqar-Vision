@@ -19,8 +19,11 @@
             </ul>
         </div>
     @endif
+    @php
+    $routePrefix = Auth::user() && Auth::user()->agent ? 'agent.ads.' : 'user.ads.';
+    @endphp
 
-    <form method="POST" action="{{ route('user.ads.store.step1') }}">
+    <form method="POST" action="{{ route($routePrefix . 'store.step1') }}">
         @csrf
 
         {{-- Top Header Section --}}

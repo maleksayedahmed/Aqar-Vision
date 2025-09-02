@@ -25,17 +25,29 @@ class AdController extends Controller
     {
         $query = Ad::with(['user', 'district.city', 'propertyType']);
 
+        // Apply text search and location filters first
         if ($request->filled('search')) {
             $query->where('title', 'LIKE', '%' . $request->search . '%');
-        }
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
         }
         if ($request->filled('city_id')) {
             $query->whereHas('district', fn($q) => $q->where('city_id', $request->city_id));
         }
 
-        $ads = $query->latest()->paginate(15)->withQueryString();
+        // ** THIS IS THE MODIFIED LOGIC **
+        if ($request->filled('status')) {
+            // If a specific status is filtered, use it.
+            $query->where('status', $request->status);
+        } else {
+            // If no status is specified, we create a custom order.
+            // This will show all 'pending' ads first, then all other statuses.
+            $query->orderByRaw("FIELD(status, 'pending') DESC");
+        }
+        
+        // Always sort the results by the newest first as a secondary criteria.
+        $query->latest();
+        // ** END OF MODIFICATION **
+
+        $ads = $query->paginate(15)->withQueryString();
         $cities = City::where('is_active', true)->orderBy('name')->get();
 
         return view('admin.ads.index', compact('ads', 'cities'));

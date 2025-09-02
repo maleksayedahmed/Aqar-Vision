@@ -54,6 +54,10 @@ Route::prefix('my-account/ads')->name('user.ads.')->group(function () {
 
          Route::patch('/{ad}/status', [App\Http\Controllers\UserAdController::class, 'updateStatus'])->name('updateStatus');
     Route::delete('/{ad}', [App\Http\Controllers\UserAdController::class, 'destroy'])->name('destroy');
+    Route::get('/{ad}/edit', [App\Http\Controllers\UserAdController::class, 'editStepOne'])->name('edit.step1');
+    Route::patch('/{ad}/step-1', [App\Http\Controllers\UserAdController::class, 'updateStepOne'])->name('update.step1');
+    Route::get('/{ad}/edit/step-2', [App\Http\Controllers\UserAdController::class, 'editStepTwo'])->name('edit.step2');
+    Route::patch('/{ad}/update', [App\Http\Controllers\UserAdController::class, 'updateAd'])->name('update'); // Final update
 });
 
 
@@ -132,7 +136,30 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
     Route::get('/ads/create/step-2', [AdController::class, 'createStepTwo'])->name('ads.create.step2');
     Route::post('/ads/create/store', [AdController::class, 'storeAd'])->name('ads.store');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
-        Route::patch('/ads/{ad}/status', [App\Http\Controllers\Agent\AdController::class, 'updateStatus'])->name('ads.updateStatus');
-    Route::delete('/ads/{ad}', [App\Http\Controllers\Agent\AdController::class, 'destroy'])->name('ads.destroy');
+    // Route::get('/ads/{ad}/edit', [App\Http\Controllers\Agent\AdController::class, 'editStepOne'])->name('ads.edit.step1');
+    // Route::patch('/ads/{ad}/step-1', [App\Http\Controllers\Agent\AdController::class, 'updateStepOne'])->name('ads.update.step1');
+    // Route::get('/ads/{ad}/edit/step-2', [App\Http\Controllers\Agent\AdController::class, 'editStepTwo'])->name('ads.edit.step2');
+    // Route::patch('/ads/{ad}/update', [App\Http\Controllers\Agent\AdController::class, 'updateAd'])->name('ads.update');
+    // Route::patch('/ads/{ad}/status', [App\Http\Controllers\Agent\AdController::class, 'updateStatus'])->name('ads.updateStatus');
+    // Route::delete('/ads/{ad}', [App\Http\Controllers\Agent\AdController::class, 'destroy'])->name('ads.destroy');
+    Route::prefix('ads')->name('ads.')->group(function() {
+        // Now correctly named `agent.ads.index`
+        Route::get('/', [App\Http\Controllers\Agent\AdController::class, 'index'])->name('index'); 
+        
+        // The rest of the routes now have a consistent base name
+        Route::get('/create', [App\Http\Controllers\Agent\AdController::class, 'create'])->name('create');
+        Route::get('/create/step-1/{adPrice}', [App\Http\Controllers\Agent\AdController::class, 'createStepOne'])->name('create.step1');
+        Route::post('/create/step-1', [App\Http\Controllers\Agent\AdController::class, 'storeStepOne'])->name('store.step1');
+        Route::get('/create/step-2', [App\Http\Controllers\Agent\AdController::class, 'createStepTwo'])->name('create.step2');
+        Route::post('/create/store', [App\Http\Controllers\Agent\AdController::class, 'storeAd'])->name('store');
+        
+        Route::get('/{ad}/edit', [App\Http\Controllers\Agent\AdController::class, 'editStepOne'])->name('edit.step1');
+        Route::patch('/{ad}/step-1', [App\Http\Controllers\Agent\AdController::class, 'updateStepOne'])->name('update.step1');
+        Route::get('/{ad}/edit/step-2', [App\Http\Controllers\Agent\AdController::class, 'editStepTwo'])->name('edit.step2');
+        Route::patch('/{ad}/update', [App\Http\Controllers\Agent\AdController::class, 'updateAd'])->name('updateAd');
+
+        Route::patch('/{ad}/status', [App\Http\Controllers\Agent\AdController::class, 'updateStatus'])->name('updateStatus');
+        Route::delete('/{ad}', [App\Http\Controllers\Agent\AdController::class, 'destroy'])->name('destroy');
+    });
 
 });

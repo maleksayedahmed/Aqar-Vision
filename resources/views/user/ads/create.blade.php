@@ -3,13 +3,20 @@
 @section('title', 'اختر نوع رخصة الإعلان')
 
 @section('content')
+@php
+    $routePrefix = Auth::user() && Auth::user()->agent ? 'agent.ads.' : 'user.ads.';
+@endphp
 
 <main class="py-10 bg-[rgba(250,250,250,1)]">
     <section class="flex justify-center px-4 sm:px-6 lg:px-4">
         <div class="flex flex-col w-full lg:flex-row gap-4">
 
             <!-- Sidebar Navigation -->
-            @include('partials.user_sidebar')
+            @if(Auth::user() && Auth::user()->agent)
+                @include('partials.agent_sidebar')
+            @else
+                @include('partials.user_sidebar')
+            @endif
 
 
             <!-- Pricing Section -->
@@ -53,7 +60,7 @@
                                             <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
                                         </label>
                                     </div>
-                                    <a href="{{ route('user.ads.create.step1', $price) }}" class="w-full bg-[rgba(48,62,124,1)] text-[14.7px] text-white font-normal py-2 rounded-md hover:bg-opacity-90 transition-colors mt-auto">
+                                    <a href="{{ route($routePrefix . 'create.step1', $price) }}" class="w-full bg-[rgba(48,62,124,1)] text-[14.7px] text-white font-normal py-2 rounded-md hover:bg-opacity-90 transition-colors mt-auto">
                                         اشترك الآن
                                     </a>
                                 </div>
