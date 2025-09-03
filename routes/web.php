@@ -156,7 +156,7 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
         Route::get('/{ad}/edit', [App\Http\Controllers\Agent\AdController::class, 'editStepOne'])->name('edit.step1');
         Route::patch('/{ad}/step-1', [App\Http\Controllers\Agent\AdController::class, 'updateStepOne'])->name('update.step1');
         Route::get('/{ad}/edit/step-2', [App\Http\Controllers\Agent\AdController::class, 'editStepTwo'])->name('edit.step2');
-        Route::patch('/{ad}/update', [App\Http\Controllers\Agent\AdController::class, 'updateAd'])->name('updateAd');
+        Route::patch('/{ad}/update', [App\Http\Controllers\Agent\AdController::class, 'updateAd'])->name('update');
 
         Route::patch('/{ad}/status', [App\Http\Controllers\Agent\AdController::class, 'updateStatus'])->name('updateStatus');
         Route::delete('/{ad}', [App\Http\Controllers\Agent\AdController::class, 'destroy'])->name('destroy');

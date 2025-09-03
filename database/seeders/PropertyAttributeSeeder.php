@@ -115,6 +115,10 @@ class PropertyAttributeSeeder extends Seeder
             [
                 'name' => ['en' => 'Finishing Status', 'ar' => 'حالة التشطيب'],
                 'type' => 'dropdown',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/water-pump.svg'))
+                ),
                 'choices' => [
                     ['en' => 'Fully Finished', 'ar' => 'تشطيب كامل'],
                     ['en' => 'Semi Finished', 'ar' => 'نصف تشطيب'],

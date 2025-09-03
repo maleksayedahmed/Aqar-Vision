@@ -7,6 +7,8 @@
     <style>
         #detail-map { height: 100%; min-height: 256px; }
     </style>
+        <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
 @endpush
 
 @push('scripts')
@@ -22,7 +24,7 @@
             @php
                 $routePrefix = auth()->user()->agent ? 'agent.ads.' : 'user.ads.';
             @endphp
-            <div class="flex w-full items-center justify-end bg-white py-6" dir="rtl">
+            <div class="flex w-full items-center justify-between bg-white py-6" dir="rtl">
                 <div class="flex items-center gap-x-2">
                     {{-- Status Badge --}}
                     @php
@@ -60,11 +62,7 @@
                 </div>
 
                 <div class="flex items-center gap-x-2">
-                    {{-- The Delete button is now separate and triggers the modal --}}
-                    <button @click="deleteModalOpen = true" type="button" class="flex items-center gap-x-1.5 rounded-xl bg-gray-100 p-2 text-sm font-medium text-red-600 hover:bg-red-100">
-                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.58.22-2.365.468a.75.75 0 10.23 1.482l.149-.046a.75.75 0 01.704.016l.995.497a.75.75 0 01.363.633V16.25a.75.75 0 01-.75.75h-2.5a.75.75 0 010-1.5h2V6.087a2.25 2.25 0 012.25-2.25h.5a2.25 2.25 0 012.25 2.25v10.163h2a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75V6.087a.75.75 0 01.363-.633l.995-.497a.75.75 0 01.704-.016l.149.046a.75.75 0 10.23-1.482A41.31 41.31 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5z" clip-rule="evenodd" /></svg>
-                        <span>حذف</span>
-                    </button>
+                    
 
                     @if($ad->status === 'active')
                     <div class="relative" x-data="{ open: false }">
@@ -81,48 +79,67 @@
                         </div>
                     </div>
                     @endif
+
+                    {{-- The Delete button is now separate and triggers the modal --}}
+                    <button @click="deleteModalOpen = true" type="button" class="flex items-center gap-x-1.5 rounded-xl bg-gray-100 p-2 text-sm font-medium text-red-600 hover:bg-red-100">
+                        <img src="{{ asset('images/delete.svg') }}" alt="">
+                        <span>حذف</span>
+                    </button>
                 </div>
                 {{-- ** END: THIS IS THE MODIFIED SECTION ** --}}
             </div>
         @endif
 
-        <div x-data="{ 
-                images: {{ json_encode($ad->images ?? []) }}, 
-                currentIndex: 0,
-                get currentImage() { return this.images.length > 0 ? '{{ Storage::url('') }}' + this.images[this.currentIndex] : 'https://placehold.co/800x600?text=No+Image' },
-                next() { if (this.images.length > 1) this.currentIndex = (this.currentIndex + 1) % this.images.length; },
-                prev() { if (this.images.length > 1) this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length; },
-                select(index) { this.currentIndex = index; }
-            }">
-            
-            @if(!empty($ad->images) && count($ad->images) > 1)
-            <div class="flex justify-center flex-wrap gap-3 mb-6">
-                <template x-for="(image, index) in images" :key="index">
-                    <button @click="select(index)" :class="{ 'border-blue-600 opacity-100': currentIndex === index, 'border-transparent opacity-70': currentIndex !== index }" class="thumbnail-btn w-32 h-20 rounded-lg overflow-hidden border-2 hover:opacity-100 transition-all">
-                        <img :src="'{{ Storage::url('') }}' + image" :alt="'Thumbnail ' + (index + 1)" class="w-full h-full object-cover">
-                    </button>
-                </template>
-            </div>
-            @endif
+<div x-data="{ 
+    images: {{ json_encode($ad->images ?? []) }}, 
+    currentIndex: 0,
+    get currentImage() { return this.images.length > 0 ? '{{ Storage::url('') }}' + this.images[this.currentIndex] : 'https://placehold.co/800x600?text=No+Image' },
+    next() { if (this.images.length > 1) this.currentIndex = (this.currentIndex + 1) % this.images.length; },
+    prev() { if (this.images.length > 1) this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length; },
+    select(index) { this.currentIndex = index; }
+}">
 
-            <div class="grid grid-cols-1 {{ $ad->video_path ? 'lg:grid-cols-2' : '' }} gap-6">
-                <div class="relative w-full h-96 rounded-xl overflow-hidden">
-                    <img x-bind:src="currentImage" alt="{{ $ad->title }}" class="w-full h-full object-cover transition-opacity duration-300">
-                    <div x-show="images.length > 1" class="absolute inset-0 flex items-center justify-between px-4">
-                        <button @click="prev()" class="bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg></button>
-                        <button @click="next()" class="bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></button>
-                    </div>
-                </div>
-                @if($ad->video_path)
-                <div class="relative w-full h-96 rounded-xl overflow-hidden group bg-black">
-                    <video controls class="w-full h-full object-cover" poster="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : '' }}">
-                        <source src="{{ Storage::url($ad->video_path) }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-                @endif
+    {{-- Thumbnail navigation --}}
+    @if(!empty($ad->images) && count($ad->images) > 1)
+    <div class="flex justify-center flex-wrap gap-3 mb-6">
+        <template x-for="(image, index) in images" :key="index">
+            <button @click="select(index)" :class="{ 'border-blue-600 opacity-100': currentIndex === index, 'border-transparent opacity-70': currentIndex !== index }" class="thumbnail-btn w-32 h-20 rounded-lg overflow-hidden border-2 hover:opacity-100 transition-all">
+                <img :src="'{{ Storage::url('') }}' + image" :alt="'Thumbnail ' + (index + 1)" class="w-full h-full object-cover">
+            </button>
+        </template>
+    </div>
+    @endif
+
+    <div class="grid grid-cols-1 {{ $ad->video_path ? 'lg:grid-cols-2' : '' }} gap-6">
+        {{-- Image Gallery --}}
+        <div class="relative w-full h-96 rounded-xl overflow-hidden">
+            <img x-bind:src="currentImage" alt="{{ $ad->title }}" class="w-full h-full object-cover transition-opacity duration-300">
+            <div x-show="images.length > 1" class="absolute inset-0 flex items-center justify-between px-4">
+                <button @click="prev()" class="bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800 shadow-md">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <button @click="next()" class="bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800 shadow-md">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                </button>
             </div>
         </div>
+
+        {{-- Modern Video Player with Plyr.io --}}
+        @if($ad->video_path)
+        <div 
+            class="w-full h-96 rounded-xl overflow-hidden flex" 
+            wire:ignore 
+            x-data 
+            x-init="const player = new Plyr($refs.videoPlayer);"
+        >
+            <video x-ref="videoPlayer" class="w-full h-full " playsinline controls poster="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : '' }}">
+                <source src="{{ Storage::url($ad->video_path) }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        @endif
+    </div>
+</div>
     </div>
 </section>
 
@@ -149,15 +166,28 @@
             <div class="bg-[rgba(242,242,242,0.35)] rounded-3xl p-8 shadow-sm">
                 <h2 class="text-[18px] font-medium mb-3">تفاصيل العقار</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-8 gap-x-4 text-center">
-                    <div class="flex gap-[10px] items-center justify-center"><img src="{{ asset('images/area.svg') }}"><div class="flex flex-col"><p class="font-bold text-[14.8px]">{{ $ad->area_sq_meters }}م²</p><span class="text-[9px]">المساحة</span></div></div>
+                    <div class="flex gap-[10px] items-center justify-center">
+                    <img src="{{ asset('images/area.svg') }}">
+                    <div class="flex flex-col">
+                        <p class="font-bold text-[14.8px]">{{ $ad->area_sq_meters }}م²</p>
+                        <span class="text-[9px]">المساحة</span>
+                    </div>
+                </div>
+                <div class="flex gap-[10px] items-center justify-center">
+                    <img src="{{ asset('images/age.svg') }}">
+                    <div class="flex flex-col">
+                        <p class="font-bold text-[14.8px]">{{ $ad->age_years }} سنين</p>
+                        <span class="text-[9px]">عمر العقار</span>
+                    </div>
+                </div>
                     @foreach($ad->features as $slug => $value)
                         @php $attribute = $allAttributes->get($slug); @endphp
                         @if($attribute && $attribute->type !== 'boolean' && $value)
                             <div class="flex gap-[10px] items-center justify-center">
                                 @if($attribute->icon_path)
-                                    <img src="{{ Storage::url($attribute->icon_path) }}" class="h-8 w-8" alt="{{ $attribute->name }}">
+                                    <img src="{{ Storage::url($attribute->icon_path) }}" alt="{{ $attribute->name }}">
                                 @else
-                                    <img src="{{ asset('images/details-list.svg') }}" class="h-8 w-8">
+                                    <img src="{{ asset('images/details-list.svg') }}">
                                 @endif
                                 <div class="flex flex-col">
                                     <p class="font-bold text-[14.8px]">{{ $value }}</p>
@@ -260,6 +290,8 @@
 
 @push('scripts')
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const mapElement = document.getElementById('detail-map');
