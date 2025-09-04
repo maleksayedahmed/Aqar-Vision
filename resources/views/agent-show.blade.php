@@ -18,7 +18,7 @@
                 <div class="flex-1 flex flex-col items-start gap-2">
                     <!-- Badge -->
                      <div class="flex items-center justify-between w-full">
-                        
+
                         <div class="flex items-center font-medium gap-0.5 text-[rgba(48,62,124,1)] text-[14px]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[rgba(217,222,242,1)]" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
@@ -28,7 +28,7 @@
                             <span class="bg-[rgba(223,246,226,1)] text-[rgba(117,177,123,1)] text-[17.5px] font-normal px-2.5 pt-1 pb-1.5 rounded-full">مسوق عقاري</span>
 
                      </div>
-                    
+
                     <!-- Name -->
                     <h2 class="text-[28px] lg:text-4xl font-semibold text-[rgba(48,62,124,1)] h-[50px]">{{ $agent->name }}</h2>
 
@@ -102,7 +102,7 @@
                             </a>
                         @endif
                     @endauth
-                    
+
                     <!-- WhatsApp Button -->
                     <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $agent->phone) }}" target="_blank" title="WhatsApp" class="w-full sm:w-[66px] h-[50px] flex items-center justify-center rounded-2xl border-[1px] border-[rgba(27,177,105,1)] text-[#25D366] hover:bg-green-100/50 transition-colors">
                         <img src="{{ asset('images/wa.svg') }}">
@@ -133,7 +133,7 @@
     </button>
 
     <!-- The Dropdown Menu with the links -->
-    <div 
+    <div
         x-show="isOpen"
         @click.away="isOpen = false"
         x-transition
@@ -150,8 +150,8 @@
         @endphp
         <div class="py-1">
             @foreach($sortOptions as $key => $value)
-                <a 
-                    href="{{ route('agents.show', ['agent' => $agent->id, 'sort' => $key]) }}" 
+                <a
+                    href="{{ route('agents.show', ['agent' => $agent->id, 'sort' => $key]) }}"
                     class="block px-4 py-2 text-sm text-right font-medium"
                     {{-- This class dynamically highlights the active sort option --}}
                     :class="{ 'bg-indigo-50 text-indigo-700': '{{ $sortBy }}' === '{{ $key }}', 'text-gray-700 hover:bg-gray-100': '{{ $sortBy }}' !== '{{ $key }}' }"
@@ -176,11 +176,16 @@
                         <div class="relative">
                             <img src="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-lg" alt="{{ $ad->title }}">
                             <div class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">{{ $ad->listing_purpose == 'rent' ? 'إيجار' : 'بيع' }}</div>
-                            <button class="absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[rgba(242,242,242,1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                                </svg>
-                            </button>
+                            @if (auth()->user())
+                                    <button class="favorite-btn absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"
+                                            data-ad-id="{{ $ad->id }}"
+                                            data-favorited="{{ in_array($ad->id, $favoriteAdIds) ? 'true' : 'false' }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ in_array($ad->id, $favoriteAdIds) ? 'text-red-500' : 'text-[rgba(242,242,242,1)]' }}"
+                                            fill="{{ in_array($ad->id, $favoriteAdIds) ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                        </svg>
+                                    </button>
+                                    @endif
                         </div>
                         <!-- Details Section -->
                         <div class="p-3 space-y-[23px]">
@@ -197,7 +202,7 @@
                             <div class="space-y-1.5">
                                 <h3 class="text-lg font-bold text-slate-800 leading-tight">{{ $ad->title }}</h3>
                                 <p class="text-xs text-slate-500">{{ Str::limit($ad->description, 100) }}</p>
-                            </div> 
+                            </div>
                             <div class="flex gap-2 text-sm">
                                 <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/building.svg') }}" class="h-4 w-4"> {{ $ad->propertyType?->name }}</span>
                                 <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/bath.svg') }}" class="h-4 w-4"> {{ $ad->bathrooms }} حمام</span>
@@ -222,3 +227,95 @@
     </section>
 </main>
 @endsection
+
+
+@push('scripts')
+    <script>
+        document.querySelectorAll('.favorite-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                @auth
+                const adId = this.dataset.adId;
+                const isFavorited = this.dataset.favorited === 'true';
+
+                // Optimistic UI update
+                updateFavoriteButton(this, !isFavorited);
+
+                fetch('/favorites/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        ad_id: adId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        this.dataset.favorited = data.is_favorited;
+                        updateFavoriteButton(this, data.is_favorited);
+
+                        // Show success message
+                        showNotification(data.message, 'success');
+                    } else {
+                        // Revert optimistic update on error
+                        updateFavoriteButton(this, isFavorited);
+                        this.dataset.favorited = isFavorited;
+                        showNotification(data.message || 'حدث خطأ', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Revert optimistic update on error
+                    updateFavoriteButton(this, isFavorited);
+                    this.dataset.favorited = isFavorited;
+                    showNotification('حدث خطأ في الشبكة', 'error');
+                });
+                @else
+                // Redirect to login if not authenticated
+                window.location.href = '/login';
+                @endauth
+            });
+        });
+
+        function updateFavoriteButton(button, isFavorited) {
+            const svg = button.querySelector('svg');
+            if (isFavorited) {
+                svg.setAttribute('fill', 'currentColor');
+                svg.classList.remove('text-[rgba(242,242,242,1)]');
+                svg.classList.add('text-red-500');
+            } else {
+                svg.setAttribute('fill', 'none');
+                svg.classList.remove('text-red-500');
+                svg.classList.add('text-[rgba(242,242,242,1)]');
+            }
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            notification.textContent = message;
+
+            // Add to DOM
+            document.body.appendChild(notification);
+
+            // Slide in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Slide out and remove
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+@endpush

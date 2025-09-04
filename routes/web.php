@@ -33,6 +33,8 @@ use App\Http\Controllers\Agent\NotificationController;
 
 // Homepage Route
 Route::get('/', [UserHomeController::class, 'index'])->name('home');
+Route::get('/all-agents', [UserHomeController::class, 'allAgents'])->name('all.agents');
+Route::get('/contact-us', [UserHomeController::class, 'contactUs'])->name('contact.us');
 
 Route::post('/login/phone', [LoginWithPhoneController::class, 'sendOtp'])->name('login.phone.send');
 Route::post('/login/otp/verify', [LoginWithPhoneController::class, 'verifyOtp'])->name('login.phone.verify');
@@ -45,6 +47,8 @@ Route::get('/agents/{agent}', [PropertySearchController::class, 'showAgent'])->n
 
 
 Route::prefix('my-account/ads')->name('user.ads.')->group(function () {
+ Route::get('/', [App\Http\Controllers\UserAdsController::class, 'index'])->name('index');
+
     Route::get('/create', [App\Http\Controllers\UserAdController::class, 'create'])->name('create');
     Route::get('/create/step-1/{adPrice}', [App\Http\Controllers\UserAdController::class, 'createStepOne'])->name('create.step1');
     Route::post('/create/step-1', [App\Http\Controllers\UserAdController::class, 'storeStepOne'])->name('store.step1');
@@ -62,7 +66,7 @@ Route::prefix('my-account/ads')->name('user.ads.')->group(function () {
 
 
 
- 
+
 
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
@@ -75,7 +79,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/upgrade-request', [UserRequestController::class, 'store'])->name('user.upgrade.request');
-    
+
+
+    // Favorites Routes
+    Route::get('/favorites', [App\Http\Controllers\FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/toggle', [App\Http\Controllers\FavoriteController::class, 'toggle'])->name('favorites.toggle');
+    Route::post('/favorites', [App\Http\Controllers\FavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites', [App\Http\Controllers\FavoriteController::class, 'destroy'])->name('favorites.destroy');
 
      // CHAT ROUTES
     Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
@@ -144,15 +154,15 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
     // Route::delete('/ads/{ad}', [App\Http\Controllers\Agent\AdController::class, 'destroy'])->name('ads.destroy');
     Route::prefix('ads')->name('ads.')->group(function() {
         // Now correctly named `agent.ads.index`
-        Route::get('/', [App\Http\Controllers\Agent\AdController::class, 'index'])->name('index'); 
-        
+        Route::get('/', [App\Http\Controllers\Agent\AdController::class, 'index'])->name('index');
+
         // The rest of the routes now have a consistent base name
         Route::get('/create', [App\Http\Controllers\Agent\AdController::class, 'create'])->name('create');
         Route::get('/create/step-1/{adPrice}', [App\Http\Controllers\Agent\AdController::class, 'createStepOne'])->name('create.step1');
         Route::post('/create/step-1', [App\Http\Controllers\Agent\AdController::class, 'storeStepOne'])->name('store.step1');
         Route::get('/create/step-2', [App\Http\Controllers\Agent\AdController::class, 'createStepTwo'])->name('create.step2');
         Route::post('/create/store', [App\Http\Controllers\Agent\AdController::class, 'storeAd'])->name('store');
-        
+
         Route::get('/{ad}/edit', [App\Http\Controllers\Agent\AdController::class, 'editStepOne'])->name('edit.step1');
         Route::patch('/{ad}/step-1', [App\Http\Controllers\Agent\AdController::class, 'updateStepOne'])->name('update.step1');
         Route::get('/{ad}/edit/step-2', [App\Http\Controllers\Agent\AdController::class, 'editStepTwo'])->name('edit.step2');
