@@ -1,4 +1,9 @@
 {{-- resources/views/layouts/agent.blade.php --}}
+@auth
+    @if (!Auth::user()->agent)
+        <?php header('Location: ' . route('user.profile.edit')); exit; ?>
+    @endif
+@endauth
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>

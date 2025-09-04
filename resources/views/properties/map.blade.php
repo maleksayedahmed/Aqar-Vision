@@ -241,13 +241,31 @@
                 document.querySelectorAll('.dropdown-menu').forEach(m => { if (m !== menu) m.classList.add('hidden'); });
                 menu.classList.toggle('hidden');
             });
-            menu.querySelectorAll('.select-option').forEach(option => {
-                option.addEventListener('click', event => {
+            menu.addEventListener('click', event => {
+                if (event.target.classList.contains('select-option')) {
                     event.preventDefault();
-                    if (hiddenInput) hiddenInput.value = option.dataset.value;
+                    const filterName = wrapper.dataset.filterName;
+                    const hiddenInput = filterForm.querySelector(`input[name="${filterName}"]`);
+                    if (hiddenInput) {
+                        hiddenInput.value = event.target.dataset.value;
+                    }
                     filterForm.submit();
-                });
+                }
             });
+
+            const districtOptionsList = document.getElementById('district-options');
+            const districtHiddenInput = filterForm.querySelector('input[name="district_id"]');
+
+
+            if(districtOptionsList) {
+                districtOptionsList.addEventListener('click', function(event) {
+                    if (event.target.classList.contains('select-option')) {
+                        event.preventDefault(); // Stop the link from navigating
+                        districtHiddenInput.value = event.target.dataset.value; // Get the district ID
+                        filterForm.submit(); // Submit the form
+                    }
+                });
+            }
         });
 
         const roomsBathroomsWrapper = Array.from(document.querySelectorAll('.custom-select-wrapper')).find(el => !el.dataset.filterName);

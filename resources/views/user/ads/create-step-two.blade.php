@@ -10,8 +10,11 @@
 @section('content')
 <main class="bg-[rgba(250,250,250,1)] px-4 lg:px-20 pt-6 pb-11">
 
+    @php
+    $routePrefix = Auth::user() && Auth::user()->agent ? 'agent.ads.' : 'user.ads.';
+    @endphp
     {{-- The form now needs the enctype for the standard image uploads --}}
-    <form id="ad-step-two-form" method="POST" action="{{ route('user.ads.store') }}" enctype="multipart/form-data">
+    <form id="ad-step-two-form" method="POST" action="{{ route($routePrefix . 'store') }}" enctype="multipart/form-data">
         @csrf
         
         {{-- This hidden input will be populated by Uppy with the uploaded video's path --}}

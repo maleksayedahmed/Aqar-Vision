@@ -63,6 +63,8 @@ Route::middleware(['auth' ,Language::class])
     Route::resource('property-attributes', PropertyAttributeController::class)->except('show');
 
     Route::resource('ads', AdController::class);
+    Route::post('ads/{ad}/approve', [AdController::class, 'approve'])->name('ads.approve');
+    Route::post('ads/{ad}/reject', [AdController::class, 'reject'])->name('ads.reject');
 
     // Locations (Districts & Cities)
     Route::resource('districts', DistrictController::class)->except('show');

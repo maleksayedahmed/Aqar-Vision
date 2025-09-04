@@ -12,12 +12,22 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Display the user's profile form OR redirect if they are an agent.
      */
-    public function edit(Request $request): View
+    public function edit(Request $request): View|RedirectResponse
     {
+        $user = $request->user();
+
+        // ** THIS IS THE FIX **
+        // Check if the authenticated user has an associated agent profile.
+        if ($user && $user->agent) {
+            // If they are an agent, redirect them to the dedicated agent profile page.
+            return redirect()->route('agent.profile.edit');
+        }
+
+        // If they are not an agent, proceed as normal and show the default profile view.
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
 

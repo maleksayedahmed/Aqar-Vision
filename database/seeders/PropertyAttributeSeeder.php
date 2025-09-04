@@ -20,14 +20,94 @@ class PropertyAttributeSeeder extends Seeder
             // ============================
             // Boolean (Checkbox) Attributes
             // ============================
-            ['name' => ['en' => 'Internet', 'ar' => 'إنترنت'], 'type' => 'boolean'],
-            ['name' => ['en' => 'Central AC', 'ar' => 'تكييف مركزي'], 'type' => 'boolean'],
-            ['name' => ['en' => 'Parking', 'ar' => 'مواقف سيارات'], 'type' => 'boolean'],
-            ['name' => ['en' => 'Pool', 'ar' => 'مسبح'], 'type' => 'boolean'],
-            ['name' => ['en' => 'Elevator', 'ar' => 'مصعد'], 'type' => 'boolean'],
-            ['name' => ['en' => 'Equipped Kitchen', 'ar' => 'مطبخ مجهز'], 'type' => 'boolean'],
-            ['name' => ['en' => 'Security', 'ar' => 'أمن'], 'type' => 'boolean'],
-            ['name' => ['en' => 'Garden', 'ar' => 'حديقة'], 'type' => 'boolean'],
+            [
+                'name' => ['en' => 'Internet', 'ar' => 'إنترنت'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/Internet Icon.svg'))
+                ),
+            ],
+            [
+                'name' => ['en' => 'Central AC', 'ar' => 'تكييف مركزي'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/Central Air Conditioning Icon.svg'))
+                ),
+            ],
+            [
+                'name' => ['en' => 'Parking', 'ar' => 'مواقف سيارات'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/Parking Icon.svg'))
+                ),
+            ],
+            [
+                'name' => ['en' => 'Pool', 'ar' => 'مسبح'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/Swimming Pool Icon.svg'))
+                ),
+            ],
+            [
+                'name' => ['en' => 'Elevator', 'ar' => 'مصعد'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/Elevator Icon.svg'))
+                ),
+            ],
+            [
+                'name' => ['en' => 'Equipped Kitchen', 'ar' => 'مطبخ مجهز'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/Equipped Kitchen Icon.svg'))
+                ),
+            ],
+            [
+                'name' => ['en' => 'Security', 'ar' => 'أمن'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/Security Icon.svg'))
+                ),
+            ],
+            [
+                'name' => ['en' => 'Garden', 'ar' => 'حديقة'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/Garden Icon.svg'))
+                ),
+            ],
+            [
+                'name' => ['en' => 'Gas Meter', 'ar' => 'عداد غاز'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/energy.svg'))
+                ),
+            ],
+            [
+                'name' => ['en' => 'Electricity Meter', 'ar' => 'عداد كهربا'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/elect.svg'))
+                ),
+            ],
+            [
+                'name' => ['en' => 'Water Meter', 'ar' => 'عداد مياه'],
+                'type' => 'boolean',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/water-pump.svg'))
+                ),
+            ],
 
             // ============================
             // Dropdown Attributes
@@ -35,6 +115,10 @@ class PropertyAttributeSeeder extends Seeder
             [
                 'name' => ['en' => 'Finishing Status', 'ar' => 'حالة التشطيب'],
                 'type' => 'dropdown',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/water-pump.svg'))
+                ),
                 'choices' => [
                     ['en' => 'Fully Finished', 'ar' => 'تشطيب كامل'],
                     ['en' => 'Semi Finished', 'ar' => 'نصف تشطيب'],
@@ -54,33 +138,6 @@ class PropertyAttributeSeeder extends Seeder
                     ['en' => 'Northwest', 'ar' => 'شمال غرب'],
                     ['en' => 'Southeast', 'ar' => 'جنوب شرق'],
                     ['en' => 'Southwest', 'ar' => 'جنوب غرب'],
-                ]
-            ],
-            [
-                'name' => ['en' => 'Property Age', 'ar' => 'عمر العقار'],
-                'type' => 'dropdown',
-                'choices' => [
-                    ['en' => 'New', 'ar' => 'جديد'],
-                    ['en' => 'Less than a year', 'ar' => 'أقل من سنة'],
-                    ['en' => '1 Year', 'ar' => 'سنة'],
-                    ['en' => '2 Years', 'ar' => 'سنتان'],
-                    ['en' => '3 Years', 'ar' => '3 سنوات'],
-                    ['en' => '4 Years', 'ar' => '4 سنوات'],
-                    ['en' => '5 Years', 'ar' => '5 سنوات'],
-                    ['en' => 'More than 5 years', 'ar' => 'أكثر من 5 سنوات'],
-                ]
-            ],
-            [
-                'name' => ['en' => 'Floor Number', 'ar' => 'رقم الدور'],
-                'type' => 'dropdown',
-                'choices' => [
-                    ['en' => 'Ground Floor', 'ar' => 'الدور الأرضي'],
-                    ['en' => 'First Floor', 'ar' => 'الدور الأول'],
-                    ['en' => 'Second Floor', 'ar' => 'الدور الثاني'],
-                    ['en' => 'Third Floor', 'ar' => 'الدور الثالث'],
-                    ['en' => 'Fourth Floor', 'ar' => 'الدور الرابع'],
-                    ['en' => 'Fifth Floor or higher', 'ar' => 'الدور الخامس أو أعلى'],
-                    ['en' => 'Rooftop', 'ar' => 'السطح'],
                 ]
             ],
             [

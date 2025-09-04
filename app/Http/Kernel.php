@@ -74,6 +74,6 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-        //
+        'is_agency' => \App\Http\Middleware\IsAgency::class,
     ];
 } 

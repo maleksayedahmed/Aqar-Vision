@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use App\Notifications\AdStatusUpdated;
+use Illuminate\Http\JsonResponse;
 
 class AdController extends Controller
 {
@@ -24,17 +25,29 @@ class AdController extends Controller
     {
         $query = Ad::with(['user', 'district.city', 'propertyType']);
 
+        // Apply text search and location filters first
         if ($request->filled('search')) {
             $query->where('title', 'LIKE', '%' . $request->search . '%');
-        }
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
         }
         if ($request->filled('city_id')) {
             $query->whereHas('district', fn($q) => $q->where('city_id', $request->city_id));
         }
 
-        $ads = $query->latest()->paginate(15)->withQueryString();
+        // ** THIS IS THE MODIFIED LOGIC **
+        if ($request->filled('status')) {
+            // If a specific status is filtered, use it.
+            $query->where('status', $request->status);
+        } else {
+            // If no status is specified, we create a custom order.
+            // This will show all 'pending' ads first, then all other statuses.
+            $query->orderByRaw("FIELD(status, 'pending') DESC");
+        }
+        
+        // Always sort the results by the newest first as a secondary criteria.
+        $query->latest();
+        // ** END OF MODIFICATION **
+
+        $ads = $query->paginate(15)->withQueryString();
         $cities = City::where('is_active', true)->orderBy('name')->get();
 
         return view('admin.ads.index', compact('ads', 'cities'));
@@ -196,4 +209,45 @@ class AdController extends Controller
              $validatedData['features'] = array_filter($validatedData['features'], fn($value) => $value !== null && $value !== '');
         }
     }
+
+    public function approve(Ad $ad): RedirectResponse
+    {
+        if ($ad->status === 'pending') {
+            $ad->update(['status' => 'active']);
+            $ad->user->notify(new AdStatusUpdated($ad));
+            return back()->with('success', 'Ad approved successfully.');
+        }
+        return back()->with('error', 'This ad is not pending approval.');
+    }
+    /**
+     * Reject a pending ad with a reason.
+     */
+    public function reject(Request $request, Ad $ad): RedirectResponse|JsonResponse
+    {
+        if ($ad->status === 'pending') {
+            $request->validate(['rejection_reason' => 'nullable|string|max:1000']);
+            
+            $ad->status = 'rejected';
+            // Optional: Save the rejection reason if you have a column for it
+            // $ad->rejection_reason = $request->rejection_reason;
+            $ad->save();
+            
+            $ad->user->notify(new AdStatusUpdated($ad, $request->rejection_reason));
+
+            // This is still correct for AJAX requests
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Ad rejected successfully.']);
+            }
+
+            return back()->with('success', 'Ad rejected successfully.');
+        }
+
+        // This is still correct for AJAX requests
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'This ad is not pending approval.'], 422);
+        }
+        
+        return back()->with('error', 'This ad is not pending approval.');
+    }
+
 }
