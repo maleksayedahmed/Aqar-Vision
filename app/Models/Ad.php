@@ -95,4 +95,9 @@ class Ad extends Model
     {
         return $this->belongsTo(PropertyType::class);
     }
+    public function agency()
+    {
+        // An Ad has one Agency through its User's Agent profile.
+        return $this->hasOneThrough(Agency::class, Agent::class, 'user_id', 'id', 'user_id', 'agency_id');
+    }
 }
