@@ -160,8 +160,6 @@ class AdController extends Controller
             'listing_purpose' => 'required|in:sale,rent',
             'total_price' => 'required|numeric|min:0',
             'area_sq_meters' => 'required|numeric|min:0',
-            'rooms' => 'required|integer|min:0',
-            'bathrooms' => 'required|integer|min:0',
             'age_years' => 'nullable|integer|min:0',
             'is_mortgaged' => 'required|boolean',
             'features' => 'nullable|array',
@@ -170,8 +168,6 @@ class AdController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:5120',
             'video' => 'nullable|file|mimes:mp4,mov,webm|max:51200',
-            
-            // THE CRUCIAL FIX IS ADDING THIS LINE:
             'delete_images' => 'nullable|array',
         ]);
     }
