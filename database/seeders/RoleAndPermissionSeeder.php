@@ -18,27 +18,37 @@ class RoleAndPermissionSeeder extends Seeder
             'create properties',
             'edit properties',
             'delete properties',
+            'manage agencies',
             'manage users',
             'manage roles',
             'manage permissions',
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+                Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
         // Create roles and assign permissions
-        $adminRole = Role::create(['name' => 'admin']);
+            $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $adminRole->givePermissionTo(Permission::all());
 
-        $agentRole = Role::create(['name' => 'agent']);
+            $agentRole = Role::firstOrCreate(['name' => 'agent', 'guard_name' => 'web']);
         $agentRole->givePermissionTo([
             'view properties',
             'create properties',
             'edit properties',
         ]);
 
-        $userRole = Role::create(['name' => 'user']);
+        // Agency role: can manage its properties and agencies
+            $agencyRole = Role::firstOrCreate(['name' => 'agency', 'guard_name' => 'web']);
+            $agencyRole->givePermissionTo([
+                'view properties',
+                'create properties',
+                'edit properties',
+                'manage agencies',
+            ]);
+
+            $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
         $userRole->givePermissionTo([
             'view properties',
         ]);

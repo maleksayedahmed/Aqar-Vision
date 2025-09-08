@@ -68,12 +68,4 @@ class Kernel extends HttpKernel
         'lang' => \App\Http\Middleware\Language::class,
     ];
 
-    /**
-     * Register any other middleware.
-     *
-     * @var array<string, class-string|string>
-     */
-    protected $routeMiddleware = [
-        'is_agency' => \App\Http\Middleware\IsAgency::class,
-    ];
 } 

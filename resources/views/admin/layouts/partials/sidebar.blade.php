@@ -48,12 +48,7 @@
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-user-follow"></use></svg> Agents
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('admin.agency-types.*') ? 'active' : '' }}" href="{{ route('admin.agency-types.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-building"></use></svg> {{ __('attributes.agency_types.title') }}
-            </a>
-        </li>
-
+        
         <li class="nav-title">Property Management</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.properties.*') ? 'active' : '' }}" href="{{ route('admin.properties.index') }}">

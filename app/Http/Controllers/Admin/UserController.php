@@ -7,7 +7,8 @@ use App\Http\Requests\Admin\User\StoreUserRequest;
 use App\Http\Requests\Admin\User\UpdateUserRequest;
 use App\Models\User;
 use App\Models\Agent;
-use App\Models\AgentType; // <-- IMPORT THE AGENT TYPE MODEL
+use App\Models\AgentType;
+use App\Models\Agency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -64,29 +65,26 @@ class UserController extends Controller
         }
 
         if ($newRole === 'agent') {
-            // Find a default agent type to assign
             $defaultAgentType = AgentType::where('is_active', true)->orderBy('id')->first();
-
-            // Safety check: Make sure an agent type exists
             if (!$defaultAgentType) {
-                // Manually delete the user we just created to avoid an orphaned user account
-                $user->delete();
-                return redirect()->back()
-                    ->withInput()
-                    ->with('error', 'Cannot create agent profile because no active Agent Types are configured. Please create an Agent Type first.');
+                $user->delete(); // Clean up
+                return redirect()->back()->withInput()->with('error', 'Cannot create agent profile: No active Agent Types exist. Please create one first.');
             }
-
             Agent::create([
+                'user_id' => $user->id, 'full_name' => $user->name, 'email' => $user->email,
+                'phone_number' => $user->phone, 'agent_type_id' => $defaultAgentType->id,
+            ]);
+        } 
+        elseif ($newRole === 'agency') {
+            Agency::create([
                 'user_id' => $user->id,
-                'full_name' => $user->name,
+                'agency_name' => ['en' => $user->name, 'ar' => $user->name],
                 'email' => $user->email,
-                'phone_number' => $user->phone,
-                'agent_type_id' => $defaultAgentType->id, // Assign the default type ID
+                // agency_type_id is omitted, allowing it to be null
             ]);
         }
 
-        return redirect()->route('admin.users.index')
-            ->with('success', __('messages.created_successfully'));
+        return redirect()->route('admin.users.index')->with('success', __('messages.created_successfully'));
     }
 
     /**
@@ -115,37 +113,38 @@ class UserController extends Controller
         $data['is_active'] = $request->has('is_active');
         $user->update($data);
 
-        // Logic for syncing agent profiles
+        // --- Logic for syncing Agent/Agency profiles based on role change ---
+
         if ($newRole === 'agent' && $originalRole !== 'agent') {
             $defaultAgentType = AgentType::where('is_active', true)->orderBy('id')->first();
-
             if (!$defaultAgentType) {
-                // Don't change the role if we can't create the agent profile
-                return redirect()->back()
-                    ->withInput()
-                    ->with('error', 'Cannot assign agent role because no active Agent Types are configured. Please create an Agent Type first.');
+                return redirect()->back()->withInput()->with('error', 'Cannot assign agent role: No active Agent Types exist.');
             }
-
-            Agent::updateOrCreate(
+            Agent::updateOrCreate(['user_id' => $user->id], [
+                'full_name' => $user->name, 'email' => $user->email,
+                'phone_number' => $user->phone, 'agent_type_id' => $defaultAgentType->id,
+            ]);
+        } 
+        elseif ($newRole === 'agency' && $originalRole !== 'agency') {
+            Agency::updateOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'full_name' => $user->name,
+                    'agency_name' => ['en' => $user->name, 'ar' => $user->name],
                     'email' => $user->email,
-                    'phone_number' => $user->phone,
-                    'agent_type_id' => $defaultAgentType->id, // Assign the default type ID
+                    // agency_type_id is omitted, allowing it to be null
                 ]
             );
         }
         elseif ($newRole !== 'agent' && $originalRole === 'agent') {
-            // Find and delete the associated agent record
             $user->agent()->delete();
         }
+        elseif ($newRole !== 'agency' && $originalRole === 'agency') {
+            $user->agency()->delete();
+        }
 
-        // Finally, sync the role in the users table
         $user->syncRoles($newRole ? [$newRole] : []);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', __('messages.updated_successfully'));
+        return redirect()->route('admin.users.index')->with('success', __('messages.updated_successfully'));
     }
 
     /**
@@ -154,16 +153,12 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         if ($user->id === auth()->id()) {
-            return redirect()->route('admin.users.index')
-                ->with('error', __('messages.cannot_delete_self'));
+            return redirect()->route('admin.users.index')->with('error', __('messages.cannot_delete_self'));
         }
-
         $user->agent()->delete();
         $user->agency()->delete();
-
         $user->delete();
-        return redirect()->route('admin.users.index')
-            ->with('success', __('messages.deleted_successfully'));
+        return redirect()->route('admin.users.index')->with('success', __('messages.deleted_successfully'));
     }
 
     /**
@@ -172,11 +167,21 @@ class UserController extends Controller
     public function toggleStatus(User $user)
     {
         if ($user->id === auth()->id()) {
-            return redirect()->route('admin.users.index')
-                ->with('error', __('messages.cannot_deactivate_self'));
+            return redirect()->route('admin.users.index')->with('error', __('messages.cannot_deactivate_self'));
         }
         $user->update(['is_active' => !$user->is_active]);
-        return redirect()->route('admin.users.index')
-            ->with('success', __('messages.status_updated_successfully'));
+        return redirect()->route('admin.users.index')->with('success', __('messages.status_updated_successfully'));
+    }
+    
+    /**
+     * Fetch user details for AJAX requests.
+     */
+    public function getDetails(User $user)
+    {
+        return response()->json([
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+        ]);
     }
 }

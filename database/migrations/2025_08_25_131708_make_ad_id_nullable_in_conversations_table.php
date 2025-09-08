@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -24,6 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        DB::table('conversations')->whereNull('ad_id')->delete();
         Schema::table('conversations', function (Blueprint $table) {
             // This is the reverse operation, useful if you ever need to roll back.
             $table->unsignedBigInteger('ad_id')->nullable(false)->change();
