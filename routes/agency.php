@@ -5,6 +5,7 @@ use App\Http\Controllers\Agency\DashboardController;
 use App\Http\Controllers\Agency\ProfileController;
 use App\Http\Controllers\Agency\AgentController;
 use App\Http\Controllers\Agency\AdController;
+use App\Http\Controllers\Agency\PropertyController;
 
 // All routes are protected by the 'auth' and new 'is_agency' middleware.
 Route::middleware(['auth', 'is_agency'])
@@ -23,4 +24,5 @@ Route::middleware(['auth', 'is_agency'])
 
     // Agency's management of its agents' ads
     Route::resource('ads', AdController::class)->except(['store']); // Agency doesn't create ads directly
+    Route::resource('properties', PropertyController::class);
 });

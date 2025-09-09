@@ -1,28 +1,60 @@
-@extends('admin.layouts.app') {{-- Reusing the admin layout for consistent styling --}}
+<!DOCTYPE html>
+<html lang="en">
 
-@section('content')
-    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
-        @include('agency.layouts.header') {{-- Agency-specific header if needed --}}
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
+    <meta name="author" content="Łukasz Holeczek">
+    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+    <title>@yield('title', 'Aqar Vision Agency')</title>
+    <!-- Favicon and Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/favicon/apple-icon-180x180.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('assets/img/favicon/manifest.json') }}">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendors styles-->
+    <link rel="stylesheet" href="{{ asset('assets/css/vendors/simplebar.css') }}">
+    <!-- Main styles for this application-->
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/examples.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
+    @stack('styles')
+</head>
 
-        <div class="body flex-grow-1 px-3">
-            <div class="container-lg">
+<body>
+    @include('agency.layouts.partials.sidebar')
+    <div class="wrapper d-flex flex-column min-vh-100">
+        @include('agency.layouts.partials.navbar')
+        <div class="body flex-grow-1">
+            <div class="container-lg px-4">
                 @if(session('success'))
-                    <div class="alert alert-success" role="alert">{{ session('success') }}</div>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 @endif
                 @if(session('error'))
-                    <div class="alert alert-danger" role="alert">{{ session('error') }}</div>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 @endif
-                
-                @yield('agency-content')
+                @yield('content')
             </div>
         </div>
-        
-        <footer class="footer">
-            <div><a href="#">{{ auth()->user()->agency->agency_name ?? 'Agency' }}</a> © {{ date('Y') }}.</div>
-        </footer>
+        @include('agency.layouts.partials.footer')
     </div>
-@endsection
+    <!-- CoreUI and necessary plugins-->
+    <script src="{{ asset('assets/js/coreui.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/simplebar.min.js') }}"></script>
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+    <script src="{{ asset('assets/js/color-modes.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+    @stack('scripts')
+</body>
 
-@push('scripts')
-    @stack('agency-scripts')
-@endpush
+</html>
