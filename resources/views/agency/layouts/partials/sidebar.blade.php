@@ -9,26 +9,26 @@
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('agency.dashboard') ? 'active' : '' }}" href="{{ route('agency.dashboard') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-speedometer"></use></svg> Dashboard
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-speedometer"></use></svg> {{ __('attributes.dashboard.title') }}
             </a>
         </li>
 
-        <li class="nav-title">Agency Management</li>
+        <li class="nav-title">{{ __('attributes.nav.agency_management') }}</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('agency.agents.*') ? 'active' : '' }}" href="{{ route('agency.agents.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-user-follow"></use></svg> Agents
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-user-follow"></use></svg> {{ __('attributes.agents.title') }}
             </a>
         </li>
         
-        <li class="nav-title">Property Management</li>
+        <li class="nav-title">{{ __('attributes.nav.property_management') }}</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('agency.properties.*') ? 'active' : '' }}" href="{{ route('agency.properties.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-house"></use></svg> Properties
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-house"></use></svg> {{ __('attributes.properties.title') }}
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('agency.ads.*') ? 'active' : '' }}" href="{{ route('agency.ads.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-newspaper"></use></svg> Ads Management
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-newspaper"></use></svg> {{ __('attributes.ads.title') }}
             </a>
         </li>
     </ul>
