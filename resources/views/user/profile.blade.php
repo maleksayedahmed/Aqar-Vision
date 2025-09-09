@@ -194,7 +194,16 @@
         $latestRequest = $user->latestUpgradeRequest;
         $isAgent = $user->agent !== null;
         $isAgency = $user->agency !== null;
-        $showCTA = !$isAgent && !$isAgency && (!$latestRequest || $latestRequest->status === 'rejected');
+
+        $showCTA = !$isAgent && !$isAgency && (
+            !$latestRequest ||
+            $latestRequest->status === 'rejected' ||
+            ($latestRequest->status === 'approved' && (
+                ($latestRequest->requested_role === 'agent' && !$user->agent) ||
+                ($latestRequest->requested_role === 'agency' && !$user->agency)
+            ))
+        );
+
         $hasPendingRequest = $latestRequest && $latestRequest->status === 'pending';
         $hasApprovedRequest = $latestRequest && $latestRequest->status === 'approved';
         $hasRejectedRequest = $latestRequest && $latestRequest->status === 'rejected';
@@ -213,6 +222,12 @@
                     تحويل الحساب
                 </button>
             </div>
+        </div>
+    @endif
+
+    @if($isAgency)
+        <div class="mt-6">
+            <a href="{{ route('agency.dashboard') }}" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700">الذهاب إلى لوحة التحكم الخاصة بالشركة</a>
         </div>
     @endif
 

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use App\Models\AgencyUpgradeRequest;
 
 class UserRequestController extends Controller
 {
@@ -26,18 +27,41 @@ class UserRequestController extends Controller
             'requested_role' => 'required|in:agent,agency',
             'fal_license' => 'nullable|string|max:255',
             'license_issue_date' => 'nullable|date',
-            'license_expiry_date' => 'nullable|date|after:license_issue_date'
+            'license_expiry_date' => 'nullable|date|after:license_issue_date',
+            // allow optional name/phone to be provided with the upgrade request and used to fill missing profile data
+            'name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:255',
+            'agency_name' => 'required_if:requested_role,agency|string|max:255',
+            'agency_type_id' => 'required_if:requested_role,agency|exists:agency_types,id',
+            'commercial_register_number' => 'nullable|string|max:255',
+            'commercial_issue_date' => 'nullable|date',
+            'commercial_expiry_date' => 'nullable|date|after:commercial_issue_date',
+            'tax_id' => 'nullable|string|max:255',
+            'tax_issue_date' => 'nullable|date',
+            'tax_expiry_date' => 'nullable|date|after:tax_issue_date',
+            'address' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
         ]);
 
         $user = Auth::user();
 
-        // Check if user has required data for upgrade request
-        if (empty($user->name) || empty($user->phone)) {
+        // Check if user has required data for upgrade request, using either form input or existing user data
+        $userName = $request->filled('name') ? $request->input('name') : $user->name;
+        $userPhone = $request->filled('phone') ? $request->input('phone') : $user->phone;
+        
+        if (empty($userName) || empty($userPhone)) {
             return response()->json([
                 'message' => 'يجب إكمال جميع البيانات الشخصية (الاسم ورقم الهاتف) قبل إرسال طلب الترقية.',
                 'error' => true
             ], 422);
         }
+        
+        // Update user profile with the provided or existing values
+        $user->update([
+            'name' => $userName,
+            'phone' => $userPhone
+        ]);
 
         // Prevent agents/agencies from submitting another request
         if ($user->agent || $user->agency) {
@@ -114,6 +138,23 @@ class UserRequestController extends Controller
             'requested_role' => $request->requested_role,
             'license_id' => $licenseId,
         ]);
+
+        if ($request->requested_role === 'agency') {
+            AgencyUpgradeRequest::create([
+                'upgrade_request_id' => $newRequest->id,
+                'agency_name' => $request->agency_name,
+                'agency_type_id' => $request->agency_type_id,
+                'commercial_register_number' => $request->commercial_register_number,
+                'commercial_issue_date' => $request->commercial_issue_date,
+                'commercial_expiry_date' => $request->commercial_expiry_date,
+                'tax_id' => $request->tax_id,
+                'tax_issue_date' => $request->tax_issue_date,
+                'tax_expiry_date' => $request->tax_expiry_date,
+                'address' => $request->address,
+                'phone_number' => $request->phone_number,
+                'email' => $request->email,
+            ]);
+        }
 
         // 3. Create the corresponding Agent/Agency record immediately for requests
         if ($request->requested_role === 'agent') {

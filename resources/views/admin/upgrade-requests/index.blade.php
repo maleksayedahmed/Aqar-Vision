@@ -67,6 +67,9 @@
                             @endif
                         </td>
                         <td>
+                            @if($request->requested_role == 'agency')
+                                <a href="{{ route('admin.upgrade-requests.show', $request) }}" class="btn btn-info btn-sm">View Details</a>
+                            @endif
                             @if($request->status == 'pending')
                                 <form action="{{ route('admin.upgrade-requests.approve', $request) }}" method="POST" class="d-inline">
                                     @csrf

@@ -79,6 +79,7 @@ Route::middleware(['auth' ,Language::class])
     Route::resource('commercial-records', CommercialRecordController::class)->except('show');
 
     Route::get('upgrade-requests', [UpgradeRequestController::class, 'index'])->name('upgrade-requests.index');
+    Route::get('upgrade-requests/{upgradeRequest}', [UpgradeRequestController::class, 'show'])->name('upgrade-requests.show');
     Route::post('upgrade-requests/{upgradeRequest}/approve', [UpgradeRequestController::class, 'approve'])->name('upgrade-requests.approve');
     Route::post('upgrade-requests/{upgradeRequest}/reject', [UpgradeRequestController::class, 'reject'])->name('upgrade-requests.reject');
 });

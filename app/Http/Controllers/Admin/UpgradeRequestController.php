@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use App\Models\AgencyUpgradeRequest;
 
 class UpgradeRequestController extends Controller
 {
@@ -27,6 +28,16 @@ class UpgradeRequestController extends Controller
             ->paginate(20);
 
         return view('admin.upgrade-requests.index', compact('requests'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(UpgradeRequest $upgradeRequest)
+    {
+        $upgradeRequest->load('user', 'agencyUpgradeRequest.agencyType');
+
+        return view('admin.upgrade-requests.show', ['request' => $upgradeRequest]);
     }
 
     /**
@@ -57,15 +68,21 @@ class UpgradeRequestController extends Controller
                 ]);
             }
         } elseif ($role === 'agency' && !$user->agency) {
-            // Find a default agency type
-            $defaultAgencyType = AgencyType::where('is_active', true)->orderBy('id')->first();
-            if ($defaultAgencyType) {
+            $agencyUpgradeRequest = $upgradeRequest->agencyUpgradeRequest;
+            if ($agencyUpgradeRequest) {
                 Agency::create([
                     'user_id' => $user->id,
-                    'agency_name' => $user->name,
-                    'email' => $user->email,
-                    'phone_number' => $user->phone,
-                    'agency_type_id' => $defaultAgencyType->id,
+                    'agency_name' => $agencyUpgradeRequest->agency_name,
+                    'agency_type_id' => $agencyUpgradeRequest->agency_type_id,
+                    'commercial_register_number' => $agencyUpgradeRequest->commercial_register_number,
+                    'commercial_issue_date' => $agencyUpgradeRequest->commercial_issue_date,
+                    'commercial_expiry_date' => $agencyUpgradeRequest->commercial_expiry_date,
+                    'tax_id' => $agencyUpgradeRequest->tax_id,
+                    'tax_issue_date' => $agencyUpgradeRequest->tax_issue_date,
+                    'tax_expiry_date' => $agencyUpgradeRequest->tax_expiry_date,
+                    'address' => $agencyUpgradeRequest->address,
+                    'phone_number' => $agencyUpgradeRequest->phone_number,
+                    'email' => $agencyUpgradeRequest->email,
                 ]);
             }
         }
@@ -76,6 +93,9 @@ class UpgradeRequestController extends Controller
             'processed_by' => Auth::id(),
             'processed_at' => now(),
         ]);
+
+        // 5. Send notification to user
+        $user->notify(new \App\Notifications\UpgradeRequestStatusChanged($upgradeRequest));
 
         return back()->with('success', "تم الموافقة على الطلب. المستخدم {$user->name} أصبح الآن {$role} نشط.");
     }
@@ -108,7 +128,10 @@ class UpgradeRequestController extends Controller
             'license_id' => null, // Remove license reference
         ]);
 
-        // 4. Respond based on the request type
+        // 4. Send notification to user
+        $upgradeRequest->user->notify(new \App\Notifications\UpgradeRequestStatusChanged($upgradeRequest));
+
+        // 5. Respond based on the request type
         if ($request->wantsJson()) {
             return response()->json(['message' => 'تم رفض الطلب بنجاح.']);
         }

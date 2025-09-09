@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\AgencyType;
 
 class ProfileController extends Controller
 {
@@ -28,6 +29,7 @@ class ProfileController extends Controller
         // If they are not an agent, proceed as normal and show the default profile view.
         return view('profile.edit', [
             'user' => $user,
+            'agencyTypes' => AgencyType::all(),
         ]);
     }
 

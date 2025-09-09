@@ -49,10 +49,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    // Show/hide agency fields
+    const agencyFields = document.getElementById('agency-fields');
+    const toggleAgencyFields = () => {
+        const selectedRole = upgradeForm.querySelector('input[name="requested_role"]:checked');
+        if (agencyFields) {
+            if (selectedRole && selectedRole.value === 'agency') {
+                agencyFields.classList.remove('hidden');
+            } else {
+                agencyFields.classList.add('hidden');
+            }
+        }
+    };
+
     // Event listeners
     openModalBtn.addEventListener('click', () => {
         showUpgradeModal();
         toggleFalLicenseField(); // Show/hide field when modal opens
+    toggleAgencyFields();
     });
 
     closeModalBtn.addEventListener('click', hideUpgradeModal);
@@ -69,11 +83,13 @@ document.addEventListener('DOMContentLoaded', function () {
     upgradeForm.addEventListener('change', function(e) {
         if (e.target.name === 'requested_role') {
             toggleFalLicenseField();
+            toggleAgencyFields();
         }
     });
 
     // Initialize field visibility
     toggleFalLicenseField();
+    toggleAgencyFields();
 
 
     // AJAX form submission
@@ -110,8 +126,24 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             if (!response.ok) {
-                errorDiv.textContent = data.message || 'حدث خطأ غير معروف.';
-                errorDiv.classList.remove('hidden');
+                // If validation errors are returned, show them as a list
+                if (data.errors && typeof data.errors === 'object') {
+                    const ul = document.createElement('ul');
+                    ul.classList.add('list-disc', 'list-inside', 'space-y-1');
+                    Object.keys(data.errors).forEach(function(key) {
+                        data.errors[key].forEach(function(msg) {
+                            const li = document.createElement('li');
+                            li.textContent = msg;
+                            ul.appendChild(li);
+                        });
+                    });
+                    errorDiv.innerHTML = '';
+                    errorDiv.appendChild(ul);
+                    errorDiv.classList.remove('hidden');
+                } else {
+                    errorDiv.textContent = data.message || 'حدث خطأ غير معروف.';
+                    errorDiv.classList.remove('hidden');
+                }
             } else {
                 hideUpgradeModal();
                 showSuccessAlert(data.message);
