@@ -19,6 +19,11 @@
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-user-follow"></use></svg> {{ __('attributes.agents.title') }}
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('agency.notifications') ? 'active' : '' }}" href="{{ route('agency.notifications') }}">
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-bell"></use></svg> Notifications
+            </a>
+        </li>
         
         <li class="nav-title">{{ __('attributes.nav.property_management') }}</li>
         <li class="nav-item">

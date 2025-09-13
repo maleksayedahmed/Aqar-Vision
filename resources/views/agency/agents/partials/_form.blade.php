@@ -8,11 +8,11 @@
 <h5 class="mb-3">User Account Details</h5>
 <div class="row">
     <div class="col-md-6 mb-3">
-        <label for="name">Full Name</label>
+        <label for="name">{{__('attributes.agencies.email')}}</label>
         <input type="text" name="name" class="form-control" value="{{ old('name', $agent->user->name ?? '') }}" required>
     </div>
     <div class="col-md-6 mb-3">
-        <label for="email">Email Address</label>
+        <label for="email">@lang('attributes.agencies.email')</label>
         <input type="email" name="email" class="form-control" value="{{ old('email', $agent->user->email ?? '') }}" required>
     </div>
     <div class="col-md-6 mb-3">

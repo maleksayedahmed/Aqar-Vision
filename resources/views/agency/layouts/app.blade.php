@@ -23,6 +23,8 @@
     <link href="{{ asset('assets/css/examples.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
     @stack('styles')
+        <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
 <body>
@@ -43,7 +45,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                @yield('content')
+                @yield('agency-content')
             </div>
         </div>
         @include('agency.layouts.partials.footer')

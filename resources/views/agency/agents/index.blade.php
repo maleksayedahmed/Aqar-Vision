@@ -5,6 +5,7 @@
     <div class="card-header d-flex justify-content-between">
         <h5 class="mb-0">Manage Your Agents</h5>
         <a href="{{ route('agency.agents.create') }}" class="btn btn-primary btn-sm">Add New Agent</a>
+        <a href="{{ route('agency.agents.invite') }}" class="btn btn-success btn-sm">Invite Agent</a>
     </div>
     <div class="table-responsive">
         <table class="table table-vcenter card-table">
@@ -33,7 +34,12 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('agency.agents.edit', $agent) }}">Edit</a>
+                            <a href="{{ route('agency.agents.edit', $agent) }}" class="btn btn-info btn-sm">Edit</a>
+                            <form action="{{ route('agency.agents.removeFromAgency', $agent) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to remove this agent from your agency? Their account will not be deleted.')">Remove from Agency</button>
+                            </form>
                         </td>
                     </tr>
                 @empty

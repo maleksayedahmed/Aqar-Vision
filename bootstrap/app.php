@@ -16,7 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'is_agency' => \App\Http\Middleware\IsAgency::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

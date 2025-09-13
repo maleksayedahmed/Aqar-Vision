@@ -1,6 +1,6 @@
 @extends('agency.layouts.app')
 
-@section('content')
+@section('agency-content')
     <div class="container-fluid py-4">
         {{-- KPI Widgets --}}
         <div class="row">

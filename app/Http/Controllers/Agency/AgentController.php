@@ -7,6 +7,10 @@ use App\Models\Agent;
 use App\Models\User;
 use App\Models\City;
 use App\Models\AgentType;
+use App\Models\AgentInvitation;
+use App\Notifications\AgentInvitationNotification;
+use App\Notifications\AgentInvitationCancelledNotification;
+use App\Notifications\AgentRemovedFromAgencyNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -80,6 +84,103 @@ class AgentController extends Controller
     }
 
     /**
+     * Show the form for inviting a new agent.
+     */
+    public function showInviteForm(Request $request)
+    {
+        $query = $request->input('query');
+        $agents = User::whereHas('roles', function ($q) {
+            $q->where('name', 'agent');
+        })
+        ->whereDoesntHave('agent.agency') // Exclude agents already in an agency
+        ->when($query, function ($q) use ($query) {
+            $q->where(function ($q2) use ($query) {
+                $q2->where('name', 'like', "%{$query}%")
+                   ->orWhere('email', 'like', "%{$query}%");
+            })
+            ->orWhereHas('agent', function ($q2) use ($query) {
+                $q2->where('full_name', 'like', "%{$query}%")
+                   ->orWhere('email', 'like', "%{$query}%")
+                   ->orWhere('phone_number', 'like', "%{$query}%");
+            });
+        })
+        ->paginate(10);
+
+        $pendingInvitations = AgentInvitation::where('agency_id', $request->user()->agency->id)
+            ->where('status', 'pending')
+            ->with('agent.user')
+            ->get();
+
+        $pendingAgentIds = $pendingInvitations->pluck('agent_id')->toArray();
+
+        return view('agency.agents.invite', compact('agents', 'query', 'pendingInvitations', 'pendingAgentIds'));
+    }
+
+    /**
+     * Send an invitation to an agent.
+     */
+    public function sendInvitation(Request $request)
+    {
+        $request->validate([
+            'agent_id' => ['required', 'exists:agents,id'],
+        ]);
+
+        $agency = $request->user()->agency;
+        $agent = Agent::findOrFail($request->agent_id);
+
+        // Check if the agent is already in an agency
+        if ($agent->agency_id) {
+            return redirect()->back()->with('error', 'This agent is already part of an agency.');
+        }
+
+        // Check if an invitation has already been sent and is pending
+        $existingInvitation = AgentInvitation::where('agency_id', $agency->id)
+            ->where('agent_id', $agent->id)
+            ->where('status', 'pending')
+            ->first();
+
+        if ($existingInvitation) {
+            return redirect()->back()->with('info', 'An invitation has already been sent to this agent.');
+        }
+
+        // Create the invitation
+        $invitation = AgentInvitation::create([
+            'agency_id' => $agency->id,
+            'agent_id' => $agent->id,
+        ]);
+
+        // Send notification to the agent's user
+        $agent->user->notify(new AgentInvitationNotification($invitation));
+
+        return redirect()->route('agency.agents.invite')->with('success', 'Invitation sent successfully.');
+    }
+
+    /**
+     * Cancel a pending agent invitation.
+     */
+    public function cancelInvitation(Request $request, $invitationId)
+    {
+        $agency = $request->user()->agency;
+        $invitation = AgentInvitation::where('id', $invitationId)
+            ->where('agency_id', $agency->id)
+            ->where('status', 'pending')
+            ->firstOrFail();
+
+        // Notify the agent's user about cancellation
+        $agentUser = $invitation->agent->user;
+        if ($agentUser) {
+            // Delete the original invitation notification
+            $agentUser->notifications()->where('data->invitation_id', $invitation->id)->delete();
+            // Send cancellation notification
+            $agentUser->notify(new AgentInvitationCancelledNotification($invitation));
+        }
+
+        $invitation->delete();
+
+        return redirect()->route('agency.agents.invite')->with('success', 'Invitation cancelled successfully.');
+    }
+
+    /**
      * Show the form for editing the specified agent.
      */
     public function edit(Request $request, Agent $agent)
@@ -141,6 +242,31 @@ class AgentController extends Controller
         ]);
 
         return redirect()->route('agency.agents.index')->with('success', 'Agent updated successfully.');
+    }
+
+    /**
+     * Remove the specified agent from the agency.
+     */
+    public function removeFromAgency(Request $request, Agent $agent)
+    {
+        $agency = $request->user()->agency;
+        // Security Check: Ensure the agent belongs to the logged-in agency
+        if ($agent->agency_id !== $agency->id) {
+            abort(403);
+        }
+
+        $agentUser = $agent->user;
+
+        // Remove agent from the agency by setting agency_id to null
+        $agent->agency_id = null;
+        $agent->save();
+
+        // Notify the agent
+        if ($agentUser) {
+            $agentUser->notify(new AgentRemovedFromAgencyNotification($agency));
+        }
+
+        return redirect()->route('agency.agents.index')->with('success', 'Agent removed from the agency successfully.');
     }
 
     /**

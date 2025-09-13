@@ -25,9 +25,9 @@
     @stack('styles')
 </head>
 <body class="bg-white">
+    {{-- Guest-only modals are included below via partials --}}
 
-
-   @auth
+    @auth
         @if (Auth::user()->agent)
             @include('partials.agent-header')
         @else
@@ -460,6 +460,30 @@
     @stack('scripts')
     <script src="{{ asset('assets/js/auth-modals.js') }}"></script>
         <script src="{{ asset('assets/js/upgrade-modal.js') }}"></script>
+
+    <script>
+        // Auto-open login modal when URL contains ?openLogin=1 or ?openLogin
+        (function() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                if (params.has('openLogin')) {
+                    // values like openLogin=1, openLogin=true, or just ?openLogin
+                    const loginEmailModal = document.getElementById('login-email-modal');
+                    if (loginEmailModal) {
+                        // Use existing showModal helper if available, otherwise remove 'hidden'
+                        if (typeof showModal === 'function') {
+                            showModal(loginEmailModal);
+                        } else {
+                            loginEmailModal.classList.remove('hidden');
+                        }
+                    }
+                }
+            } catch (e) {
+                // silent fail — non-critical
+                console.error('openLogin auto-open script error:', e);
+            }
+        })();
+    </script>
 
 </body>
 </html>
