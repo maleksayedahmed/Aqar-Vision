@@ -24,6 +24,11 @@
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-bell"></use></svg> Notifications
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('agency.chat') ? 'active' : '' }}" href="{{ route('agency.chat') }}">
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-chat-bubble"></use></svg> {{ __('Chat') }}
+            </a>
+        </li>
         
         <li class="nav-title">{{ __('attributes.nav.property_management') }}</li>
         <li class="nav-item">

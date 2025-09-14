@@ -7,6 +7,7 @@ use App\Http\Controllers\Agency\AgentController;
 use App\Http\Controllers\Agency\AdController;
 use App\Http\Controllers\Agency\PropertyController;
 use App\Http\Middleware\Language;
+use App\Livewire\Agency\AgencyChatSystem;
 
 
 // All routes are protected by the 'auth' and new 'is_agency' middleware.
@@ -16,6 +17,7 @@ Route::middleware(['auth',Language::class, 'is_agency'])
     ->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/chat/{conversationId?}', AgencyChatSystem::class)->name('chat');
     
     // Agency's own profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
