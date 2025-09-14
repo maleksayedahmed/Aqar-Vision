@@ -19,10 +19,14 @@
                 @forelse($ads as $ad)
                     <tr>
                         <td>
-                            @if($ad->images && $ad->images[0])
-                                <img src="{{ Storage::url($ad->images[0]) }}" class="avatar avatar-sm me-3">
-                            @endif
-                            {{ $ad->title }}
+                            <div class="d-flex align-items-center">
+                                @if(!empty($ad->images) && is_array($ad->images) && !empty($ad->images[0]))
+                                    <img src="{{ Storage::url($ad->images[0]) }}" class="avatar avatar-sm me-3">
+                                @else
+                                    <img src="https://via.placeholder.com/100" class="avatar avatar-sm me-3">
+                                @endif
+                                <span class="text-sm">{{ $ad->title }}</span>
+                            </div>
                         </td>
                         <td>{{ $ad->user->name }}</td>
                         <td>

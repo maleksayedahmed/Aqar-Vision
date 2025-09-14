@@ -59,13 +59,18 @@ class UpgradeRequestController extends Controller
             // Find a default agent type to assign
             $defaultAgentType = AgentType::where('is_active', true)->orderBy('id')->first();
             if ($defaultAgentType) {
-                Agent::create([
+                $agent = Agent::create([
                     'user_id' => $user->id,
                     'full_name' => $user->name,
                     'email' => $user->email,
                     'phone_number' => $user->phone,
                     'agent_type_id' => $defaultAgentType->id,
                 ]);
+
+                // Link license to agent if it exists in the request
+                if ($upgradeRequest->license_id) {
+                    $upgradeRequest->license->update(['agent_id' => $agent->id]);
+                }
             }
         } elseif ($role === 'agency' && !$user->agency) {
             $agencyUpgradeRequest = $upgradeRequest->agencyUpgradeRequest;
@@ -105,21 +110,12 @@ class UpgradeRequestController extends Controller
      */
     public function reject(Request $request, UpgradeRequest $upgradeRequest): JsonResponse|RedirectResponse
     {
-        // 1. Find and delete the corresponding agent or agency profile and license
-        if ($upgradeRequest->user) {
-            if ($upgradeRequest->requested_role === 'agent' && $upgradeRequest->user->agent) {
-                $upgradeRequest->user->agent()->delete();
-            } elseif ($upgradeRequest->requested_role === 'agency' && $upgradeRequest->user->agency) {
-                $upgradeRequest->user->agency()->delete();
-            }
-        }
-
-        // 2. Delete associated license if it exists
+        // 1. Delete associated license if it exists
         if ($upgradeRequest->license) {
             $upgradeRequest->license->delete();
         }
 
-        // 3. Update the request status
+        // 2. Update the request status
         $upgradeRequest->update([
             'status' => 'rejected',
             'admin_notes' => $request->input('rejection_reason'),
@@ -128,14 +124,14 @@ class UpgradeRequestController extends Controller
             'license_id' => null, // Remove license reference
         ]);
 
-        // 4. Send notification to user
+        // 3. Send notification to user
         $upgradeRequest->user->notify(new \App\Notifications\UpgradeRequestStatusChanged($upgradeRequest));
 
-        // 5. Respond based on the request type
+        // 4. Respond based on the request type
         if ($request->wantsJson()) {
             return response()->json(['message' => 'تم رفض الطلب بنجاح.']);
         }
 
-        return back()->with('success', 'تم رفض الطلب وإزالة الملف الشخصي والرخصة المعلقة.');
+        return back()->with('success', 'تم رفض الطلب وإزالة الرخصة المعلقة.');
     }
 }

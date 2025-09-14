@@ -22,27 +22,39 @@ class UserRequestController extends Controller
 {
     public function store(Request $request): JsonResponse|RedirectResponse
     {
-        // Validate required data and role type
-        $request->validate([
+        // Core validation rules for all requests
+        $baseRules = [
             'requested_role' => 'required|in:agent,agency',
-            'fal_license' => 'nullable|string|max:255',
-            'license_issue_date' => 'nullable|date',
-            'license_expiry_date' => 'nullable|date|after:license_issue_date',
-            // allow optional name/phone to be provided with the upgrade request and used to fill missing profile data
             'name' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:255',
-            'agency_name' => 'required_if:requested_role,agency|string|max:255',
-            'agency_type_id' => 'required_if:requested_role,agency|exists:agency_types,id',
-            'commercial_register_number' => 'nullable|string|max:255',
-            'commercial_issue_date' => 'nullable|date',
-            'commercial_expiry_date' => 'nullable|date|after:commercial_issue_date',
-            'tax_id' => 'nullable|string|max:255',
-            'tax_issue_date' => 'nullable|date',
-            'tax_expiry_date' => 'nullable|date|after:tax_issue_date',
-            'address' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-        ]);
+        ];
+
+        // Role-specific validation rules
+        $roleRules = [];
+        if ($request->input('requested_role') === 'agent') {
+            $roleRules = [
+                'fal_license' => 'nullable|string|max:255',
+                'license_issue_date' => 'nullable|date',
+                'license_expiry_date' => 'nullable|date|after:license_issue_date',
+            ];
+        } elseif ($request->input('requested_role') === 'agency') {
+            $roleRules = [
+                'agency_name' => 'required|string|max:255',
+                'agency_type_id' => 'required|exists:agency_types,id',
+                'commercial_register_number' => 'nullable|string|max:255',
+                'commercial_issue_date' => 'nullable|date',
+                'commercial_expiry_date' => 'nullable|date|after:commercial_issue_date',
+                'tax_id' => 'nullable|string|max:255',
+                'tax_issue_date' => 'nullable|date',
+                'tax_expiry_date' => 'nullable|date|after:tax_issue_date',
+                'address' => 'nullable|string|max:255',
+                'phone_number' => 'nullable|string|max:255',
+                'email' => 'nullable|email|max:255',
+            ];
+        }
+
+        // Merge and validate
+        $request->validate(array_merge($baseRules, $roleRules));
 
         $user = Auth::user();
 
@@ -153,30 +165,6 @@ class UserRequestController extends Controller
                 'address' => $request->address,
                 'phone_number' => $request->phone_number,
                 'email' => $request->email,
-            ]);
-        }
-
-        // 3. Create the corresponding Agent/Agency record immediately for requests
-        if ($request->requested_role === 'agent') {
-            $agent = Agent::create([
-                'user_id' => $user->id,
-                'full_name' => $user->name,
-                'email' => $user->email,
-                'phone_number' => $user->phone,
-                'agent_type_id' => $defaultAgentType->id,
-            ]);
-
-            // Link license to agent if created
-            if ($licenseId) {
-                License::find($licenseId)->update(['agent_id' => $agent->id]);
-            }
-        } elseif ($request->requested_role === 'agency') {
-            Agency::create([
-                'user_id' => $user->id,
-                'agency_name' => $user->name,
-                'email' => $user->email,
-                'phone_number' => $user->phone,
-                'agency_type_id' => $defaultAgencyType->id,
             ]);
         }
 

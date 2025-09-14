@@ -24,26 +24,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
-                    <div class="card-body p-3">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Properties</p>
-                                    <h5 class="font-weight-bolder">{{ $propertiesCount ?? 0 }}</h5>
-                                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{ $newPropertiesLast7Days ?? 0 }}</span> New (7 days)</p>
-                                </div>
-                            </div>
-                            <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
-                                    <i class="fas fa-home text-lg opacity-10"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
             <div class="col-xl-4 col-sm-6">
                 <div class="card">
                     <div class="card-body p-3">
@@ -81,7 +62,7 @@
                                     <td class="w-30">
                                         <div class="d-flex px-2 py-1 align-items-center">
                                             <div>
-                                                <img src="{{ $ad->getFirstMediaUrl('images', 'thumb') ?: 'https://via.placeholder.com/100' }}" alt="img" width="40">
+                                                <img src="{{ !empty($ad->images) && is_array($ad->images) && !empty($ad->images[0]) ? Storage::url($ad->images[0]) : 'https://via.placeholder.com/100' }}" alt="img" width="40">
                                             </div>
                                             <div class="ms-4">
                                                 <p class="text-xs font-weight-bold mb-0">Title:</p>
@@ -107,44 +88,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 mb-lg-0 mb-4">
-                <div class="card ">
-                    <div class="card-header pb-0 p-3">
-                        <h6 class="mb-0">Latest Properties</h6>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table align-items-center ">
-                            <tbody>
-                                @forelse($latestProperties as $property)
-                                <tr>
-                                    <td class="w-30">
-                                        <div class="d-flex px-2 py-1 align-items-center">
-                                            <div>
-                                                <img src="{{ $property->getFirstMediaUrl('property_images', 'thumb') ?: 'https://via.placeholder.com/100' }}" alt="img" width="40">
-                                            </div>
-                                            <div class="ms-4">
-                                                <p class="text-xs font-weight-bold mb-0">Title:</p>
-                                                <h6 class="text-sm mb-0">{{ Str::limit($property->title, 30) }}</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Price:</p>
-                                            <h6 class="text-sm mb-0">${{ number_format($property->total_price) }}</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td class="text-center py-3">No properties found.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            
 
             <div class="col-lg-4">
                 <div class="card">
