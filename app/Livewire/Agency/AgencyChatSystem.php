@@ -26,11 +26,12 @@ class AgencyChatSystem extends Component
     {
         $this->agency = Auth::user()->agency;
 
-        // Explicitly query for agents to bypass any relationship issues
-        $agentModels = Agent::where('agency_id', $this->agency->id)->get();
-
-        $agentUserIds = $agentModels->pluck('user_id')->filter();
-        $this->agents = User::whereIn('id', $agentUserIds)->get();
+        if ($this->agency) {
+            $agentUserIds = $this->agency->agents->pluck('user_id')->filter();
+            $this->agents = User::whereIn('id', $agentUserIds)->get();
+        } else {
+            $this->agents = collect();
+        }
 
         $this->loadConversations();
 

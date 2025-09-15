@@ -32,11 +32,6 @@
         
         <li class="nav-title">{{ __('attributes.nav.property_management') }}</li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('agency.properties.*') ? 'active' : '' }}" href="{{ route('agency.properties.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-house"></use></svg> {{ __('attributes.properties.title') }}
-            </a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('agency.ads.*') ? 'active' : '' }}" href="{{ route('agency.ads.index') }}">
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-newspaper"></use></svg> {{ __('attributes.ads.title') }}
             </a>

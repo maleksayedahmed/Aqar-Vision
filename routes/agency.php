@@ -5,7 +5,6 @@ use App\Http\Controllers\Agency\DashboardController;
 use App\Http\Controllers\Agency\ProfileController;
 use App\Http\Controllers\Agency\AgentController;
 use App\Http\Controllers\Agency\AdController;
-use App\Http\Controllers\Agency\PropertyController;
 use App\Http\Middleware\Language;
 use App\Livewire\Agency\AgencyChatSystem;
 
@@ -17,7 +16,9 @@ Route::middleware(['auth',Language::class, 'is_agency'])
     ->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/chat/{conversationId?}', AgencyChatSystem::class)->name('chat');
+    Route::get('/chat/{conversationId?}', function () {
+        return view('agency.chat');
+    })->name('chat');
     
     // Agency's own profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -35,5 +36,4 @@ Route::middleware(['auth',Language::class, 'is_agency'])
 
     // Agency's management of its agents' ads
     Route::resource('ads', AdController::class)->except(['store']); // Agency doesn't create ads directly
-    Route::resource('properties', PropertyController::class);
 });

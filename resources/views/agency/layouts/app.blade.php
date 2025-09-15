@@ -22,9 +22,10 @@
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/examples.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    @livewireStyles
     @stack('styles')
-        <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
 <body>
@@ -55,7 +56,13 @@
     <script src="{{ asset('assets/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/js/config.js') }}"></script>
     <script src="{{ asset('assets/js/color-modes.js') }}"></script>
+    {{-- Chart.js should probably be loaded here with other plugins --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    
+    @livewireScripts
+
+    {{-- Pushed scripts that depend on Livewire/Alpine should be loaded last --}}
     @stack('scripts')
 </body>
 

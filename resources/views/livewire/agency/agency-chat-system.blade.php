@@ -100,6 +100,7 @@
     <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm">
         <h2 class="text-[28px] font-medium text-right text-[rgba(48,62,124,1)] mb-8">Agents</h2>
         <div class="flex flex-col gap-4">
+
             @forelse ($conversations as $item)
                 @php
                     $agentUser = $item->user;
@@ -137,6 +138,7 @@
 
 @push('scripts')
 <script>
+    console.log('Alpine version:', Alpine.version);
     document.addEventListener('alpine:init', () => {
         Alpine.data('chatBox', () => ({
             init() {
