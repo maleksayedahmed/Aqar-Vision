@@ -32,6 +32,7 @@
         <div class="flex gap-3 items-center h-[52px]">
             <label for="total_price" class="w-[80px] shrink-0 text-[11px] font-medium">سعر العقار<span class="text-red-500 mr-1">*</span></label>
             <input type="number" step="any" name="total_price" id="total_price" value="{{ old('total_price', $ad->total_price) }}" required placeholder="اضف سعر عقارك" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-medium text-gray-500">ريال</span>
         </div>
         <div class="flex gap-3 items-center h-[52px]">
             <label for="area_sq_meters" class="w-[80px] shrink-0 text-[11px] font-medium">المساحة (م²)<span class="text-red-500 mr-1">*</span></label>

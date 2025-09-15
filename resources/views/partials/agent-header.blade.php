@@ -26,7 +26,7 @@
             </div>
 
             <div class="flex items-center gap-x-4 lg:gap-x-[45px]">
-                <a href="{{ route('agent.ads.create') }}" class="hidden lg:flex bg-[rgba(48,63,125,1)] hover:bg-blue-700 text-white px-4 py-2 rounded-lg items-center gap-2 transition-colors duration-200 text-sm font-medium shadow-sm">
+                <a href="{{ route('agent.ads.create') }}" class="hidden lg:flex bg-[rgba(48,63,125,1)] hover:bg-[rgba(48,63,125,0.85)] text-white px-4 py-2 rounded-lg items-center gap-2 transition-colors duration-200 text-sm font-medium shadow-sm">
                     <img src="{{asset('images/plus.svg')}}" alt="">
                     <span>أضف إعلان </span>
                 </a>

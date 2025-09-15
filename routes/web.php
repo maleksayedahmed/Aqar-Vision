@@ -178,3 +178,7 @@ Route::middleware(['auth', 'role:agent'])->prefix('agent')->name('agent.')->grou
     Route::get('/invitations/{invitation}/reject', [InvitationController::class, 'reject'])->name('invitations.reject');
 
 });
+
+Route::get('/get-plans', function () {
+    return response()->json(App\Models\Plan::all());
+});

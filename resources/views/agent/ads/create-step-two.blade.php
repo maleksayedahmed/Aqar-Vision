@@ -21,7 +21,7 @@
                 <div class="hidden md:flex items-center gap-x-[27px]">
                     <span class="font-medium text-[16px] text-[rgba(181,183,191,1)]">بيانات العقار</span>
                     <div class="flex items-center gap-x-2">
-                        <img src="{{ asset('images/rode-active.svg') }}">
+                        <img src="{{ asset('images/rode.svg') }}">
                     </div>
                     <span class="font-medium text-[16px] text-[rgba(48,62,124,1)]">مستندات العقار</span>
                 </div>
