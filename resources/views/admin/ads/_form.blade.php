@@ -196,12 +196,12 @@
     <div class="form-section">
         <div class="section-header">
             <i class="fas fa-images"></i>
-            Media Management
+            @lang('admin.ads.media_management')
         </div>
         <div class="section-content">
             @if($ad->images && count($ad->images) > 0)
             <div class="mb-4">
-                <label class="form-label">Current Images <small class="text-muted">(Check to delete)</small></label>
+                <label class="form-label">@lang('admin.ads.current_images') <small class="text-muted">@lang('admin.ads.check_to_delete')</small></label>
                 <div class="d-flex flex-wrap gap-3 mt-2">
                     @foreach($ad->images as $imagePath)
                     <div class="media-container">
@@ -218,20 +218,20 @@
 
             <div class="form-group">
                 <label class="form-label" for="images">
-                    <i class="fas fa-upload me-2"></i>Upload New Images
+                    <i class="fas fa-upload me-2"></i>@lang('admin.ads.upload_new_images')
                 </label>
                 <div class="file-input-wrapper">
                     <input type="file" name="images[]" id="images" class="form-control" multiple accept="image/*">
                     <label for="images" class="file-input-label">
                         <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i><br>
-                        Click to select images or drag and drop
+                        @lang('admin.ads.click_to_select_images')
                     </label>
                 </div>
             </div>
 
             @if($ad->video_path)
             <div class="form-group mt-4">
-                <label class="form-label">Current Video</label>
+                <label class="form-label">@lang('admin.ads.current_video')</label>
                 <div class="video-container">
                     <video src="{{ Storage::url($ad->video_path) }}" controls class="w-100" style="max-width: 400px;"></video>
                 </div>
@@ -240,13 +240,13 @@
             
             <div class="form-group">
                 <label class="form-label" for="video">
-                    <i class="fas fa-video me-2"></i>Upload/Replace Video
+                    <i class="fas fa-video me-2"></i>@lang('admin.ads.upload_replace_video')
                 </label>
                 <div class="file-input-wrapper">
                     <input type="file" name="video" id="video" class="form-control" accept="video/*">
                     <label for="video" class="file-input-label">
                         <i class="fas fa-video fa-2x mb-2"></i><br>
-                        Click to select video file
+                        @lang('admin.ads.click_to_select_video')
                     </label>
                 </div>
             </div>
@@ -257,21 +257,21 @@
     <div class="form-section">
         <div class="section-header">
             <i class="fas fa-info-circle"></i>
-            Main Details
+            @lang('admin.ads.main_details')
         </div>
         <div class="section-content">
             <div class="row">
                 <div class="col-md-8">
                     <div class="form-group">
-                        <label class="form-label required-field" for="title">Property Title</label>
-                        <input type="text" name="title" class="form-control" value="{{ old('title', $ad->title) }}" required placeholder="Enter property title">
+                        <label class="form-label required-field" for="title">@lang('admin.ads.property_title')</label>
+                        <input type="text" name="title" class="form-control" value="{{ old('title', $ad->title) }}" required placeholder="@lang('admin.ads.enter_property_title')">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label class="form-label required-field" for="user_id">Property Owner</label>
+                        <label class="form-label required-field" for="user_id">@lang('admin.ads.property_owner')</label>
                         <select name="user_id" id="user_id" class="form-control" required>
-                            <option value="">Select an Owner</option>
+                            <option value="">@lang('admin.ads.select_an_owner')</option>
                             @foreach($users as $user)
                             <option value="{{ $user->id }}" {{ old('user_id', $ad->user_id) == $user->id ? 'selected' : '' }}>
                                 {{ $user->name }} ({{ $user->email }})
@@ -282,8 +282,8 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label class="form-label" for="description">Description</label>
-                        <textarea name="description" class="form-control" rows="4" placeholder="Describe the property features, location, and other details...">{{ old('description', $ad->description) }}</textarea>
+                        <label class="form-label" for="description">@lang('admin.ads.description')</label>
+                        <textarea name="description" class="form-control" rows="4" placeholder="@lang('admin.ads.describe_property')">{{ old('description', $ad->description) }}</textarea>
                     </div>
                 </div>
             </div>
@@ -294,15 +294,15 @@
     <div class="form-section">
         <div class="section-header">
             <i class="fas fa-home"></i>
-            Property Details
+            @lang('admin.ads.property_details')
         </div>
         <div class="section-content">
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label class="form-label required-field" for="property_type_id">Property Type</label>
+                        <label class="form-label required-field" for="property_type_id">@lang('admin.ads.property_type')</label>
                         <select name="property_type_id" class="form-control" required>
-                            <option value="">Select a Type</option>
+                            <option value="">@lang('admin.ads.select_a_type')</option>
                             @foreach($propertyTypes as $type)
                             <option value="{{ $type->id }}" {{ old('property_type_id', $ad->property_type_id) == $type->id ? 'selected' : '' }}>
                                 {{ $type->name }}
@@ -313,20 +313,20 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label class="form-label required-field" for="listing_purpose">Listing Purpose</label>
+                        <label class="form-label required-field" for="listing_purpose">@lang('admin.ads.listing_purpose')</label>
                         <select name="listing_purpose" class="form-control" required>
                             <option value="sale" {{ old('listing_purpose', $ad->listing_purpose) == 'sale' ? 'selected' : '' }}>
-                                <i class="fas fa-tag"></i> For Sale
+                                <i class="fas fa-tag"></i> @lang('admin.ads.for_sale')
                             </option>
                             <option value="rent" {{ old('listing_purpose', $ad->listing_purpose) == 'rent' ? 'selected' : '' }}>
-                                <i class="fas fa-key"></i> For Rent
+                                <i class="fas fa-key"></i> @lang('admin.ads.for_rent')
                             </option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label class="form-label required-field" for="total_price">Total Price</label>
+                        <label class="form-label required-field" for="total_price">@lang('admin.ads.total_price')</label>
                         <div class="input-group">
                             <input type="number" step="0.01" name="total_price" class="form-control" value="{{ old('total_price', $ad->total_price) }}" required placeholder="0.00">
                             <span class="input-group-text">SAR</span>
@@ -335,7 +335,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label class="form-label required-field" for="area_sq_meters">Area</label>
+                        <label class="form-label required-field" for="area_sq_meters">@lang('admin.ads.area')</label>
                         <div class="input-group">
                             <input type="number" step="0.01" name="area_sq_meters" class="form-control" value="{{ old('area_sq_meters', $ad->area_sq_meters) }}" required placeholder="0.00">
                             <span class="input-group-text">m²</span>
@@ -347,22 +347,22 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label" for="age_years">Property Age</label>
+                        <label class="form-label" for="age_years">@lang('admin.ads.property_age')</label>
                         <div class="input-group">
                             <input type="number" name="age_years" class="form-control" value="{{ old('age_years', $ad->age_years) }}" placeholder="0">
-                            <span class="input-group-text">Years</span>
+                            <span class="input-group-text">@lang('admin.ads.years')</span>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label" for="is_mortgaged">Mortgage Status</label>
+                        <label class="form-label" for="is_mortgaged">@lang('admin.ads.mortgage_status')</label>
                         <select name="is_mortgaged" class="form-control">
                             <option value="0" {{ old('is_mortgaged', $ad->is_mortgaged) == '0' ? 'selected' : '' }}>
-                                <i class="fas fa-check-circle text-success"></i> Not Mortgaged
+                                <i class="fas fa-check-circle text-success"></i> @lang('admin.ads.not_mortgaged')
                             </option>
                             <option value="1" {{ old('is_mortgaged', $ad->is_mortgaged) == '1' ? 'selected' : '' }}>
-                                <i class="fas fa-university text-warning"></i> Mortgaged
+                                <i class="fas fa-university text-warning"></i> @lang('admin.ads.mortgaged')
                             </option>
                         </select>
                     </div>
@@ -375,15 +375,15 @@
     <div class="form-section">
         <div class="section-header">
             <i class="fas fa-map-marker-alt"></i>
-            Location Details
+            @lang('admin.ads.location_details')
         </div>
         <div class="section-content">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label" for="city_id_select">City</label>
+                        <label class="form-label" for="city_id_select">@lang('admin.ads.city')</label>
                         <select id="city-select" class="form-control">
-                            <option value="">Select City</option>
+                            <option value="">@lang('admin.ads.select_city')</option>
                             @foreach($cities as $city)
                             <option value="{{ $city->id }}" {{ old('city_id', $ad->district?->city_id) == $city->id ? 'selected' : '' }}>
                                 {{ $city->name }}
@@ -394,9 +394,9 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label required-field" for="district_id">District</label>
+                        <label class="form-label required-field" for="district_id">@lang('admin.ads.district')</label>
                         <select name="district_id" id="district-select" class="form-control" required>
-                            <option value="">Select City First</option>
+                            <option value="">@lang('admin.ads.select_city_first')</option>
                             @if($ad->district)
                                 @foreach($districts as $district)
                                 <option value="{{ $district->id }}" {{ old('district_id', $ad->district_id) == $district->id ? 'selected' : '' }}>
@@ -411,7 +411,7 @@
             
             <div class="mt-4">
                 <label class="form-label">
-                    <i class="fas fa-map me-2"></i>Property Location <small class="text-muted">(Drag the marker to adjust)</small>
+                    <i class="fas fa-map me-2"></i>@lang('admin.ads.property_location') <small class="text-muted">@lang('admin.ads.drag_marker_to_adjust')</small>
                 </label>
                 <div id="map" class="w-100"></div>
             </div>
@@ -425,7 +425,7 @@
     <div class="form-section">
         <div class="section-header">
             <i class="fas fa-list-check"></i>
-            Property Features
+            @lang('admin.ads.property_features')
         </div>
         <div class="section-content">
             <div class="row">
@@ -450,7 +450,7 @@
     <div class="form-section">
         <div class="section-header">
             <i class="fas fa-cog"></i>
-            Additional Details
+            @lang('admin.ads.additional_details')
         </div>
         <div class="section-content">
             <div class="row">
@@ -464,7 +464,7 @@
                             <label class="form-label" for="attr_{{ $slug }}">{{ $attribute->name }}</label>
                             @if($attribute->type === 'dropdown')
                                 <select name="features[{{ $slug }}]" id="attr_{{ $slug }}" class="form-control">
-                                    <option value="">-- Select --</option>
+                                    <option value="">@lang('admin.ads.select')</option>
                                     @foreach($attribute->choices as $choice)
                                         <option value="{{ $choice['en'] }}" {{ $currentValue == $choice['en'] ? 'selected' : '' }}>
                                             {{ $choice[app()->getLocale()] ?? $choice['en'] }}
@@ -485,25 +485,25 @@
     <div class="form-section">
         <div class="section-header">
             <i class="fas fa-flag"></i>
-            Status & Moderation
+            @lang('admin.ads.status_moderation')
         </div>
         <div class="section-content">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label required-field" for="status">Status</label>
+                        <label class="form-label required-field" for="status">@lang('admin.ads.status')</label>
                         <select name="status" class="form-control" required>
                             <option value="pending" {{ old('status', $ad->status) == 'pending' ? 'selected' : '' }}>
-                                🟡 Pending Review
+                                🟡 @lang('admin.ads.pending_review')
                             </option>
                             <option value="active" {{ old('status', $ad->status) == 'active' ? 'selected' : '' }}>
-                                🟢 Active
+                                🟢 @lang('admin.ads.active')
                             </option>
                             <option value="rejected" {{ old('status', $ad->status) == 'rejected' ? 'selected' : '' }}>
-                                🔴 Rejected
+                                🔴 @lang('admin.ads.rejected')
                             </option>
                             <option value="expired" {{ old('status', $ad->status) == 'expired' ? 'selected' : '' }}>
-                                ⏰ Expired
+                                ⏰ @lang('admin.ads.expired')
                             </option>
                         </select>
                     </div>
@@ -511,7 +511,7 @@
                 <div class="col-md-6 d-flex align-items-end">
                     <div class="alert alert-info w-100">
                         <i class="fas fa-info-circle me-2"></i>
-                        <strong>Current Status:</strong> 
+                        <strong>@lang('admin.ads.current_status')</strong> 
                         <span class="status-badge status-{{ old('status', $ad->status) }}">
                             {{ ucfirst(old('status', $ad->status)) }}
                         </span>
@@ -526,10 +526,10 @@
 <div class="form-section">
     <div class="section-content text-center">
         <button type="submit" class="btn btn-primary btn-lg">
-            <i class="fas fa-save me-2"></i>Save Property Ad
+            <i class="fas fa-save me-2"></i>@lang('admin.ads.save_property_ad')
         </button>
         <a href="{{ url()->previous() }}" class="btn btn-secondary btn-lg ms-3">
-            <i class="fas fa-arrow-left me-2"></i>Cancel
+            <i class="fas fa-arrow-left me-2"></i>@lang('admin.ads.cancel')
         </a>
     </div>
 </div>
@@ -544,19 +544,19 @@
         
         function fetchDistricts(cityId, selectedDistrictId = null) {
             if (!cityId) { 
-                districtSelect.innerHTML = '<option value="">Select City First</option>'; 
+                districtSelect.innerHTML = '<option value="">@lang('admin.ads.select_city_first')</option>'; 
                 districtSelect.disabled = true; 
                 return; 
             }
             
             // Add loading state
-            districtSelect.innerHTML = '<option value="">Loading districts...</option>';
+            districtSelect.innerHTML = '<option value="">@lang('admin.ads.loading_districts')</option>';
             districtSelect.disabled = true;
             
             fetch(`/get-districts/${cityId}`)
                 .then(response => response.json())
                 .then(districts => {
-                    districtSelect.innerHTML = '<option value="">Select a District</option>';
+                    districtSelect.innerHTML = '<option value="">@lang('admin.ads.select_a_district')</option>';
                     districts.forEach(district => {
                         const option = new Option(district.name, district.id);
                         if (district.id == selectedDistrictId) { 
@@ -568,7 +568,7 @@
                 })
                 .catch(error => {
                     console.error('Error fetching districts:', error);
-                    districtSelect.innerHTML = '<option value="">Error loading districts</option>';
+                    districtSelect.innerHTML = '<option value="">@lang('admin.ads.error_loading_districts')</option>';
                 });
         }
         
@@ -607,9 +607,9 @@
                 const fileCount = this.files.length;
                 if (fileCount > 0) {
                     if (this.multiple) {
-                        label.innerHTML = `<i class="fas fa-check-circle fa-2x mb-2 text-success"></i><br>${fileCount} file(s) selected`;
+                        label.innerHTML = `<i class="fas fa-check-circle fa-2x mb-2 text-success"></i><br>${fileCount} @lang('admin.ads.files_selected')`;
                     } else {
-                        label.innerHTML = `<i class="fas fa-check-circle fa-2x mb-2 text-success"></i><br>File selected: ${this.files[0].name}`;
+                        label.innerHTML = `<i class="fas fa-check-circle fa-2x mb-2 text-success"></i><br>@lang('admin.ads.file_selected') ${this.files[0].name}`;
                     }
                     label.style.background = '#d4edda';
                     label.style.borderColor = '#28a745';
@@ -648,7 +648,7 @@
                 
                 if (hasErrors) {
                     e.preventDefault();
-                    alert('Please fill in all required fields.');
+                    alert('@lang('admin.ads.fill_required_fields')');
                 }
             });
         }

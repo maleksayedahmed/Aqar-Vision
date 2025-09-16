@@ -1,6 +1,6 @@
 @extends('agency.layouts.app')
 
-@section('title', 'Chat')
+@section('title', __('agency.chat.title'))
 
 @section('agency-content')
 

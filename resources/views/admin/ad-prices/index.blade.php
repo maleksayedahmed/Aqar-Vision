@@ -3,19 +3,19 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex justify-content-between">
-            <h3 class="card-title">Ad Packages</h3>
-            <a href="{{ route('admin.ad-prices.create') }}" class="btn btn-primary btn-sm">Create New</a>
+            <h3 class="card-title">@lang('admin.ad_packages')</h3>
+            <a href="{{ route('admin.ad-prices.create') }}" class="btn btn-primary btn-sm">@lang('admin.create_new')</a>
         </div>
         <div class="table-responsive">
             <table class="table table-vcenter card-table">
                 <thead>
                     <tr>
-                        <th>Icon</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Price</th>
-                        <th>Duration</th>
-                        <th>Status</th>
+                        <th>@lang('admin.icon')</th>
+                        <th>@lang('admin.name')</th>
+                        <th>@lang('admin.type')</th>
+                        <th>@lang('admin.price')</th>
+                        <th>@lang('admin.duration')</th>
+                        <th>@lang('admin.status')</th>
                         <th class="w-1"></th>
                     </tr>
                 </thead>
@@ -36,25 +36,25 @@
                             <td>{{ $price->duration_days }} days</td>
                             <td>
                                 @if($price->is_active)
-                                    <span class="badge bg-success">Active</span>
+                                    <span class="badge bg-success">@lang('admin.active')</span>
                                 @else
-                                    <span class="badge bg-danger">Inactive</span>
+                                    <span class="badge bg-danger">@lang('admin.inactive')</span>
                                 @endif
                             </td>
                             <td>
                                 <div class="btn-list flex-nowrap">
-                                    <a href="{{ route('admin.ad-prices.edit', $price) }}" class="btn btn-sm btn-primary">Edit</a>
-                                    <form action="{{ route('admin.ad-prices.destroy', $price) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');" class="d-inline">
+                                    <a href="{{ route('admin.ad-prices.edit', $price) }}" class="btn btn-sm btn-primary">@lang('admin.edit')</a>
+                                    <form action="{{ route('admin.ad-prices.destroy', $price) }}" method="POST" onsubmit="return confirm('@lang('admin.delete_confirmation')');" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        <button type="submit" class="btn btn-sm btn-danger">@lang('admin.delete')</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center">No ad packages found.</td>
+                            <td colspan="7" class="text-center">@lang('admin.no_ad_packages_found')</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -7,20 +7,20 @@
             {{-- Filter Card --}}
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>Filters</h6>
+                    <h6>@lang('admin.ads.filters')</h6>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.ads.index') }}" method="GET">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <input type="text" name="search" class="form-control" placeholder="Search by Title..." value="{{ request('search') }}">
+                                    <input type="text" name="search" class="form-control" placeholder="@lang('admin.ads.search_by_title')" value="{{ request('search') }}">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <select name="city_id" class="form-control">
-                                        <option value="">-- All Cities --</option>
+                                        <option value="">@lang('admin.ads.all_cities')</option>
                                         @foreach($cities as $city)
                                             <option value="{{ $city->id }}" {{ request('city_id') == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
                                         @endforeach
@@ -30,17 +30,17 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <select name="status" class="form-control">
-                                        <option value="">-- All Statuses --</option>
-                                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                        <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                                        <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Expired</option>
+                                        <option value="">@lang('admin.ads.all_statuses')</option>
+                                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>@lang('admin.ads.pending')</option>
+                                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>@lang('admin.ads.active')</option>
+                                        <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>@lang('admin.ads.rejected')</option>
+                                        <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>@lang('admin.ads.expired')</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                                <a href="{{ route('admin.ads.index') }}" class="btn btn-secondary">Reset</a>
+                                <button type="submit" class="btn btn-primary">@lang('admin.ads.filter')</button>
+                                <a href="{{ route('admin.ads.index') }}" class="btn btn-secondary">@lang('admin.ads.reset')</a>
                             </div>
                         </div>
                     </form>
@@ -50,18 +50,18 @@
             {{-- Ads Table Card --}}
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0">All Ads</h6>
-                    <a href="{{ route('admin.ads.create') }}" class="btn btn-primary btn-sm">Create New Ad</a>
+                    <h6 class="mb-0">@lang('admin.ads.all_ads')</h6>
+                    <a href="{{ route('admin.ads.create') }}" class="btn btn-primary btn-sm">@lang('admin.ads.create_new_ad')</a>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Ad Details</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Location</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status / Actions</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Agent</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@lang('admin.ads.ad_details')</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">@lang('admin.ads.location')</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@lang('admin.ads.status_actions')</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@lang('admin.ads.agent')</th>
                                     <th class="text-secondary opacity-7"></th>
                                 </tr>
                             </thead>
@@ -89,10 +89,10 @@
                                                 <div class="btn-group" role="group" aria-label="Ad Actions">
                                                     <form action="{{ route('admin.ads.approve', $ad) }}" method="POST" class="d-inline">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-success btn-sm mb-0">Approve</button>
+                                                        <button type="submit" class="btn btn-success btn-sm mb-0">@lang('admin.ads.approve')</button>
                                                     </form>
                                                     <button type="button" class="btn btn-danger btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#rejectModal-{{ $ad->id }}">
-                                                        Reject
+                                                        @lang('admin.ads.reject')
                                                     </button>
                                                 </div>
                                             @else
@@ -110,11 +110,11 @@
                                         </td>
                                         <td class="align-middle">
                                             <div class="d-flex justify-content-end gap-2 px-3">
-                                                <a href="{{ route('admin.ads.edit', $ad->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" title="Edit Ad">Edit</a>
-                                                <form action="{{ route('admin.ads.destroy', $ad) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
+                                                <a href="{{ route('admin.ads.edit', $ad->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" title="@lang('admin.ads.edit_ad_title')">@lang('admin.edit')</a>
+                                                <form action="{{ route('admin.ads.destroy', $ad) }}" method="POST" class="d-inline" onsubmit="return confirm('@lang('admin.ads.are_you_sure')')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="text-danger font-weight-bold text-xs border-0 bg-transparent" data-toggle="tooltip" title="Delete Ad">Delete</button>
+                                                    <button type="submit" class="text-danger font-weight-bold text-xs border-0 bg-transparent" data-toggle="tooltip" title="@lang('admin.ads.delete_ad_title')">@lang('admin.delete')</button>
                                                 </form>
                                             </div>
                                         </td>
@@ -125,8 +125,8 @@
                                       <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                           <div class="modal-header">
-                                            <h5 class="modal-title" id="rejectModalLabel-{{ $ad->id }}">Reject Ad: {{ $ad->title }}</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <h5 class="modal-title" id="rejectModalLabel-{{ $ad->id }}">@lang('admin.ads.reject_ad_title', ['title' => $ad->title])</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@lang('admin.ads.close')"></button>
                                           </div>
                                           {{-- 1. Give the form a unique ID --}}
                                           <form id="reject-form-{{ $ad->id }}" action="{{ route('admin.ads.reject', $ad) }}" method="POST">
@@ -135,20 +135,20 @@
                                                 <div class="row">
                                                     {{-- Left Column: More Details --}}
                                                     <div class="col-md-8">
-                                                        <h6 class="text-dark">Ad Details</h6>
+                                                        <h6 class="text-dark">@lang('admin.ads.ad_details')</h6>
                                                         <ul class="list-unstyled mb-0">
-                                                            <li><strong>Agent:</strong> {{ optional($ad->user)->name }}</li>
-                                                            <li><strong>Location:</strong> {{ optional($ad->district->city)->name }} - {{ optional($ad->district)->name }}</li>
-                                                            <li><strong>Property Type:</strong> {{ optional($ad->propertyType)->name }}</li>
-                                                            <li><strong>Purpose:</strong> <span class="badge bg-secondary">{{ $ad->listing_purpose == 'sale' ? 'For Sale' : 'For Rent' }}</span></li>
-                                                            <li><strong>Price:</strong> {{ number_format($ad->total_price) }} SAR</li>
-                                                            <li><strong>Area:</strong> {{ $ad->area_sq_meters }} m²</li>
-                                                            <li><strong>Posted on:</strong> {{ $ad->created_at->format('M d, Y') }}</li>
+                                                            <li><strong>@lang('admin.ads.agent_colon')</strong> {{ optional($ad->user)->name }}</li>
+                                                            <li><strong>@lang('admin.ads.location_colon')</strong> {{ optional($ad->district->city)->name }} - {{ optional($ad->district)->name }}</li>
+                                                            <li><strong>@lang('admin.ads.property_type_colon')</strong> {{ optional($ad->propertyType)->name }}</li>
+                                                            <li><strong>@lang('admin.ads.purpose_colon')</strong> <span class="badge bg-secondary">{{ $ad->listing_purpose == 'sale' ? __('admin.ads.for_sale') : __('admin.ads.for_rent') }}</span></li>
+                                                            <li><strong>@lang('admin.ads.price_colon')</strong> {{ number_format($ad->total_price) }} SAR</li>
+                                                            <li><strong>@lang('admin.ads.area_colon')</strong> {{ $ad->area_sq_meters }} m²</li>
+                                                            <li><strong>@lang('admin.ads.posted_on_colon')</strong> {{ $ad->created_at->format('M d, Y') }}</li>
                                                         </ul>
                                                         <hr class="my-2">
-                                                        <p><strong>Description:</strong></p>
+                                                        <p><strong>@lang('admin.ads.description_colon')</strong></p>
                                                         <p class="text-sm text-muted" style="max-height: 100px; overflow-y: auto;">
-                                                            {{ $ad->description ?? 'No description provided.' }}
+                                                            {{ $ad->description ?? __('admin.ads.no_description_provided') }}
                                                         </p>
                                                     </div>
                                                     {{-- Right Column: Image and View Button --}}
@@ -158,15 +158,15 @@
                                                 </div>
                                                 <hr class="my-3">
                                                 <div class="form-group">
-                                                    <label for="rejection_reason-{{ $ad->id }}">Reason for Rejection (Optional, will be sent to user)</label>
+                                                    <label for="rejection_reason-{{ $ad->id }}">@lang('admin.ads.rejection_reason_label')</label>
                                                     <textarea name="rejection_reason" id="rejection_reason-{{ $ad->id }}" class="form-control" rows="4"></textarea>
                                                 </div>
                                             </div>
                                               <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('admin.ads.close')</button>
                                                 {{-- 2. Change button type and add attributes for JS --}}
                                                 <button type="button" class="btn btn-danger js-submit-reject-form" data-form-id="reject-form-{{ $ad->id }}">
-                                                    Confirm Rejection
+                                                    @lang('admin.ads.confirm_rejection')
                                                 </button>
                                               </div>
                                           </form>
@@ -174,7 +174,7 @@
                                       </div>
                                     </div>
                                 @empty
-                                    <tr><td colspan="5" class="text-center py-4">No ads found.</td></tr>
+                                    <tr><td colspan="5" class="text-center py-4">@lang('admin.ads.no_ads_found')</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -232,7 +232,7 @@
                 }
 
                 this.disabled = true;
-                this.textContent = 'Rejecting...';
+                this.textContent = '@lang('admin.ads.rejecting')';
 
                 const formData = new FormData(form);
                 const url = form.getAttribute('action');
@@ -254,9 +254,9 @@
                 })
                 .catch(error => {
                     console.error('Fetch error:', error);
-                    alert('An error occurred. Please try again.');
+                    alert('@lang('admin.ads.error_occurred')');
                     this.disabled = false;
-                    this.textContent = 'Confirm Rejection';
+                    this.textContent = '@lang('admin.ads.confirm_rejection')';
                 });
             });
         });

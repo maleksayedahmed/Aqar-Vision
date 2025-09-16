@@ -10,9 +10,9 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Ads</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">@lang('agency.dashboard.total_ads')</p>
                                     <h5 class="font-weight-bolder">{{ $adsCount ?? 0 }}</h5>
-                                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{ $newAdsLast7Days ?? 0 }}</span> New (7 days)</p>
+                                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+{{ $newAdsLast7Days ?? 0 }}</span> @lang('agency.dashboard.new_ads_last_7_days')</p>
                                 </div>
                             </div>
                             <div class="col-4 text-end">
@@ -31,9 +31,9 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Agents</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">@lang('agency.dashboard.total_agents')</p>
                                     <h5 class="font-weight-bolder">{{ $agentsCount ?? 0 }}</h5>
-                                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">&nbsp;</span> Active</p>
+                                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">&nbsp;</span> @lang('agency.dashboard.active')</p>
                                 </div>
                             </div>
                             <div class="col-4 text-end">
@@ -52,7 +52,7 @@
             <div class="col-lg-4 mb-lg-0 mb-4">
                 <div class="card ">
                     <div class="card-header pb-0 p-3">
-                        <h6 class="mb-0">Latest Ads</h6>
+                        <h6 class="mb-0">@lang('agency.dashboard.latest_ads')</h6>
                     </div>
                     <div class="table-responsive">
                         <table class="table align-items-center ">
@@ -65,21 +65,21 @@
                                                 <img src="{{ !empty($ad->images) && is_array($ad->images) && !empty($ad->images[0]) ? Storage::url($ad->images[0]) : 'https://via.placeholder.com/100' }}" alt="img" width="40">
                                             </div>
                                             <div class="ms-4">
-                                                <p class="text-xs font-weight-bold mb-0">Title:</p>
+                                                <p class="text-xs font-weight-bold mb-0">@lang('agency.dashboard.title')</p>
                                                 <h6 class="text-sm mb-0">{{ Str::limit($ad->title, 30) }}</h6>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Price:</p>
+                                            <p class="text-xs font-weight-bold mb-0">@lang('agency.dashboard.price')</p>
                                             <h6 class="text-sm mb-0">${{ number_format($ad->total_price) }}</h6>
                                         </div>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td class="text-center py-3">No ads found.</td>
+                                    <td class="text-center py-3">@lang('agency.dashboard.no_ads_found')</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -93,7 +93,7 @@
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header pb-0 p-3">
-                        <h6 class="mb-0">Latest Agents</h6>
+                        <h6 class="mb-0">@lang('agency.dashboard.latest_agents')</h6>
                     </div>
                     <div class="card-body p-3">
                         <ul class="list-group">
@@ -113,7 +113,7 @@
                                 </div>
                             </li>
                             @empty
-                            <li class="list-group-item border-0 text-center">No agents found.</li>
+                            <li class="list-group-item border-0 text-center">@lang('agency.dashboard.no_agents_found')</li>
                             @endforelse
                         </ul>
                     </div>

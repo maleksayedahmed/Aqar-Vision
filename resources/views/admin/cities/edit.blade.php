@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header"><h3 class="card-title">Edit City</h3></div>
+                <div class="card-header"><h3 class="card-title">@lang('admin.cities.edit_city')</h3></div>
                 <form action="{{ route('admin.cities.update', $city) }}" method="POST">
                     @csrf
                     @method('PUT')

@@ -16,11 +16,11 @@
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Agent</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Contact</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Location</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Type</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@lang('admin.agents.agent')</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">@lang('admin.agents.contact')</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">@lang('admin.agents.location')</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">@lang('admin.agents.type')</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@lang('admin.agents.status')</th>
                                     <th class="text-secondary opacity-7"></th>
                                 </tr>
                             </thead>
@@ -40,28 +40,28 @@
                                             <p class="text-xs font-weight-bold mb-0">{{ $agent->phone_number }}</p>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $agent->city?->name ?? 'Not Set' }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $agent->city?->name ?? __('admin.agents.not_set') }}</p>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $agent->agentType?->name }}</p>
                                         </td>
                                         <td class="align-middle text-center text-sm">
                                             @if($agent->user?->is_active)
-                                                <span class="badge badge-sm bg-gradient-success">Active</span>
+                                                <span class="badge badge-sm bg-gradient-success">@lang('admin.agents.messages.active')</span>
                                             @else
-                                                <span class="badge badge-sm bg-gradient-secondary">Inactive</span>
+                                                <span class="badge badge-sm bg-gradient-secondary">@lang('admin.agents.messages.inactive')</span>
                                             @endif
                                         </td>
                                         <td class="align-middle text-right">
                                             <div class="d-flex justify-content-end gap-2 px-3">
-                                                <a href="{{ route('admin.agents.edit', $agent->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit agent">
-                                                    Edit
+                                                <a href="{{ route('admin.agents.edit', $agent->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="@lang('admin.agents.edit_agent_tooltip')">
+                                                    @lang('admin.agents.messages.edit')
                                                 </a>
                                                 <form action="{{ route('admin.agents.destroy', $agent->id) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="text-danger font-weight-bold text-xs border-0 bg-transparent" onclick="return confirm('{{ __('attributes.agents.messages.confirm_delete') }}')" data-toggle="tooltip" data-original-title="Delete agent">
-                                                        Delete
+                                                    <button type="submit" class="text-danger font-weight-bold text-xs border-0 bg-transparent" onclick="return confirm('{{ __('attributes.agents.messages.confirm_delete') }}')" data-toggle="tooltip" data-original-title="@lang('admin.agents.delete_agent_tooltip')">
+                                                        @lang('admin.agents.messages.delete')
                                                     </button>
                                                 </form>
                                             </div>

@@ -10,13 +10,13 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Revenue This Month</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">@lang('admin.dashboard.revenue_this_month')</p>
                                     <h5 class="font-weight-bolder">
                                         ${{ number_format($totalRevenueThisMonth ?? 0, 2) }}
                                     </h5>
                                     <p class="mb-0">
                                         <span class="text-success text-sm font-weight-bolder">{{ $propertiesCount ?? 0 }}</span>
-                                        Total Properties
+                                        @lang('admin.dashboard.total_properties')
                                     </p>
                                 </div>
                             </div>
@@ -35,13 +35,13 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">New Users (Last 7 Days)</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">@lang('admin.dashboard.new_users_last_7_days')</p>
                                     <h5 class="font-weight-bolder">
                                         +{{ $newUsersLast7Days ?? 0 }}
                                     </h5>
                                      <p class="mb-0">
                                         <span class="text-success text-sm font-weight-bolder">{{ $usersCount ?? 0 }}</span>
-                                        Total Users
+                                        @lang('admin.dashboard.total_users')
                                     </p>
                                 </div>
                             </div>
@@ -60,13 +60,13 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">New Properties (Last 7 Days)</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">@lang('admin.dashboard.new_properties_last_7_days')</p>
                                     <h5 class="font-weight-bolder">
                                         +{{ $newPropertiesLast7Days ?? 0 }}
                                     </h5>
                                     <p class="mb-0">
                                         <span class="text-success text-sm font-weight-bolder">{{ $agenciesCount ?? 0 }}</span>
-                                        Total Agencies
+                                        @lang('admin.dashboard.total_agencies')
                                     </p>
                                 </div>
                             </div>
