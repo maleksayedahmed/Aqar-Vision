@@ -23,6 +23,7 @@ use App\Http\Controllers\Agent\TermsController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PropertySearchController;
 use App\Http\Controllers\Agent\NotificationController;
+use App\Http\Controllers\Agent\InvitationController;
 
 
 /*
@@ -124,7 +125,7 @@ require __DIR__.'/agency.php';
 // ===================================
 // AGENT ROUTES
 // ===================================
-Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () {
+Route::middleware(['auth', 'role:agent'])->prefix('agent')->name('agent.')->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/packages', [PackageController::class, 'index'])->name('packages');
@@ -173,4 +174,11 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
         Route::delete('/{ad}', [App\Http\Controllers\Agent\AdController::class, 'destroy'])->name('destroy');
     });
 
+    Route::get('/invitations/{invitation}/accept', [InvitationController::class, 'accept'])->name('invitations.accept');
+    Route::get('/invitations/{invitation}/reject', [InvitationController::class, 'reject'])->name('invitations.reject');
+
+});
+
+Route::get('/get-plans', function () {
+    return response()->json(App\Models\Plan::all());
 });

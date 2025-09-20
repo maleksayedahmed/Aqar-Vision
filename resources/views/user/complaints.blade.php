@@ -4,7 +4,6 @@
 
 @section('content')
 
-{{-- The background color now matches the agent's page --}}
 <main class="py-10 bg-[rgba(250,250,250,1)]">
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
         <div class="flex flex-col w-full lg:flex-row gap-4">

@@ -186,7 +186,15 @@
                             <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/bed.svg') }}" class="h-4 w-4"> {{ $ad->rooms }} غرف</span>
                         </div>
                         <div class="border-t border-gray-100 pt-5 mt-5 flex justify-between items-center">
-                            <p class="text-lg font-bold text-indigo-700">{{ number_format($ad->total_price) }} <span class="text-xs font-medium text-slate-500">ر.س</span></p>
+                            <p class="text-lg font-bold text-black flex items-baseline gap-1">
+                                <span>{{ number_format($ad->total_price) }}</span>
+                                <span class="flex items-center">
+                                <span class="text-sm font-medium text-gray-500">ريال</span>
+                                @if ($ad->listing_purpose == 'rent')
+                                    <span class="text-sm font-bold text-black">/شهري</span>
+                                @endif
+                                <span>
+                            </p>
                             <a href="{{ route('properties.show', $ad->id) }}" class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800">رؤية التفاصيل</a>
                         </div>
                     </div>

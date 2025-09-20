@@ -23,13 +23,13 @@
                         <span>المفضلة</span>
                     </a>
                 </li>
-                {{-- <li>
+                <li>
                     <a href="{{ route('user.notifications') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-[rgba(48,62,124,0.09)] text-[16px] transition-colors {{ request()->routeIs('user.notifications') ? 'bg-[rgba(48,62,124,0.09)]' : '' }}">
                         <img src="{{ asset('images/bell.svg') }}">
                         <span>الاشعارات</span>
-                        @livewire('user.notification-counter')
+                        @livewire('agent.notification-counter')
                     </a>
-                </li> --}}
+                </li>
                 <li>
                     <a href="{{ route('user.about-us') }}" class="flex items-center gap-[10px] p-3 px-4 sm:px-10 rounded-lg text-[rgba(48,62,124,1)] hover:bg-[rgba(48,62,124,0.09)] text-[16px] transition-colors {{ request()->routeIs('user.about-us') ? 'bg-[rgba(48,62,124,0.09)]' : '' }}">
                         <img src="{{ asset('images/about.svg') }}">

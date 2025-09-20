@@ -235,51 +235,90 @@
     </section>
 
     @if($featuredAds->isNotEmpty())
-<section class="max-w-7xl w-full mx-auto py-12 px-4 bg-gray-50 rounded-2xl">
+<section class="max-w-7xl w-[100%] mx-auto py-12 px-4">
     <div class="flex justify-between items-center mb-8">
         <div class="space-y-1">
             <h2 class="text-xl font-bold text-slate-800 md:text-3xl">أبـرز العقارات</h2>
-            <p class="text-xs sm:text-sm text-slate-500">عقارات مميزة نوصي بها.</p>
+            <p class="text-xs sm:text-sm text-slate-500">
+                عقارات مميزة نوصي بها.
+            </p>
         </div>
         <a href="{{ route('properties.search', ['type' => 'featured']) }}" class="text-sm flex items-center gap-2 bg-indigo-50 text-indigo-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
             <span>رؤية الكل</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7" /></svg>
         </a>
     </div>
-
-    {{-- Grid for Featured Ads --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        @foreach ($featuredAds as $ad)
-            <div class="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300">
-                <div>
-                    <div class="relative">
-                        <a href="{{ route('properties.show', $ad->id) }}">
-                            <img src="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-t-lg" alt="{{ $ad->title }}">
-                        </a>
-                        {{-- A slightly different badge for featured items --}}
-                        <div class="absolute top-2 right-2 bg-amber-400 text-gray-900 text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
-                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.868 2.884c.321-.772 1.305-.772 1.626 0l1.373 3.303a1 1 0 00.95.69h3.468c.851 0 1.21.976.544 1.49l-2.807 2.04a1 1 0 00-.364 1.118l1.07 3.303c.321.772-.639 1.42-1.34 1.01l-2.807-2.04a1 1 0 00-1.175 0l-2.807 2.04c-.701.41-1.66-.238-1.34-1.01l1.07-3.303a1 1 0 00-.364-1.118l-2.807-2.04c-.666-.514-.307-1.49.544-1.49h3.468a1 1 0 00.95-.69l1.373-3.303z" clip-rule="evenodd" /></svg>
-                            <span>مميز</span>
-                        </div>
-                        <button class="favorite-btn absolute top-2 left-2 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"
-                                data-ad-id="{{ $ad->id }}"
-                                data-favorited="{{ in_array($ad->id, $favoriteAdIds) ? 'true' : 'false' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ in_array($ad->id, $favoriteAdIds) ? 'text-red-500' : 'text-[rgba(242,242,242,1)]' }}"
-                                 fill="{{ in_array($ad->id, $favoriteAdIds) ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="p-4 space-y-3">
-                         <h3 class="text-lg font-bold text-slate-800 leading-tight">{{ Str::limit($ad->title, 100) }}</h3>
-                         <div class="flex justify-between items-center">
-                            <p class="text-lg font-bold text-indigo-700">{{ number_format($ad->total_price) }} <span class="text-xs font-medium text-slate-500">ر.س</span></p>
-                            <a href="{{ route('properties.show', $ad->id) }}" class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-indigo-800 transition-colors">التفاصيل</a>
-                         </div>
-                    </div>
-                </div>
+    <div class="relative">
+        <button id="featuredNextBtn" class="absolute cursor-pointer top-1/2 left-0 lg:left-[-50px] z-10 transform -translate-y-1/2 bg-[rgba(236,238,249,1)] border border-gray-200 rounded-full p-2 hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 rotate-180 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+        </button>
+        <button id="featuredPrevBtn" class="absolute cursor-pointer top-1/2 right-0 lg:right-[-35px] z-10 transform -translate-y-1/2 bg-[rgba(236,238,249,1)] border border-gray-200 rounded-full p-2 hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+        </button>
+        <div class="slider-card bg-white border border-gray-100 rounded-xl w-[320px] flex-shrink-0 snap-start shadow-sm hover:shadow-lg transition-shadow duration-300">
+    <div>
+        <div class="relative">
+            <img src="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-lg" alt="{{ $ad->title }}">
+            <div class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">
+                {{ $ad->listing_purpose == 'rent' ? 'إيجار' : 'بيع' }}
             </div>
-        @endforeach
+            <div class="absolute top-2 right-2 bg-amber-400 text-gray-900 text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.868 2.884c.321-.772 1.305-.772 1.626 0l1.373 3.303a1 1 0 00.95.69h3.468c.851 0 1.21.976.544 1.49l-2.807 2.04a1 1 0 00-.364 1.118l1.07 3.303c.321.772-.639 1.42-1.34 1.01l-2.807-2.04a1 1 0 00-1.175 0l-2.807 2.04c-.701.41-1.66-.238-1.34-1.01l1.07-3.303a1 1 0 00-.364-1.118l-2.807-2.04c-.666-.514-.307-1.49.544-1.49h3.468a1 1 0 00.95-.69l1.373-3.303z" clip-rule="evenodd" /></svg>
+                <span>مميز</span>
+            </div>
+            @if (auth()->user())
+            <button class="favorite-btn absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"
+                    data-ad-id="{{ $ad->id }}"
+                    data-favorited="{{ in_array($ad->id, $favoriteAdIds) ? 'true' : 'false' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ in_array($ad->id, $favoriteAdIds) ? 'text-red-500' : 'text-[rgba(242,242,242,1)]' }}"
+                    fill="{{ in_array($ad->id, $favoriteAdIds) ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                </svg>
+            </button>
+            @endif
+        </div>
+        <div class="p-3 space-y-[23px]">
+            <div class="flex justify-between items-center text-xs text-[rgba(204,204,204,1)]">
+                <span class="flex items-center gap-0.5 font-semibold text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[rgba(48,62,124,1)]" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                    </svg>
+                    {{ $ad->district?->city?->name }} - {{ $ad->district?->name }}
+                </span>
+                <span class="flex items-center gap-0.5">
+                    <img src="{{ asset('images/clock.svg') }}"> {{ $ad->created_at->format('d/m/Y') }}
+                </span>
+            </div>
+            <div class="space-y-1.5">
+                <h3 class="text-lg font-bold text-slate-800 leading-tight">{{ Str::limit($ad->title, 100) }}</h3>
+                <p class="text-xs text-slate-500">{{ Str::limit($ad->description, 40) }}</p>
+            </div>
+            <div class="flex gap-2 text-sm flex-wrap">
+                <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md">
+                    <img src="{{ asset('images/building.svg') }}" class="h-4 w-4"> {{ $ad->propertyType?->name }}
+                </span>
+                <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md">
+                    <img src="{{ asset('images/bath.svg') }}" class="h-4 w-4"> {{ $ad->bathrooms }} حمام
+                </span>
+                <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md">
+                    <img src="{{ asset('images/bed.svg') }}" class="h-4 w-4"> {{ $ad->rooms }} غرف نوم
+                </span>
+                @if(is_array($ad->features))
+                    @foreach(array_slice($ad->features, 0, 3) as $feature)
+                        <span class="flex items-center gap-1 bg-indigo-50 text-indigo-700 px-2 py-1 rounded-md">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12l2 2 4-4" /></svg>
+                            {{ is_array($feature) ? ($feature['ar'] ?? $feature['en'] ?? $feature) : $feature }}
+                        </span>
+                    @endforeach
+                @endif
+            </div>
+            <div class="border-t border-gray-100 pt-5 mt-5 flex justify-between items-center">
+                <p class="text-lg font-bold text-indigo-700">{{ number_format($ad->total_price) }} <span class="text-xs font-medium text-slate-500">ر.س</span></p>
+                <a href="{{ route('properties.show', $ad->id) }}" class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800 transition-colors">رؤية التفاصيل</a>
+            </div>
+        </div>
+    </div>
+</div>
     </div>
 </section>
 @endif

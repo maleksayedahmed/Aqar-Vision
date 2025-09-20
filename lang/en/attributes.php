@@ -353,4 +353,36 @@ return [
         'save' => 'Save',
         'cancel' => 'Cancel',
     ],
+
+    'dashboard' => [
+        'title' => 'Dashboard',
+    ],
+
+    'nav' => [
+        'core_management' => 'Core Management',
+        'agency_management' => 'Agency Management',
+        'property_management' => 'Property Management',
+        'locations' => 'Locations',
+        'monetization' => 'Monetization',
+    ],
+
+    'upgrade_requests' => [
+        'title' => 'Upgrade Requests',
+    ],
+
+    'properties' => [
+        'title' => 'Properties',
+    ],
+
+    'ads' => [
+        'title' => 'Ads Management',
+    ],
+
+    'cities' => [
+        'title' => 'Cities',
+    ],
+
+    'districts' => [
+        'title' => 'Districts',
+    ],
 ];

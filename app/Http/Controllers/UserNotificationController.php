@@ -8,6 +8,7 @@ class UserNotificationController extends Controller
 {
     public function index()
     {
-        return view('user.notifications.index');
+    // Livewire component handles loading and paginating notifications
+    return view('user.notifications.index');
     }
 }

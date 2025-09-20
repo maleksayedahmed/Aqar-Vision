@@ -9,11 +9,11 @@
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-speedometer"></use></svg> Dashboard
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-speedometer"></use></svg> {{ __('attributes.dashboard.title') }}
             </a>
         </li>
 
-        <li class="nav-title">Core Management</li>
+        <li class="nav-title">{{ __('attributes.nav.core_management') }}</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-user"></use></svg> {{ __('attributes.users.title') }}
@@ -30,14 +30,14 @@
                 <svg class="nav-icon">
                     <use xlink:href="/assets/icons/free.svg#cil-user-plus"></use>
                 </svg>
-                Upgrade Requests
+                {{ __('attributes.upgrade_requests.title') }}
                 @if($notificationCount > 0)
                     <span class="badge badge-sm bg-danger ms-auto">{{ $notificationCount }}</span>
                 @endif
             </a>
         </li>
 
-        <li class="nav-title">Agency Management</li>
+        <li class="nav-title">{{ __('attributes.nav.agency_management') }}</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.agencies.*') ? 'active' : '' }}" href="{{ route('admin.agencies.index') }}">
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-handshake"></use></svg> {{ __('attributes.agencies.title') }}
@@ -45,24 +45,19 @@
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.agents.*') ? 'active' : '' }}" href="{{ route('admin.agents.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-user-follow"></use></svg> Agents
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-user-follow"></use></svg> {{ __('attributes.agents.title') }}
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('admin.agency-types.*') ? 'active' : '' }}" href="{{ route('admin.agency-types.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-building"></use></svg> {{ __('attributes.agency_types.title') }}
-            </a>
-        </li>
-
-        <li class="nav-title">Property Management</li>
+        
+        <li class="nav-title">{{ __('attributes.nav.property_management') }}</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.properties.*') ? 'active' : '' }}" href="{{ route('admin.properties.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-house"></use></svg> Properties
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-house"></use></svg> {{ __('attributes.properties.title') }}
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.ads.*') ? 'active' : '' }}" href="{{ route('admin.ads.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-newspaper"></use></svg> Ads Management
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-newspaper"></use></svg> {{ __('attributes.ads.title') }}
             </a>
         </li>
         <li class="nav-item">
@@ -84,37 +79,37 @@
         {{-- Locations Dropdown --}}
         <li class="nav-group {{ request()->routeIs('admin.districts.*') || request()->routeIs('admin.cities.*') ? 'show' : '' }}">
             <a class="nav-link nav-group-toggle" href="#">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-location-pin"></use></svg> Locations
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-location-pin"></use></svg> {{ __('attributes.nav.locations') }}
             </a>
             <ul class="nav-group-items">
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.cities.*') ? 'active' : '' }}" href="{{ route('admin.cities.index') }}">
-                        <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Cities
+                        <span class="nav-icon"><span class="nav-icon-bullet"></span></span> {{ __('attributes.cities.title') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.districts.*') ? 'active' : '' }}" href="{{ route('admin.districts.index') }}">
-                        <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Districts
+                    <a class.nav-link {{ request()->routeIs('admin.districts.*') ? 'active' : '' }}" href="{{ route('admin.districts.index') }}">
+                        <span class="nav-icon"><span class="nav-icon-bullet"></span></span> {{ __('attributes.districts.title') }}
                     </a>
                 </li>
             </ul>
         </li>
 
 
-        <li class="nav-title">Monetization</li>
+        <li class="nav-title">{{ __('attributes.nav.monetization') }}</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.plans.*') ? 'active' : '' }}" href="{{ route('admin.plans.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-wallet"></use></svg> Plans
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-wallet"></use></svg> {{ __('attributes.plans.title') }}
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}" href="{{ route('admin.subscriptions.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-calendar-check"></use></svg> Subscriptions
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-calendar-check"></use></svg> {{ __('attributes.subscriptions.title') }}
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.ad-prices.*') ? 'active' : '' }}" href="{{ route('admin.ad-prices.index') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-money"></use></svg> Ad Prices
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-money"></use></svg> {{ __('attributes.ad_prices.title') }}
             </a>
         </li>
     </ul>

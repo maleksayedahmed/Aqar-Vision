@@ -89,7 +89,7 @@ class PropertyAttributeSeeder extends Seeder
                 'type' => 'boolean',
                 'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
                     'property-attribute-icons',
-                    new \Illuminate\Http\File(public_path('images/energy.svg'))
+                    new \Illuminate\Http\File(public_path('images/fire.svg'))
                 ),
             ],
             [
@@ -117,7 +117,7 @@ class PropertyAttributeSeeder extends Seeder
                 'type' => 'dropdown',
                 'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
                     'property-attribute-icons',
-                    new \Illuminate\Http\File(public_path('images/water-pump.svg'))
+                    new \Illuminate\Http\File(public_path('images/finishing.svg'))
                 ),
                 'choices' => [
                     ['en' => 'Fully Finished', 'ar' => 'تشطيب كامل'],
@@ -129,6 +129,10 @@ class PropertyAttributeSeeder extends Seeder
             [
                 'name' => ['en' => 'Direction', 'ar' => 'جهة العقار'],
                 'type' => 'dropdown',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/direction.svg'))
+                ),  
                 'choices' => [
                     ['en' => 'North', 'ar' => 'شمال'],
                     ['en' => 'South', 'ar' => 'جنوب'],
@@ -143,6 +147,10 @@ class PropertyAttributeSeeder extends Seeder
             [
                 'name' => ['en' => 'Rooms', 'ar' => 'عدد الغرف'],
                 'type' => 'dropdown',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/room.svg'))
+                ),  
                 'choices' => [
                     ['en' => '1', 'ar' => '1'],
                     ['en' => '2', 'ar' => '2'],
@@ -155,6 +163,10 @@ class PropertyAttributeSeeder extends Seeder
             [
                 'name' => ['en' => 'Bathrooms', 'ar' => 'دورات المياه'],
                 'type' => 'dropdown',
+                'icon_path' => \Illuminate\Support\Facades\Storage::disk('public')->putFile(
+                    'property-attribute-icons',
+                    new \Illuminate\Http\File(public_path('images/bathroom.svg'))
+                ),  
                 'choices' => [
                     ['en' => '1', 'ar' => '1'],
                     ['en' => '2', 'ar' => '2'],

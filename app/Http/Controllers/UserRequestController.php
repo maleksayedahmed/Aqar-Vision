@@ -16,28 +16,64 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use App\Models\AgencyUpgradeRequest;
 
 class UserRequestController extends Controller
 {
     public function store(Request $request): JsonResponse|RedirectResponse
     {
-        // Validate required data and role type
-        $request->validate([
+        // Core validation rules for all requests
+        $baseRules = [
             'requested_role' => 'required|in:agent,agency',
-            'fal_license' => 'nullable|string|max:255',
-            'license_issue_date' => 'nullable|date',
-            'license_expiry_date' => 'nullable|date|after:license_issue_date'
-        ]);
+            'name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:255',
+        ];
+
+        // Role-specific validation rules
+        $roleRules = [];
+        if ($request->input('requested_role') === 'agent') {
+            $roleRules = [
+                'fal_license' => 'nullable|string|max:255',
+                'license_issue_date' => 'nullable|date',
+                'license_expiry_date' => 'nullable|date|after:license_issue_date',
+            ];
+        } elseif ($request->input('requested_role') === 'agency') {
+            $roleRules = [
+                'agency_name' => 'required|string|max:255',
+                'agency_type_id' => 'required|exists:agency_types,id',
+                'commercial_register_number' => 'nullable|string|max:255',
+                'commercial_issue_date' => 'nullable|date',
+                'commercial_expiry_date' => 'nullable|date|after:commercial_issue_date',
+                'tax_id' => 'nullable|string|max:255',
+                'tax_issue_date' => 'nullable|date',
+                'tax_expiry_date' => 'nullable|date|after:tax_issue_date',
+                'address' => 'nullable|string|max:255',
+                'phone_number' => 'nullable|string|max:255',
+                'email' => 'nullable|email|max:255',
+            ];
+        }
+
+        // Merge and validate
+        $request->validate(array_merge($baseRules, $roleRules));
 
         $user = Auth::user();
 
-        // Check if user has required data for upgrade request
-        if (empty($user->name) || empty($user->phone)) {
+        // Check if user has required data for upgrade request, using either form input or existing user data
+        $userName = $request->filled('name') ? $request->input('name') : $user->name;
+        $userPhone = $request->filled('phone') ? $request->input('phone') : $user->phone;
+        
+        if (empty($userName) || empty($userPhone)) {
             return response()->json([
                 'message' => 'يجب إكمال جميع البيانات الشخصية (الاسم ورقم الهاتف) قبل إرسال طلب الترقية.',
                 'error' => true
             ], 422);
         }
+        
+        // Update user profile with the provided or existing values
+        $user->update([
+            'name' => $userName,
+            'phone' => $userPhone
+        ]);
 
         // Prevent agents/agencies from submitting another request
         if ($user->agent || $user->agency) {
@@ -115,27 +151,20 @@ class UserRequestController extends Controller
             'license_id' => $licenseId,
         ]);
 
-        // 3. Create the corresponding Agent/Agency record immediately for requests
-        if ($request->requested_role === 'agent') {
-            $agent = Agent::create([
-                'user_id' => $user->id,
-                'full_name' => $user->name,
-                'email' => $user->email,
-                'phone_number' => $user->phone,
-                'agent_type_id' => $defaultAgentType->id,
-            ]);
-
-            // Link license to agent if created
-            if ($licenseId) {
-                License::find($licenseId)->update(['agent_id' => $agent->id]);
-            }
-        } elseif ($request->requested_role === 'agency') {
-            Agency::create([
-                'user_id' => $user->id,
-                'agency_name' => $user->name,
-                'email' => $user->email,
-                'phone_number' => $user->phone,
-                'agency_type_id' => $defaultAgencyType->id,
+        if ($request->requested_role === 'agency') {
+            AgencyUpgradeRequest::create([
+                'upgrade_request_id' => $newRequest->id,
+                'agency_name' => $request->agency_name,
+                'agency_type_id' => $request->agency_type_id,
+                'commercial_register_number' => $request->commercial_register_number,
+                'commercial_issue_date' => $request->commercial_issue_date,
+                'commercial_expiry_date' => $request->commercial_expiry_date,
+                'tax_id' => $request->tax_id,
+                'tax_issue_date' => $request->tax_issue_date,
+                'tax_expiry_date' => $request->tax_expiry_date,
+                'address' => $request->address,
+                'phone_number' => $request->phone_number,
+                'email' => $request->email,
             ]);
         }
 

@@ -6,28 +6,28 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0">
-                        <h6>Filters</h6>
+                        <h6>@lang('admin.agencies.filters')</h6>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('admin.agencies.index') }}" method="GET">
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <input type="text" name="search" class="form-control" placeholder="Search by Agency Name..." value="{{ request('search') }}">
+                                        <input type="text" name="search" class="form-control" placeholder="@lang('admin.agencies.search_by_agency_name')" value="{{ request('search') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <select name="accreditation_status" class="form-control">
-                                            <option value="">-- All Statuses --</option>
-                                            <option value="Accredited" {{ request('accreditation_status') == 'Accredited' ? 'selected' : '' }}>Accredited</option>
-                                            <option value="Not Accredited" {{ request('accreditation_status') == 'Not Accredited' ? 'selected' : '' }}>Not Accredited</option>
+                                            <option value="">@lang('admin.agencies.all_statuses')</option>
+                                            <option value="Accredited" {{ request('accreditation_status') == 'Accredited' ? 'selected' : '' }}>@lang('admin.agencies.accredited')</option>
+                                            <option value="Not Accredited" {{ request('accreditation_status') == 'Not Accredited' ? 'selected' : '' }}>@lang('admin.agencies.not_accredited')</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary">Filter</button>
-                                    <a href="{{ route('admin.agencies.index') }}" class="btn btn-secondary">Reset</a>
+                                    <button type="submit" class="btn btn-primary">@lang('admin.agencies.filter')</button>
+                                    <a href="{{ route('admin.agencies.index') }}" class="btn btn-secondary">@lang('admin.agencies.reset')</a>
                                 </div>
                             </div>
                         </form>

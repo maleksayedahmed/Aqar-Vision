@@ -113,8 +113,13 @@
             <li class="nav-item dropdown">
                 <a class="nav-link py-0 pe-0" data-coreui-toggle="dropdown" href="#" role="button"
                     aria-haspopup="true" aria-expanded="false">
-                    <div class="avatar avatar-md"><img class="avatar-img" src="{{ asset('assets/img/avatars/8.jpg') }}"
-                            alt="user@email.com"></div>
+                                        <div class="avatar avatar-md">
+                        @if (Auth::user()->profile_photo_path)
+                            <img class="avatar-img" src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}" alt="{{ Auth::user()->name }}">
+                        @else
+                            <span class="avatar-text">{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</span>
+                        @endif
+                    </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end pt-0">
                     <div class="dropdown-header bg-body-tertiary text-body-secondary fw-semibold rounded-top mb-2">

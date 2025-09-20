@@ -10,35 +10,71 @@
 
     <!-- Notifications List -->
     <div class="space-y-2">
-        @forelse ($notifications as $notification)
+                @forelse ($notifications as $notification)
             <div class="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-colors">
                 
-                @if ($notification->data['status'] === 'active')
+                @if (isset($notification->data['invitation_id']))
+                    @php
+                        $invitation = \App\Models\AgentInvitation::find($notification->data['invitation_id']);
+                    @endphp
+                    @if ($invitation && $invitation->status === 'pending')
+                        <div class="flex-shrink-0 w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.5 21.75c-2.676 0-5.216-.584-7.5-1.654z" />
+                            </svg>
+                        </div>
+                        <div class="flex-grow mr-4 text-right">
+                            <p class="text-sm text-gray-800">{{ $notification->data['message'] }}</p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <a href="{{ route('agent.invitations.accept', $invitation) }}" class="btn btn-sm btn-success">Accept</a>
+                                <a href="{{ route('agent.invitations.reject', $invitation) }}" class="btn btn-sm btn-danger">Reject</a>
+                            </div>
+                            <div class="flex items-center gap-1.5 mt-2">
+                                <span class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</span>
+                            </div>
+                        </div>
+                    @elseif(isset($notification->data['status']) && $notification->data['status'] === 'cancelled')
+                        <div class="flex-shrink-0 w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center text-white">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"></path></svg>
+                        </div>
+                        <div class="flex-grow mr-4 text-right">
+                            <p class="text-sm text-gray-800">{{ $notification->data['message'] }}</p>
+                            <div class="flex items-center gap-1.5 mt-2">
+                                <span class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</span>
+                            </div>
+                        </div>
+                    @endif
+                @elseif ($notification->data['status'] === 'active')
                     {{-- Approved Icon --}}
                     <div class="flex-shrink-0 w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center text-white">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <div class="flex-grow mr-4 text-right">
+                        <p class="text-sm text-gray-800">{{ $notification->data['message'] }}</p>
+                        <div class="flex items-center gap-1.5 mt-2">
+                            <span class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</span>
+                        </div>
                     </div>
                 @else
                     {{-- Rejected Icon --}}
                     <div class="flex-shrink-0 w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center text-white">
                          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </div>
-                @endif
-                
-                <div class="flex-grow mr-4 text-right">
-                    <p class="text-sm text-gray-800">{{ $notification->data['message'] }}</p>
+                    <div class="flex-grow mr-4 text-right">
+                        <p class="text-sm text-gray-800">{{ $notification->data['message'] }}</p>
 
-                    @if (!empty($notification->data['rejection_reason']))
-                        <div class="mt-2 p-3 bg-red-50 border-l-4 border-red-400 text-red-700 text-sm rounded">
-                            <p class="font-semibold">سبب الرفض:</p>
-                            <p>{{ $notification->data['rejection_reason'] }}</p>
+                        @if (!empty($notification->data['rejection_reason']))
+                            <div class="mt-2 p-3 bg-red-50 border-l-4 border-red-400 text-red-700 text-sm rounded">
+                                <p class="font-semibold">سبب الرفض:</p>
+                                <p>{{ $notification->data['rejection_reason'] }}</p>
+                            </div>
+                        @endif
+
+                        <div class="flex items-center gap-1.5 mt-2">
+                            <span class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</span>
                         </div>
-                    @endif
-
-                    <div class="flex items-center gap-1.5 mt-2">
-                        <span class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</span>
                     </div>
-                </div>
+                @endif
             </div>
         @empty
             <div class="text-center py-16">

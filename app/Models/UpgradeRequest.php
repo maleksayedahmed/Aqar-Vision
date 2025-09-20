@@ -42,4 +42,9 @@ class UpgradeRequest extends Model
     {
         return $this->belongsTo(License::class);
     }
+
+    public function agencyUpgradeRequest()
+    {
+        return $this->hasOne(AgencyUpgradeRequest::class);
+    }
 }

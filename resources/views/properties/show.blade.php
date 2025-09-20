@@ -115,11 +115,12 @@
         <div class="relative w-full h-96 rounded-xl overflow-hidden">
             <img x-bind:src="currentImage" alt="{{ $ad->title }}" class="w-full h-full object-cover transition-opacity duration-300">
             <div x-show="images.length > 1" class="absolute inset-0 flex items-center justify-between px-4">
+                
                 <button @click="prev()" class="bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800 shadow-md">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
                 </button>
                 <button @click="next()" class="bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800 shadow-md">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
                 </button>
             </div>
         </div>
@@ -244,9 +245,11 @@
                         <span class="inline-block bg-[rgba(223,246,226,1)] text-[rgba(117,177,123,1)] text-[12px] w-auto px-2 h-[23px] font-medium rounded-md">مسوق عقاري</span>
                     @endif
                     <div class="flex items-center gap-1">
-                        <a href="tel:{{ optional($ad->user)->phone }}" class="h-[27px] px-3 flex items-center gap-2 rounded-lg bg-[rgba(48,63,125,1)] text-white hover:bg-indigo-800 text-xs font-normal"><span>اتصال</span></a>
-                        <a href="{{ route('chat.start', $ad->id) }}" class="h-[27px] px-3 flex items-center gap-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-200/50 text-xs font-normal"><span>راسلني</span></a>
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', optional($ad->user)->phone) }}" target="_blank" title="WhatsApp" class="flex items-center justify-center w-[34px] h-[27px] rounded-lg bg-[#25D366] text-white hover:bg-[#1EAE54]"><svg width="13.5" height="13.5" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 0.78...Z" fill="white"/></svg></a>
+                        <a href="tel:{{ optional($ad->user)->phone }}" class="h-[27px] px-3 flex items-center gap-2 rounded-lg bg-[rgba(48,63,125,1)] text-white hover:bg-indigo-800 text-xs font-normal"><img src="{{ asset('images/phone.svg') }}" width="13"><span>اتصال</span></a>
+                        <a href="{{ route('chat.start', $ad->id) }}" class="h-[27px] px-3 flex items-center gap-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-200/50 text-xs font-normal"><img src="{{ asset('images/chat.svg') }}" alt="" srcset=""><span>راسلني </span></a>
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', optional($ad->user)->phone) }}" target="_blank" title="WhatsApp" class="flex items-center justify-center w-[34px] h-[27px] rounded-lg bg-[#25D366] text-white hover:bg-[#1EAE54]">
+                            <img src="{{ asset('images/whatsapp.svg') }}" alt="" srcset="">
+                        </a>
                     </div>
                 </div>
             </div>

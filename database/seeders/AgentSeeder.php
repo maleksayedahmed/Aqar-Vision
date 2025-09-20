@@ -7,6 +7,7 @@ use App\Models\AdPrice;
 use App\Models\Agent;
 use App\Models\City;
 use App\Models\User;
+use App\Models\Agency;
 use Illuminate\Database\Seeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -21,9 +22,11 @@ class AgentSeeder extends Seeder
         $adPrice = AdPrice::first();
         $cities = City::pluck('id');
 
+        $agencies = Agency::all();
+
         // Check for prerequisites to avoid errors
-        if (!$adPrice || $cities->isEmpty()) {
-            $this->command->error('Prerequisites missing! Please ensure AdPriceSeeder and CitySeeder have been run.');
+        if (!$adPrice || $cities->isEmpty() || $agencies->isEmpty()) {
+            $this->command->error('Prerequisites missing! Please ensure AdPriceSeeder, CitySeeder and AgencySeeder have been run.');
             return;
         }
 
@@ -32,7 +35,7 @@ class AgentSeeder extends Seeder
             ->count(10)
             ->withAgentRole() // This state assigns the 'agent' role
             ->create()
-            ->each(function (User $agentUser) use ($adPrice, $cities) {
+            ->each(function (User $agentUser, $index) use ($adPrice, $cities, $agencies) {
                 
                 // Explicitly create the Agent record for the new User
                 Agent::create([
@@ -42,6 +45,7 @@ class AgentSeeder extends Seeder
                     'city_id' => $cities->random(), // Assign a random city
                     'agent_type_id' => 1, // Assumes agent_type with ID 1 exists
                     'created_by' => $agentUser->id, // The user created themselves in this context
+                    'agency_id' => $agencies[$index % $agencies->count()]->id,
                 ]);
 
                 // For each agent, create a random number of ads

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -130,6 +131,7 @@ trait AdFormManagementTrait
             $adData['images'] = $imagePaths;
         }
         if ($request->filled('video')) { $adData['video_path'] = $request->video; }
+        Log::info('Ad data:', $adData);
         Ad::create($adData);
         return redirect($this->getRoute('index'))->with('success', 'Ad submitted for review.');
     }

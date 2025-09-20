@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header"><h3 class="card-title">Create New Ad</h3></div>
+                <div class="card-header"><h3 class="card-title">@lang('admin.ads.create_new_ad')</h3></div>
                 {{-- Point the form to the store route --}}
                 <form action="{{ route('admin.ads.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf

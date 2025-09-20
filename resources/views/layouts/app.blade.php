@@ -12,9 +12,10 @@
     {{-- The title will be dynamic for each page --}}
     <title>@yield('title', 'Aqarvision')</title>
 
-    {{-- CSS Links using the asset() helper for proper URL generation --}}
-    <script src="https://cdn.tailwindcss.com"></script>
-    {{-- THIS REDUNDANT ALPINE.JS SCRIPT HAS BEEN REMOVED TO PREVENT CONFLICTS WITH LIVEWIRE --}}
+    {{-- Vite Assets --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 
@@ -25,9 +26,9 @@
     @stack('styles')
 </head>
 <body class="bg-white">
+    {{-- Guest-only modals are included below via partials --}}
 
-
-   @auth
+    @auth
         @if (Auth::user()->agent)
             @include('partials.agent-header')
         @else
@@ -69,24 +70,42 @@
 {{-- Upgrade Account Modal --}}
 {{-- ================================================= --}}
 <div id="upgrade-account-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg m-4 p-8 relative flex flex-col items-center">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg m-4 relative">
+        <!-- Inner scrollable container: keeps modal centered but allows long content to scroll -->
+        <div class="p-6 sm:p-8 flex flex-col items-center max-h-[80vh] overflow-y-auto">
 
         <!-- Close Button -->
         <button id="close-upgrade-modal" class="absolute top-4 left-4 w-6 h-6 bg-gray-200 text-gray-800 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors" aria-label="Close modal">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
 
-        <!-- Logo -->
-        <img src="{{ asset('images/logo.png') }}" class="w-[70px] h-[60px]" alt="logo">
+    <!-- Logo -->
+    <img src="{{ asset('images/logo.png') }}" class="w-[56px] h-[48px]" alt="logo">
 
-        <!-- Heading -->
-        <h2 class="text-xl font-bold text-gray-800 my-4">طلب ترقية الحساب</h2>
-        <p class="text-sm text-gray-500 mb-6 text-center">اختر الدور الذي ترغب في الترقية إليه. ستتم مراجعة طلبك من قبل الإدارة.</p>
+    <!-- Heading -->
+    <h2 class="text-lg font-bold text-gray-800 my-3">طلب ترقية الحساب</h2>
+    <p class="text-sm text-gray-500 mb-4 text-center">اختر الدور الذي ترغب في الترقية إليه. ستتم مراجعة طلبك من قبل الإدارة.</p>
 
         <!-- Upgrade Form -->
         <form id="upgrade-request-form" action="{{ route('user.upgrade.request') }}" method="POST" class="w-full space-y-5">
             @csrf
-            <div id="upgrade-form-error" class="hidden text-center text-red-500 text-sm p-2 bg-red-50 rounded-lg"></div>
+
+            <!-- Personal Information -->
+            <div class="space-y-4 mb-6">
+                <div class="space-y-2">
+                    <label for="name" class="block text-sm font-medium text-gray-700">الاسم</label>
+                    <input type="text" name="name" id="name" value="{{ Auth::user()->name }}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="أدخل اسمك الكامل">
+                </div>
+
+                <div class="space-y-2">
+                    <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
+                    <input type="tel" name="phone" id="phone" value="{{ Auth::user()->phone }}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="أدخل رقم هاتفك">
+                </div>
+            </div>
 
             <fieldset class="space-y-4">
                 <legend class="sr-only">Select a role</legend>
@@ -138,6 +157,83 @@
                 </div>
             </div>
 
+            <!-- Agency Fields (only shown for agency requests) -->
+            @php
+                $agencyTypes = \App\Models\AgencyType::where('is_active', true)->orderBy('id')->get();
+            @endphp
+            <div id="agency-fields" class="space-y-4 hidden">
+                <div class="space-y-2">
+                    <label for="agency_name" class="block text-sm font-medium text-gray-700">اسم الشركة / المكتب</label>
+                    <input type="text" name="agency_name" id="agency_name" placeholder="أدخل اسم الشركة" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="agency_type_id" class="block text-sm font-medium text-gray-700">نوع الشركة</label>
+                        <select name="agency_type_id" id="agency_type_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">اختر نوع الشركة</option>
+                            @foreach($agencyTypes as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="commercial_register_number" class="block text-sm font-medium text-gray-700">سجل تجاري</label>
+                        <input type="text" name="commercial_register_number" id="commercial_register_number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="رقم السجل التجاري (اختياري)">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="commercial_issue_date" class="block text-sm font-medium text-gray-700">تاريخ إصدار السجل</label>
+                        <input type="date" name="commercial_issue_date" id="commercial_issue_date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="commercial_expiry_date" class="block text-sm font-medium text-gray-700">تاريخ انتهاء السجل</label>
+                        <input type="date" name="commercial_expiry_date" id="commercial_expiry_date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="tax_id" class="block text-sm font-medium text-gray-700">الرقم الضريبي</label>
+                        <input type="text" name="tax_id" id="tax_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="الرقم الضريبي (اختياري)">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="tax_issue_date" class="block text-sm font-medium text-gray-700">تاريخ إصدار الضريبة</label>
+                        <input type="date" name="tax_issue_date" id="tax_issue_date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="tax_expiry_date" class="block text-sm font-medium text-gray-700">تاريخ انتهاء الضريبة</label>
+                        <input type="date" name="tax_expiry_date" id="tax_expiry_date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="address" class="block text-sm font-medium text-gray-700">العنوان</label>
+                        <input type="text" name="address" id="address" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="عنوان المكتب (اختياري)">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="phone_number" class="block text-sm font-medium text-gray-700">هاتف المكتب</label>
+                        <input type="tel" name="phone_number" id="phone_number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="هاتف المكتب (اختياري)">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني للمكتب</label>
+                        <input type="email" name="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="البريد الإلكتروني للمكتب (اختياري)">
+                    </div>
+                </div>
+            </div>
+
+            <div id="upgrade-form-error" class="hidden text-right text-red-500 text-sm p-2 bg-red-50 rounded-lg"></div>
             <div class="pt-3">
                 <button type="submit" class="w-full bg-[#303F7C] text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center disabled:opacity-75">
                     <svg class="spinner hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -148,6 +244,7 @@
                 </button>
             </div>
         </form>
+        </div>
     </div>
 </div>
 @endauth
@@ -364,6 +461,30 @@
     @stack('scripts')
     <script src="{{ asset('assets/js/auth-modals.js') }}"></script>
         <script src="{{ asset('assets/js/upgrade-modal.js') }}"></script>
+
+    <script>
+        // Auto-open login modal when URL contains ?openLogin=1 or ?openLogin
+        (function() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                if (params.has('openLogin')) {
+                    // values like openLogin=1, openLogin=true, or just ?openLogin
+                    const loginEmailModal = document.getElementById('login-email-modal');
+                    if (loginEmailModal) {
+                        // Use existing showModal helper if available, otherwise remove 'hidden'
+                        if (typeof showModal === 'function') {
+                            showModal(loginEmailModal);
+                        } else {
+                            loginEmailModal.classList.remove('hidden');
+                        }
+                    }
+                }
+            } catch (e) {
+                // silent fail — non-critical
+                console.error('openLogin auto-open script error:', e);
+            }
+        })();
+    </script>
 
 </body>
 </html>

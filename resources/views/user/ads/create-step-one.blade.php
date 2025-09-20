@@ -78,24 +78,40 @@
                     <input type="text" name="title" id="title" value="{{ old('title') }}" required placeholder="مثال: شقة ايجار مميزة" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
-                    <label for="property_type_id" class="w-[80px] shrink-0 text-[11px] font-medium">نوع العقار<span class="text-red-500 mr-1">*</span></label>
-                    <select name="property_type_id" id="property_type_id" required class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                        <option value="">اختر نوع العقار</option>
-                        @foreach($propertyTypes as $type)
-                            <option value="{{ $type->id }}" {{ old('property_type_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+    <label for="property_type_id" class="w-[80px] shrink-0 text-[11px] font-medium">نوع العقار<span class="text-red-500 mr-1">*</span></label>
+    <select 
+        name="property_type_id" 
+        id="property_type_id" 
+        required 
+        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] pl-10 pr-3"
+    >
+        <option value="">اختر نوع العقار</option>
+        @foreach($propertyTypes as $type)
+            <option value="{{ $type->id }}" {{ old('property_type_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+        @endforeach
+    </select>
+</div>
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="listing_purpose" class="w-[80px] shrink-0 text-[11px] font-medium">نوع المعاملة<span class="text-red-500 mr-1">*</span></label>
-                    <select name="listing_purpose" id="listing_purpose" required class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <select 
+                        name="listing_purpose" 
+                        id="listing_purpose" 
+                        required 
+                        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] pl-10 pr-3"
+                    >
                         <option value="rent" {{ old('listing_purpose') == 'rent' ? 'selected' : '' }}>إيجار</option>
                         <option value="sale" {{ old('listing_purpose') == 'sale' ? 'selected' : '' }}>بيع</option>
                     </select>
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="total_price" class="w-[80px] shrink-0 text-[11px] font-medium">سعر العقار<span class="text-red-500 mr-1">*</span></label>
-                    <input type="number" step="any" name="total_price" id="total_price" value="{{ old('total_price') }}" required placeholder="اضف سعر عقارك" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <div class="relative w-full h-full">
+                        <input type="number" step="any" name="total_price" id="total_price" required placeholder="اضف سعر عقارك" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 pl-20 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-[11px] font-bold text-gray-900 pointer-events-none flex items-center gap-1">
+                            <img src="{{ asset('images/ryal.svg') }}" alt="Currency Icon">
+                            <span id="price-period"></span>
+                        </span>
+                    </div>
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="area_sq_meters" class="w-[80px] shrink-0 text-[11px] font-medium">المساحة (م²)<span class="text-red-500 mr-1">*</span></label>
@@ -121,7 +137,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-16 gap-y-6">
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="city_id" class="w-[80px] shrink-0 text-[11px] font-medium">المدينة<span class="text-red-500 mr-1">*</span></label>
-                    <select name="city_id" id="city-select" required class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
+                    <select 
+                        name="city_id" 
+                        id="city-select" 
+                        required 
+                        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] pl-10 pr-3"
+                    >
                         <option value="">اختر المدينة</option>
                         @foreach($cities as $city)
                             <option value="{{ $city->id }}" {{ old('city_id') == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
@@ -130,7 +151,13 @@
                 </div>
                 <div class="flex gap-3 items-center h-[52px]">
                     <label for="district_id" class="w-[80px] shrink-0 text-[11px] font-medium">الحي<span class="text-red-500 mr-1">*</span></label>
-                    <select name="district_id" id="district-select" required class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3" {{ old('city_id') ? '' : 'disabled' }}>
+                    <select 
+                        name="district_id" 
+                        id="district-select" 
+                        required 
+                        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] pl-10 pr-3 disabled:opacity-50 disabled:cursor-not-allowed" 
+                        {{ old('city_id') ? '' : 'disabled' }}
+                    >
                         <option value="">اختر المدينة أولاً</option>
                     </select>
                 </div>
@@ -185,21 +212,32 @@
                         $slug = str_replace(' ', '_', strtolower($attribute->getTranslation('name', 'en'))); 
                     @endphp
                     <div class="flex gap-3 items-center h-[52px]">
-                        <label for="attr-{{ $slug }}" class="w-[80px] shrink-0 text-[11px] font-medium">{{ $attribute->name }}</label>
+    <label for="attr-{{ $slug }}" class="w-[80px] shrink-0 text-[11px] font-medium">{{ $attribute->name }}</label>
 
-                        @if ($attribute->type === 'dropdown' && !empty($attribute->choices))
-                            <select name="attributes[{{ $slug }}]" id="attr-{{ $slug }}" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                                <option value="">اختر...</option>
-                                @foreach ($attribute->choices as $choice)
-                                    <option value="{{ $choice['en'] }}" {{ old('attributes.'.$slug) == $choice['en'] ? 'selected' : '' }}>
-                                        {{ $choice[app()->getLocale()] ?? $choice['en'] }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        @else
-                            <input type="{{ $attribute->type }}" name="attributes[{{ $slug }}]" id="attr-{{ $slug }}" value="{{ old('attributes.'.$slug) }}" placeholder="{{ $attribute->name }}" class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3">
-                        @endif
-                    </div>
+    @if ($attribute->type === 'dropdown' && !empty($attribute->choices))
+        <select 
+            name="attributes[{{ $slug }}]" 
+            id="attr-{{ $slug }}" 
+            class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] pl-10 pr-3"
+        >
+            <option value="">اختر...</option>
+            @foreach ($attribute->choices as $choice)
+                <option value="{{ $choice['en'] }}" {{ old('attributes.'.$slug) == $choice['en'] ? 'selected' : '' }}>
+                    {{ $choice[app()->getLocale()] ?? $choice['en'] }}
+                </option>
+            @endforeach
+        </select>
+    @else
+        <input 
+            type="{{ $attribute->type }}" 
+            name="attributes[{{ $slug }}]" 
+            id="attr-{{ $slug }}" 
+            value="{{ old('attributes.'.$slug) }}" 
+            placeholder="{{ $attribute->name }}" 
+            class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        >
+    @endif
+</div>
                 @endforeach
             </div>
         </section>
@@ -257,6 +295,24 @@
         }
         citySelect.addEventListener('change', function () { fetchDistricts(this.value); });
         if (citySelect.value) { fetchDistricts(citySelect.value, selectedDistrictId); }
+
+        const listingPurpose = document.getElementById('listing_purpose');
+        const pricePeriod = document.getElementById('price-period');
+
+        function updatePricePeriod() {
+            console.log('Listing purpose changed to:', listingPurpose.value);
+            if (listingPurpose.value === 'rent') {
+                pricePeriod.textContent = '/ شهري';
+            } else {
+                pricePeriod.textContent = '';
+            }
+        }
+
+        // Initial check
+        updatePricePeriod();
+
+        // Listen for changes
+        listingPurpose.addEventListener('change', updatePricePeriod);
     });
 </script>
 @endpush
