@@ -1,24 +1,23 @@
 <div class="card-body">
     <div class="form-group">
-        <label for="title">Title</label>
+        <label for="title">@lang('admin.ads.property_title')</label>
         <input type="text" name="title" class="form-control" value="{{ old('title', $property?->title) }}" required>
     </div>
     <div class="form-group">
-        <label for="description">Description</label>
+        <label for="description">@lang('admin.ads.description')</label>
         <textarea name="description" class="form-control" rows="3">{{ old('description', $property?->description) }}</textarea>
     </div>
 
     <hr>
-    <h5>Location</h5>
+    <h5>@lang('admin.ads.location_details')</h5>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="city_id">City</label>
+                <label for="city_id">@lang('admin.ads.city')</label>
                 <select name="city_id" id="city-select" class="form-control" required>
-                    <option value="">Select a City</option>
+                    <option value="">@lang('admin.ads.select_city')</option>
                     @foreach ($cities as $city)
                         <option value="{{ $city->id }}" 
-                            {{-- Pre-select the city if it exists from old input or the property's relationship --}}
                             {{ old('city_id', $property?->district?->city_id) == $city->id ? 'selected' : '' }}>
                             {{ $city->name }}
                         </option>
@@ -28,22 +27,21 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="district_id">District</label>
+                <label for="district_id">@lang('admin.ads.district')</label>
                 <select name="district_id" id="district-select" class="form-control" required {{ old('city_id', $property?->district?->city_id) ? '' : 'disabled' }}>
-                    <option value="">Select a City First</option>
+                    <option value="">@lang('admin.ads.select_city_first')</option>
                 </select>
             </div>
         </div>
     </div>
     <hr>
 
-
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
-                <label for="property_type_id">Property Type</label>
+                <label for="property_type_id">@lang('admin.ads.property_type')</label>
                 <select name="property_type_id" id="property_type_id" class="form-control" required>
-                    <option value="">Select a Type</option>
+                    <option value="">@lang('admin.ads.select_a_type')</option>
                     @foreach ($types as $type)
                         <option value="{{ $type->id }}" data-attributes-url="{{ route('admin.property-types.attributes', $type->id) }}"
                             {{ old('property_type_id', $property?->property_type_id) == $type->id ? 'selected' : '' }}>
@@ -55,7 +53,7 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label for="purpose_id">Property Purpose</label>
+                <label for="purpose_id">@lang('admin.ads.listing_purpose')</label>
                 <select name="purpose_id" class="form-control" required>
                     @foreach ($purposes as $purpose)
                         <option value="{{ $purpose->id }}" {{ old('purpose_id', $property?->purpose_id) == $purpose->id ? 'selected' : '' }}>{{ $purpose->name }}</option>
@@ -65,28 +63,28 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label for="total_price">Total Price</label>
+                <label for="total_price">@lang('admin.ads.total_price')</label>
                 <input type="number" step="0.01" name="total_price" class="form-control" value="{{ old('total_price', $property?->total_price) }}" required>
             </div>
         </div>
     </div>
 
     <hr>
-    <h5>Property Photos</h5>
+    <h5>@lang('admin.ads.property_features')</h5>
     <div class="form-group">
-        <label for="photos">Upload New Photos</label>
+        <label for="photos">@lang('admin.ads.upload_new_images')</label>
         <input type="file" name="photos[]" class="form-control" multiple>
     </div>
 
     @if(isset($property) && $property->hasMedia('property_images'))
     <div class="mb-3">
-        <p><strong>Current Photos:</strong></p>
+        <p><strong>@lang('admin.ads.current_images')</strong></p>
         <div class="row">
             @foreach($property->getMedia('property_images') as $media)
                 <div class="col-md-2 text-center">
                     <img src="{{ $media->getUrl('thumb') }}" alt="Thumbnail" class="img-thumbnail mb-2" style="width: 100px; height: 100px; object-fit: cover;">
                     <br>
-                    <a href="{{ route('admin.properties.media.destroy', [$property->id, $media->id]) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this image?');">Delete</a>
+                    <a href="{{ route('admin.properties.media.destroy', [$property->id, $media->id]) }}" class="btn btn-danger btn-sm" onclick="return confirm('@lang('admin.delete_confirmation')');">@lang('admin.delete')</a>
                 </div>
             @endforeach
         </div>
@@ -94,29 +92,29 @@
     @endif
     <hr>
 
-    <h5>Dynamic Attributes</h5>
+    <h5>@lang('admin.ads.additional_details')</h5>
     <div id="dynamic-attributes-container" class="row">
-        <p class="text-muted">Please select a property type to see its specific attributes.</p>
+        <p class="text-muted">@lang('admin.ads.select_a_type')</p>
     </div>
     <hr>
 
     <div class="row">
         <div class="col-md-6">
              <div class="form-group">
-                <label for="listing_purpose">Listing Purpose</label>
+                <label for="listing_purpose">@lang('admin.ads.listing_purpose')</label>
                 <select name="listing_purpose" class="form-control" required>
-                    <option value="sale" {{ old('listing_purpose', $property?->listing_purpose) == 'sale' ? 'selected' : '' }}>For Sale</option>
-                    <option value="rent" {{ old('listing_purpose', $property?->listing_purpose) == 'rent' ? 'selected' : '' }}>For Rent</option>
+                    <option value="sale" {{ old('listing_purpose', $property?->listing_purpose) == 'sale' ? 'selected' : '' }}>@lang('admin.ads.for_sale')</option>
+                    <option value="rent" {{ old('listing_purpose', $property?->listing_purpose) == 'rent' ? 'selected' : '' }}>@lang('admin.ads.for_rent')</option>
                 </select>
             </div>
         </div>
          <div class="col-md-6">
              <div class="form-group">
-                <label for="status">Property Status</label>
+                <label for="status">@lang('admin.ads.status_moderation')</label>
                 <select name="status" class="form-control" required>
-                    <option value="available" {{ old('status', $property?->status) == 'available' ? 'selected' : '' }}>Available</option>
-                    <option value="sold" {{ old('status', $property?->status) == 'sold' ? 'selected' : '' }}>Sold</option>
-                    <option value="rented" {{ old('status', $property?->status) == 'rented' ? 'selected' : '' }}>Rented</option>
+                    <option value="available" {{ old('status', $property?->status) == 'available' ? 'selected' : '' }}>@lang('admin.ads.available')</option>
+                    <option value="sold" {{ old('status', $property?->status) == 'sold' ? 'selected' : '' }}>@lang('admin.ads.sold')</option>
+                    <option value="rented" {{ old('status', $property?->status) == 'rented' ? 'selected' : '' }}>@lang('admin.ads.rented')</option>
                 </select>
             </div>
         </div>
@@ -124,8 +122,9 @@
 
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-primary">Save Property</button>
+    <button type="submit" class="btn btn-primary">@lang('admin.save')</button>
 </div>
+
 
 @push('scripts')
 <script>
