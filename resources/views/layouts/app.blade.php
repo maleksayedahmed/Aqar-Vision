@@ -17,7 +17,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+      <script src="https://cdn.tailwindcss.com"></script>
+
 
     {{-- This line is required for Livewire component styles --}}
     @livewireStyles

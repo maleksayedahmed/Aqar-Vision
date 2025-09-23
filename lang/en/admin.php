@@ -113,6 +113,9 @@ return [
         'confirm_rejection' => 'Confirm Rejection',
         'rejecting' => 'Rejecting...',
         'error_occurred' => 'An error occurred. Please try again.',
+        'available' => 'Available',
+        'sold' => 'Sold',
+        'rented' => 'Rented',
     ],
     'cities' => [
         'city_name' => 'City Name',
@@ -120,4 +123,5 @@ return [
         'save' => 'Save',
         'cancel' => 'Cancel',
     ],
+
 ];

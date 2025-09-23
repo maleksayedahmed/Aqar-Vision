@@ -113,6 +113,9 @@ return [
         'confirm_rejection' => 'تأكيد الرفض',
         'rejecting' => 'جاري الرفض ...',
         'error_occurred' => 'حدث خطأ. يرجى المحاولة مرة أخرى.',
+        'available' => 'متاح',
+        'sold' => 'مباع',
+        'rented' => 'مؤجر',
     ],
     'cities' => [
         'city_name' => 'اسم المدينة',
