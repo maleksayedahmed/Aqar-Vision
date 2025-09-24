@@ -12,7 +12,7 @@ class District extends Model
     // This tells Laravel to use the 'districts' table for this model
     protected $table = 'districts';
 
-    protected $fillable = ['name', 'city_id'];
+    protected $fillable = ['name', 'city_id', 'slug'];
 
     // This defines the relationship: A District belongs to a City
     public function city()
