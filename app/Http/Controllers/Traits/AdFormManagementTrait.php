@@ -120,6 +120,30 @@ trait AdFormManagementTrait
             return redirect($this->getRoute('create'))->with('error', 'Session expired. Please start over.');
         }
         $request->validate([ 'images.*' => ['nullable', 'image', 'max:5120'], 'video' => ['nullable', 'string'], 'terms' => ['accepted'] ]);
+        // Check subscription and remaining ad allowances before allowing creation.
+        $user = Auth::user();
+        $activeSubscription = Subscription::where('user_id', $user->id)
+            ->where('status', 'active')
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->with('plan')
+            ->first();
+
+        if (!$activeSubscription || !$activeSubscription->plan) {
+            return redirect($this->getRoute('create'))->with('error', 'You must have an active plan to create ads.');
+        }
+
+        // Compute used normal ads during subscription period
+        $usedNormalAds = Ad::where('user_id', $user->id)
+            ->whereBetween('ads.created_at', [$activeSubscription->start_date, $activeSubscription->end_date])
+            ->join('ad_prices', 'ads.ad_price_id', '=', 'ad_prices.id')
+            ->where('ad_prices.type', 'normal')
+            ->count();
+
+        $allowedNormalAds = (int) $activeSubscription->plan->ads_regular;
+        if ($usedNormalAds >= $allowedNormalAds) {
+            return redirect($this->getRoute('create'))->with('error', 'Your free/active plan does not allow more normal ads. Please upgrade or purchase ad packages.');
+        }
         $adData = $stepOneData;
         $adData['user_id'] = Auth::id();
         $adData['status'] = 'pending';
