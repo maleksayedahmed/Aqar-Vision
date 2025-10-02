@@ -25,7 +25,7 @@ use App\Http\Middleware\Language;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware(['auth' ,Language::class])
+Route::middleware(['auth' ,'role:admin', Language::class])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {

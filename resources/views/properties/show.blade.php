@@ -101,7 +101,7 @@
 
     {{-- Thumbnail navigation --}}
     @if(!empty($ad->images) && count($ad->images) > 1)
-    <div class="flex justify-center flex-wrap gap-3 mb-6">
+    <div class="flex justify-center flex-wrap gap-3 mb-6 hidden sm:flex">
         <template x-for="(image, index) in images" :key="index">
             <button @click="select(index)" :class="{ 'border-blue-600 opacity-100': currentIndex === index, 'border-transparent opacity-70': currentIndex !== index }" class="thumbnail-btn w-32 h-20 rounded-lg overflow-hidden border-2 hover:opacity-100 transition-all">
                 <img :src="'{{ Storage::url('') }}' + image" :alt="'Thumbnail ' + (index + 1)" class="w-full h-full object-cover">
