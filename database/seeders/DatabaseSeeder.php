@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             PropertyTypeSeeder::class,
             AdPriceSeeder::class,
             RoleAndPermissionSeeder::class,
-            planSeeder::class,
+            PlanSeeder::class,
             PropertySeeder::class,
             SubscriptionSeeder::class,
             CitySeeder::class,
