@@ -7,18 +7,18 @@
 <main class="flex flex-col items-center justify-center min-h-screen pt-[35px]">
     <section class="w-[98%] h-[369px] rounded-[20px] shadow-[0_100px_100px_-60px_rgba(0,0,0,0.2)]">
 
-        <div class="flex text-center w-[100%] h-[369px] rounded-[20px] items-center flex-col mb-8 bg-[linear-gradient(89.78deg,rgba(44,63,128,0)_0.27%,#4461A6_66.85%,#2C3F80_99.9%)] bg-cover bg-center pt-[40px] pb-[150px]" style="background-image: linear-gradient(89.78deg, rgba(44,63,128,0) 0.27%, #4461A6 66.85%, #2C3F80 99.9%), url('{{ asset('images/homebanner.jpg') }}');">
+        <div class="flex text-center w-[100%] h-[369px] rounded-[20px] items-center flex-col mb-8 bg-[linear-gradient(89.78deg,rgba(44,63,128,0)_0.27%,#4461A6_66.85%,#2C3F80_99.9%)] bg-cover bg-center pt-[40px] pb-[150px]" style="background-image: linear-gradient(89.78deg, rgba(44,63,128,0) 0.27%, #4461A6 66.85%, #2C3F80 99.9%), url('{{ asset('images/hero_banner.jpg') }}');">
             <img src="{{ asset('images/logo_sm.png') }}" width="30px" alt="logo">
 
             <!-- Main Title -->
             <div>
                 <h1 class="text-[42px] md:text-5xl font-bold text-white mb-4">
-                    شُــــفنـا لـك بيــت
+                    حيّاك الله! عقارك معنا أسهل وأسرع
                 </h1>
 
                 <!-- Subtitle -->
                 <p class="text-white/90 text-[14px] md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
-                    اكتشف عقارات حقيقية بأسعار السوق، وخل قرارك مبني على وضوح <br> وثقة.
+                    وجهتك الأولى للعقار في السعودية… بكل ثقة ووضوح
                 </p>
             </div>
 
@@ -52,7 +52,7 @@
             <!-- District Dropdown -->
             <div class="w-full h-12 relative">
                 <select name="district_id" id="district-select" class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pl-10 pr-4 cursor-pointer hover:border-indigo-400 text-sm font-medium text-gray-700 disabled:bg-gray-100" disabled>
-                    <option value="">اختر المدينة أولاً</option>
+                    <option value="">اختر الحي </option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>

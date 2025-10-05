@@ -13,7 +13,7 @@
             <!-- Main Title -->
             <div>
                 <h1 class="text-[42px] md:text-5xl font-bold text-white mb-4">
-                    وسطاء العقاريون
+                    وسطاء و مسوقين عقاريين
                 </h1>
 
                 <!-- Subtitle -->
