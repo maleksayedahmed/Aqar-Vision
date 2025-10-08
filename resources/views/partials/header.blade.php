@@ -21,7 +21,7 @@
             <!-- Logo & Desktop Navigation -->
             <div class="flex items-center gap-[50px]">
                 <a href="{{ route('home') }}">
-                    <img src="{{ asset('images/logo.png') }}" class="w-[70px] h-[60px]" alt="logo">
+                    <img src="{{ asset('images/logo.svg') }}" class="w-[70px] h-[60px]" alt="logo">
                 </a>
                 <div class="hidden lg:flex gap-[26px]">
                     <nav class="hidden lg:flex items-center gap-x-6">
@@ -33,7 +33,7 @@
                     <div class="hidden md:flex">
                             <button class="flex items-center gap-x-2 text-sm bg-gray-200 hover:bg-gray-300 p-0.5 rounded-lg transition-colors">
                                 <div class="flex items-center gap-x-1 text-white">
-                                    <img src="{{ asset('images/arabic.png') }}" alt="arabic flag">
+                                    <img src="{{ asset('images/flag.svg') }}" alt="arabic flag">
                                 </div>
 
                                 <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>

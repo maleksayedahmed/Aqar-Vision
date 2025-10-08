@@ -102,13 +102,13 @@
                      <!-- Name -->
                         <div>
                             <label for="name" class="block text-[14.2px] font-medium text-[rgba(26,26,26,1)] mb-2">الاسم</label>
-                            <input type="text" id="name" name="name" placeholder="ادخل الاسم" class="text-[14.2px] w-full bg-[#F9F9F9] text-gray-500 rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-[#303F7C]">
+                            <input type="text" id="name" name="name" placeholder="ادخل الاسم" class="text-[14.2px] w-full bg-[#F9F9F9] text-gray-500 rounded-[12px] py-3 px-5 focus:outline-none focus:ring-2 focus:ring-[#303F7C]">
                         </div>
                         <!-- Phone -->
                         <div>
                             <label for="phone" class="block text-[14.2px] font-medium text-[rgba(26,26,26,1)] mb-2">رقم الجوال</label>
                             <div class="relative">
-                                <input type="tel" id="phone" name="phone" placeholder="ادخل رقم الجوال" class="text-[14.2px] w-full bg-[#F9F9F9] text-gray-500 rounded-full py-3 px-5 text-right pr-14 focus:outline-none focus:ring-2 focus:ring-[#303F7C]">
+                                <input type="tel" id="phone" name="phone" placeholder="ادخل رقم الجوال" class="text-[14.2px] w-full bg-[#F9F9F9] text-gray-500 rounded-[12px] py-3 px-5 text-right pr-14 focus:outline-none focus:ring-2 focus:ring-[#303F7C]">
                                 <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                                     <img src="{{ asset('images/saudi_flag.png') }}" alt="Saudi Flag" class="w-6 h-auto">
                                 </div>
@@ -117,12 +117,12 @@
                         <!-- Email -->
                         <div>
                             <label for="email" class="block text-[14.2px] font-medium text-[rgba(26,26,26,1)] mb-2">البريد الالكتروني</label>
-                            <input type="email" id="email" name="email" placeholder="ادخل البريد الالكتروني" class="text-[14.2px] w-full bg-[#F9F9F9] text-gray-500 rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-[#303F7C]">
+                            <input type="email" id="email" name="email" placeholder="ادخل البريد الالكتروني" class="text-[14.2px] w-full bg-[#F9F9F9] text-gray-500  py-3 px-5 focus:outline-none focus:ring-2 focus:ring-[#303F7C]">
                         </div>
                          <!-- Service Type -->
                         <div>
                             <label for="service_type" class="block text-[14.2px] text-[rgba(26,26,26,1)] mb-2">نوع الخدمة</label>
-                            <input type="text" id="service_type" name="service_type" placeholder="اختيار نوع الخدمة" class="text-[14.2px] w-full bg-[#F9F9F9] text-gray-500 rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-[#303F7C]">
+                            <input type="text" id="service_type" name="service_type" placeholder="اختيار نوع الخدمة" class="text-[14.2px] w-full bg-[#F9F9F9] text-gray-500 rounded-[12px] py-3 px-5 focus:outline-none focus:ring-2 focus:ring-[#303F7C]">
                         </div>
                         <!-- Message -->
                         <div class="md:col-span-2">

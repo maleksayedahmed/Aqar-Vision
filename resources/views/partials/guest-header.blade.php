@@ -5,12 +5,30 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
         <div class="flex flex-wrap items-center justify-between min-h-16 py-2">
             <!-- Left side - Logo -->
-            <div class="flex items-center">
-                <a href="{{ route('home') }}">
-                    <img src="{{ asset('images/logo.png') }}" class="w-[70px] h-[60px]" alt="logo">
-                </a>
-            </div>
+            
+<!-- Logo & Desktop Navigation -->
+<div class="flex items-center gap-[50px]">
+    <a href="{{ route('home') }}">
+        <img src="{{ asset('images/logo.svg') }}" class="w-[70px] h-[60px]" alt="logo">
+    </a>
+    <div class="hidden lg:flex gap-[26px]">
+        <nav class="hidden lg:flex items-center gap-x-6">
+            <a href="{{ route('home') }}" class="text-[16px] {{ request()->routeIs('home') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">الرئيسية</a>
+            <a href="{{ route('all.agents') }}" class="text-[16px] {{ request()->routeIs('all.agents') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">وسطاء العقاريون</a>
+            <a href="{{ route('user.about-us') }}" class="text-[16px] {{ request()->routeIs('user.about-us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">نبذة عنا</a>
+            <a href="{{ route('contact.us') }}" class="text-[16px] {{ request()->routeIs('contact.us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">تواصل معنا</a>
+        </nav>
+        <div class="hidden md:flex">
+                <button class="flex items-center gap-x-2 text-sm bg-gray-200 hover:bg-gray-300 p-0.5 rounded-lg transition-colors">
+                    <div class="flex items-center gap-x-1 text-white">
+                        <img src="{{ asset('images/flag.svg') }}" alt="arabic flag">
+                    </div>
 
+                    <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                </button>
+            </div>
+    </div>
+</div>
             <!-- Right side - Controls -->
             <div class="flex items-center gap-x-2 lg:gap-x-4">
                 <!-- Map Button -->

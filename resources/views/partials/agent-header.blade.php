@@ -11,7 +11,7 @@
             </div>
 
             <div class="flex items-center gap-[50px]">
-                <img src="{{ asset('images/logo.png') }}" class="w-[70px] h-[60px]" alt="logo">
+                <img src="{{ asset('images/logo.svg') }}" class="w-[70px] h-[60px]" alt="logo">
                 <div class="hidden lg:flex gap-[33px]">
                     <nav class="hidden lg:flex items-center gap-x-6">
                         <a href="{{ route('agent.home') }}"

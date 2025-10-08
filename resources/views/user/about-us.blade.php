@@ -35,7 +35,7 @@
                     {{-- Main Text Content --}}
                     <div class="p-6 md:p-10">
                         <div>
-                            <h2 class="text-3xl md:text-[42px] font-bold text-indigo-700 mb-8">من نحن؟</h2>
+                            <h2 class="text-3xl md:text-[42px] font-bold text-[#303E7C] mb-8">من نحن؟</h2>
                             <div class="font-medium text-sm text-gray-700 leading-8">
                                 <div class="flex flex-col lg:flex-row gap-8 lg:gap-[80px]">
                                     <p>
