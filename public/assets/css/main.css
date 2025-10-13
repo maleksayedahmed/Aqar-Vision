@@ -131,3 +131,7 @@
       appearance: none;         /* Remove default arrow for other browsers */
       background-image: none;   /* Ensure no background image is used */
   }
+
+select{
+    background-position: left 0.5rem center;
+}

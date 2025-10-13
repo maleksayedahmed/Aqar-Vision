@@ -12,7 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append(Language::class);
+        $middleware->web(append: [
+            Language::class,
+        ]);
 
         $middleware->alias([
             'is_agency' => \App\Http\Middleware\IsAgency::class,

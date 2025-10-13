@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'وسطاء العقاريون')
+@section('title', __('common.real_estate_agents'))
 
 @section('content')
 
@@ -14,13 +14,13 @@
                 <!-- Main Title -->
                 <div>
                     <h1 class="text-[42px] md:text-5xl font-bold text-white mb-4">
-                        وسطاء و مسوقين عقاريين
+                        {{ __('common.real_estate_agents') }}
                     </h1>
 
                     <!-- Subtitle -->
                     <p class="text-white/90 text-[14px] md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
-                        تواصل مع أفضل وسطاء العقارات المحترفين في المملكة<br>
-                        خبراء يساعدونك في العثور على العقار المثالي
+                        {{ __('common.agents_subtitle') }}<br>
+                        {{ __('common.agents_subtitle_2') }}
                     </p>
                 </div>
             </div>
@@ -31,17 +31,17 @@
         <!-- Search and Filter Section -->
         <section class="max-w-7xl w-full mx-auto py-8 px-4">
             <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8">
-                <h2 class="text-xl font-bold text-gray-900 mb-4">البحث والتصفية</h2>
+                <h2 class="text-xl font-bold text-gray-900 mb-4">{{ __('common.search_and_filter') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                        <input type="text" id="agent-search" placeholder="ابحث عن وسيط..."
+                        <input type="text" id="agent-search" placeholder="{{ __('common.search_agent') }}"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#303E7C]
  focus:border-transparent">
                     </div>
                     <div>
                         <select id="city-filter"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#303E7C] focus:border-transparent">
-                            <option value="">جميع المدن</option>
+                            <option value="">{{ __('common.all_cities') }}</option>
                             @foreach ($agents->pluck('agent.city')->filter()->unique('id') as $city)
                                 <option value="{{ $city->id }}">{{ $city->name }}</option>
                             @endforeach
@@ -50,18 +50,18 @@
                     <div>
                         <select id="ads-count-filter"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#303E7C] focus:border-transparent">
-                            <option value="">جميع الوسطاء</option>
-                            <option value="1-5">1-5 عقارات</option>
-                            <option value="6-15">6-15 عقار</option>
-                            <option value="16+">أكثر من 15 عقار</option>
+                            <option value="">{{ __('common.all_agents') }}</option>
+                            <option value="1-5">{{ __('common.properties_1_5') }}</option>
+                            <option value="6-15">{{ __('common.properties_6_15') }}</option>
+                            <option value="16+">{{ __('common.properties_16_plus') }}</option>
                         </select>
                     </div>
                     <div>
                         <select id="sort-filter"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#303E7C] focus:border-transparent">
-                            <option value="name">ترتيب حسب الاسم</option>
-                            <option value="ads_count">ترتيب حسب عدد العقارات</option>
-                            <option value="newest">الأحدث</option>
+                            <option value="name">{{ __('common.sort_by_name') }}</option>
+                            <option value="ads_count">{{ __('common.sort_by_properties') }}</option>
+                            <option value="newest">{{ __('common.newest') }}</option>
                         </select>
                     </div>
                 </div>
@@ -72,9 +72,9 @@
         <section class="max-w-7xl w-full mx-auto py-8 px-4">
             <div class="flex justify-between items-center mb-8">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-slate-800 md:text-3xl">جميع وسطاء العقارات</h2>
+                    <h2 class="text-xl font-bold text-slate-800 md:text-3xl">{{ __('common.all_real_estate_agents') }}</h2>
                     <p class="text-xs sm:text-sm text-slate-500">
-                        {{ $agents->count() }} وسيط عقاري معتمد جاهز لخدمتك
+                        {{ __('common.certified_agents_count', ['count' => $agents->count()]) }}
                     </p>
                 </div>
                 <div class="flex items-center gap-2">
@@ -105,7 +105,7 @@
                         <div class="relative p-6 bg-gradient-to-br from-indigo-50 to-blue-50">
                             <div class="absolute top-4 right-4">
                                 <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full">
-                                    مسوق عقاري
+                                    {{ __('common.agent_title') }}
                                 </span>
                             </div>
 
@@ -127,7 +127,7 @@
                                             d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
                                             clip-rule="evenodd" />
                                     </svg>
-                                    <span>{{ $agent->agent?->city?->name ?? 'غير محدد' }}</span>
+                                    <span>{{ $agent->agent?->city?->name ?? __('common.not_specified') }}</span>
                                 </div>
 
                                 <div class="flex items-center gap-1 text-sm text-[#303F7D] font-medium">
@@ -135,7 +135,7 @@
                                         <path
                                             d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                                     </svg>
-                                    <span>{{ $agent->ads_count }} عقار</span>
+                                    <span>{{ __('common.properties_count', ['count' => $agent->ads_count]) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
                                         <path
                                             d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                                     </svg>
-                                    <span>اتصال</span>
+                                    <span>{{ __('common.call') }}</span>
                                 </a>
 
                                 <a href="{{ route('agents.show', $agent) }}"
@@ -160,7 +160,7 @@
                                             d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
                                             clip-rule="evenodd" />
                                     </svg>
-                                    <span>تفاصيل</span>
+                                    <span>{{ __('common.details') }}</span>
                                 </a>
                             </div>
 
@@ -170,7 +170,7 @@
                                     <path
                                         d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.386" />
                                 </svg>
-                                <span>واتساب</span>
+                                <span>{{ __('common.whatsapp') }}</span>
                             </a>
                         </div>
                     </div>
@@ -180,8 +180,8 @@
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">لا يوجد وسطاء عقاريون</h3>
-                        <p class="text-gray-500">لا يوجد وسطاء عقاريون متاحون حالياً.</p>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('common.no_agents_available') }}</h3>
+                        <p class="text-gray-500">{{ __('common.no_agents_message') }}</p>
                     </div>
                 @endforelse
             </div>
@@ -216,7 +216,7 @@
                                                     d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
                                                     clip-rule="evenodd" />
                                             </svg>
-                                            <span class="truncate">{{ $agent->agent?->city?->name ?? 'غير محدد' }}</span>
+                                            <span class="truncate">{{ $agent->agent?->city?->name ?? __('common.not_specified') }}</span>
                                         </div>
                                         <div class="flex items-center gap-1">
                                             <svg class="w-3 h-3 text-indigo-600 flex-shrink-0" fill="currentColor"
@@ -224,7 +224,7 @@
                                                 <path
                                                     d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                                             </svg>
-                                            <span class="text-indigo-600 font-medium">{{ $agent->ads_count }} عقار</span>
+                                            <span class="text-indigo-600 font-medium">{{ __('common.properties_count', ['count' => $agent->ads_count]) }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -232,7 +232,7 @@
                                 <!-- Status Badge -->
                                 <div class="flex-shrink-0">
                                     <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full">
-                                        مسوق عقاري
+                                        {{ __('common.agent_title') }}
                                     </span>
                                 </div>
                             </div>
@@ -245,7 +245,7 @@
                                         <path
                                             d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                                     </svg>
-                                    <span>اتصال</span>
+                                    <span>{{ __('common.call') }}</span>
                                 </a>
 
                                 <a href="{{ route('agents.show', $agent) }}"
@@ -256,7 +256,7 @@
                                             d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
                                             clip-rule="evenodd" />
                                     </svg>
-                                    <span>تفاصيل</span>
+                                    <span>{{ __('common.details') }}</span>
                                 </a>
 
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $agent->phone) }}"
@@ -265,7 +265,7 @@
                                         <path
                                             d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.386" />
                                     </svg>
-                                    <span>واتساب</span>
+                                    <span>{{ __('common.whatsapp') }}</span>
                                 </a>
                             </div>
                         </div>
@@ -291,14 +291,14 @@
                                                     d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
                                                     clip-rule="evenodd" />
                                             </svg>
-                                            <span>{{ $agent->agent?->city?->name ?? 'غير محدد' }}</span>
+                                            <span>{{ $agent->agent?->city?->name ?? __('common.not_specified') }}</span>
                                         </div>
                                         <div class="flex items-center gap-1">
                                             <svg class="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                                                 <path
                                                     d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                                             </svg>
-                                            <span class="text-indigo-600 font-medium">{{ $agent->ads_count }} عقار</span>
+                                            <span class="text-indigo-600 font-medium">{{ __('common.properties_count', ['count' => $agent->ads_count]) }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -311,12 +311,12 @@
                                         <path
                                             d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                                     </svg>
-                                    <span>اتصال</span>
+                                    <span>{{ __('common.call') }}</span>
                                 </a>
 
                                 <a href="{{ route('agents.show', $agent) }}"
                                     class="flex items-center gap-2 border border-gray-300 text-gray-700 text-sm font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors">
-                                    <span>عرض التفاصيل</span>
+                                    <span>{{ __('common.view_details') }}</span>
                                 </a>
 
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $agent->phone) }}"
@@ -335,8 +335,8 @@
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">لا يوجد وسطاء عقاريون</h3>
-                        <p class="text-gray-500">لا يوجد وسطاء عقاريون متاحون حالياً.</p>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('common.no_agents_available') }}</h3>
+                        <p class="text-gray-500">{{ __('common.no_agents_message') }}</p>
                     </div>
                 @endforelse
             </div>
@@ -346,7 +346,7 @@
                 <div class="mt-12 flex justify-center">
                     <div class="flex items-center gap-2">
                         <button
-                            class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">السابق</button>
+                            class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">{{ __('common.previous') }}</button>
                         <button
                             class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg">1</button>
                         <button
@@ -354,7 +354,7 @@
                         <button
                             class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">3</button>
                         <button
-                            class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">التالي</button>
+                            class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">{{ __('common.next') }}</button>
                     </div>
                 </div>
             @endif
@@ -366,17 +366,16 @@
                 style="background-image: url('{{ asset('images/world.png') }}'); background-color: rgba(68, 112, 174, 1);">
 
                 <h2 class="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
-                    هل أنت وسيط عقاري محترف؟
+                    {{ __('common.professional_agent_question') }}
                 </h2>
 
                 <p class="text-white/90 text-base lg:text-lg mb-8 max-w-3xl mx-auto font-medium leading-relaxed">
-                    انضم إلى منصتنا وابدأ في عرض عقاراتك للوصول إلى آلاف العملاء المحتملين. سجل الآن واحصل على حساب مجاني
-                    للبدء في رحلتك المهنية معنا.
+                    {{ __('common.join_platform_message') }}
                 </p>
 
                 <a href="#"
                     class="inline-block bg-[#2C3F80] text-white font-semibold py-3 px-10 rounded-full hover:bg-opacity-90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#4A6C9B] focus:ring-white">
-                    انضم كوسيط عقاري
+                    {{ __('common.join_as_agent') }}
                 </a>
 
             </div>

@@ -17,7 +17,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    
+
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
       <script src="https://cdn.tailwindcss.com"></script>
 
@@ -312,6 +312,90 @@
                     if (userMenu && !userMenu.classList.contains('hidden') && !userMenu.contains(event.target) && !userMenuButton.contains(event.target)) {
                         userMenu.classList.add('hidden');
                         userMenuButton.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+
+            // Language Dropdown Logic (Authenticated User)
+            const languageMenuButton = document.getElementById('language-menu-button');
+            const languageMenu = document.getElementById('language-menu');
+            const languageDropdownArrow = document.getElementById('language-dropdown-arrow');
+
+            if (languageMenuButton && languageMenu) {
+                languageMenuButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    languageMenu.classList.toggle('hidden');
+                    languageMenuButton.setAttribute('aria-expanded', !languageMenu.classList.contains('hidden'));
+
+                    // Rotate arrow
+                    if (languageDropdownArrow) {
+                        languageDropdownArrow.classList.toggle('rotate-180');
+                    }
+                });
+
+                window.addEventListener('click', (event) => {
+                    if (languageMenu && !languageMenu.classList.contains('hidden') && !languageMenu.contains(event.target) && !languageMenuButton.contains(event.target)) {
+                        languageMenu.classList.add('hidden');
+                        languageMenuButton.setAttribute('aria-expanded', 'false');
+                        if (languageDropdownArrow) {
+                            languageDropdownArrow.classList.remove('rotate-180');
+                        }
+                    }
+                });
+            }
+
+            // Language Dropdown Logic (Guest User)
+            const languageMenuButtonGuest = document.getElementById('language-menu-button-guest');
+            const languageMenuGuest = document.getElementById('language-menu-guest');
+            const languageDropdownArrowGuest = document.getElementById('language-dropdown-arrow-guest');
+
+            if (languageMenuButtonGuest && languageMenuGuest) {
+                languageMenuButtonGuest.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    languageMenuGuest.classList.toggle('hidden');
+                    languageMenuButtonGuest.setAttribute('aria-expanded', !languageMenuGuest.classList.contains('hidden'));
+
+                    // Rotate arrow
+                    if (languageDropdownArrowGuest) {
+                        languageDropdownArrowGuest.classList.toggle('rotate-180');
+                    }
+                });
+
+                window.addEventListener('click', (event) => {
+                    if (languageMenuGuest && !languageMenuGuest.classList.contains('hidden') && !languageMenuGuest.contains(event.target) && !languageMenuButtonGuest.contains(event.target)) {
+                        languageMenuGuest.classList.add('hidden');
+                        languageMenuButtonGuest.setAttribute('aria-expanded', 'false');
+                        if (languageDropdownArrowGuest) {
+                            languageDropdownArrowGuest.classList.remove('rotate-180');
+                        }
+                    }
+                });
+            }
+
+            // Language Dropdown Logic (Agent User)
+            const languageMenuButtonAgent = document.getElementById('language-menu-button-agent');
+            const languageMenuAgent = document.getElementById('language-menu-agent');
+            const languageDropdownArrowAgent = document.getElementById('language-dropdown-arrow-agent');
+
+            if (languageMenuButtonAgent && languageMenuAgent) {
+                languageMenuButtonAgent.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    languageMenuAgent.classList.toggle('hidden');
+                    languageMenuButtonAgent.setAttribute('aria-expanded', !languageMenuAgent.classList.contains('hidden'));
+
+                    // Rotate arrow
+                    if (languageDropdownArrowAgent) {
+                        languageDropdownArrowAgent.classList.toggle('rotate-180');
+                    }
+                });
+
+                window.addEventListener('click', (event) => {
+                    if (languageMenuAgent && !languageMenuAgent.classList.contains('hidden') && !languageMenuAgent.contains(event.target) && !languageMenuButtonAgent.contains(event.target)) {
+                        languageMenuAgent.classList.add('hidden');
+                        languageMenuButtonAgent.setAttribute('aria-expanded', 'false');
+                        if (languageDropdownArrowAgent) {
+                            languageDropdownArrowAgent.classList.remove('rotate-180');
+                        }
                     }
                 });
             }

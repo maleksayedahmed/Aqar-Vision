@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'الرئيسية')
+@section('title', __('common.home_title'))
 
 @section('content')
 
@@ -14,12 +14,12 @@
                 <!-- Main Title -->
                 <div>
                     <h1 class="text-[42px] md:text-5xl font-bold text-white mb-4">
-                        حيّاك الله! عقارك معنا أسهل وأسرع
+                        {{ __('common.home_title') }}
                     </h1>
 
                     <!-- Subtitle -->
                     <p class="text-white/90 text-[14px] md:text-xl font-medium leading-relaxed max-w-2xl mx-auto">
-                        وجهتك الأولى للعقار في السعودية… بكل ثقة ووضوح
+                        {{ __('common.home_subtitle') }}
                     </p>
                 </div>
 
@@ -33,11 +33,11 @@
             <div class="inline-flex p-1 bg-white border border-gray-200 rounded-xl">
                 <button data-tab="buy" data-value="sale"
                     class="toggle-btn px-8 py-2 text-sm font-semibold rounded-lg focus:outline-none transition-colors">
-                    شراء
+                    {{ __('common.buy') }}
                 </button>
                 <button data-tab="rent" data-value="rent"
                     class="toggle-btn active px-8 py-2 text-sm font-semibold rounded-lg focus:outline-none transition-colors">
-                    إيجار
+                    {{ __('common.rent') }}
                 </button>
             </div>
 
@@ -53,7 +53,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
-                        <span>بحث</span>
+                        <span>{{ __('common.search') }}</span>
                     </button>
 
                     <!-- District Dropdown -->
@@ -61,7 +61,7 @@
                         <select name="district_id" id="district-select"
                             class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pl-10 pr-4 cursor-pointer hover:border-indigo-400 text-sm font-medium text-gray-700 "
                             disabled>
-                            <option value=""> الحي </option>
+                            <option value="">{{ __('common.district') }}</option>
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3 text-gray-400">
                             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -78,7 +78,7 @@
                                 src="{{ asset('images/city.svg') }}" alt="City icon"></div>
                         <select name="city_id" id="city-select"
                             class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pr-12 pl-10 cursor-pointer hover:border-indigo-400 text-sm font-medium text-gray-700">
-                            <option value="">المدينة</option>
+                            <option value="">{{ __('common.city') }}</option>
                             @foreach ($cities as $city)
                                 <option value="{{ $city->id }}">{{ $city->name }}</option>
                             @endforeach
@@ -98,7 +98,7 @@
                                 src="{{ asset('images/aqar.svg') }}" alt="Property icon"></div>
                         <select name="property_type_id"
                             class="custom-select-arrow w-full h-full bg-white border border-gray-200 rounded-lg pr-12 pl-10 cursor-pointer hover:border-indigo-400 text-sm font-medium text-gray-700">
-                            <option value="">نوع العقار</option>
+                            <option value="">{{ __('common.property_type') }}</option>
                             @foreach ($propertyTypes as $propertyType)
                                 <option value="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
                             @endforeach
@@ -121,9 +121,9 @@
             <div x-data="{
                 activeSlide: 0,
                 slides: [
-                    { headline: 'شفنا لك البيت، وبسعر السوق - كل شيء واضح', subheadline: 'مع عقار فيجن' },
-                    { headline: 'تحليلات دقيقة وتقارير مفصلة لكل عقار', subheadline: 'لاتخاذ أفضل قرار' },
-                    { headline: 'ابحث، قارن، واشترِ بثقة تامة', subheadline: 'مستقبلك يبدأ هنا' }
+                    { headline: '{{ __('common.slider_text_1') }}', subheadline: '{{ __('common.slider_sub_1') }}' },
+                    { headline: '{{ __('common.slider_text_2') }}', subheadline: '{{ __('common.slider_sub_2') }}' },
+                    { headline: '{{ __('common.slider_text_3') }}', subheadline: '{{ __('common.slider_sub_3') }}' }
                 ]
             }" x-init="setInterval(() => { activeSlide = (activeSlide + 1) % slides.length }, 5000)"
                 class="relative rounded-2xl overflow-hidden bg-[rgba(236,238,249,1)] w-full">
@@ -162,7 +162,7 @@
                                     <h1 class="text-2xl md:text-3xl font-bold text-slate-800" x-text="slide.headline">
                                     </h1>
                                     <p class="text-2xl md:text-3xl font-bold">
-                                        <span class="text-slate-700">مع</span>
+                                        <span class="text-slate-700">{{ __('common.with') }}</span>
                                         <span class="text-indigo-600" x-text="slide.subheadline.split(' ')[1]"></span>
                                     </p>
                                 </div>
@@ -194,16 +194,16 @@
         <section class="max-w-7xl w-[100%] mx-auto py-12 px-4">
             <div class="flex justify-between items-center mb-8">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-slate-800 md:text-3xl">أحدث العقارات</h2>
+                    <h2 class="text-xl font-bold text-slate-800 md:text-3xl">{{ __('common.latest_properties') }}</h2>
                     <p class="text-xs sm:text-sm text-slate-500 p   t-2">
-                        اكتشف أحدث العروض العقارية المضافة يوميًا
-                        <br>فلل، شقق، واستوديوهات بتشطيبات مميزة وأسعار منافسة، في أفضل أحياء الرياض والمملكة.
+                        {{ __('common.latest_properties_desc') }}
+                        <br>{{ __('common.latest_properties_desc_2') }}
                     </p>
 
                 </div>
                 <a href="{{ route('properties.search') }}"
                     class="text-sm flex items-center gap-2 bg-indigo-50 text-indigo-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
-                    <span>رؤية الكل</span>
+                    <span>{{ __('common.view_all') }}</span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="3">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7" />
@@ -234,7 +234,7 @@
                                             class="w-full h-48 object-cover rounded-lg" alt="{{ $ad->title }}">
                                         <div
                                             class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">
-                                            {{ $ad->listing_purpose == 'rent' ? 'إيجار' : 'بيع' }}</div>
+                                            {{ $ad->listing_purpose == 'rent' ? __('common.rent') : __('common.sale') }}</div>
 
                                         @if (auth()->user())
                                             <button
@@ -280,24 +280,23 @@
                                             <span
                                                 class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img
                                                     src="{{ asset('images/bath.svg') }}" class="h-4 w-4">
-                                                {{ $ad->bathrooms }} حمام</span>
+                                                {{ __('common.bathrooms_count', ['count' => $ad->bathrooms]) }}</span>
                                             <span
                                                 class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img
                                                     src="{{ asset('images/bed.svg') }}" class="h-4 w-4">
-                                                {{ $ad->rooms }} غرف نوم</span>
+                                                {{ __('common.bedrooms_count', ['count' => $ad->rooms]) }}</span>
                                         </div>
                                         <div class="border-t border-gray-100 pt-5 mt-5 flex justify-between items-center">
                                             <p class="text-lg font-bold text-black">{{ number_format($ad->total_price) }}
-                                                <span class="text-xs font-medium text-slate-500">ر.س</span></p>
+                                                <span class="text-xs font-medium text-slate-500">{{ __('common.sar') }}</span></p>
                                             <a href="{{ route('properties.show', $ad->id) }}"
-                                                class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800 transition-colors">رؤية
-                                                التفاصيل</a>
+                                                class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800 transition-colors">{{ __('common.view_details') }}</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @empty
-                            <p class="w-full text-center text-gray-500 py-8">لا توجد عقارات متاحة حالياً.</p>
+                            <p class="w-full text-center text-gray-500 py-8">{{ __('common.no_properties') }}</p>
                         @endforelse
                     </div>
                 </div>
@@ -308,14 +307,14 @@
             <section class="max-w-7xl w-[100%] mx-auto py-12 px-4">
                 <div class="flex justify-between items-center mb-8">
                     <div class="space-y-1">
-                        <h2 class="text-xl font-bold text-slate-800 md:text-3xl">أبـرز العقارات</h2>
+                        <h2 class="text-xl font-bold text-slate-800 md:text-3xl">{{ __('common.featured_properties') }}</h2>
                         <p class="text-xs sm:text-sm text-slate-500">
-                            عقارات مميزة نوصي بها.
+                            {{ __('common.featured_properties_desc') }}
                         </p>
                     </div>
                     <a href="{{ route('properties.search', ['type' => 'featured']) }}"
                         class="text-sm flex items-center gap-2 bg-indigo-50 text-indigo-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
-                        <span>رؤية الكل</span>
+                        <span>{{ __('common.view_all') }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7" />
@@ -345,7 +344,7 @@
                                     class="w-full h-48 object-cover rounded-lg" alt="{{ $ad->title }}">
                                 <div
                                     class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">
-                                    {{ $ad->listing_purpose == 'rent' ? 'إيجار' : 'بيع' }}
+                                    {{ $ad->listing_purpose == 'rent' ? __('common.rent') : __('common.sale') }}
                                 </div>
                                 <div
                                     class="absolute top-2 right-2 bg-amber-400 text-gray-900 text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
@@ -355,7 +354,7 @@
                                             d="M10.868 2.884c.321-.772 1.305-.772 1.626 0l1.373 3.303a1 1 0 00.95.69h3.468c.851 0 1.21.976.544 1.49l-2.807 2.04a1 1 0 00-.364 1.118l1.07 3.303c.321.772-.639 1.42-1.34 1.01l-2.807-2.04a1 1 0 00-1.175 0l-2.807 2.04c-.701.41-1.66-.238-1.34-1.01l1.07-3.303a1 1 0 00-.364-1.118l-2.807-2.04c-.666-.514-.307-1.49.544-1.49h3.468a1 1 0 00.95-.69l1.373-3.303z"
                                             clip-rule="evenodd" />
                                     </svg>
-                                    <span>مميز</span>
+                                    <span>{{ __('common.featured') }}</span>
                                 </div>
                                 @if (auth()->user())
                                     <button
@@ -399,12 +398,10 @@
                                         {{ $ad->propertyType?->name }}
                                     </span>
                                     <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md">
-                                        <img src="{{ asset('images/bath.svg') }}" class="h-4 w-4"> {{ $ad->bathrooms }}
-                                        حمام
+                                        <img src="{{ asset('images/bath.svg') }}" class="h-4 w-4"> {{ __('common.bathrooms_count', ['count' => $ad->bathrooms]) }}
                                     </span>
                                     <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md">
-                                        <img src="{{ asset('images/bed.svg') }}" class="h-4 w-4"> {{ $ad->rooms }}
-                                        غرف نوم
+                                        <img src="{{ asset('images/bed.svg') }}" class="h-4 w-4"> {{ __('common.bedrooms_count', ['count' => $ad->rooms]) }}
                                     </span>
                                     @if (is_array($ad->features))
                                         @foreach (array_slice($ad->features, 0, 3) as $feature)
@@ -423,10 +420,9 @@
                                 </div>
                                 <div class="border-t border-gray-100 pt-5 mt-5 flex justify-between items-center">
                                     <p class="text-lg font-bold text-indigo-700">{{ number_format($ad->total_price) }}
-                                        <span class="text-xs font-medium text-slate-500">ر.س</span></p>
+                                        <span class="text-xs font-medium text-slate-500">{{ __('common.sar') }}</span></p>
                                     <a href="{{ route('properties.show', $ad->id) }}"
-                                        class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800 transition-colors">رؤية
-                                        التفاصيل</a>
+                                        class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800 transition-colors">{{ __('common.view_details') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -438,10 +434,10 @@
         <section class="py-10 w-[98%] bg-white">
             <div class="max-w-7xl mx-auto">
                 <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-xl font-bold text-slate-800 md:text-3xl">وكلاء العقارات</h2>
+                    <h2 class="text-xl font-bold text-slate-800 md:text-3xl">{{ __('common.real_estate_agents_title') }}</h2>
                     <a href="{{ route('all.agents') }}"
                         class="text-sm flex items-center gap-2 bg-indigo-50 text-[rgba(48,62,124,1)] font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
-                        <span>رؤية الكل</span>
+                        <span>{{ __('common.view_all') }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7" />
@@ -461,8 +457,7 @@
                         @forelse($agents as $agent)
                             <div class="bg-[rgba(247,249,250,1)] p-5 rounded-2xl flex flex-col gap-2 min-w-[380px]">
                                 <div class="self-end"><span
-                                        class="bg-[#e6f6f0] text-[#1d8e5a] text-[11px] font-medium px-2 py-1 rounded-md">مسوق
-                                        عقاري</span></div>
+                                        class="bg-[#e6f6f0] text-[#1d8e5a] text-[11px] font-medium px-2 py-1 rounded-md">{{ __('common.agent_title') }}</span></div>
                                 <div class="flex items-center gap-1 text-[rgba(48,62,124,1)]">
                                     <img src="{{ $agent->profile_photo_path ? Storage::url($agent->profile_photo_path) : asset('images/agent.png') }}"
                                         alt="{{ $agent->name }}"
@@ -477,7 +472,7 @@
                                                     d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
                                                     clip-rule="evenodd" />
                                             </svg>
-                                            <span>{{ $agent->agent?->city?->name ?? 'غير محدد' }}</span>
+                                            <span>{{ $agent->agent?->city?->name ?? __('common.not_specified') }}</span>
                                         </div>
                                         <h3 class="font-medium text-lg text-[rgba(48,62,124,1)]">{{ $agent->name }}</h3>
                                     </div>
@@ -500,15 +495,13 @@
                                                 d="M5.26953 0.436035V8.60133H8.00391V1.3475L5.26953 0.436035ZM6.34375 5.96461L5.5625 5.7693V5.37867L6.34375 5.57398V5.96461ZM6.34375 5.37867L5.5625 5.18336V4.79273L6.34375 4.98805V5.37867ZM6.34375 4.79273L5.5625 4.59742V4.2068L6.34375 4.40211V4.79273ZM6.34375 4.2068L5.5625 4.01148V3.62086L6.34375 3.81617V4.2068ZM6.34375 3.62086L5.5625 3.42555V3.03492L6.34375 3.23023V3.62086ZM6.34375 3.03492L5.5625 2.83961V2.44898L6.34375 2.6443V3.03492ZM6.34375 2.44898L5.5625 2.25367V1.86305L6.34375 2.05836V2.44898ZM6.34375 1.86305L5.5625 1.66773V1.27711L6.34375 1.47242V1.86305ZM7.51562 6.35523L6.73438 6.15992V5.7693L7.51562 5.96461V6.35523ZM7.51562 5.7693L6.73438 5.57398V5.18336L7.51562 5.37867V5.7693ZM7.51562 5.18336L6.73438 4.98805V4.59742L7.51562 4.79273V5.18336ZM7.51562 4.59742L6.73438 4.40211V4.01148L7.51562 4.2068V4.59742ZM7.51562 4.01148L6.73438 3.81617V3.42555L7.51562 3.62086V4.01148ZM7.51562 3.42555L6.73438 3.23023V2.83961L7.51562 3.03492V3.42555ZM7.51562 2.83961L6.73438 2.6443V2.25367L7.51562 2.44898V2.83961ZM7.51562 2.25367L6.73438 2.05836V1.66773L7.51562 1.86305V2.25367Z"
                                                 fill="#303E7C" />
                                         </svg>
-                                        <span>+{{ $agent->ads_count }} عقار</span>
+                                        <span>{{ __('common.properties_count', ['count' => $agent->ads_count]) }}</span>
                                     </div>
                                     <div class="flex items-center gap-1">
                                         <a href="tel:{{ $agent->phone }}"
-                                            class="h-[27px] px-3 flex items-center gap-2 rounded-lg bg-[rgba(48,63,125,1)] text-white hover:bg-indigo-800 transition-colors text-xs font-normal"><span>اتصل
-                                                بنا</span></a>
+                                            class="h-[27px] px-3 flex items-center gap-2 rounded-lg bg-[rgba(48,63,125,1)] text-white hover:bg-indigo-800 transition-colors text-xs font-normal"><span>{{ __('common.call_us') }}</span></a>
                                         <a href="{{ route('agents.show', $agent) }}"
-                                            class="h-[27px] px-3 flex items-center gap-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-200/50 transition-colors text-xs font-normal"><span>تواصل
-                                                معنا</span></a>
+                                            class="h-[27px] px-3 flex items-center gap-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-200/50 transition-colors text-xs font-normal"><span>{{ __('common.contact_us_button') }}</span></a>
                                         <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $agent->phone) }}"
                                             title="WhatsApp"
                                             class="flex items-center justify-center w-[34px] h-[27px] rounded-lg bg-[#25D366] text-white hover:bg-[#1EAE54] transition-colors"><svg
@@ -522,7 +515,7 @@
                                 </div>
                             </div>
                         @empty
-                            <p class="w-full text-center text-gray-500 py-8">لا يوجد وكلاء عقارات متاحون حالياً.</p>
+                            <p class="w-full text-center text-gray-500 py-8">{{ __('common.no_agents') }}</p>
                         @endforelse
                     </div>
                 </div>
@@ -535,12 +528,11 @@
                 style="background-image: url('images/world.png'); background-color: rgba(68, 112, 174, 1);">
 
                 <h2 class="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
-                    لديك عقار للبيع أو الإيجار؟ ابدأ إعلانك هنا!
+                    {{ __('common.sell_or_rent_title') }}
                 </h2>
 
                 <p class="text-white/90 text-base lg:text-lg mb-8 max-w-3xl mx-auto font-medium leading-relaxed">
-                    يمكنك الآن إصدار رخصة إعلان لعقارك والوصول إلى آلاف المشترين أو المستأجرين المحتملين بكل سهولة. لديك حتى
-                    3 إعلان متاح كحد أقصى لحسابك.
+                    {{ __('common.sell_or_rent_desc') }}
                 </p>
 
                 <a href="{{ route('user.ads.create') }}"
@@ -549,7 +541,7 @@
          transition-colors 
          focus:outline-none focus:ring-2 focus:ring-offset-2 
          focus:ring-offset-[#4A6C9B] focus:ring-white">
-                    إصدار ترخيص اعلان
+                    {{ __('common.issue_license') }}
                 </a>
 
             </div>
@@ -742,7 +734,7 @@
                                         // Revert optimistic update on error
                                         updateFavoriteButton(this, isFavorited);
                                         this.dataset.favorited = isFavorited;
-                                        showNotification(data.message || 'حدث خطأ', 'error');
+                                        showNotification(data.message || '{{ __('common.error_occurred') }}', 'error');
                                     }
                                 })
                                 .catch(error => {
@@ -750,7 +742,7 @@
                                     // Revert optimistic update on error
                                     updateFavoriteButton(this, isFavorited);
                                     this.dataset.favorited = isFavorited;
-                                    showNotification('حدث خطأ في الشبكة', 'error');
+                                    showNotification('{{ __('common.network_error') }}', 'error');
                                 });
                         @else
                             // Redirect to login if not authenticated

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'ملف المسوق: ' . $agent->name)
+@section('title', __('common.agent_profile') . ': ' . $agent->name)
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
@@ -23,9 +23,9 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[rgba(217,222,242,1)]" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                                 </svg>
-                                <span>{{ $agent->agent?->city?->name ?? 'غير محدد' }}</span>
+                                <span>{{ $agent->agent?->city?->name ?? __('common.not_specified') }}</span>
                             </div>
-                            <span class="bg-[rgba(223,246,226,1)] text-[rgba(117,177,123,1)] text-[17.5px] font-normal px-2.5 pt-1 pb-1.5 rounded-full">مسوق عقاري</span>
+                            <span class="bg-[rgba(223,246,226,1)] text-[rgba(117,177,123,1)] text-[17.5px] font-normal px-2.5 pt-1 pb-1.5 rounded-full">{{ __('common.agent_title') }}</span>
 
                      </div>
 
@@ -43,19 +43,19 @@
                                 <path d="M4.09...Z" fill="#303E7C"/>
                                 <path d="M9.22...Z" fill="#303E7C"/>
                              </svg>
-                            <span>+{{ $ads->total() }} عقار</span>
+                            <span>{{ __('common.properties_count', ['count' => $ads->total()]) }}</span>
                         </span>
                         <!-- Stat: Location -->
                         <span class="flex items-center gap-2 bg-[rgba(48,62,124,0.02)] rounded-lg px-3 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 20l-4.95-6.05a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
                             </svg>
-                            <span>{{ $agent->agent?->city?->name ?? 'غير محدد' }}</span>
+                            <span>{{ $agent->agent?->city?->name ?? __('common.not_specified') }}</span>
                         </span>
                         <!-- Stat: Experience -->
                         <span class="flex items-center gap-2 bg-[rgba(48,62,124,0.02)] rounded-lg px-3 py-3">
                             <img src="{{ asset('images/star.svg') }}">
-                            <span>خبرة 4-5 سنوات</span> <!-- Note: This is static -->
+                            <span>{{ __('common.experience_years') }}</span> <!-- Note: This is static -->
                         </span>
                     </div>
 
@@ -81,9 +81,9 @@
             <div class="flex justify-between flex-col sm:flex-row gap-5 sm:gap-0">
                 <!-- Divider and Description -->
                 <div class="">
-                    <h3 class="text-lg font-medium mb-3">نبذة تعريفية</h3>
+                    <h3 class="text-lg font-medium mb-3">{{ __('common.biography') }}</h3>
                     <p class="text-slate-600 leading-relaxed text-[16px]">
-                        {{ $agent->agent?->bio ?? 'هذا النص هو مثال بسيط يستخدم كقالب نصي في التصاميم او المستندات يمكن تعديله حسب الحاجة ليعكس شكل المحتوى الحقيقي المتوقع في المشروع.' }}
+                        {{ $agent->agent?->bio ?? __('common.default_bio') }}
                     </p>
                 </div>
                 <!-- Buttons Row -->
@@ -91,14 +91,14 @@
                     <!-- Call Button -->
                     <a href="tel:{{ $agent->phone }}" class="w-full sm:w-auto py-2.5 px-9 flex items-center justify-center gap-2 rounded-2xl bg-[rgba(48,63,125,1)] text-white hover:bg-indigo-800 transition-colors text-[20px] font-medium">
                         <img src="{{ asset('images/phone.svg') }}">
-                        <span>اتصال</span>
+                        <span>{{ __('common.call') }}</span>
                     </a>
                     @auth
                         @if(auth()->id() != $agent->id)
                             <!-- Message Button -->
                             <a href="{{ route('chat.start.user', $agent) }}" class="w-full sm:w-auto py-2 px-8 flex items-center justify-center gap-2 rounded-2xl border-[1px] border-[rgba(48,63,125,1)] text-[rgba(48,63,125,1)] hover:bg-indigo-100/50 transition-colors text-[20px] font-medium">
                                 <img src="{{ asset('images/message.svg') }}" alt="Message Icon">
-                                <span>راسلني</span>
+                                <span>{{ __('common.message_me') }}</span>
                             </a>
                         @endif
                     @endauth
@@ -116,9 +116,9 @@
         <div class="mt-8 px-[3%]">
             <div class="flex items-end justify-between">
                 <div class="flex gap-[33px] flex-col">
-                     <p class="text-[22px] font-medium">إعلانات عقارية فعّالة</p>
+                     <p class="text-[22px] font-medium">{{ __('common.active_listings') }}</p>
                      <div class="flex items-center gap-3">
-                        <span class="text-xl font-light">عرض {{ $ads->count() }} من {{ $ads->total() }} عقار مرتبة حسب</span>
+                        <span class="text-xl font-light">{{ __('common.showing_count', ['current' => $ads->count(), 'total' => $ads->total()]) }}</span>
                         <!-- Alpine.js Dropdown Component -->
 <div x-data="{ isOpen: false }" class="relative">
     <!-- The Button that shows the current sort option -->
@@ -142,10 +142,10 @@
     >
         @php
             $sortOptions = [
-                'latest' => 'الأحدث',
-                'oldest' => 'الأقدم',
-                'price_desc' => 'السعر: من الأعلى للأقل',
-                'price_asc' => 'السعر: من الأقل للأعلى',
+                'latest' => __('common.latest'),
+                'oldest' => __('common.oldest'),
+                'price_desc' => __('common.price_high_to_low'),
+                'price_asc' => __('common.price_low_to_high'),
             ];
         @endphp
         <div class="py-1">
@@ -175,7 +175,7 @@
                         <!-- Image Section -->
                         <div class="relative">
                             <img src="{{ !empty($ad->images) ? Storage::url($ad->images[0]) : 'https://placehold.co/400x300' }}" class="w-full h-48 object-cover rounded-lg" alt="{{ $ad->title }}">
-                            <div class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">{{ $ad->listing_purpose == 'rent' ? 'إيجار' : 'بيع' }}</div>
+                            <div class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">{{ $ad->listing_purpose == 'rent' ? __('common.rent') : __('common.sale') }}</div>
                             @if (auth()->user())
                                     <button class="favorite-btn absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"
                                             data-ad-id="{{ $ad->id }}"
@@ -205,18 +205,18 @@
                             </div>
                             <div class="flex gap-2 text-sm">
                                 <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/building.svg') }}" class="h-4 w-4"> {{ $ad->propertyType?->name }}</span>
-                                <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/bath.svg') }}" class="h-4 w-4"> {{ $ad->bathrooms }} حمام</span>
-                                <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/bed.svg') }}" class="h-4 w-4"> {{ $ad->rooms }} غرف نوم</span>
+                                <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/bath.svg') }}" class="h-4 w-4"> {{ __('common.bathrooms_count', ['count' => $ad->bathrooms]) }}</span>
+                                <span class="flex items-center gap-1 bg-gray-100 text-slate-600 px-2 py-1 rounded-md"><img src="{{ asset('images/bed.svg') }}" class="h-4 w-4"> {{ __('common.bedrooms_count', ['count' => $ad->rooms]) }}</span>
                             </div>
                             <div class="border-t border-gray-100 pt-5 mt-5 flex justify-between items-center">
-                                <p class="text-lg font-bold text-indigo-700">{{ number_format($ad->total_price) }} <span class="text-xs font-medium text-slate-500">ر.س {{ $ad->listing_purpose == 'rent' ? '/ شهري' : ''}}</span></p>
-                                <a href="{{ route('properties.show', $ad->id) }}" class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800 transition-colors">رؤية التفاصيل</a>
+                                <p class="text-lg font-bold text-indigo-700">{{ number_format($ad->total_price) }} <span class="text-xs font-medium text-slate-500">{{ __('common.sar') }} {{ $ad->listing_purpose == 'rent' ? __('common.per_month') : ''}}</span></p>
+                                <a href="{{ route('properties.show', $ad->id) }}" class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800 transition-colors">{{ __('common.view_details') }}</a>
                             </div>
                         </div>
                     </div>
                 </div>
             @empty
-                <p class="w-full text-center text-gray-500 py-8 col-span-full">هذا المسوق ليس لديه إعلانات حالياً.</p>
+                <p class="w-full text-center text-gray-500 py-8 col-span-full">{{ __('common.no_ads') }}</p>
             @endforelse
         </div>
 
