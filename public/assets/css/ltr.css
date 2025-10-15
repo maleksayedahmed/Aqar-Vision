@@ -1,0 +1,150 @@
+/*
+ * LTR Override Stylesheet
+ * Version: 1.0
+ * Description: This stylesheet overrides RTL-specific Tailwind CSS classes 
+ *              to force an LTR layout without modifying the original HTML.
+ */
+
+/* General Body and Layout Direction */
+body, main {
+    direction: ltr;
+    text-align: left;
+}
+
+/* Flexbox Direction Overrides */
+.flex-row-reverse {
+    flex-direction: row !important;
+}
+
+.lg\:flex-row-reverse {
+    flex-direction: row !important;
+}
+
+/* Spacing and Padding Overrides */
+
+/* Padding Left to Padding Right */
+.pl-10 {
+    padding-left: 0 !important;
+    padding-right: 2.5rem !important;
+}
+
+.pl-4 {
+    padding-left: 0 !important;
+    padding-right: 1rem !important;
+}
+
+/* Padding Right to Padding Left */
+.pr-4 {
+    padding-right: 0 !important;
+    padding-left: 1rem !important;
+}
+
+.pr-12 {
+    padding-right: 0 !important;
+    padding-left: 3rem !important;
+}
+
+/* Margin Left to Margin Right */
+.ml-2 {
+    margin-left: 0 !important;
+    margin-right: 0.5rem !important;
+}
+
+.lg\:-ml-\[8\%\] {
+    margin-left: 0 !important;
+    margin-right: -8% !important;
+}
+
+.lg\:-ml-\[210px\] {
+    margin-left: 0 !important;
+    margin-right: -210px !important;
+}
+
+/* Positioning Overrides */
+.left-0 {
+    left: auto !important;
+    right: 0 !important;
+}
+
+.left-4 {
+    left: auto !important;
+    right: 1rem !important;
+}
+
+.right-0 {
+    right: auto !important;
+    left: 0 !important;
+}
+
+.right-2 {
+    right: auto !important;
+    left: 0.5rem !important;
+}
+
+.right-3 {
+    right: auto !important;
+    left: 0.75rem !important;
+}
+
+.lg\:left-\[-50px\] {
+    left: auto !important;
+    right: -50px !important;
+}
+
+.lg\:right-\[-35px\] {
+    right: auto !important;
+    left: -35px !important;
+}
+
+/* Specific Component Adjustments */
+
+/* Form Elements */
+.custom-select-arrow {
+    padding-left: 2.5rem !important;
+    padding-right: 0.75rem !important;
+}
+
+/* Hero Slider */
+.lg\:text-right {
+    text-align: left !important;
+}
+
+.lg\:items-start {
+    align-items: flex-start !important;
+}
+
+.lg\:self-end {
+    align-self: flex-start !important;
+}
+
+/* Property and Agent Cards */
+.text-right {
+    text-align: left !important;
+}
+
+.self-end {
+    align-self: flex-start !important;
+}
+
+/* Gradients for Slider */
+#gradient-left {
+    left: 0 !important;
+    right: auto !important;
+    background-image: linear-gradient(to right, white, transparent) !important;
+}
+
+#gradient-right {
+    right: 0 !important;
+    left: auto !important;
+    background-image: linear-gradient(to left, white, transparent) !important;
+}
+
+/* SVG and Icon Transformations */
+.rotate-180 {
+    transform: rotate(0deg) !important;
+}
+
+/* This will handle the arrow in the "See All" button */
+a svg {
+    transform: rotate(180deg);
+}

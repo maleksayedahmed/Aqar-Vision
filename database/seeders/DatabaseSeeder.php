@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::firstOrCreate(
+        $user = User::firstOrCreate(
             // --- Attributes to find the user by ---
             ['email' => 'test@example.com'],
 
@@ -25,6 +25,9 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('password'), // You must provide a password when creating
             ]
         );
+
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $user->assignRole($adminRole);
 
         $this->call([
             AgentTypeSeeder::class,
