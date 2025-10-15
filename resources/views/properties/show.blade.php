@@ -116,10 +116,10 @@
             <img x-bind:src="currentImage" alt="{{ $ad->title }}" class="w-full h-full object-cover transition-opacity duration-300">
             <div x-show="images.length > 1" class="absolute inset-0 flex items-center justify-between px-4">
                 
-                <button @click="prev()" class="bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800 shadow-md">
+                <button @click="prev()" class="seeallbtn bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800 shadow-md">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
                 </button>
-                <button @click="next()" class="bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800 shadow-md">
+                <button @click="next()" class="seeallbtn bg-white/60 hover:bg-white/90 transition-colors rounded-full w-10 h-10 flex items-center justify-center text-gray-800 shadow-md">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
                 </button>
             </div>

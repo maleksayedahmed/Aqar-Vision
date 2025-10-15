@@ -204,7 +204,7 @@
                 <a href="{{ route('properties.search') }}"
                     class="text-sm flex items-center gap-2 bg-indigo-50 text-indigo-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
                     <span>{{ __('common.view_all') }}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    <svg xmlns="http://www.w3.org/2000/svg" class="seeallbtn h-4 w-4" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="3">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7" />
                     </svg>
@@ -315,7 +315,7 @@
                     <a href="{{ route('properties.search', ['type' => 'featured']) }}"
                         class="text-sm flex items-center gap-2 bg-indigo-50 text-indigo-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
                         <span>{{ __('common.view_all') }}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        <svg xmlns="http://www.w3.org/2000/svg" class="seeallbtn h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7" />
                         </svg>
@@ -438,7 +438,7 @@
                     <a href="{{ route('all.agents') }}"
                         class="text-sm flex items-center gap-2 bg-indigo-50 text-[rgba(48,62,124,1)] font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-100 transition-colors">
                         <span>{{ __('common.view_all') }}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        <svg xmlns="http://www.w3.org/2000/svg" class="seeallbtn h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7" />
                         </svg>
@@ -550,6 +550,8 @@
 @endsection
 
 @push('scripts')
+
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Buy/Rent Toggle Button Logic
@@ -588,6 +590,95 @@
 
 
             // Property slider functionality
+   
+    <?php if(app()->getLocale() == 'en'): ?>
+const sliderTrack = document.getElementById('sliderTrack');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+
+// Ensure the slider elements exist before proceeding
+if (sliderTrack && nextBtn && prevBtn) {
+    const cards = sliderTrack.querySelectorAll('.slider-card');
+    
+    let currentIndex = 0;
+    const cardWidth = 320; // Card width in pixels
+    const gap = 16; // Gap between cards in pixels (corresponds to gap-4)
+    const slideDistance = cardWidth + gap;
+    const maxIndex = cards.length > 0 ? cards.length - 1 : 0;
+
+    // Function to update slider position for LTR
+    function updateSliderPosition() {
+        // CHANGE: Added a negative sign before the calculation.
+        // This moves the track to the LEFT for LTR behavior.
+        const translateX = -currentIndex * slideDistance;
+        sliderTrack.style.transform = `translateX(${translateX}px)`;
+
+        // Update button states
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === maxIndex;
+        prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+        nextBtn.style.opacity = currentIndex === maxIndex ? '0.5' : '1';
+    }
+
+    // Next button click handler
+    nextBtn.addEventListener('click', function() {
+        if (currentIndex < maxIndex) {
+            currentIndex++;
+            updateSliderPosition();
+        }
+    });
+
+    // Previous button click handler
+    prevBtn.addEventListener('click', function() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSliderPosition();
+        }
+    });
+
+    // Initialize slider state
+    if (cards.length > 0) {
+        updateSliderPosition();
+    }
+
+
+    // Optional: Touch/swipe support for mobile (this logic works for LTR)
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+
+    sliderTrack.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+    });
+
+    sliderTrack.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        // e.preventDefault(); // Uncomment if you experience page scrolling issues
+    });
+
+    sliderTrack.addEventListener('touchend', function() {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const diffX = startX - currentX;
+        const threshold = 50; // Minimum swipe distance
+
+        if (Math.abs(diffX) > threshold) {
+            if (diffX > 0 && currentIndex < maxIndex) {
+                // Swipe left - go to next
+                currentIndex++;
+                updateSliderPosition();
+            } else if (diffX < 0 && currentIndex > 0) {
+                // Swipe right - go to previous
+                currentIndex--;
+                updateSliderPosition();
+            }
+        }
+    });
+}
+    <?php else: ?>
             const sliderTrack = document.getElementById('sliderTrack');
             const nextBtn = document.getElementById('nextBtn');
             const prevBtn = document.getElementById('prevBtn');
@@ -669,6 +760,8 @@
                     }
                 }
             });
+    <?php endif; ?>
+
 
             // Agents Slider Functionality
             const agentsSlider = document.querySelector('#agents-slider');
