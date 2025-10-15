@@ -34,21 +34,21 @@ class LanguageController extends Controller
                 return redirect()->back()->with('error', 'Language not supported.');
             }
 
-            // Store the language in session
-            Session::put('locale', $lang);
-            
+            // Store the language in session using request session
+            request()->session()->put('locale', $lang);
+
+            // Force save the session immediately
+            request()->session()->save();
+
             // Verify the session was set
-            $currentLocale = Session::get('locale');
+            $currentLocale = request()->session()->get('locale');
             Log::info('Session locale set to: ' . $currentLocale);
 
-            // Set the application locale
+            // Set the application locale for this request
             App::setLocale($lang);
-            
+
             // Verify the application locale was set
             Log::info('Application locale set to: ' . App::getLocale());
-
-            // Clear the view cache
-            \Artisan::call('view:clear');
 
             return redirect()->back()->with('success', 'Language changed successfully.');
         } catch (\Exception $e) {
@@ -56,4 +56,4 @@ class LanguageController extends Controller
             return redirect()->back()->with('error', 'Failed to change language.');
         }
     }
-} 
+}

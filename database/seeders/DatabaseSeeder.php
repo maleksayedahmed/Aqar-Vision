@@ -15,27 +15,16 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $user = User::firstOrCreate(
-            // --- Attributes to find the user by ---
-            ['email' => 'test@example.com'],
 
-            // --- Attributes to use if creating a new user ---
-            [
-                'name' => 'Test User',
-                'password' => bcrypt('password'), // You must provide a password when creating
-            ]
-        );
-
-        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        $user->assignRole($adminRole);
 
         $this->call([
+            RoleAndPermissionSeeder::class,
+            adminseeder::class,
             AgentTypeSeeder::class,
             LicenseTypeSeeder::class,
             PropertyPurposeSeeder::class,
             PropertyTypeSeeder::class,
             AdPriceSeeder::class,
-            RoleAndPermissionSeeder::class,
             PlanSeeder::class,
             PropertySeeder::class,
             SubscriptionSeeder::class,
@@ -46,5 +35,6 @@ class DatabaseSeeder extends Seeder
             AgencySeeder::class,
             AgentSeeder::class,
         ]);
+
     }
 }

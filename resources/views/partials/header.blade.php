@@ -21,7 +21,7 @@
             <!-- Logo & Desktop Navigation -->
             <div class="flex items-center gap-[50px]">
                 <a href="{{ route('home') }}">
-                    <img src="{{ asset('images/logo.png') }}" class="w-[70px] h-[60px]" alt="logo">
+                    <img src="{{ asset('images/logo.svg') }}" class="w-[70px] h-[60px]" alt="logo">
                 </a>
                 <div class="hidden lg:flex gap-[26px]">
                     <nav class="hidden lg:flex items-center gap-x-6">
@@ -30,15 +30,41 @@
                         <a href="{{ route('user.about-us') }}" class="text-[16px] {{ request()->routeIs('user.about-us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">نبذة عنا</a>
                         <a href="{{ route('contact.us') }}" class="text-[16px] {{ request()->routeIs('contact.us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">تواصل معنا</a>
                     </nav>
-                    <div class="hidden md:flex">
-                            <button class="flex items-center gap-x-2 text-sm bg-gray-200 hover:bg-gray-300 p-0.5 rounded-lg transition-colors">
-                                <div class="flex items-center gap-x-1 text-white">
-                                    <img src="{{ asset('images/arabic.png') }}" alt="arabic flag">
-                                </div>
+                    <!-- Language Dropdown -->
+                    <div class="hidden md:flex relative">
+                        <button id="language-menu-button" type="button" class="flex items-center gap-x-2 text-sm bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded-lg transition-colors" aria-expanded="false" aria-haspopup="true">
+                            <div class="flex items-center gap-x-1">
+                                @if(app()->getLocale() == 'ar')
+                                    <img src="{{ asset('images/flag.svg') }}" alt="arabic flag" class="w-5 h-5">
+                                    <span class="text-gray-700 font-medium text-xs">العربية</span>
+                                @else
+                                    <img src="{{ asset('images/united-kingdom-flag-icon.svg') }}" alt="english flag" class="w-5 h-5">
+                                    <span class="text-gray-700 font-medium text-xs">English</span>
+                                @endif
+                            </div>
+                            <svg class="w-4 h-4 text-gray-600 transition-transform" id="language-dropdown-arrow" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        </button>
 
-                                <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                            </button>
+                        <!-- Dropdown Menu -->
+                        <div id="language-menu" class="hidden absolute left-0 mt-12 w-40 origin-top-left rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50" role="menu" aria-orientation="vertical" aria-labelledby="language-menu-button">
+                            <div class="py-1">
+                                <a href="{{ route('language.switch', 'ar') }}" class="flex items-center gap-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ app()->getLocale() == 'ar' ? 'bg-gray-50 font-semibold' : '' }}" role="menuitem">
+                                    <img src="{{ asset('images/flag.svg') }}" alt="arabic flag" class="w-5 h-5">
+                                    <span>العربية</span>
+                                    @if(app()->getLocale() == 'ar')
+                                        <svg class="w-4 h-4 ml-auto text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                    @endif
+                                </a>
+                                <a href="{{ route('language.switch', 'en') }}" class="flex items-center gap-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ app()->getLocale() == 'en' ? 'bg-gray-50 font-semibold' : '' }}" role="menuitem">
+                                    <img src="{{ asset('images/united-kingdom-flag-icon.svg') }}" alt="english flag" class="w-5 h-5">
+                                    <span>English</span>
+                                    @if(app()->getLocale() == 'en')
+                                        <svg class="w-4 h-4 ml-auto text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                    @endif
+                                </a>
+                            </div>
                         </div>
+                    </div>
                 </div>
             </div>
 
