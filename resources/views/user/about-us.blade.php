@@ -1,6 +1,6 @@
 @extends('layouts.app') {{-- Use the main app layout --}}
 
-@section('title', 'من نحن')
+@section('title', __('common.about_us'))
 
 @section('content')
 
@@ -22,12 +22,8 @@
                             <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('{{ asset('images/bg-pattern.png') }}');"></div>
                             <div class="relative z-10 flex flex-col items-center text-center">
                                 <img src="{{ asset('images/logo.png') }}" class="w-[45px] h-[35px] mb-4" alt="logo">
-                                <h2 class="text-[15px] font-bold text-[rgba(26,26,26,1)] mb-2">
-                                    قصتنا: بناء جسور الثقة في عالم العقارات
-                                </h2>
-                                <p class="max-w-3xl text-[15px] mx-auto text-[rgba(102,102,102,1)] font-medium leading-relaxed mb-4">
-                                    نحن في عقار فيجن نؤمن بأن كل عقار يحمل قصة، وكل بحث عن منزل هو رحلة نحو حلم. لذلك، نسعى لتقديم تجربة عقارية سهلة، شفافة، وفعالة للجميع.
-                                </p>
+                                <h2 class="text-[15px] font-bold text-[rgba(26,26,26,1)] mb-2">{{ __('common.our_story_title') }}</h2>
+                                <p class="max-w-3xl text-[15px] mx-auto text-[rgba(102,102,102,1)] font-medium leading-relaxed mb-4">{{ __('common.our_story_desc', ['app' => config('app.name', 'عقار فيجن')]) }}</p>
                             </div>
                         </div>
                     </section>
@@ -35,22 +31,13 @@
                     {{-- Main Text Content --}}
                     <div class="p-6 md:p-10">
                         <div>
-                            <h2 class="text-3xl md:text-[42px] font-bold text-[#303E7C] mb-8">من نحن؟</h2>
+                            <h2 class="text-3xl md:text-[42px] font-bold text-[#303E7C] mb-8">{{ __('common.about_us') }}</h2>
                             <div class="font-medium text-sm text-gray-700 leading-8">
                                 <div class="flex flex-col lg:flex-row gap-8 lg:gap-[80px]">
-                                    <p>
-                                        عقار فيجن هو منصة عقارية رائدة تهدف إلى ربط الباحثين عن العقارات بأفضل الفرص المتاحة في السوق. تأسس موقعنا على يد فريق من الخبراء الشغوفين بقطاع العقارات والتكنولوجيا، بهدف إحداث نقلة نوعية في طريقة البحث عن العقارات وعرضها في المملكة العربية السعودية.
-                                        <br>
-                                        منذ انطلاقتنا، التزمنا بتقديم أدوات مبتكرة وخدمات استثنائية لتمكين الأفراد والشركات العقارية على حد سواء. نحن نضع الشفافية والموثوقية في صميم كل ما نقدمه.
-                                    </p>
+                                    <p>{!! nl2br(e(__('common.about_paragraph_1'))) !!}</p>
                                     <img src="{{ asset('images/whous.jpg') }}" class="rounded-2xl w-full lg:w-[338px] lg:h-[206px] object-cover shrink-0 mt-4 lg:mt-0" alt="About Us Image">
                                 </div>
-                                <p class="mt-8">
-                                    عقار فيجن هو منصة عقارية رائدة تهدف إلى ربط الباحثين عن العقارات بأفضل الفرص المتاحة في السوق. تأسس موقعنا على يد فريق من الخبراء الشغوفين بقطاع العقارات والتكنولوجيا، بهدف إحداث نقلة نوعية في طريقة البحث عن العقارات وعرضها في المملكة العربية السعودية.
-                                    منذ انطلاقنا، التزمنا بتقديم أدوات مبتكرة وخدمات استثنائية لتمكين الأفراد والشركات العقارية على حد سواء. نحن نضع الشفافية والموثوقية في صميم كل ما نقدمه. عقار فيجن هو منصة عقارية رائدة تهدف إلى ربط الباحثين عن العقارات بأفضل الفرص المتاحة في السوق. تأسس موقعنا على يد فريق من الخبراء الشغوفين بقطاع العقارات والتكنولوجيا، بهدف إحداث نقلة نوعية في طريقة البحث عن العقارات وعرضها في المملكة العربية السعودية.
-                                    منذ انطلاقنا، التزمنا بتقديم أدوات مبتكرة وخدمات استثنائية لتمكين الأفراد والشركات العقارية على حد سواء. نحن نضع الشفافية والموثوقية في صميم كل ما نقدمه.عقار فيجن هو منصة عقارية رائدة تهدف إلى ربط الباحثين عن العقارات بأفضل الفرص المتاحة في السوق. تأسس موقعنا على يد فريق من الخبراء الشغوفين بقطاع العقارات والتكنولوجيا، بهدف إحداث نقلة نوعية في طريقة البحث عن العقارات وعرضها في المملكة العربية السعودية.
-                                    منذ انطلاقنا، التزمنا بتقديم أدوات مبتكرة وخدمات استثنائية لتمكين الأفراد والشركات العقارية على حد سواء. نحن نضع الشفافية والموثوقية في صميم كل ما نقدمه.
-                                </p>
+                                <p class="mt-8">{{ __('common.about_paragraph_2') }}</p>
                             </div>
                         </div>
                     </div>
@@ -58,18 +45,14 @@
                     {{-- CTA Banner Section --}}
                     <section class="mt-10 flex justify-center ">
                         <div class="w-full text-center p-6 md:p-8 lg:p-12 bg-cover bg-center" style="background-image: url('{{ asset('images/world.png') }}'); background-color: rgba(68, 112, 174, 1);">
-                            <h2 class="text-white text-2xl md:text-[27.2px] font-medium mb-5">
-                                خلّك جاهـز وابـدأ رحلتـك فـي عـالم الـعقار الـيوم
-                            </h2>
-                            <p class="text-white/90 text-base md:text-[16.6px] mb-8 max-w-3xl mx-auto font-bold leading-relaxed">
-                                سواء كنت تبحث عن عقارك المثالي أو ترغب في بيع أو تأجير ممتلكاتك، نحن هنا لمساعدتك.
-                            </p>
+                            <h2 class="text-white text-2xl md:text-[27.2px] font-medium mb-5">{{ __('common.get_ready_start_journey') }}</h2>
+                            <p class="text-white/90 text-base md:text-[16.6px] mb-8 max-w-3xl mx-auto font-bold leading-relaxed">{{ __('common.we_are_here_to_help') }}</p>
                             <div class="flex flex-wrap justify-center gap-[14.2px]">
                                 <a href="{{ route('properties.search') }}" class="inline-block bg-white text-[rgba(48,62,124,1)] text-[15px] font-medium py-2 px-5 rounded-full hover:bg-opacity-90 transition-colors">
-                                   ابحث عن عقارك
+                                   {{ __('common.search_for_property') }}
                                 </a>
                                 <a href="#" class="inline-block bg-[rgba(26,36,76,1)] text-[15px] text-white font-medium py-2 px-5 rounded-full hover:bg-opacity-90 transition-colors">
-                                    أضف عقار الآن
+                                    {{ __('common.add_property_now') }}
                                 </a>
                             </div>
                         </div>

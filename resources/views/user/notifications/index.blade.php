@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'الإشعارات')
+@section('title', __('common.notifications'))
 
 @section('content')
 <main class="py-10 bg-[rgba(250,250,250,1)]">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'تعديل الإعلان: ' . $ad->title)
+@section('title', __('common.edit_ad') . ': ' . $ad->title)
 
 @push('styles')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -11,7 +11,7 @@
 
     @if ($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4" role="alert">
-            <strong class="font-bold">يرجى تصحيح الأخطاء التالية:</strong>
+            <strong class="font-bold">{{ __('common.please_fix_errors') }}</strong>
             <ul class="mt-2 list-disc list-inside text-sm">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -23,12 +23,12 @@
     <form method="POST" action="{{ route('user.ads.update', $ad) }}">
         @csrf
         @method('PATCH') {{-- Use PATCH method for updates --}}
-        
+
         @include('user.ads.partials.form-step-one', ['ad' => $ad])
 
         <div class="flex justify-center mt-12">
             <button type="submit" class="bg-blue-800 text-white font-bold py-3 px-16 rounded-lg hover:bg-blue-700">
-                حفظ التعديلات وإرسال للمراجعة
+                {{ __('common.save_and_submit_for_review') }}
             </button>
         </div>
     </form>
@@ -57,14 +57,14 @@
 
             function fetchDistricts(cityId, selectedDistrict = null) {
                 if (!cityId) {
-                    districtSelect.innerHTML = '<option value="">اختر المدينة أولاً</option>';
+                    districtSelect.innerHTML = '<option value="">{{ __('common.select_city_first') }}</option>';
                     districtSelect.disabled = true;
                     return;
                 }
                 fetch(`/get-districts/${cityId}`)
                     .then(response => response.json())
                     .then(districts => {
-                        districtSelect.innerHTML = '<option value="">اختر الحي</option>';
+                        districtSelect.innerHTML = '<option value="">{{ __('common.choose_district') }}</option>';
                         districts.forEach(district => {
                             const option = new Option(district.name, district.id);
                             if (selectedDistrict == district.id) { option.selected = true; }
@@ -74,7 +74,7 @@
                     });
             }
             citySelect.addEventListener('change', function () { fetchDistricts(this.value); });
-            
+
             // Initial check on page load for the edit form
             if (citySelect.value) {
                 fetchDistricts(citySelect.value, selectedDistrictId);

@@ -48,7 +48,7 @@
                 <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-user-follow"></use></svg> {{ __('attributes.agents.title') }}
             </a>
         </li>
-        
+
         <li class="nav-title">{{ __('attributes.nav.property_management') }}</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.properties.*') ? 'active' : '' }}" href="{{ route('admin.properties.index') }}">
@@ -88,7 +88,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class.nav-link {{ request()->routeIs('admin.districts.*') ? 'active' : '' }}" href="{{ route('admin.districts.index') }}">
+                    <a class="nav-link {{ request()->routeIs('admin.districts.*') ? 'active' : '' }}" href="{{ route('admin.districts.index') }}">
                         <span class="nav-icon"><span class="nav-icon-bullet"></span></span> {{ __('attributes.districts.title') }}
                     </a>
                 </li>

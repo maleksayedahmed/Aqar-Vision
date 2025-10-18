@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'تعديل الإعلان (الخطوة 1 من 2)')
+@section('title', __('common.edit_ad') . ' (' . __('common.step_1_of_2') . ')')
 
 @push('styles')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -11,7 +11,7 @@
 
     @if ($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4" role="alert">
-            <strong class="font-bold">يرجى تصحيح الأخطاء التالية:</strong>
+            <strong class="font-bold">{{ __('common.please_fix_errors') }}</strong>
             <ul class="mt-2 list-disc list-inside text-sm">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -28,13 +28,13 @@
     <form method="POST" action="{{ route($routePrefix . 'update.step1', $ad) }}">
         @csrf
         @method('PATCH')
-        
+
         {{-- Include the reusable form partial, passing the ad data to it --}}
         @include('user.ads.partials.form-step-one', ['ad' => $ad])
 
         <div class="flex justify-center mt-12">
             <button type="submit" class="flex items-center justify-center gap-x-2 bg-blue-800 text-white font-bold py-3 px-16 rounded-lg hover:bg-blue-700">
-                <span>الخطوة التالية (الوسائط)</span>
+                <span>{{ __('common.next_step_media') }}</span>
                 <img src="{{ asset('images/next-arrow.svg') }}">
             </button>
         </div>
@@ -57,7 +57,7 @@
                 document.getElementById('latitude').value = newPosition.lat.toFixed(7);
                 document.getElementById('longitude').value = newPosition.lng.toFixed(7);
             });
-            
+
             const citySelect = document.getElementById('city-select');
             const districtSelect = document.getElementById('district-select');
             const selectedDistrictId = "{{ old('district_id', $ad->district_id) }}";
@@ -67,7 +67,7 @@
                 fetch(`/get-districts/${cityId}`)
                     .then(response => response.json())
                     .then(districts => {
-                        districtSelect.innerHTML = '<option value="">اختر الحي</option>';
+                        districtSelect.innerHTML = '<option value="">{{ __('common.choose_district') }}</option>';
                         districts.forEach(district => {
                             const option = new Option(district.name, district.id);
                             if (selectedDistrict == district.id) { option.selected = true; }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'إعلاناتي')
+@section('title', __('common.my_ads'))
 
 @section('content')
 
@@ -18,18 +18,12 @@
                     <div class="bg-[rgba(79,171,232,0.07)] border border-[rgba(79,171,232,1)] rounded-2xl p-6 shadow-sm">
                         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                             <div class="w-full text-right">
-                                <h3 class="text-[15px] font-bold text-[rgba(79,171,232,1)] mb-3">
-                                    لديك عقار للبيع أو الإيجار؟ ابدأ إعلانك هنا!
-                                </h3>
-                                <p class="text-[15px] text-[rgba(102,102,102,1)] font-medium leading-relaxed">
-                                    يمكنك الآن إصدار رخصة إعلان لعقارك والوصول إلى آلاف المشترين أو المستأجرين المحتملين بكل سهولة.
-                                    <br>
-                                    لديك حق 3 إعلان متاح كحد أقصى لحسابك العادي.
-                                </p>
+                                <h3 class="text-[15px] font-bold text-[rgba(79,171,232,1)] mb-3">{{ __('common.sell_or_rent_title') }}</h3>
+                                <p class="text-[15px] text-[rgba(102,102,102,1)] font-medium leading-relaxed">{{ __('common.sell_or_rent_desc') }}</p>
                             </div>
                             <a href="{{ route('user.ads.create') }}" class="text-[11px] w-[125px] h-[32px] inline-flex items-center justify-center gap-x-2 whitespace-nowrap bg-[rgba(79,171,232,1)] text-white font-medium py-3 px-5 rounded-lg shadow-sm hover:bg-opacity-90 transition-colors flex-shrink-0">
                                 <img src="{{ asset('images/plus.svg') }}">
-                                <span>أضف إعلان</span>
+                                <span>{{ __('common.add_ad') }}</span>
                             </a>
                         </div>
                     </div>
@@ -41,16 +35,16 @@
                         <nav class="-mb-px flex gap-x-1 sm:gap-x-4 overflow-x-auto whitespace-nowrap pb-3 text-sm font-bold text-gray-600">
                             {{-- Active tab color is now identical to the agent's page --}}
                             <a href="{{ route('user.my-ads', ['tab' => 'active']) }}" class="py-2.5 px-5 rounded-full transition-colors {{ $currentTab == 'active' ? 'bg-[#3A487E] text-white shadow-sm' : 'hover:bg-gray-100' }}">
-                                اعلانات مفعلة ({{ $activeCount }})
+                                {{ __('common.tab_active_ads', ['count' => $activeCount]) }}
                             </a>
                             <a href="{{ route('user.my-ads', ['tab' => 'pending']) }}" class="py-2.5 px-5 rounded-full transition-colors {{ $currentTab == 'pending' ? 'bg-[#3A487E] text-white shadow-sm' : 'hover:bg-gray-100' }}">
-                                اعلانات معلقة ({{ $pendingCount }})
+                                {{ __('common.tab_pending_ads', ['count' => $pendingCount]) }}
                             </a>
                             <a href="{{ route('user.my-ads', ['tab' => 'deleted']) }}" class="py-2.5 px-5 rounded-full transition-colors {{ $currentTab == 'deleted' ? 'bg-[#3A487E] text-white shadow-sm' : 'hover:bg-gray-100' }}">
-                                اعلانات محذوفة ({{ $deletedCount }})
+                                {{ __('common.tab_deleted_ads', ['count' => $deletedCount]) }}
                             </a>
                             <a href="{{ route('user.my-ads', ['tab' => 'expired']) }}" class="py-2.5 px-5 rounded-full transition-colors {{ $currentTab == 'expired' ? 'bg-[#3A487E] text-white shadow-sm' : 'hover:bg-gray-100' }}">
-                                اعلانات منتهية ({{ $expiredCount }})
+                                {{ __('common.tab_expired_ads', ['count' => $expiredCount]) }}
                             </a>
                         </nav>
                     </div>
@@ -63,17 +57,17 @@
                                 <div class="flex flex-col md:flex-row-reverse items-start h-[122px] md:items-center justify-between gap-y-4 gap-x-6">
                                     <div class="w-full h-full md:w-auto flex flex-row items-center md:flex-col md:items-end justify-between md:gap-y-4">
                                         <span class="bg-[rgba(221,162,80,0.18)] text-[rgba(221,162,80,1)] text-[10.4px] font-medium px-3 py-1 rounded-md self-start md:self-end">
-                                            {{ optional($ad->adPrice)->name ?? 'عادي' }}
+                                            {{ optional($ad->adPrice)->name ?? __('common.standard') }}
                                         </span>
                                         <div class="flex items-center gap-2">
                                         @php
-                                        
+
                                             // Determine the correct route based on the current user's role
                                             $editRoute = auth()->user()->agent ? route('agent.ads.edit.step1', $ad) : route('user.ads.edit.step1', $ad);
                                         @endphp
-                                        <a href="{{ $editRoute }}" class="text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 py-2 px-4 rounded-lg">تعديل</a>
+                                        <a href="{{ $editRoute }}" class="text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 py-2 px-4 rounded-lg">{{ __('common.edit') }}</a>
                                         <a href="{{ route('properties.show', $ad->id) }}" class="w-[142px] inline-flex items-center text-[12px] gap-x-2 bg-[rgba(48,62,124,1)] justify-between text-white font-medium py-2 px-5 rounded-lg shadow-sm hover:bg-opacity-70 transition-colors">
-                                            <span>رؤية التفاصيل</span>
+                                            <span>{{ __('common.view_details') }}</span>
                                             <img src="{{ asset('images/next-arrow.svg') }}">
                                         </a>
                                     </div>
@@ -97,7 +91,7 @@
                             </div>
                         @empty
                             <div class="text-center py-16">
-                                <p class="text-gray-500 font-medium">لا توجد إعلانات في هذا القسم حالياً.</p>
+                                <p class="text-gray-500 font-medium">{{ __('common.no_ads_section') }}</p>
                             </div>
                         @endforelse
                     </div>
@@ -117,14 +111,10 @@
             <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('{{ asset('images/bg-pattern.png') }}');"></div>
             <div class="relative z-10 flex flex-col items-center text-center">
                 <img src="{{ asset('images/logo.png') }}" class="w-[45px] h-[35px] mb-4" alt="logo">
-                <h2 class="text-[15px] font-bold text-[rgba(26,26,26,1)] mb-2">
-                    هل انت مسوق عقاري؟
-                </h2>
-                <p class="max-w-3xl text-[15px] mx-auto text-[rgba(102,102,102,1)] font-medium leading-relaxed mb-4">
-                    إذا كنت وسيطًا عقاريًا أو لديك عدد كبير من العقارات، قم بترقية حسابك إلى حساب عقاري للاستفادة من باقات متعددة للإعلانات وميزات إدارة متقدمة.
-                </p>
+                <h2 class="text-[15px] font-bold text-[rgba(26,26,26,1)] mb-2">{{ __('common.are_you_an_agent') }}</h2>
+                <p class="max-w-3xl text-[15px] mx-auto text-[rgba(102,102,102,1)] font-medium leading-relaxed mb-4">{{ __('common.join_platform_message') }}</p>
                 <a href="#" class="bg-[#303F7C] text-white font-bold py-3 px-12 rounded-lg hover:bg-opacity-90 transition-colors shadow-md">
-                    تحويل الحساب
+                    {{ __('common.join_as_agent') }}
                 </a>
             </div>
         </div>

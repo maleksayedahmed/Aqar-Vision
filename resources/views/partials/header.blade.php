@@ -12,7 +12,7 @@
             <!-- Mobile Menu Button (Hamburger) -->
             <div class="lg:hidden">
                 <button id="mobile-menu-button" class="p-2 rounded-md text-gray-600 hover:text-gray-900 focus:outline-none">
-                    <span class="sr-only">Open main menu</span>
+                    <span class="sr-only">{{ __('common.open_main_menu') }}</span>
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                     </svg>
@@ -25,21 +25,21 @@
                 </a>
                 <div class="hidden lg:flex gap-[26px]">
                     <nav class="hidden lg:flex items-center gap-x-6">
-                        <a href="{{ route('home') }}" class="text-[16px] {{ request()->routeIs('home') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">الرئيسية</a>
-                        <a href="{{ route('all.agents') }}" class="text-[16px] {{ request()->routeIs('all.agents') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">وسطاء العقاريون</a>
-                        <a href="{{ route('user.about-us') }}" class="text-[16px] {{ request()->routeIs('user.about-us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">نبذة عنا</a>
-                        <a href="{{ route('contact.us') }}" class="text-[16px] {{ request()->routeIs('contact.us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">تواصل معنا</a>
+                        <a href="{{ route('home') }}" class="text-[16px] {{ request()->routeIs('home') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">{{ __('common.home') }}</a>
+                        <a href="{{ route('all.agents') }}" class="text-[16px] {{ request()->routeIs('all.agents') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">{{ __('common.agents') }}</a>
+                        <a href="{{ route('user.about-us') }}" class="text-[16px] {{ request()->routeIs('user.about-us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">{{ __('common.about_nav') }}</a>
+                        <a href="{{ route('contact.us') }}" class="text-[16px] {{ request()->routeIs('contact.us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">{{ __('common.contact_us') }}</a>
                     </nav>
                     <!-- Language Dropdown -->
                     <div class="hidden md:flex relative">
                         <button id="language-menu-button" type="button" class="flex items-center gap-x-2 text-sm bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded-lg transition-colors" aria-expanded="false" aria-haspopup="true">
                             <div class="flex items-center gap-x-1">
                                 @if(app()->getLocale() == 'ar')
-                                    <img src="{{ asset('images/flag.svg') }}" alt="arabic flag" class="w-5 h-5">
-                                    <span class="text-gray-700 font-medium text-xs">العربية</span>
+                                    <img src="{{ asset('images/flag.svg') }}" alt="{{ __('common.arabic_flag_alt') }}" class="w-5 h-5">
+                                    <span class="text-gray-700 font-medium text-xs">{{ __('common.arabic') }}</span>
                                 @else
-                                    <img src="{{ asset('images/united-kingdom-flag-icon.svg') }}" alt="english flag" class="w-5 h-5">
-                                    <span class="text-gray-700 font-medium text-xs">English</span>
+                                    <img src="{{ asset('images/united-kingdom-flag-icon.svg') }}" alt="{{ __('common.english_flag_alt') }}" class="w-5 h-5">
+                                    <span class="text-gray-700 font-medium text-xs">{{ __('common.english') }}</span>
                                 @endif
                             </div>
                             <svg class="w-4 h-4 text-gray-600 transition-transform" id="language-dropdown-arrow" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -49,15 +49,15 @@
                         <div id="language-menu" class="hidden absolute left-0 mt-12 w-40 origin-top-left rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50" role="menu" aria-orientation="vertical" aria-labelledby="language-menu-button">
                             <div class="py-1">
                                 <a href="{{ route('language.switch', 'ar') }}" class="flex items-center gap-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ app()->getLocale() == 'ar' ? 'bg-gray-50 font-semibold' : '' }}" role="menuitem">
-                                    <img src="{{ asset('images/flag.svg') }}" alt="arabic flag" class="w-5 h-5">
-                                    <span>العربية</span>
+                                    <img src="{{ asset('images/flag.svg') }}" alt="{{ __('common.arabic_flag_alt') }}" class="w-5 h-5">
+                                    <span>{{ __('common.arabic') }}</span>
                                     @if(app()->getLocale() == 'ar')
                                         <svg class="w-4 h-4 ml-auto text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                                     @endif
                                 </a>
                                 <a href="{{ route('language.switch', 'en') }}" class="flex items-center gap-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ app()->getLocale() == 'en' ? 'bg-gray-50 font-semibold' : '' }}" role="menuitem">
-                                    <img src="{{ asset('images/united-kingdom-flag-icon.svg') }}" alt="english flag" class="w-5 h-5">
-                                    <span>English</span>
+                                    <img src="{{ asset('images/united-kingdom-flag-icon.svg') }}" alt="{{ __('common.english_flag_alt') }}" class="w-5 h-5">
+                                    <span>{{ __('common.english') }}</span>
                                     @if(app()->getLocale() == 'en')
                                         <svg class="w-4 h-4 ml-auto text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                                     @endif
@@ -72,7 +72,7 @@
             <div class="flex items-center gap-x-4 lg:gap-x-[45px]">
                 <a href="{{ route('properties.map') }}" class="hidden lg:flex bg-[rgba(48,63,125,1)] hover:bg-[rgba(48,63,125,0.9)] text-white px-4 py-2 rounded-lg items-center gap-2 transition-colors duration-200 text-sm font-medium shadow-sm">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2C6.686 2 4 4.686 4 8c0 4.28 6 10 6 10s6-5.72 6-10c0-3.314-2.686-6-6-6zm0 8.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd"></path></svg>
-                    <span>بحث علي الخريطة </span>
+                    <span>{{ __('common.search_on_map') }}</span>
                 </a>
                 <div class="flex items-center gap-[12.5px]">
                     <a href="{{ route('chat.index') }}" class="hidden lg:block relative rounded-lg transition-colors">
@@ -82,7 +82,7 @@
                     <!-- User Profile Dropdown -->
                     <div class="relative">
                         <button id="user-menu-button" type="button" class="flex items-center gap-x-2 text-sm font-medium text-gray-700 rounded-full" aria-expanded="false" aria-haspopup="true">
-                            <span class="sr-only">Open user menu</span>
+                            <span class="sr-only">{{ __('common.open_user_menu') }}</span>
                             <div class="relative">
                                 @if (Auth::user()->profile_photo_path)
                                     {{-- If user has a photo, display it --}}
@@ -104,26 +104,26 @@
                             <div class="space-y-[10px]">
                                 <a href="{{ route('user.profile.edit') }}" class="p-1 rounded {{ request()->routeIs('user.profile.edit') ? 'bg-[rgba(48,62,124,0.09)]' : '' }} flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none"><path d="M6.77894 7.44089C6.73386 7.43523 6.68825 7.43523 6.64317 7.44089C6.15724 7.4231 5.69771 7.21528 5.36345 6.86214C5.02918 6.509 4.84688 6.03877 4.85578 5.55259C4.86468 5.06642 5.06405 4.60317 5.41102 4.2625C5.75798 3.92182 6.2248 3.73096 6.71106 3.73096C7.19731 3.73096 7.66413 3.92182 8.0111 4.2625C8.35806 4.60317 8.55744 5.06642 8.56633 5.55259C8.57523 6.03877 8.39293 6.509 8.05867 6.86214C7.7244 7.21528 7.26487 7.4231 6.77894 7.44089Z" stroke="#303E7C" stroke-width="1.12978" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5242 11.1752C9.48455 12.1308 8.12327 12.6599 6.7112 12.6574C5.29912 12.6599 3.93785 12.1308 2.89819 11.1752C2.94757 10.8733 3.0629 10.5859 3.23597 10.3337C3.40905 10.0814 3.63561 9.87036 3.89953 9.71562C4.7503 9.21014 5.7216 8.94336 6.7112 8.94336C7.7008 8.94336 8.6721 9.21014 9.52286 9.71562C9.78679 9.87036 10.0134 10.0814 10.1864 10.3337C10.3595 10.5859 10.4748 10.8733 10.5242 11.1752Z" stroke="#303E7C" stroke-width="1.12978" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.3685 7.00005C12.3685 8.11895 12.0367 9.21273 11.4151 10.1431C10.7935 11.0734 9.90991 11.7985 8.87618 12.2267C7.84245 12.6549 6.70496 12.7669 5.60756 12.5486C4.51015 12.3303 3.50212 11.7915 2.71094 11.0003C1.91975 10.2092 1.38095 9.20113 1.16266 8.10373C0.944373 7.00633 1.05641 5.86884 1.48459 4.8351C1.91278 3.80137 2.63789 2.91783 3.56822 2.2962C4.49855 1.67457 5.59233 1.34277 6.71123 1.34277C8.21164 1.34277 9.65059 1.93881 10.7115 2.99975C11.7725 4.0607 12.3685 5.49965 12.3685 7.00005Z" stroke="#303E7C" stroke-width="1.12978" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    <span>ملفي الشخصي</span>
+                                    <span>{{ __('common.my_profile') }}</span>
                                 </a>
                                 <a href="{{ route('user.notifications') }}" class="p-1 rounded flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
                                     <path d="M6.99999 11.1974C5.68211 11.1974 4.36261 11.0154 3.08211 10.653C2.51174 10.4922 2.06161 10.0745 1.84711 9.5074C1.62936 8.93053 1.69599 8.27728 2.02749 7.76053L2.63199 6.81965C2.90336 6.4134 2.93911 5.8349 2.93911 5.37665C2.93911 4.25703 3.35999 3.20403 4.12374 2.41103C4.89074 1.61478 5.91286 1.17603 7.00162 1.17603C8.08874 1.17603 9.11087 1.61478 9.87949 2.41103C10.6432 3.20403 11.0641 4.25703 11.0641 5.37665V5.3799C11.0641 5.40753 11.0674 6.24278 11.3842 6.83915L11.9757 7.7589C12.3072 8.27565 12.3755 8.9289 12.1561 9.50578C11.9416 10.0729 11.4915 10.4905 10.9211 10.6514C9.63736 11.0154 8.31786 11.1974 6.99999 11.1974ZM3.30799 7.26978L2.70999 8.19928C2.51336 8.50478 2.47599 8.8769 2.60599 9.21815C2.72786 9.54153 2.98299 9.7804 3.30311 9.86978C5.72111 10.5539 8.27886 10.5539 10.6969 9.86978C11.017 9.77878 11.2705 9.54153 11.394 9.21815C11.524 8.87528 11.485 8.50478 11.29 8.19928L10.6822 7.2519L10.6757 7.2389C10.2516 6.46053 10.25 5.44815 10.25 5.37665C10.25 3.50953 8.79237 1.98853 6.99999 1.98853C5.20761 1.98853 3.74999 3.5079 3.74999 5.37665C3.74999 5.95028 3.69961 6.68153 3.30799 7.26978Z" fill="#303E7C" style="fill:#303E7C;fill:color(display-p3 0.1882 0.2431 0.4863);fill-opacity:1;"/>
                                     <path d="M6.99991 12.8223C5.73729 12.8223 4.60466 12.0635 4.18216 10.9341C4.10416 10.7245 4.20979 10.4905 4.41941 10.4108C4.62904 10.3328 4.86304 10.4385 4.94266 10.6481C5.24816 11.4622 6.07529 12.0098 6.99991 12.0098C7.92454 12.0098 8.75166 11.4622 9.05716 10.6481C9.13516 10.4385 9.37079 10.3312 9.58041 10.4108C9.79004 10.4888 9.89729 10.7245 9.81767 10.9341C9.39516 12.0635 8.26254 12.8223 6.99991 12.8223Z" fill="#303E7C" style="fill:#303E7C;fill:color(display-p3 0.1882 0.2431 0.4863);fill-opacity:1;"/>
                                     </svg>
-                                    <span>الاشعارات</span>
+                                    <span>{{ __('common.notifications') }}</span>
                                 </a>
                                 <a href="{{ route('user.my-ads') }}" class="p-1 rounded {{ request()->routeIs('user.my-ads') ? 'bg-[rgba(48,62,124,0.09)]' : '' }} flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" viewBox="0 0 15 14" fill="none">
                                     <path d="M7.14636 1.3324C7.04809 1.23413 6.90945 1.18713 6.77188 1.20914C6.63473 1.22964 6.51532 1.31424 6.45038 1.43707L3.6972 6.63794L2.1965 8.13843C1.73486 8.60049 1.59366 9.25653 1.75687 9.84485C1.21661 10.531 1.25506 11.5271 1.88739 12.1603C2.22876 12.5013 2.67694 12.6717 3.12512 12.6717C3.50793 12.6717 3.88647 12.5395 4.20264 12.2906C4.35623 12.3333 4.51303 12.3624 4.67154 12.3624C4.97851 12.3622 5.28314 12.2761 5.55572 12.1161L6.6828 13.2427C6.89578 13.4559 7.17584 13.5623 7.4559 13.5623C7.73596 13.5623 8.01623 13.4559 8.22943 13.2427C8.65582 12.8163 8.65582 12.1225 8.22943 11.6961L7.14657 10.6133L7.40954 10.3503L12.6104 7.59668C12.733 7.53174 12.8176 7.41232 12.8386 7.27496C12.8591 7.13782 12.8134 6.99875 12.7151 6.9007L7.14636 1.3324ZM2.50625 11.5414C2.27832 11.3133 2.20611 10.9905 2.28281 10.6991L3.34836 11.7647C3.05719 11.8414 2.7344 11.7694 2.50625 11.5414ZM4.0531 11.2321L2.81537 9.99438C2.47442 9.65344 2.47442 9.09824 2.81537 8.75708L4.0531 7.51935L6.52814 9.99438L5.2904 11.2319C4.94946 11.5733 4.39447 11.5735 4.0531 11.2321ZM7.61078 12.3148C7.66568 12.3697 7.67401 12.4352 7.67401 12.4694C7.67401 12.5036 7.66568 12.5692 7.61099 12.6239C7.52725 12.7072 7.38562 12.7083 7.30145 12.6241L6.21838 11.5414L6.52792 11.2319L7.61078 12.3148ZM7.22754 9.4567L4.591 6.81973L6.94662 2.36996L11.6777 7.10065L7.22754 9.4567ZM8.81262 1.75024V0.875244C8.81262 0.633636 9.0083 0.437744 9.25012 0.437744C9.49194 0.437744 9.68762 0.633636 9.68762 0.875244V1.75024C9.68762 1.99185 9.49194 2.18774 9.25012 2.18774C9.0083 2.18774 8.81262 1.99185 8.81262 1.75024ZM13.6251 4.81253C13.6251 5.05414 13.4294 5.25003 13.1876 5.25003H12.3126C12.0708 5.25003 11.8751 5.05414 11.8751 4.81253C11.8751 4.57092 12.0708 4.37503 12.3126 4.37503H13.1876C13.4294 4.37503 13.6251 4.57092 13.6251 4.81253ZM10.6908 3.37186C10.5199 3.20096 10.5199 2.9241 10.6908 2.7532L11.5658 1.8782C11.7367 1.70731 12.0135 1.70731 12.1844 1.8782C12.3553 2.0491 12.3553 2.32596 12.1844 2.49686L11.3094 3.37186C11.224 3.45731 11.1121 3.50003 11.0001 3.50003C10.8882 3.50003 10.7762 3.45731 10.6908 3.37186Z" fill="#303E7C" style="fill:#303E7C;fill:color(display-p3 0.1882 0.2431 0.4863);fill-opacity:1;"/>
                                     </svg>
-                                    <span>إعلاناتي</span>
+                                    <span>{{ __('common.my_ads') }}</span>
                                 </a>
                                 <a href="{{ route('favorites.index') }}" class="p-1 rounded {{ request()->routeIs('favorites.index') ? 'bg-[rgba(48,62,124,0.09)]' : '' }} flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                                     </svg>
-                                    <span>المفضلة</span>
+                                    <span>{{ __('common.favorites') }}</span>
                                 </a>
                                 <a href="{{ route('user.about-us') }}" class="p-1 rounded {{ request()->routeIs('user.about-us') ? 'bg-[rgba(48,62,124,0.09)]' : '' }} flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" viewBox="0 0 15 14" fill="none">
@@ -131,7 +131,7 @@
                                     <path d="M10.98 8.94849V11.9657" stroke="#303E7C" style="stroke:#303E7C;stroke:color(display-p3 0.1882 0.2431 0.4863);stroke-opacity:1;" stroke-width="1.13146" stroke-linecap="round"/>
                                     <path d="M11.6088 7.06304C11.6088 7.37549 11.3555 7.62877 11.043 7.62877C10.7306 7.62877 10.4773 7.37549 10.4773 7.06304C10.4773 6.75059 10.7306 6.49731 11.043 6.49731C11.3555 6.49731 11.6088 6.75059 11.6088 7.06304Z" fill="#303E7C" style="fill:#303E7C;fill:color(display-p3 0.1882 0.2431 0.4863);fill-opacity:1;"/>
                                     </svg>
-                                    <span>من نحن</span>
+                                    <span>{{ __('common.about_us') }}</span>
                                 </a>
                                 <a href="{{ route('user.terms') }}" class="p-1 rounded {{ request()->routeIs('user.terms') ? 'bg-[rgba(48,62,124,0.09)]' : '' }} flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -146,14 +146,14 @@
                                     </clipPath>
                                     </defs>
                                     </svg>
-                                    <span>شروط الاستخدام</span>
+                                    <span>{{ __('common.terms_of_use') }}</span>
                                 </a>
                                 <a href="{{ route('user.complaints.create') }}" class="p-1 rounded {{ request()->routeIs('user.complaints.create') ? 'bg-[rgba(48,62,124,0.09)]' : '' }} flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75" role="menuitem">
                                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" viewBox="0 0 15 14" fill="none">
                                     <path d="M14.5001 5.16176L12.0869 3.96843V1.34264C12.0869 0.717751 11.5803 0.211182 10.9554 0.211182H4.46724C3.84236 0.211182 3.33579 0.717752 3.33579 1.34264V3.96843L0.922607 5.16176V12.6572C0.922607 13.2821 1.42918 13.7886 2.05406 13.7886H13.3686C13.9935 13.7886 14.5001 13.2821 14.5001 12.6572V5.16176ZM13.7045 5.65585V6.00497L12.0869 7.21315V4.85592L13.7045 5.65585ZM11.2913 1.00674V7.80735L7.71134 10.4812L4.13134 7.80735V1.00674H11.2913ZM3.33579 4.85592V7.21315L1.71816 6.00497V5.65585L3.33579 4.85592ZM1.71816 12.9931V6.99793L7.71134 11.4742L13.7045 6.99793V12.9931H1.71816Z" fill="#303E7C" style="fill:#303E7C;fill:color(display-p3 0.1882 0.2431 0.4863);fill-opacity:1;"/>
                                     <path d="M6.91556 5.97131L7.71112 5.17575L8.50667 5.97131L9.06921 5.40877L8.27366 4.61322L9.06921 3.81766L8.50667 3.25513L7.71112 4.05068L6.91556 3.25513L6.35303 3.81766L7.14858 4.61322L6.35303 5.40877L6.91556 5.97131Z" fill="#303E7C" style="fill:#303E7C;fill:color(display-p3 0.1882 0.2431 0.4863);fill-opacity:1;"/>
                                     </svg>
-                                   <span>للشكاوي والمقترحات</span>
+                                   <span>{{ __('common.complaints') }}</span>
                                 </a>
                             </div>
                             <div class="w-full pt-6 flex justify-center">
@@ -161,7 +161,7 @@
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                    class="flex items-center gap-[6px] text-[13px] font-light text-[#D9534F] transition-opacity hover:opacity-75" role="menuitem">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 16 15" fill="none"><rect x="0.657959" y="0.157959" width="14.6842" height="14.6842" rx="7.3421" fill="#CB544B"/><path d="M7.89136 8.3905L8.76153 7.52032L7.89136 6.65015" stroke="white" stroke-width="0.489474" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.28076 7.52026H8.73767" stroke="white" stroke-width="0.489474" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 4.78067C8.36159 4.76376 8.72273 4.82253 9.0603 4.9532C9.39788 5.08388 9.70446 5.28359 9.96042 5.53955C10.2164 5.79551 10.4161 6.10209 10.5468 6.43967C10.6774 6.77724 10.7362 7.13838 10.7193 7.49997C10.7362 7.86156 10.6774 8.2227 10.5468 8.56027C10.4161 8.89785 10.2164 9.20442 9.96042 9.46039C9.70446 9.71635 9.39788 9.91606 9.0603 10.0467C8.72273 10.1774 8.36159 10.2362 8 10.2193" stroke="white" stroke-width="0.489474" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    <span>تسجيل الخروج</span>
+                                    <span>{{ __('common.log_out') }}</span>
                                 </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                                     @csrf
@@ -178,7 +178,7 @@
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M4.18335 6.92564C4.18335 6.77187 4.30797 6.64722 4.46177 6.64722H6.31789C6.47166 6.64722 6.59631 6.77187 6.59631 6.92564C6.59631 7.0794 6.47166 7.20405 6.31789 7.20405H4.46177C4.30797 7.20405 4.18335 7.0794 4.18335 6.92564Z" fill="#303E7C" style="fill:#303E7C;fill:color(display-p3 0.1882 0.2431 0.4863);fill-opacity:1;"/>
                                     <path d="M5.16112 5.60194C3.75228 5.42929 2.30303 5.68543 1.01409 6.37038C0.813115 6.47718 0.6875 6.68618 0.6875 6.91378V8.27688C0.6875 8.63567 0.978355 8.92653 1.33714 8.92653H5.30387C5.23575 8.74433 5.23397 8.54424 5.2963 8.36226C5.25186 8.33245 5.20965 8.29793 5.17042 8.25865C5.03095 8.11918 4.95113 7.9427 4.9309 7.76084H4.46175C4.00043 7.76084 3.62647 7.38687 3.62647 6.92559C3.62647 6.4643 4.00043 6.09033 4.46175 6.09033H4.9309C4.95065 5.91255 5.02741 5.73989 5.16112 5.60194Z" fill="#303E7C" style="fill:#303E7C;fill:color(display-p3 0.1882 0.2431 0.4863);fill-opacity:1;"/>
                                     </svg>
-                                    <span>تسجيل دخول المسوق/الشركة</span>
+                                    <span>{{ __('common.marketer_company_login') }}</span>
                                 </a>
                             </div>
                         </div>
@@ -189,10 +189,10 @@
         <!-- Mobile Menu Panel -->
         <div id="mobile-menu" class="hidden lg:hidden">
             <div class="pt-2 pb-3 space-y-1">
-                <a href="{{ route('home') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#303f7d] hover:bg-gray-50">الرئيسية</a>
-                <a href="{{ route('all.agents') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#303f7d] hover:bg-gray-50">وسطاء العقاريون</a>
-                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#303f7d] hover:bg-gray-50">نبذة عنا</a>
-                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#303f7d] hover:bg-gray-50">تواصل معنا</a>
+                <a href="{{ route('home') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#303f7d] hover:bg-gray-50">{{ __('common.home') }}</a>
+                <a href="{{ route('all.agents') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#303f7d] hover:bg-gray-50">{{ __('common.agents') }}</a>
+                <a href="{{ route('user.about-us') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#303f7d] hover:bg-gray-50">{{ __('common.about_nav') }}</a>
+                <a href="{{ route('contact.us') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#303f7d] hover:bg-gray-50">{{ __('common.contact_us') }}</a>
             </div>
         </div>
     </div>

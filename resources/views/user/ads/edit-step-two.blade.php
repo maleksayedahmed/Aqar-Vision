@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'تعديل الوسائط - الخطوة 2')
+@section('title', __('common.edit_media') . ' - ' . __('common.step_2'))
 
 @push('styles')
     <link href="https://releases.transloadit.com/uppy/v3.1.0/uppy.min.css" rel="stylesheet">
@@ -10,8 +10,8 @@
 <main class="bg-gray-50 px-4 lg:px-20 pt-6 pb-11">
 
     @if ($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4">
-             <strong class="font-bold">يرجى تصحيح الأخطاء التالية:</strong>
+       <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4">
+           <strong class="font-bold">{{ __('common.please_fix_errors') }}</strong>
             <ul class="mt-2 list-disc list-inside text-sm">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -27,17 +27,17 @@
     <form method="POST" action="{{ route($routePrefix .'update', $ad) }}" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
-        
+
         {{-- This hidden input will be populated by Uppy with the new video's path --}}
         <input type="hidden" name="video" id="video-path">
 
         <section class="mt-6 bg-white p-4 md:p-8 rounded-xl shadow-sm" dir="rtl">
-            <h2 class="text-lg font-bold mb-6">تعديل الصور والفيديو</h2>
+            <h2 class="text-lg font-bold mb-6">{{ __('common.edit_images_and_video') }}</h2>
 
             {{-- Existing Images --}}
             @if(!empty($ad->images))
             <div class="mb-8">
-                <label class="block text-sm font-medium text-gray-700">الصور الحالية (حدد المربع لحذف الصورة)</label>
+                <label class="block text-sm font-medium text-gray-700">{{ __('common.current_images') }}</label>
                 <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 mt-2">
                     @foreach($ad->images as $image)
                     <div class="relative group">
@@ -52,10 +52,10 @@
                 </div>
             </div>
             @endif
-            
+
             {{-- Add New Images --}}
             <div class="mb-8">
-                <label for="images" class="block text-sm font-medium text-gray-700">إضافة صور جديدة</label>
+                <label for="images" class="block text-sm font-medium text-gray-700">{{ __('common.upload_new_images') }}</label>
                 <input type="file" name="images[]" multiple class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                  @error('images.*') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
             </div>
@@ -65,18 +65,18 @@
             {{-- Existing Video --}}
             @if($ad->video_path)
              <div class="mb-8 mt-8">
-                <label class="block text-sm font-medium text-gray-700">الفيديو الحالي</label>
+                <label class="block text-sm font-medium text-gray-700">{{ __('common.current_video') }}</label>
                 <video src="{{ Storage::url($ad->video_path) }}" controls class="w-full max-w-md rounded-lg mt-2"></video>
                 <div class="mt-2">
                     <input type="checkbox" name="delete_video" value="1" id="delete_video" class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500">
-                    <label for="delete_video" class="text-sm text-red-600 font-medium">حذف الفيديو الحالي</label>
+                    <label for="delete_video" class="text-sm text-red-600 font-medium">{{ __('common.delete_current_video') }}</label>
                 </div>
             </div>
             @endif
 
             {{-- Uppy Video Uploader --}}
             <div class="mt-8">
-                <label class="block text-sm font-medium text-gray-700">{{ $ad->video_path ? 'رفع فيديو جديد (سيتم حذف الفيديو الحالي)' : 'رفع فيديو' }}</label>
+                <label class="block text-sm font-medium text-gray-700">{{ $ad->video_path ? __('common.upload_new_video') : __('common.upload_video') }}</label>
                 <div id="video-uploader" class="mt-2"></div>
                 <div id="uppy-error-message" class="text-red-500 text-xs mt-2"></div>
             </div>
@@ -89,15 +89,15 @@
                     <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                 </div>
                 <div class="text-sm leading-6">
-                    <label for="terms" class="block text-[14.25px] font-bold">أقر بأن جميع المعلومات المقدمة صحيحة.</label>
+                    <label for="terms" class="block text-[14.25px] font-bold">{{ __('common.confirm_all_info_correct') }}</label>
                 </div>
             </div>
              @error('terms') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
         </div>
-        
+
         <div class="flex justify-center mt-12">
             <button type="submit" id="submit-button" class="bg-blue-800 text-white font-bold py-3 px-16 rounded-lg hover:bg-blue-700 disabled:opacity-50">
-                حفظ وإنهاء
+                {{ __('common.save_and_finish') }}
             </button>
         </div>
     </form>
@@ -106,7 +106,7 @@
 
 @push('scripts')
 <script type="module">
-  import { Uppy, Dashboard, XHRUpload } 
+  import { Uppy, Dashboard, XHRUpload }
     from "https://releases.transloadit.com/uppy/v3.1.0/uppy.min.mjs";
   import ar_SA from "https://unpkg.com/@uppy/locales/lib/ar_SA.js";
 
@@ -130,7 +130,7 @@
       target: '#video-uploader',
       height: 300,
       proudlyDisplayPoweredByUppy: false,
-      note: 'فيديو واحد فقط، أقصى حجم 50 ميجابايت',
+    note: '{{ __('common.uppy_video_note', ['size' => 50]) }}',
       hideUploadButton: true,
   });
 
@@ -162,9 +162,9 @@
       submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
   });
 
-  uppy.on('upload-error', (file, error, response) => {
+    uppy.on('upload-error', (file, error, response) => {
       console.error('Uppy upload error:', { error, response });
-      uppyErrorMessage.textContent = 'فشل رفع الفيديو. يرجى التأكد من أن حجمه أقل من 50 ميجابايت.';
+    uppyErrorMessage.textContent = '{{ __('common.video_upload_failed', ['size' => 50]) }}';
       submitButton.disabled = false;
       submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
   });

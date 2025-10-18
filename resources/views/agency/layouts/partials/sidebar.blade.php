@@ -21,15 +21,15 @@
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('agency.notifications') ? 'active' : '' }}" href="{{ route('agency.notifications') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-bell"></use></svg> Notifications
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-bell"></use></svg> {{ __('common.notifications') }}
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('agency.chat') ? 'active' : '' }}" href="{{ route('agency.chat') }}">
-                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-chat-bubble"></use></svg> {{ __('Chat') }}
+                <svg class="nav-icon"><use xlink:href="/assets/icons/free.svg#cil-chat-bubble"></use></svg> {{ __('common.chat') }}
             </a>
         </li>
-        
+
         <li class="nav-title">{{ __('attributes.nav.property_management') }}</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('agency.ads.*') ? 'active' : '' }}" href="{{ route('agency.ads.index') }}">

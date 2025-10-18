@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'أضف اعلان جديد - الخطوة 2')
+@section('title', __('common.create_ad') . ' - ' . __('common.next_step_media'))
 
 @push('styles')
     {{-- Uppy's CSS is required for the video uploader's UI --}}
@@ -16,7 +16,7 @@
     {{-- The form now needs the enctype for the standard image uploads --}}
     <form id="ad-step-two-form" method="POST" action="{{ route($routePrefix . 'store') }}" enctype="multipart/form-data">
         @csrf
-        
+
         {{-- This hidden input will be populated by Uppy with the uploaded video's path --}}
         <input type="hidden" name="video" id="video-path">
 
@@ -25,14 +25,14 @@
                 <a href="{{ route('user.ads.create.step1', $selectedAdPrice) }}" class="flex items-center gap-x-3">
                     <img src="{{ asset('images/back-arrow.svg') }}" alt="Back Arrow">
                     <div class="text-right">
-                        <h3 class="text-2xl lg:text-[26px] font-medium text-[rgba(48,62,124,1)]">أضف اعلان جديد</h3>
-                        <p class="text-[14.3px] font-medium"><span class="mr-1 text-red-500">*</span>نرجو تعبئة البيانات بدقة</p>
+                        <h3 class="text-2xl lg:text-[26px] font-medium text-[rgba(48,62,124,1)]">{{ __('common.create_ad') }}</h3>
+                        <p class="text-[14.3px] font-medium"><span class="mr-1 text-red-500">*</span>{{ __('common.fill_data_carefully') }}</p>
                     </div>
                 </a>
                 <div class="hidden md:flex items-center gap-x-[27px]">
-                    <span class="font-medium text-[16px] text-[rgba(181,183,191,1)]">بيانات العقار</span>
+                    <span class="font-medium text-[16px] text-[rgba(181,183,191,1)]">{{ __('common.property_data') }}</span>
                     <div class="flex items-center gap-x-2"><img src="{{ asset('images/rode-active.svg') }}"></div>
-                    <span class="font-medium text-[16px] text-[rgba(48,62,124,1)]">مستندات العقار</span>
+                    <span class="font-medium text-[16px] text-[rgba(48,62,124,1)]">{{ __('common.property_documents') }}</span>
                 </div>
                 <div class="relative w-full lg:w-[264px]">
                     <div class="flex items-center justify-between bg-[rgba(0,0,0,0.02)] w-full h-[53px] px-4 py-2.5 rounded-xl text-lg lg:text-[20px] font-medium text-black">
@@ -51,26 +51,26 @@
                 <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl">
                     <img src="{{ asset('images/plaza.svg') }}">
                 </div>
-                <h2 class="text-base lg:text-[18px] font-bold">صور وفيديوهات العقار</h2>
+                <h2 class="text-base lg:text-[18px] font-bold">{{ __('common.photos_and_videos') }}</h2>
             </div>
 
             {{-- ** THIS IS THE RESTORED INSTRUCTIONS BLOCK ** --}}
             <div class="bg-[rgba(243,246,255,1)] p-4 md:p-6 rounded-lg border-r-4 border-[rgba(98,150,209,1)] mb-8">
                 <div class="text-gray-800 space-y-4 text-[16.3px] font-medium">
-                    <p class="font-bold text-lg">إرشادات هامة لرفع الوسائط:</p>
+                    <p class="font-bold text-lg">{{ __('common.media_guidelines_title') }}</p>
                     <div>
-                        <p class="font-bold mb-2">• الصور:</p>
+                        <p class="font-bold mb-2">{{ __('common.images_bullet_title') }}</p>
                         <ul class="space-y-2 pr-4 md:pr-6 text-[rgba(48,62,124,1)]">
-                            <li>• يُفضل رفع صور عالية الجودة وواضحة للعقار من زوايا مختلفة.</li>
-                            <li>• الحد الأقصى لحجم الصورة: 5 ميجابايت.</li>
+                            <li>{{ __('common.images_guideline_quality') }}</li>
+                            <li>{{ __('common.images_guideline_max_size', ['size' => 5]) }}</li>
                         </ul>
                     </div>
                     <div>
-                        <p class="font-bold mb-2 mt-4">• الفيديوهات:</p>
+                        <p class="font-bold mb-2 mt-4">{{ __('common.videos_bullet_title') }}</p>
                         <ul class="space-y-2 pr-4 md:pr-6 text-[rgba(48,62,124,1)]">
-                            <li>• يمكنك رفع فيديو واحد فقط للعقار.</li>
-                            <li>• صيغ الفيديو المدعومة: MP4, MOV, WebM.</li>
-                            <li>• الحد الأقصى لحجم الفيديو: 50 ميجابايت.</li>
+                            <li>{{ __('common.video_single_only') }}</li>
+                            <li>{{ __('common.video_supported_formats') }}</li>
+                            <li>{{ __('common.video_max_size', ['size' => 50]) }}</li>
                         </ul>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
 
             {{-- Standard Image Upload --}}
             <div class="mb-8">
-                <label for="images" class="block text-sm font-medium text-gray-700">صور العقار (يمكنك اختيار عدة صور)</label>
+                <label for="images" class="block text-sm font-medium text-gray-700">{{ __('common.upload_new_images') }}</label>
                 <input type="file" name="images[]" id="images" multiple class="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
                 @error('images.*') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
             </div>
@@ -87,7 +87,7 @@
 
             {{-- Uppy Video Upload Area --}}
             <div class="mt-8">
-                <label class="block text-sm font-medium text-gray-700">فيديو العقار (فيديو واحد فقط)</label>
+                <label class="block text-sm font-medium text-gray-700">{{ __('common.upload_video') }}</label>
                 <div id="video-uploader" class="mt-2"></div>
                 <div id="uppy-error-message" class="text-red-500 text-xs mt-2"></div>
             </div>
@@ -99,7 +99,7 @@
                     <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                 </div>
                 <div class="text-sm leading-6">
-                    <label for="terms" class="block text-[14.25px] font-bold">أقر بأن جميع المعلومات المقدمة صحيحة.</label>
+                    <label for="terms" class="block text-[14.25px] font-bold">{{ __('common.confirm_all_info_correct') }}</label>
                 </div>
             </div>
             @error('terms') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
@@ -107,7 +107,7 @@
 
         <div class="flex justify-center mt-12">
             <button type="submit" id="submit-button" class="flex items-center justify-center gap-x-2 bg-[rgba(48,62,124,1)] text-white text-lg font-medium py-3 px-16 rounded-lg transition-colors disabled:opacity-50">
-                <span>نشر العقار</span>
+                <span>{{ __('common.publish_property') }}</span>
             </button>
         </div>
     </form>
@@ -139,7 +139,7 @@
             target: '#video-uploader',
             height: 300,
             proudlyDisplayPoweredByUppy: false,
-            note: 'فيديو واحد فقط، أقصى حجم 50 ميجابايت',
+            note: '{{ __('common.uppy_video_note', ['size' => 50]) }}',
             hideUploadButton: true,
         });
 
@@ -163,7 +163,7 @@
             submitButton.disabled = false;
             submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
             console.log('Uppy upload successful:', response.body.path);
-            
+
         });
 
         uppy.on('file-removed', (file) => {
@@ -174,7 +174,7 @@
 
         uppy.on('upload-error', (file, error, response) => {
             console.error('Uppy upload error:', { error, response });
-            uppyErrorMessage.textContent = 'فشل رفع الفيديو. يرجى التأكد من أن حجمه أقل من 50 ميجابايت.';
+            uppyErrorMessage.textContent = '{{ __('common.video_upload_failed', ['size' => 50]) }}';
             submitButton.disabled = false;
             submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
         });

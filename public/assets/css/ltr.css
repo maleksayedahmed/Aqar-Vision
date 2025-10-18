@@ -168,3 +168,6 @@ img.self-start {
 h2.self-start {
   align-self: flex-start !important; /* Ensures "تفاصيل المعلن" is on the left */
 }
+select{
+  background-position: right 0.5rem center !important;
+} 
