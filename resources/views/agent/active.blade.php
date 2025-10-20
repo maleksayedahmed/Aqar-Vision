@@ -39,9 +39,9 @@
                 <div x-data="{
                     activeSlide: 0,
                     slides: [
-                        { headline: 'شفنا لك البيت، وبسعر السوق - كل شيء واضح', subheadline: 'مع عقار فيجن' },
-                        { headline: 'تحليلات دقيقة وتقارير مفصلة لكل عقار', subheadline: 'لاتخاذ أفضل قرار' },
-                        { headline: 'ابحث، قارن، واشترِ بثقة تامة', subheadline: 'مستقبلك يبدأ هنا' }
+                        { headline: '{{ __('common.slider_text_1') }}', subheadline: '{{ __('common.slider_sub_1') }}' },
+                        { headline: '{{ __('common.slider_text_2') }}', subheadline: '{{ __('common.slider_sub_2') }}' },
+                        { headline: '{{ __('common.slider_text_3') }}', subheadline: '{{ __('common.slider_sub_3') }}' }
                     ]
                 }" x-init="setInterval(() => { activeSlide = (activeSlide + 1) % slides.length }, 5000)"
                     class="relative rounded-2xl overflow-hidden bg-[rgba(236,238,249,1)] w-full">
@@ -81,7 +81,7 @@
                                         <h1 class="text-2xl md:text-3xl font-bold text-slate-800" x-text="slide.headline">
                                         </h1>
                                         <p class="text-2xl md:text-3xl font-bold">
-                                            <span class="text-slate-700">مع</span>
+                                            <span class="text-slate-700">{{ __('common.with') }}</span>
                                             <span class="text-indigo-600" x-text="slide.subheadline.split(' ')[1]"></span>
                                         </p>
                                     </div>
@@ -93,8 +93,11 @@
                                 <template x-for="(slide, index) in slides" :key="index">
                                     <button @click="activeSlide = index"
                                         class="h-1.5 rounded-full transition-all duration-300"
-                                        :class="{ 'bg-indigo-600 w-8': activeSlide ===
-                                            index, 'bg-slate-300 w-1.5 hover:bg-slate-400': activeSlide !== index }"></button>
+                                        :class="{
+                                            'bg-indigo-600 w-8': activeSlide ===
+                                                index,
+                                            'bg-slate-300 w-1.5 hover:bg-slate-400': activeSlide !== index
+                                        }"></button>
                                 </template>
                             </div>
                         </div>

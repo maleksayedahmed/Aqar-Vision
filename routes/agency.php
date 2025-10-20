@@ -9,8 +9,8 @@ use App\Http\Middleware\Language;
 use App\Livewire\Agency\AgencyChatSystem;
 
 
-// All routes are protected by the 'auth' and new 'is_agency' middleware.
-Route::middleware(['auth',Language::class, 'is_agency'])
+// All routes are protected by the 'auth', 'role:agency' and 'is_agency' middleware.
+Route::middleware(['auth',Language::class, 'role:agency', 'is_agency'])
     ->prefix('agency')
     ->name('agency.')
     ->group(function () {
@@ -21,8 +21,8 @@ Route::middleware(['auth',Language::class, 'is_agency'])
     })->name('chat');
     
     // Agency's own profile management
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [\App\Http\Controllers\Agency\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [\App\Http\Controllers\Agency\ProfileController::class, 'update'])->name('profile.update');
 
     // Agency's notifications
     Route::get('/notifications', [\App\Http\Controllers\Agency\NotificationController::class, 'index'])->name('notifications');

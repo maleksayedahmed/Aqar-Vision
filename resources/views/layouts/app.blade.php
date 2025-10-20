@@ -1,6 +1,6 @@
 {{-- resources/views/layouts/app.blade.php --}}
 <!DOCTYPE html>
-<html  lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="UTF-8">
@@ -110,17 +110,19 @@
                         <!-- Personal Information -->
                         <div class="space-y-4 mb-6">
                             <div class="space-y-2">
-                                <label for="name" class="block text-sm font-medium text-gray-700">الاسم</label>
+                                <label for="name"
+                                    class="block text-sm font-medium text-gray-700">{{ __('common.full_name') }}</label>
                                 <input type="text" name="name" id="name" value="{{ Auth::user()->name }}"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="أدخل اسمك الكامل">
+                                    placeholder="{{ __('common.enter_full_name') }}">
                             </div>
 
                             <div class="space-y-2">
-                                <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
+                                <label for="phone"
+                                    class="block text-sm font-medium text-gray-700">{{ __('common.phone_number') }}</label>
                                 <input type="tel" name="phone" id="phone" value="{{ Auth::user()->phone }}"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="أدخل رقم هاتفك">
+                                    placeholder="{{ __('common.enter_phone') }}">
                             </div>
                         </div>
 
@@ -163,7 +165,7 @@
                                     class="block text-sm font-medium text-gray-700">{{ __('common.fal_license_optional') }}</label>
                                 <input type="text" name="fal_license" id="upgrade_fal_license"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="أدخل رقم رخصة فال">
+                                    placeholder="{{ __('common.fal_license') }}">
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -243,7 +245,7 @@
                                         class="block text-sm font-medium text-gray-700">{{ __('common.tax_id_label') }}</label>
                                     <input type="text" name="tax_id" id="tax_id"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="الرقم الضريبي (اختياري)">
+                                        placeholder="{{ __('common.tax_id_label') }} ({{ __('common.optional') }})">
                                 </div>
 
                                 <div class="space-y-2">
@@ -277,7 +279,7 @@
                                         class="block text-sm font-medium text-gray-700">{{ __('common.office_phone_label') }}</label>
                                     <input type="tel" name="phone_number" id="phone_number"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="هاتف المكتب (اختياري)">
+                                        placeholder="{{ __('common.office_phone_label') }} ({{ __('common.optional') }})">
                                 </div>
 
                                 <div class="space-y-2">
@@ -285,7 +287,7 @@
                                         class="block text-sm font-medium text-gray-700">{{ __('common.office_email_label') }}</label>
                                     <input type="email" name="email" id="email"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="البريد الإلكتروني للمكتب (اختياري)">
+                                        placeholder="{{ __('common.office_email_label') }} ({{ __('common.optional') }})">
                                 </div>
                             </div>
                         </div>
@@ -489,11 +491,11 @@
             const openLoginModalBtn = document.getElementById('open-login-modal');
             const closeButtons = document.querySelectorAll(
                 '#close-login-modal, #close-signup-modal, #close-login-email-modal, #close-login-phone-modal, #close-otp-modal'
-                );
+            );
 
             const switchToSignupBtns = document.querySelectorAll(
                 '#switch-to-signup-modal, #switch-to-signup-from-email-modal, #switch-to-signup-from-phone-modal, #switch-to-signup-from-otp-modal'
-                );
+            );
             const switchToLoginBtns = document.querySelectorAll(
                 '#switch-to-login-modal, #back-to-initial-login-modal, #back-to-initial-login-from-phone');
             const switchToLoginEmailBtn = document.getElementById('switch-to-login-email-modal');
@@ -519,7 +521,7 @@
             if (switchToLoginPhoneBtn) switchToLoginPhoneBtn.addEventListener('click', () => showModal(
                 loginPhoneModal));
             if (backToLoginPhoneBtn) backToLoginPhoneBtn.addEventListener('click', () => showModal(
-            loginPhoneModal));
+                loginPhoneModal));
 
             // Background click to close
             allModals.forEach(modal => {
@@ -558,7 +560,8 @@
                 citySelect.addEventListener('change', function() {
                     const cityId = this.value;
 
-                    districtSelect.innerHTML = '<option value="">جار التحميل...</option>';
+                    districtSelect.innerHTML =
+                        '<option value="">{{ __('common.loading_option') }}</option>';
                     districtSelect.disabled = true;
 
                     if (cityId) {
@@ -568,7 +571,8 @@
                                 return response.json();
                             })
                             .then(districts => {
-                                districtSelect.innerHTML = '<option value="">اختر الحي</option>';
+                                districtSelect.innerHTML =
+                                    '<option value="">{{ __('common.choose_district') }}</option>';
                                 if (districts.length > 0) {
                                     districts.forEach(district => {
                                         const option = document.createElement('option');
@@ -579,15 +583,17 @@
                                     districtSelect.disabled = false;
                                 } else {
                                     districtSelect.innerHTML =
-                                        '<option value="">لا توجد أحياء لهذه المدينة</option>';
+                                        '<option value="">{{ __('common.no_districts_for_city') }}</option>';
                                 }
                             })
                             .catch(error => {
                                 console.error('Error fetching districts:', error);
-                                districtSelect.innerHTML = '<option value="">حدث خطأ</option>';
+                                districtSelect.innerHTML =
+                                    '<option value="">{{ __('common.an_error_occurred') }}</option>';
                             });
                     } else {
-                        districtSelect.innerHTML = '<option value="">اختر المدينة أولاً</option>';
+                        districtSelect.innerHTML =
+                            '<option value="">{{ __('common.select_city_first_js') }}</option>';
                         districtSelect.disabled = true;
                     }
                 });

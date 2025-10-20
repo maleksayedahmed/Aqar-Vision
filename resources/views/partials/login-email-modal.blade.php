@@ -62,7 +62,7 @@
                 <div class="text-left mt-2">
                     @if (Route::has('password.request'))
                         <a href="{{ route('password.request') }}"
-                            class="text-sm text-gray-500 hover:text-blue-600 hover:underline">{{ __('passwords.forgot', [], app()->getLocale()) ?? 'هل نسيت كلمة المرور؟' }}</a>
+                            class="text-sm text-gray-500 hover:text-blue-600 hover:underline">{{ __('validation.forgot_password') ?? 'هل نسيت كلمة المرور؟' }}</a>
                     @endif
                 </div>
             </div>

@@ -15,6 +15,11 @@
             background: transparent;
             border: none;
         }
+        .dropdown-menu {
+            max-height: 300px;
+            overflow-y: auto;
+            width: -webkit-fill-available !important;
+        } 
     </style>
 @endpush
 
@@ -78,7 +83,7 @@
                                     </svg>
                                 </button>
                                 <div
-                                    class="dropdown-menu hidden absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                                    class="dropdown-menu hidden absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5" style="max-height: 300px; overflow-y: auto;">
                                     <ul class="py-1">
                                         @foreach ($cities as $city)
                                             <li><a href="#"
@@ -157,7 +162,8 @@
                                 </button>
                                 <div
                                     class="dropdown-menu hidden absolute z-10 mt-2 w-56 bg-white rounded-md shadow-lg p-2 ring-1 ring-black ring-opacity-5">
-                                    <label class="block text-sm font-medium text-gray-700 px-2 py-1">عدد الغرف</label>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 px-2 py-1">{{ __('common.number_of_rooms') }}</label>
                                     <div class="flex justify-around py-2">
                                         <a href="#" class="room-option px-3 py-1 rounded-md hover:bg-gray-100"
                                             data-value="1">1</a>
@@ -243,7 +249,8 @@
                     <div>
                         <p class="text-sm text-gray-500 mb-1 px-3">{{ __('common.search_results_on_map') }}</p>
                         <div class="flex items-center gap-3">
-                            <h2 class="text-3xl font-normal text-[rgba(48,62,124,1)]">العقارات المتاحة</h2>
+                            <h2 class="text-3xl font-normal text-[rgba(48,62,124,1)]">
+                                {{ __('common.available_properties') }}</h2>
                             <span
                                 class="text-xs font-medium bg-gray-200 text-[rgba(48,62,124,1)] px-1.5 py-0.5 border-[0.5px] border-[rgba(48,62,124,1)] bg-[rgba(48,62,124,0.06)] rounded-md">{{ $ads->total() }}</span>
                         </div>
@@ -264,7 +271,7 @@
                                 </a>
                                 <div
                                     class="absolute top-0 left-4 bg-white text-[rgba(48,62,124,1)] text-sm font-medium px-3.5 py-1.5 rounded-b">
-                                    {{ $ad->listing_purpose == 'rent' ? 'إيجار' : 'بيع' }}</div>
+                                    {{ $ad->listing_purpose == 'rent' ? __('common.rent') : __('common.sale') }}</div>
                                 @if (auth()->user())
                                     <button
                                         class="favorite-btn absolute top-2.5 right-3 bg-[rgba(255,255,255,0.27)] p-1.5 rounded-lg hover:shadow"
@@ -317,7 +324,8 @@
                                 </div>
                                 <div class="border-t border-gray-100 pt-5 mt-5 flex justify-between items-center">
                                     <p class="text-lg font-bold text-indigo-700">{{ number_format($ad->total_price) }}
-                                        <span class="text-xs font-medium text-slate-500">{{ __('common.sar') }}</span></p>
+                                        <span class="text-xs font-medium text-slate-500">{{ __('common.sar') }}</span>
+                                    </p>
                                     <a href="{{ route('properties.show', $ad->id) }}"
                                         class="bg-[rgba(48,62,124,1)] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-indigo-800">{{ __('common.view_details') }}</a>
                                 </div>
@@ -378,7 +386,7 @@
                         if (event.target.classList.contains('select-option')) {
                             event.preventDefault(); // Stop the link from navigating
                             districtHiddenInput.value = event.target.dataset
-                            .value; // Get the district ID
+                                .value; // Get the district ID
                             filterForm.submit(); // Submit the form
                         }
                     });
@@ -419,7 +427,7 @@
                 function fetchDistricts(cityId) {
                     if (!cityId) {
                         districtOptionsList.innerHTML =
-                            '<li><a class="block px-4 py-2 text-sm text-gray-400">اختر مدينة أولاً</a></li>';
+                            '<li><a class="block px-4 py-2 text-sm text-gray-400">{{ __('common.select_city_first_js') }}</a></li>';
                         districtButton.disabled = true;
                         return;
                     }
@@ -442,7 +450,7 @@
                                 districtButton.disabled = false;
                             } else {
                                 districtOptionsList.innerHTML =
-                                    '<li><a class="block px-4 py-2 text-sm text-gray-400">لا توجد أحياء</a></li>';
+                                    '<li><a class="block px-4 py-2 text-sm text-gray-400">{{ __('common.no_districts') }}</a></li>';
                             }
                         });
                 }
@@ -489,8 +497,8 @@
                         const popupContent = `
                         <div class="text-right font-sans p-1" style="min-width: 150px;">
                             <h3 class="font-bold text-md mb-1">${ad.title}</h3>
-                            <p class="text-sm text-gray-600">${Number(ad.total_price).toLocaleString()} ر.س</p>
-                            <a href="/properties/${ad.id}" class="text-blue-500 hover:underline font-semibold text-xs" target="_blank">رؤية التفاصيل</a>
+                            <p class="text-sm text-gray-600">${Number(ad.total_price).toLocaleString()} {{ __('common.sar') }}</p>
+                            <a href="/properties/${ad.id}" class="text-blue-500 hover:underline font-semibold text-xs" target="_blank">{{ __('common.view_details') }}</a>
                         </div>
                     `;
                         marker.bindPopup(popupContent);
@@ -498,7 +506,7 @@
                 });
             } else if (mapElement) {
                 mapElement.innerHTML =
-                    '<div class="flex items-center justify-center h-full bg-gray-100 text-gray-500 rounded-lg">لا توجد نتائج لعرضها على الخريطة</div>';
+                    '<div class="flex items-center justify-center h-full bg-gray-100 text-gray-500 rounded-lg">{{ __('common.no_results_on_map') }}</div>';
             }
         });
 
@@ -537,7 +545,8 @@
                                 // Revert optimistic update on error
                                 updateFavoriteButton(this, isFavorited);
                                 this.dataset.favorited = isFavorited;
-                                showNotification(data.message || 'حدث خطأ', 'error');
+                                showNotification(data.message || '{{ __('common.an_error_occurred') }}',
+                                    'error');
                             }
                         })
                         .catch(error => {
@@ -545,7 +554,7 @@
                             // Revert optimistic update on error
                             updateFavoriteButton(this, isFavorited);
                             this.dataset.favorited = isFavorited;
-                            showNotification('حدث خطأ في الشبكة', 'error');
+                            showNotification('{{ __('common.network_error') }}', 'error');
                         });
                 @else
                     // Redirect to login if not authenticated

@@ -329,6 +329,17 @@ return [
     'agent_upgrade_cta_paragraph' => 'If you are a real estate agent or have many properties, upgrade your account to an agent account to benefit from multiple ad packages and advanced management features.',
     'convert_account' => 'Convert account',
     'describe_feedback_placeholder' => 'Please describe your complaint or suggestion in detail...',
+    'priority_support' => 'Priority support',
+    'support_24_7' => '24/7 support',
+    'promote_featured_ads' => 'Promote featured ads (:count monthly)',
+    'access_all_statistics' => 'Access all statistics',
+    'multi_user_admin_account' => 'Multi-user admin account',
+    'loading_option' => 'Loading...',
+    'choose_district' => 'Choose district',
+    'no_districts_for_city' => 'No districts for this city',
+    'an_error_occurred' => 'An error occurred',
+    'select_city_first_js' => 'Choose the city first',
+    'rejecting_in_progress' => 'Rejecting...',
 
     // User Pages - About & Terms
     'about_us' => 'Who are we?',

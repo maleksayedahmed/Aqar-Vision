@@ -329,6 +329,16 @@ return [
         'agent_upgrade_cta_paragraph' => 'إذا كنت وسيطًا عقاريًا أو لديك عدد كبير من العقارات، قم بترقية حسابك إلى حساب عقاري للاستفادة من باقات متعددة للإعلانات وميزات إدارة متقدمة.',
         'convert_account' => 'تحويل الحساب',
         'describe_feedback_placeholder' => 'الرجاء وصف شكواك أو اقتراحاتك بالتفصيل...',
+        'priority_support' => 'دعم فني ذو أولوية',
+        'support_24_7' => 'دعم فني 24/7',
+        'promote_featured_ads' => 'ترويج إعلانات مميزة (:count شهرياً)',
+        'access_all_statistics' => 'وصول لجميع الاحصائيات',
+        'multi_user_admin_account' => 'حساب مدير متعدد المستخدمين',
+        'loading_option' => 'جار التحميل...',
+        'choose_district' => 'اختر الحي',
+        'an_error_occurred' => 'حدث خطأ',
+        'select_city_first_js' => 'اختر المدينة أولاً',
+        'rejecting_in_progress' => 'جاري الرفض...',
 
     // User Pages - About & Terms
     'about_us' => 'من نحن؟',

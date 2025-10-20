@@ -127,8 +127,11 @@
                         <div class="flex justify-center flex-wrap gap-3 mb-6 hidden sm:flex">
                             <template x-for="(image, index) in images" :key="index">
                                 <button @click="select(index)"
-                                    :class="{ 'border-blue-600 opacity-100': currentIndex ===
-                                        index, 'border-transparent opacity-70': currentIndex !== index }"
+                                    :class="{
+                                        'border-blue-600 opacity-100': currentIndex ===
+                                            index,
+                                        'border-transparent opacity-70': currentIndex !== index
+                                    }"
                                     class="thumbnail-btn w-32 h-20 rounded-lg overflow-hidden border-2 hover:opacity-100 transition-all">
                                     <img :src="'{{ Storage::url('') }}' + image" :alt="'Thumbnail ' + (index + 1)"
                                         class="w-full h-full object-cover">
@@ -377,18 +380,16 @@
                 @keydown.escape.window="deleteModalOpen = false">
                 <div x-show="deleteModalOpen" x-transition @click.away="deleteModalOpen = false"
                     class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-                    <h3 class="text-lg font-bold text-gray-900">تأكيد الحذف</h3>
-                    <p class="mt-2 text-sm text-gray-600">هل أنت متأكد من رغبتك في حذف هذا الإعلان؟ لا يمكن التراجع عن هذا
-                        الإجراء.</p>
+                    <h3 class="text-lg font-bold text-gray-900">{{ __('common.confirm_delete') }}</h3>
+                    <p class="mt-2 text-sm text-gray-600">{{ __('common.confirm_delete_message') }}</p>
                     <div class="mt-6 flex justify-end gap-3">
                         <button @click="deleteModalOpen = false" type="button"
-                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">إلغاء</button>
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">{{ __('common.cancel') }}</button>
                         <form action="{{ route($routePrefix . 'destroy', $ad) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit"
-                                class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">نعم،
-                                قم بالحذف</button>
+                                class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">{{ __('common.yes_delete') }}</button>
                         </form>
                     </div>
                 </div>

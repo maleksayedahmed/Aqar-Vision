@@ -92,3 +92,9 @@
 .hidden {
     display: none !important;
 }
+
+/* Global dropdown behavior across admin/agency layouts */
+.dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}

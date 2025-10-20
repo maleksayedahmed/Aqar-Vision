@@ -365,7 +365,8 @@
                 fetch(`/get-districts/${cityId}`)
                     .then(response => response.json())
                     .then(districts => {
-                        districtSelect.innerHTML = '<option value="">اختر الحي</option>';
+                        districtSelect.innerHTML =
+                            '<option value="">{{ __('common.choose_district') }}</option>';
                         districts.forEach(district => {
                             const option = new Option(district.name, district.id);
                             if (selectedDistrict == district.id) {

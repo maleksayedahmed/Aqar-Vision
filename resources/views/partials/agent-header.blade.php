@@ -163,7 +163,7 @@
                                             stroke="#303E7C" stroke-width="1.12978" stroke-linecap="round"
                                             stroke-linejoin="round" />
                                     </svg>
-                                    <span>ملفي الشخصي</span>
+                                    <span>{{ __('common.my_profile') }}</span>
                                 </a>
                                 <a href="{{ route('agent.notifications') }}"
                                     class="flex items-center gap-[10px] text-[13px] font-light text-[#303f7d] transition-opacity hover:opacity-75"

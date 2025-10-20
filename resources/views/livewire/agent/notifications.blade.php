@@ -89,7 +89,7 @@
 
                         @if (!empty($notification->data['rejection_reason']))
                             <div class="mt-2 p-3 bg-red-50 border-l-4 border-red-400 text-red-700 text-sm rounded">
-                                <p class="font-semibold">سبب الرفض:</p>
+                                <p class="font-semibold">{{ __('common.rejection_reason') }}</p>
                                 <p>{{ $notification->data['rejection_reason'] }}</p>
                             </div>
                         @endif

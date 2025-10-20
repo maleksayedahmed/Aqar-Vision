@@ -236,7 +236,7 @@
 
                     // Provide visual feedback to the admin
                     this.disabled = true;
-                    this.textContent = 'جاري الرفض...';
+                    this.textContent = '{{ __('common.rejecting_in_progress') }}';
 
                     const formData = new FormData(form);
                     const url = form.getAttribute('action');
@@ -267,12 +267,10 @@
                         .catch(error => {
                             // Handle network errors or server errors
                             console.error('Fetch error:', error);
-                            alert(
-                                'حدث خطأ أثناء رفض الطلب. يرجى التحقق من وحدة التحكم والمحاولة مرة أخرى.'
-                                );
+                            alert('{{ __('common.error_during_reject') }}');
                             // Restore the button so the admin can try again
                             this.disabled = false;
-                            this.textContent = 'تأكيد الرفض';
+                            this.textContent = '{{ __('common.confirm_reject') }}';
                         });
                 });
             });

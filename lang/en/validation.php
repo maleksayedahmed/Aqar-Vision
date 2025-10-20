@@ -3,18 +3,58 @@
 return [
     'required' => 'The :attribute field is required.',
     'string' => 'The :attribute must be a string.',
+    'min' => [
+        'string' => 'The :attribute must be at least :min characters.',
+        'numeric' => 'The :attribute must be at least :min.',
+    ],
     'max' => [
         'string' => 'The :attribute may not be greater than :max characters.',
     ],
     'email' => 'The :attribute must be a valid email address.',
+    'numeric' => 'The :attribute must be a number.',
+    'digits' => 'The :attribute must be :digits digits.',
     'date' => 'The :attribute is not a valid date.',
     'after' => 'The :attribute must be a date after :date.',
     'exists' => 'The selected :attribute is invalid.',
     'unique' => 'The :attribute has already been taken.',
     'boolean' => 'The :attribute field must be true or false.',
+    'confirmed' => 'The :attribute confirmation does not match.',
+    'regex' => 'The :attribute format is invalid.',
+    'accepted' => 'You must accept the :attribute.',
+    'forgot_password' => 'You forgot your password?',
 
     // Agent custom messages
     'custom' => [
+        // Auth/Login/Signup
+        'email' => [
+            'required' => 'The email field is required.',
+            'email' => 'Enter a valid email address.',
+            'max' => 'The email may not be greater than :max characters.',
+        ],
+        'phone' => [
+            'required' => 'The phone number field is required.',
+            'regex' => 'Enter a valid phone number.',
+            'min' => 'The phone number must be at least :min digits.',
+        ],
+        'password' => [
+            'required' => 'The password field is required.',
+            'min' => 'The password must be at least :min characters.',
+            'confirmed' => 'The password confirmation does not match.',
+        ],
+        'password_confirmation' => [
+            'required' => 'The password confirmation field is required.',
+        ],
+        'terms' => [
+            'accepted' => 'You must accept the terms of use.',
+        ],
+        'otp' => [
+            'required' => 'The verification code is required.',
+            'digits' => 'The verification code must be :digits digits.',
+        ],
+        'code' => [
+            'required' => 'The verification code is required.',
+            'digits' => 'The verification code must be :digits digits.',
+        ],
         'name' => [
             'required' => 'The name field is required.',
             'string' => 'The name must be a string.',
@@ -79,7 +119,13 @@ return [
         'agent_type_id' => 'Agent Type',
         'agency_id' => 'Agency',
         'phone_number' => 'Phone Number',
+        'phone' => 'Phone Number',
         'email' => 'Email',
+        'password' => 'Password',
+        'password_confirmation' => 'Confirm Password',
+        'otp' => 'Verification Code',
+        'code' => 'Verification Code',
+        'terms' => 'Terms of Use',
         'license_number' => 'License Number',
         'license_issue_date' => 'License Issue Date',
         'license_expiry_date' => 'License Expiry Date',

@@ -47,7 +47,7 @@ Route::get('/agents/{agent}', [PropertySearchController::class, 'showAgent'])->n
   Route::get('/about-us', [App\Http\Controllers\AboutController::class, 'index'])->name('user.about-us');
 
 
-Route::prefix('my-account/ads')->name('user.ads.')->group(function () {
+Route::middleware('auth')->prefix('my-account/ads')->name('user.ads.')->group(function () {
  Route::get('/', [App\Http\Controllers\UserAdsController::class, 'index'])->name('index');
 
     Route::get('/create', [App\Http\Controllers\UserAdController::class, 'create'])->name('create');

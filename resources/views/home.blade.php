@@ -44,7 +44,7 @@
             <form action="{{ route('properties.search') }}" method="GET" class="w-full">
                 <input type="hidden" name="listing_purpose" id="listing_purpose_input" value="rent">
 
-                <div class="flex flex-col-reverse lg:flex-row-reverse items-center gap-4 w-full">
+                <div class="flex flex-col-reverse items-center gap-4 w-full ltr:flex-row-reverse rtl:flex-row">
 
                     <button type="submit"
                         class="flex items-center justify-center w-full lg:w-auto h-12 bg-[rgba(48,62,124,1)] text-white font-semibold rounded-lg px-10 hover:bg-indigo-800 focus:outline-none flex-shrink-0">
