@@ -23,6 +23,10 @@ class Plan extends Model
         'description',
         'created_by',
         'updated_by',
+        'duration_in_days',
+        'features',
+        'monthly_price',
+        'yearly_price',
     ];
 
     public $translatable = ['name', 'description'];
@@ -34,10 +38,16 @@ class Plan extends Model
         'ads_premium' => 'integer',
         'ads_map' => 'integer',
         'agent_seats' => 'integer',
+        'features' => 'array',
     ];
 
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
+    }
+
+    public function scopeNotFree($query)
+    {
+        return $query->where('price_monthly', '>', 0);
     }
 }

@@ -23,7 +23,9 @@ use App\Http\Controllers\Agent\TermsController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PropertySearchController;
 use App\Http\Controllers\Agent\NotificationController;
+use App\Http\Controllers\Agent\SubscriptionController;
 use App\Http\Controllers\Agent\InvitationController;
+
 
 
 /*
@@ -176,6 +178,9 @@ Route::middleware(['auth', 'role:agent'])->prefix('agent')->name('agent.')->grou
 
     Route::get('/invitations/{invitation}/accept', [InvitationController::class, 'accept'])->name('invitations.accept');
     Route::get('/invitations/{invitation}/reject', [InvitationController::class, 'reject'])->name('invitations.reject');
+
+    Route::get('checkout/{plan}', [SubscriptionController::class, 'checkout'])->name('checkout');
+    Route::post('subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
 
 });
 

@@ -36,58 +36,29 @@
                     <div class="price-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 flex flex-col">
                         <div class="text-center">
                             <h3 class="text-xl md:text-[23.3px] font-medium text-[rgba(3,33,110,1)]">
-                                {{ __('common.basic_package') }}</h3>
+                                {{ $basicPlan->name }}</h3>
                             <p
                                 class="text-3xl md:text-[31.3px] my-4 font-medium text-[rgba(26,26,26,1)] flex justify-center items-end gap-[9.3px]">
-                                <span class="price-value" data-monthly="150" data-yearly="1500">1500</span>
+                                <span class="price-value" data-monthly="{{ $basicPlan->monthly_price }}" data-yearly="{{ $basicPlan->yearly_price }}">{{ $basicPlan->yearly_price }}</span>
                                 <span
                                     class="billing-cycle text-base md:text-[16.6px] text-[rgba(26,26,26,1)] flex items-center"><img
                                         src="images/royal.png" class="inline h-4 mr-1"
                                         alt="Currency">{{ __('common.per_year') }}</span>
                             </p>
                             <p class="text-[rgba(153,153,153,1)] text-[15.5px] min-h-[3rem]">
-                                {{ __('common.ideal_for_few_properties') }}</p>
+                                {{ $basicPlan->description }}</p>
                         </div>
                         <ul class="mt-8 space-y-4 text-sm font-medium text-gray-700 flex-grow">
-                            <!-- features list -->
+                            @foreach(json_decode($basicPlan->features) as $feature)
                             <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
                                         d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.show_n_properties', ['count' => 5]) }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.technical_support') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.high_quality_media') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.ad_view_stats') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.campaign_management') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.performance_analysis') }}</span></li>
+                                </svg><span>{{ $feature }}</span></li>
+                            @endforeach
                         </ul>
-                        <a href="#"
+                        <a href="{{ route('agent.checkout', ['plan' => $basicPlan->id]) }}"
                             class="w-full mt-8 bg-[rgba(48,62,124,1)] text-white text-lg md:text-[21.3px] font-medium py-3 text-center rounded-lg hover:bg-opacity-90 transition-colors">{{ __('common.subscribe_now') }}</a>
                     </div>
 
@@ -98,56 +69,27 @@
                             class="absolute -top-4 right-1/2 transform translate-x-1/2 bg-[rgba(27,177,105,1)] text-white text-xs font-bold px-4 py-1.5 rounded-full">{{ __('common.most_popular') }}</span>
                         <div class="text-center">
                             <h3 class="text-xl md:text-[23.3px] font-medium text-[rgba(27,177,105,1)]">
-                                {{ __('common.basic_package') }}</h3>
+                                {{ $popularPlan->name }}</h3>
                             <p
                                 class="text-3xl md:text-[31.3px] my-4 font-medium text-[rgba(26,26,26,1)] flex justify-center items-end gap-[9.3px]">
-                                <span class="price-value" data-monthly="300" data-yearly="3000">3000</span>
+                                <span class="price-value" data-monthly="{{ $popularPlan->monthly_price }}" data-yearly="{{ $popularPlan->yearly_price }}">{{ $popularPlan->yearly_price }}</span>
                                 <span
                                     class="billing-cycle text-base md:text-[16.6px] text-[rgba(26,26,26,1)] flex items-center">{{ __('common.per_year') }}</span>
                             </p>
                             <p class="text-[rgba(153,153,153,1)] text-[15.5px] min-h-[3rem]">
-                                {{ __('common.ideal_for_few_properties') }}</p>
+                                {{ $popularPlan->description }}</p>
                         </div>
                         <ul class="mt-8 space-y-4 text-sm font-medium text-gray-700 flex-grow">
-                            <!-- features list -->
+                            @foreach(json_decode($popularPlan->features) as $feature)
                             <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
                                         d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.show_n_properties', ['count' => 20]) }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.priority_support') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.high_quality_media') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.ad_view_stats') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.campaign_management') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.performance_analysis') }}</span></li>
+                                </svg><span>{{ $feature }}</span></li>
+                            @endforeach
                         </ul>
-                        <a href="#"
+                        <a href="{{ route('agent.checkout', ['plan' => $popularPlan->id]) }}"
                             class="w-full mt-8 bg-[rgba(27,177,105,1)] text-white text-lg md:text-[21.3px] font-medium py-3 text-center rounded-lg hover:bg-opacity-90 transition-colors">{{ __('common.subscribe_now') }}</a>
                     </div>
 
@@ -155,56 +97,27 @@
                     <div class="price-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 flex flex-col">
                         <div class="text-center">
                             <h3 class="text-xl md:text-[23.3px] font-medium text-[rgba(3,33,110,1)]">
-                                {{ __('common.companies_package') }}</h3>
+                                {{ $companyPlan->name }}</h3>
                             <p
                                 class="text-3xl md:text-[31.3px] my-4 font-medium text-[rgba(26,26,26,1)] flex justify-center items-end gap-[9.3px]">
-                                <span class="price-value" data-monthly="500" data-yearly="5000">5000</span>
+                                <span class="price-value" data-monthly="{{ $companyPlan->monthly_price }}" data-yearly="{{ $companyPlan->yearly_price }}">{{ $companyPlan->yearly_price }}</span>
                                 <span
                                     class="billing-cycle text-base md:text-[16.6px] text-[rgba(26,26,26,1)] flex items-center">{{ __('common.per_year') }}</span>
                             </p>
                             <p class="text-[rgba(153,153,153,1)] text-[15.5px] min-h-[3rem]">
-                                {{ __('common.ideal_for_few_properties') }}</p>
+                                {{ $companyPlan->description }}</p>
                         </div>
                         <ul class="mt-8 space-y-4 text-sm font-medium text-gray-700 flex-grow">
-                            <!-- features list -->
+                            @foreach(json_decode($companyPlan->features) as $feature)
                             <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
                                         d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.show_n_properties', ['count' => 50]) }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.support_24_7') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.promote_featured_ads', ['count' => 5]) }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.access_all_statistics') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ __('common.multi_user_admin_account') }}</span></li>
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>تحليل الأداء شهريًا لضمان أفضل النتائج</span></li>
+                                </svg><span>{{ $feature }}</span></li>
+                            @endforeach
                         </ul>
-                        <a href="#"
+                        <a href="{{ route('agent.checkout', ['plan' => $companyPlan->id]) }}"
                             class="w-full mt-8 bg-[rgba(48,62,124,1)] text-white text-lg md:text-[21.3px] font-medium py-3 text-center rounded-lg hover:bg-opacity-90 transition-colors">{{ __('common.subscribe_now') }}</a>
                     </div>
 

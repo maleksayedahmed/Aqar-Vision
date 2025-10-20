@@ -66,4 +66,17 @@ class Agent extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function subscribeTo(Plan $plan)
+    {
+        return $this->subscriptions()->create([
+            'plan_id' => $plan->id,
+            'ends_at' => now()->addDays($plan->duration_in_days),
+        ]);
+    }
 }

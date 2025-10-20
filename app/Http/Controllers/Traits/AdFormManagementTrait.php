@@ -51,6 +51,21 @@ trait AdFormManagementTrait
      */
     public function create(): View|RedirectResponse
     {
+        if ($this->isAgent()) {
+            $user = Auth::user();
+            $activeSubscription = Subscription::where('user_id', $user->id)
+                ->where('status', 'active')
+                ->where('start_date', '<=', now())
+                ->where('end_date', '>=', now())
+                ->first();
+
+            if ($activeSubscription) {
+                return redirect($this->getRoute('create.step1', ['adPrice' => 2]));
+            } else {
+                return redirect()->route('agent.packages');
+            }
+        }
+
         $adPrices = AdPrice::where('is_active', true)->get();
         if ($adPrices->isEmpty()) {
             return redirect($this->getRoute('index'))->with('error', 'No ad packages are available at the moment.');
