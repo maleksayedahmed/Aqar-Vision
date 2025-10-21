@@ -559,4 +559,12 @@ return [
     'quick_dashboard_intro' => 'Your quick dashboard to manage your properties and explore opportunities.',
     'alert' => 'Alert!',
     'account_not_activated_yet' => 'Your account is not activated yet. Please wait for review to activate your account and receive requests.',
+
+    'checkout' => 'Checkout',
+    'complete_your_purchase' => 'Complete your purchase by providing your payment details.',
+    'payment_details' => 'Payment Details',
+    'card_number' => 'Card Number',
+    'expiry_date' => 'Expiry Date',
+    'cvc' => 'CVC',
+    'pay_now' => 'Pay Now',
 ];
