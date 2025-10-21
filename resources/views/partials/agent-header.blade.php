@@ -45,12 +45,12 @@
                             aria-expanded="false" aria-haspopup="true">
                             <div class="flex items-center gap-x-1">
                                 @if (app()->getLocale() == 'ar')
-                                    <img src="{{ asset('images/flag.svg') }}" alt="arabic flag" class="w-5 h-5">
-                                    <span class="text-gray-700 font-medium text-xs">العربية</span>
+                                    <img src="{{ asset('images/flag.svg') }}" alt="{{ __('common.arabic_flag_alt') }}" class="w-5 h-5">
+                                    <span class="text-gray-700 font-medium text-xs">{{ __('common.arabic') }}</span>
                                 @else
-                                    <img src="{{ asset('images/united-kingdom-flag-icon.svg') }}" alt="english flag"
+                                    <img src="{{ asset('images/united-kingdom-flag-icon.svg') }}" alt="{{ __('common.english_flag_alt') }}"
                                         class="w-5 h-5">
-                                    <span class="text-gray-700 font-medium text-xs">English</span>
+                                    <span class="text-gray-700 font-medium text-xs">{{ __('common.english') }}</span>
                                 @endif
                             </div>
                             <svg class="w-4 h-4 text-gray-600 transition-transform" id="language-dropdown-arrow-agent"
@@ -69,8 +69,8 @@
                                 <a href="{{ route('language.switch', 'ar') }}"
                                     class="flex items-center gap-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ app()->getLocale() == 'ar' ? 'bg-gray-50 font-semibold' : '' }}"
                                     role="menuitem">
-                                    <img src="{{ asset('images/flag.svg') }}" alt="arabic flag" class="w-5 h-5">
-                                    <span>العربية</span>
+                                    <img src="{{ asset('images/flag.svg') }}" alt="{{ __('common.arabic_flag_alt') }}" class="w-5 h-5">
+                                    <span>{{ __('common.arabic') }}</span>
                                     @if (app()->getLocale() == 'ar')
                                         <svg class="w-4 h-4 ml-auto text-green-600" fill="currentColor"
                                             viewBox="0 0 20 20">
@@ -83,9 +83,9 @@
                                 <a href="{{ route('language.switch', 'en') }}"
                                     class="flex items-center gap-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ app()->getLocale() == 'en' ? 'bg-gray-50 font-semibold' : '' }}"
                                     role="menuitem">
-                                    <img src="{{ asset('images/united-kingdom-flag-icon.svg') }}" alt="english flag"
+                                    <img src="{{ asset('images/united-kingdom-flag-icon.svg') }}" alt="{{ __('common.english_flag_alt') }}"
                                         class="w-5 h-5">
-                                    <span>English</span>
+                                    <span>{{ __('common.english') }}</span>
                                     @if (app()->getLocale() == 'en')
                                         <svg class="w-4 h-4 ml-auto text-green-600" fill="currentColor"
                                             viewBox="0 0 20 20">
