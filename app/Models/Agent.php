@@ -69,14 +69,16 @@ class Agent extends Model
 
     public function subscriptions()
     {
-        return $this->hasMany(Subscription::class);
+        return $this->user->subscriptions;
     }
 
     public function subscribeTo(Plan $plan)
     {
-        return $this->subscriptions()->create([
+        return $this->user->subscriptions()->create([
             'plan_id' => $plan->id,
-            'ends_at' => now()->addDays($plan->duration_in_days),
+            'start_date' => now(),
+            'end_date' => now()->addDays(30), // Assuming monthly plan
+            'status' => 'active',
         ]);
     }
 }

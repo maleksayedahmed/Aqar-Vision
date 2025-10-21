@@ -23,6 +23,6 @@ class SubscriptionController extends Controller
         // Create a subscription for the agent
         $request->user()->agent->subscribeTo($plan);
 
-        return redirect()->route('agent.dashboard')->with('success', __('common.subscription_successful'));
+        return redirect()->route('agent.home')->with('success', __('common.subscription_successful'));
     }
 }
