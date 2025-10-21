@@ -68,8 +68,8 @@
 
         {{-- Basic Info Section --}}
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
-            <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
-                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/plaza.svg') }}"></div>
+            <div class="flex items-center ml-[-16px] lg:ml-[-28px] lg:mr-[-28px] gap-3 mb-10">
+                <div class="info-icon bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/plaza.svg') }}"></div>
                 <h2 class="text-base lg:text-[18px] font-bold">{{ __('common.property_basic_info') }}</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-16 gap-y-6">
@@ -83,7 +83,7 @@
         name="property_type_id"
         id="property_type_id"
         required
-        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] pl-10 pr-3"
+        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:right_0.75rem_center] px-2"
     >
     <option value="">{{ __('common.choose_property_type') }}</option>
         @foreach($propertyTypes as $type)
@@ -97,7 +97,7 @@
                         name="listing_purpose"
                         id="listing_purpose"
                         required
-                        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] pl-10 pr-3"
+                        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-[position:right_0.75rem_center]"
                     >
                         <option value="rent" {{ old('listing_purpose') == 'rent' ? 'selected' : '' }}>{{ __('common.rent') }}</option>
                         <option value="sale" {{ old('listing_purpose') == 'sale' ? 'selected' : '' }}>{{ __('common.sale') }}</option>
@@ -130,8 +130,8 @@
 
         {{-- Location Section --}}
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
-            <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
-                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/location-05.svg') }}"></div>
+            <div class="flex items-center ml-[-16px] lg:ml-[-28px] lg:mr-[-28px] gap-3 mb-10">
+                <div class="info-icon bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/location-05.svg') }}"></div>
                 <h2 class="text-base lg:text-[18px] font-bold">{{ __('common.property_location') }}</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-16 gap-y-6">
@@ -139,9 +139,7 @@
                     <label for="city_id" class="w-[80px] shrink-0 text-[11px] font-medium">{{ __('common.city_label') }}<span class="text-red-500 mr-1">*</span></label>
                     <select
                         name="city_id"
-                        id="city-select"
-                        required
-                        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] pl-10 pr-3"
+                        bg-[position:right_0.75rem_center]
                     >
                         <option value="">{{ __('common.choose_city') }}</option>
                         @foreach($cities as $city)
@@ -155,7 +153,7 @@
                         name="district_id"
                         id="district-select"
                         required
-                        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] pl-10 pr-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:right_0.75rem_center] px-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         {{ old('city_id') ? '' : 'disabled' }}
                     >
                         <option value="">{{ __('common.select_city_first') }}</option>
@@ -181,8 +179,8 @@
 
         {{-- Features Section (Checkboxes) --}}
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
-            <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
-                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/star-2.svg') }}"></div>
+            <div class="flex items-center ml-[-16px] lg:ml-[-28px] lg:mr-[-28px] gap-3 mb-10">
+                <div class="info-icon bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/star-2.svg') }}"></div>
                 <h2 class="text-base lg:text-[18px] font-bold">{{ __('common.property_features') }}</h2>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-6 gap-x-2">
@@ -200,8 +198,8 @@
 
         {{-- Additional Details Section --}}
         <section class="mt-6 bg-white p-4 lg:p-7 rounded-xl shadow-[0px_4px_23px_rgba(0,0,0,0.05)]" dir="rtl">
-            <div class="flex items-center ml-[-16px] lg:ml-0 lg:mr-[-28px] gap-3 mb-10">
-                <div class="bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/details-list.svg') }}"></div>
+            <div class="flex items-center ml-[-16px] lg:ml-[-28px] lg:mr-[-28px] gap-3 mb-10">
+                <div class="info-icon bg-[rgba(48,62,124,1)] p-2 rounded-tl-xl rounded-bl-xl"><img src="{{ asset('images/details-list.svg') }}"></div>
                 <h2 class="text-base lg:text-[18px] font-bold">{{ __('common.additional_details') }}</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-16 gap-y-6">
@@ -218,7 +216,7 @@
         <select
             name="attributes[{{ $slug }}]"
             id="attr-{{ $slug }}"
-            class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] pl-10 pr-3"
+            class="w-full h-full text-[11px] rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml,%3csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2020%2020%27%3e%3cpath%20stroke%3D%27%236b7280%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20stroke-width%3D%271.5%27%20d%3D%27m6%208%204%204%204-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[length:1.5em_1.5em] bg-[position:left_0.75rem_center] px-2"
         >
             <option value="">{{ __('common.select_placeholder') }}</option>
             @foreach ($attribute->choices as $choice)
@@ -246,7 +244,7 @@
         <div class="flex justify-center mt-12">
             <button type="submit" class="flex items-center justify-center gap-x-2 bg-[rgba(48,62,124,1)] hover:bg-blue-800 text-white text-[19px] font-medium py-3 px-8 sm:px-16 w-full sm:w-auto rounded-lg transition-colors">
                 <span>{{ __('common.next_step') }}</span>
-                <img src="{{ asset('images/next-arrow.svg') }}">
+                <img src="{{ asset('images/next-arrow.svg') }}" alt="next">
             </button>
         </div>
     </form>

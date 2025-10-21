@@ -171,3 +171,15 @@ h2.self-start {
 select{
   background-position: right 0.5rem center !important;
 } 
+.info-icon{
+ border-top-right-radius: 0.75rem !important;
+ border-bottom-right-radius: 0.75rem !important;
+ border-top-left-radius: 0 !important;
+ border-bottom-left-radius: 0 !important;
+}
+img[alt="Back"] {
+  transform: rotate(180deg) !important;
+}
+img[alt="next"] {
+  transform: rotate(180deg) !important;
+}
