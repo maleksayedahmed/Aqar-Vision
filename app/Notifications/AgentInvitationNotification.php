@@ -37,7 +37,7 @@ class AgentInvitationNotification extends Notification
             'invitation_id' => $this->invitation->id,
             'agency_id' => $this->invitation->agency_id,
             'agent_id' => $this->invitation->agent_id,
-            'message' => 'You have a new invitation to join an agency.',
+            'message' => __('admin.notifications.agent_invitation_received'),
         ];
     }
 }

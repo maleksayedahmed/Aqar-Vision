@@ -36,26 +36,27 @@ class UpgradeRequestStatusChanged extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        $roleText = $this->upgradeRequest->requested_role === 'agent' ? 'وسيط عقاري' : 'شركة عقارية';
-        
-        $status = $this->upgradeRequest->status === 'approved' ? 'active' : 'inactive';
-        
-        $message = $this->upgradeRequest->status === 'approved'
-            ? "تمت الموافقة على طلب ترقية حسابك إلى {$roleText}."
-            : "تم رفض طلب ترقية حسابك إلى {$roleText}.";
+        $isAgent = $this->upgradeRequest->requested_role === 'agent';
+        $isApproved = $this->upgradeRequest->status === 'approved';
+
+        $messageKey = $isApproved
+            ? ($isAgent ? 'admin.notifications.upgrade_request_approved_agent' : 'admin.notifications.upgrade_request_approved_agency')
+            : ($isAgent ? 'admin.notifications.upgrade_request_rejected_agent' : 'admin.notifications.upgrade_request_rejected_agency');
+
+        $status = $isApproved ? 'active' : 'inactive';
 
         $data = [
-            'message' => $message,
+            'message' => __($messageKey),
             'status' => $status,
         ];
 
         // Add rejection reason if request was rejected and has admin notes
-        if ($this->upgradeRequest->status === 'rejected' && $this->upgradeRequest->admin_notes) {
+        if (!$isApproved && $this->upgradeRequest->admin_notes) {
             $data['rejection_reason'] = $this->upgradeRequest->admin_notes;
         }
 
         // If approved and the user now has an agency, provide a dashboard link
-        if ($this->upgradeRequest->status === 'approved' && $this->upgradeRequest->user && $this->upgradeRequest->user->agency) {
+        if ($isApproved && $this->upgradeRequest->user && $this->upgradeRequest->user->agency) {
             $data['dashboard_link'] = route('agency.dashboard');
         }
 

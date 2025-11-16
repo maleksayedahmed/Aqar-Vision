@@ -44,7 +44,7 @@
                                                 <div class="d-flex justify-content-end gap-2">
                                                     <a href="{{ route('admin.agent-types.edit', $agentType->id) }}"
                                                         class="text-secondary font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit agent type">
+                                                        data-toggle="tooltip" data-original-title="{{ __('attributes.agents.edit_agent_type_tooltip') }}">
                                                         {{ __('attributes.agents.messages.edit') }}
                                                     </a>
                                                     <form action="{{ route('admin.agent-types.destroy', $agentType->id) }}"
@@ -54,7 +54,7 @@
                                                         <button type="submit"
                                                             class="text-danger font-weight-bold text-xs border-0 bg-transparent"
                                                             onclick="return confirm('{{ __('attributes.agents.messages.confirm_delete') }}')"
-                                                            data-toggle="tooltip" data-original-title="Delete agent type">
+                                                            data-toggle="tooltip" data-original-title="{{ __('attributes.agents.delete_agent_type_tooltip') }}">
                                                             {{ __('attributes.agents.messages.delete') }}
                                                         </button>
                                                     </form>

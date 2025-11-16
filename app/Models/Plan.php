@@ -33,6 +33,8 @@ class Plan extends Model
 
     protected $casts = [
         'price_monthly' => 'decimal:2',
+        'monthly_price' => 'decimal:2',
+        'yearly_price' => 'decimal:2',
         'ads_regular' => 'integer',
         'ads_featured' => 'integer',
         'ads_premium' => 'integer',

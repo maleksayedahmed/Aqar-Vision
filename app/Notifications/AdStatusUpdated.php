@@ -39,8 +39,11 @@ class AdStatusUpdated extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        $statusText = $this->ad->status === 'active' ? 'تمت الموافقة على' : 'تم رفض';
-        $message = "{$statusText} إعلانك: '{$this->ad->title}'";
+        $messageKey = $this->ad->status === 'active'
+            ? 'admin.notifications.ad_status_updated_approved'
+            : 'admin.notifications.ad_status_updated_rejected';
+
+        $message = __($messageKey, ['title' => $this->ad->title]);
 
         // ** THIS IS THE FIX **
         // Determine the correct link based on whether the user is an agent or not

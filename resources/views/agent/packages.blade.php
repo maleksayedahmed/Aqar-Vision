@@ -39,7 +39,8 @@
                                 {{ $basicPlan->name }}</h3>
                             <p
                                 class="text-3xl md:text-[31.3px] my-4 font-medium text-[rgba(26,26,26,1)] flex justify-center items-end gap-[9.3px]">
-                                <span class="price-value" data-monthly="{{ $basicPlan->monthly_price }}" data-yearly="{{ $basicPlan->yearly_price }}">{{ $basicPlan->yearly_price }}</span>
+                                <span class="price-value" data-monthly="{{ $basicPlan->monthly_price }}"
+                                    data-yearly="{{ $basicPlan->yearly_price }}">{{ $basicPlan->yearly_price }}</span>
                                 <span
                                     class="billing-cycle text-base md:text-[16.6px] text-[rgba(26,26,26,1)] flex items-center"><img
                                         src="images/royal.png" class="inline h-4 mr-1"
@@ -49,13 +50,13 @@
                                 {{ $basicPlan->description }}</p>
                         </div>
                         <ul class="mt-8 space-y-4 text-sm font-medium text-gray-700 flex-grow">
-                            @foreach(json_decode($basicPlan->features) as $feature)
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ $feature }}</span></li>
+                            @foreach ($basicPlan->features ?? [] as $feature)
+                                <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg><span>{{ $feature }}</span></li>
                             @endforeach
                         </ul>
                         <a href="{{ route('agent.checkout', ['plan' => $basicPlan->id]) }}"
@@ -72,7 +73,8 @@
                                 {{ $popularPlan->name }}</h3>
                             <p
                                 class="text-3xl md:text-[31.3px] my-4 font-medium text-[rgba(26,26,26,1)] flex justify-center items-end gap-[9.3px]">
-                                <span class="price-value" data-monthly="{{ $popularPlan->monthly_price }}" data-yearly="{{ $popularPlan->yearly_price }}">{{ $popularPlan->yearly_price }}</span>
+                                <span class="price-value" data-monthly="{{ $popularPlan->monthly_price }}"
+                                    data-yearly="{{ $popularPlan->yearly_price }}">{{ $popularPlan->yearly_price }}</span>
                                 <span
                                     class="billing-cycle text-base md:text-[16.6px] text-[rgba(26,26,26,1)] flex items-center">{{ __('common.per_year') }}</span>
                             </p>
@@ -80,13 +82,13 @@
                                 {{ $popularPlan->description }}</p>
                         </div>
                         <ul class="mt-8 space-y-4 text-sm font-medium text-gray-700 flex-grow">
-                            @foreach(json_decode($popularPlan->features) as $feature)
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ $feature }}</span></li>
+                            @foreach ($popularPlan->features ?? [] as $feature)
+                                <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg><span>{{ $feature }}</span></li>
                             @endforeach
                         </ul>
                         <a href="{{ route('agent.checkout', ['plan' => $popularPlan->id]) }}"
@@ -100,7 +102,8 @@
                                 {{ $companyPlan->name }}</h3>
                             <p
                                 class="text-3xl md:text-[31.3px] my-4 font-medium text-[rgba(26,26,26,1)] flex justify-center items-end gap-[9.3px]">
-                                <span class="price-value" data-monthly="{{ $companyPlan->monthly_price }}" data-yearly="{{ $companyPlan->yearly_price }}">{{ $companyPlan->yearly_price }}</span>
+                                <span class="price-value" data-monthly="{{ $companyPlan->monthly_price }}"
+                                    data-yearly="{{ $companyPlan->yearly_price }}">{{ $companyPlan->yearly_price }}</span>
                                 <span
                                     class="billing-cycle text-base md:text-[16.6px] text-[rgba(26,26,26,1)] flex items-center">{{ __('common.per_year') }}</span>
                             </p>
@@ -108,13 +111,13 @@
                                 {{ $companyPlan->description }}</p>
                         </div>
                         <ul class="mt-8 space-y-4 text-sm font-medium text-gray-700 flex-grow">
-                            @foreach(json_decode($companyPlan->features) as $feature)
-                            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg><span>{{ $feature }}</span></li>
+                            @foreach ($companyPlan->features ?? [] as $feature)
+                                <li class="flex items-center gap-3"><svg class="w-5 h-5 text-green-500 flex-shrink-0"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg><span>{{ $feature }}</span></li>
                             @endforeach
                         </ul>
                         <a href="{{ route('agent.checkout', ['plan' => $companyPlan->id]) }}"

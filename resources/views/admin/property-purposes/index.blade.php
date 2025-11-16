@@ -70,7 +70,7 @@
                                                 <div class="d-flex justify-content-end gap-2">
                                                     <a href="{{ route('admin.property-purposes.edit', $propertyPurpose->id) }}"
                                                         class="text-secondary font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit property purpose">
+                                                        data-toggle="tooltip" data-original-title="{{ __('attributes.property_purposes.edit_property_purpose_tooltip') }}">
                                                         {{ __('attributes.property_purposes.edit') }}
                                                     </a>
                                                     <form
@@ -81,7 +81,7 @@
                                                         <button type="submit"
                                                             class="text-danger font-weight-bold text-xs border-0 bg-transparent"
                                                             data-toggle="tooltip"
-                                                            data-original-title="Delete property purpose">
+                                                            data-original-title="{{ __('attributes.property_purposes.delete_property_purpose_tooltip') }}">
                                                             {{ __('attributes.property_purposes.delete') }}
                                                         </button>
                                                     </form>

@@ -46,8 +46,8 @@
                 <div class="col-md-6">
                     <div class="card mb-4 mx-4">
                         <div class="card-body p-4">
-                            <h1>Register</h1>
-                            <p class="text-body-secondary">Create your account</p>
+                            <h1>@lang('auth.register_title')</h1>
+                            <p class="text-body-secondary">@lang('auth.create_account')</p>
 
                             <form method="POST" action="{{ route('register') }}">
                                 @csrf
@@ -60,7 +60,7 @@
                                         </svg>
                                     </span>
                                     <input class="form-control @error('name') is-invalid @enderror" type="text"
-                                        name="name" placeholder="Name" value="{{ old('name') }}" required
+                                        name="name" placeholder="@lang('auth.name')" value="{{ old('name') }}" required
                                         autofocus>
                                     @error('name')
                                         <div class="invalid-feedback">
@@ -78,7 +78,7 @@
                                         </svg>
                                     </span>
                                     <input class="form-control @error('email') is-invalid @enderror" type="email"
-                                        name="email" placeholder="Email" value="{{ old('email') }}" required>
+                                        name="email" placeholder="@lang('auth.email')" value="{{ old('email') }}" required>
                                     @error('email')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -95,7 +95,7 @@
                                         </svg>
                                     </span>
                                     <input class="form-control @error('password') is-invalid @enderror"
-                                        type="password" name="password" placeholder="Password" required>
+                                        type="password" name="password" placeholder="@lang('auth.password')" required>
                                     @error('password')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -112,7 +112,7 @@
                                         </svg>
                                     </span>
                                     <input class="form-control @error('password_confirmation') is-invalid @enderror"
-                                        type="password" name="password_confirmation" placeholder="Confirm Password"
+                                        type="password" name="password_confirmation" placeholder="@lang('auth.confirm_password')"
                                         required>
                                     @error('password_confirmation')
                                         <div class="invalid-feedback">
@@ -121,11 +121,11 @@
                                     @enderror
                                 </div>
 
-                                <button class="btn btn-success w-100" type="submit">Create Account</button>
+                                <button class="btn btn-success w-100" type="submit">@lang('auth.create_account')</button>
 
                                 <div class="text-center mt-3">
                                     <a href="{{ route('login') }}" class="btn btn-link">
-                                        Already registered? Sign in here
+                                        @lang('auth.already_have_account_login') @lang('auth.login_here')
                                     </a>
                                 </div>
                             </form>

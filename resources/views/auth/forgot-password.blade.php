@@ -46,9 +46,8 @@
                 <div class="col-md-6">
                     <div class="card mb-4 mx-4">
                         <div class="card-body p-4">
-                            <h1>Forgot Password</h1>
-                            <p class="text-body-secondary">Enter your email address and we will send you a password
-                                reset link.</p>
+                            <h1>@lang('auth.reset_password')</h1>
+                            <p class="text-body-secondary">@lang('auth.enter_email_reset')</p>
 
                             <!-- Session Status -->
                             @if (session('status'))
@@ -68,8 +67,8 @@
                                         </svg>
                                     </span>
                                     <input class="form-control @error('email') is-invalid @enderror" type="email"
-                                        name="email" placeholder="Email" value="{{ old('email') }}" required
-                                        autofocus>
+                                        name="email" placeholder="@lang('auth.email')" value="{{ old('email') }}"
+                                        required autofocus>
                                     @error('email')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -77,11 +76,11 @@
                                     @enderror
                                 </div>
 
-                                <button class="btn btn-primary w-100" type="submit">Email Password Reset Link</button>
+                                <button class="btn btn-primary w-100" type="submit">@lang('auth.send_reset_link')</button>
 
                                 <div class="text-center mt-3">
                                     <a href="{{ route('login') }}" class="btn btn-link">
-                                        Back to Login
+                                        @lang('auth.login_here')
                                     </a>
                                 </div>
                             </form>

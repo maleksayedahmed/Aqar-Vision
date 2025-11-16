@@ -38,7 +38,7 @@ class AgentRemovedFromAgencyNotification extends Notification
         return [
             'agency_id' => $this->agency->id,
             'agency_name' => $this->agency->name,
-            'message' => 'You have been removed from the agency: ' . $this->agency->name,
+            'message' => __('admin.notifications.agent_removed_from_agency', ['agency_name' => $this->agency->name]),
             'status' => 'removed', // To help the frontend distinguish this notification
         ];
     }

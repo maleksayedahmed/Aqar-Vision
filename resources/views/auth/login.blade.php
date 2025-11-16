@@ -47,8 +47,8 @@
                     <div class="card-group d-block d-md-flex row">
                         <div class="card col-md-7 p-4 mb-0">
                             <div class="card-body">
-                                <h1>Login</h1>
-                                <p class="text-body-secondary">Sign In to your account</p>
+                                <h1>@lang('auth.login_title')</h1>
+                                <p class="text-body-secondary">@lang('auth.sign_in_to_account')</p>
 
                                 <!-- Session Status -->
                                 @if (session('status'))
@@ -68,7 +68,7 @@
                                             </svg>
                                         </span>
                                         <input class="form-control @error('email') is-invalid @enderror" type="email"
-                                            name="email" placeholder="Email" value="{{ old('email') }}" required
+                                            name="email" placeholder="@lang('auth.email')" value="{{ old('email') }}" required
                                             autofocus>
                                         @error('email')
                                             <div class="invalid-feedback">
@@ -86,7 +86,7 @@
                                             </svg>
                                         </span>
                                         <input class="form-control @error('password') is-invalid @enderror"
-                                            type="password" name="password" placeholder="Password" required>
+                                            type="password" name="password" placeholder="@lang('auth.password')" required>
                                         @error('password')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -96,12 +96,12 @@
 
                                     <div class="row">
                                         <div class="col-6">
-                                            <button class="btn btn-primary px-4" type="submit">Login</button>
+                                            <button class="btn btn-primary px-4" type="submit">@lang('auth.login_button')</button>
                                         </div>
                                         <div class="col-6 text-end">
                                             @if (Route::has('password.request'))
                                                 <a class="btn btn-link px-0" href="{{ route('password.request') }}">
-                                                    Forgot password?
+                                                    @lang('auth.forgot_password')
                                                 </a>
                                             @endif
                                         </div>
@@ -112,7 +112,7 @@
                                         <input class="form-check-input" type="checkbox" name="remember"
                                             id="remember_me">
                                         <label class="form-check-label" for="remember_me">
-                                            Remember me
+                                            @lang('auth.remember_me')
                                         </label>
                                     </div>
                                 </form>
@@ -121,11 +121,11 @@
                         <div class="card col-md-5 text-white bg-primary py-5">
                             <div class="card-body text-center">
                                 <div>
-                                    <h2>Sign up</h2>
-                                    <p>Don't have an account? Create one to start managing your real estate properties.
+                                    <h2>@lang('auth.sign_up')</h2>
+                                    <p>@lang('auth.welcome_back')
                                     </p>
                                     <a href="{{ route('register') }}" class="btn btn-lg btn-outline-light mt-3">
-                                        Register Now!
+                                        @lang('auth.register_now')
                                     </a>
                                 </div>
                             </div>

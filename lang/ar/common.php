@@ -258,14 +258,18 @@ return [
     'no_packages_available' => 'لا توجد باقات إعلانية متاحة حالياً.',
     'subscribe' => 'اشترك',
 
-        // Navbar and UI toggles
-        'dashboard' => 'لوحة التحكم',
-        'users' => 'المستخدمون',
-        'settings' => 'الإعدادات',
-        'account' => 'الحساب',
-        'light' => 'فاتح',
-        'dark' => 'داكن',
-        'auto' => 'تلقائي',
+    // Navbar and UI toggles
+    'dashboard' => 'لوحة التحكم',
+    'users' => 'المستخدمون',
+    'settings' => 'الإعدادات',
+    'account' => 'الحساب',
+    'light' => 'فاتح',
+    'dark' => 'داكن',
+    'auto' => 'تلقائي',
+
+    // Language switcher
+    'language' => 'اللغة',
+    'switch_language' => 'تغيير اللغة',
 
         // Admin Upgrade Requests
         'user_upgrade_requests' => 'طلبات ترقية المستخدمين',

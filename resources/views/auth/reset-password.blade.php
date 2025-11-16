@@ -46,7 +46,7 @@
                 <div class="col-md-6">
                     <div class="card mb-4 mx-4">
                         <div class="card-body p-4">
-                            <h1>Reset Password</h1>
+                            <h1>@lang('auth.reset_password_title')</h1>
                             <p class="text-body-secondary">Enter your new password below.</p>
 
                             <form method="POST" action="{{ route('password.store') }}">
@@ -82,7 +82,7 @@
                                         </svg>
                                     </span>
                                     <input class="form-control @error('password') is-invalid @enderror" type="password"
-                                        name="password" placeholder="New Password" required>
+                                        name="password" placeholder="@lang('auth.password')" required>
                                     @error('password')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -100,7 +100,7 @@
                                     </span>
                                     <input class="form-control @error('password_confirmation') is-invalid @enderror"
                                         type="password" name="password_confirmation"
-                                        placeholder="Confirm New Password" required>
+                                        placeholder="@lang('auth.confirm_password')" required>
                                     @error('password_confirmation')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -108,11 +108,11 @@
                                     @enderror
                                 </div>
 
-                                <button class="btn btn-primary w-100" type="submit">Reset Password</button>
+                                <button class="btn btn-primary w-100" type="submit">@lang('auth.reset_password')</button>
 
                                 <div class="text-center mt-3">
                                     <a href="{{ route('login') }}" class="btn btn-link">
-                                        Back to Login
+                                        @lang('auth.login_here')
                                     </a>
                                 </div>
                             </form>

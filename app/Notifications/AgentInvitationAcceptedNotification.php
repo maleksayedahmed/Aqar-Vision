@@ -35,7 +35,7 @@ class AgentInvitationAcceptedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => 'Agent ' . $this->invitation->agent->user->name . ' has accepted your invitation.',
+            'message' => __('admin.notifications.agent_invitation_accepted', ['agent_name' => $this->invitation->agent->user->name]),
             'agent_id' => $this->invitation->agent_id,
             'invitation_id' => $this->invitation->id,
             'status' => 'accepted',

@@ -7,22 +7,24 @@
                 {{-- Filter Card --}}
                 <div class="card mb-4">
                     <div class="card-header pb-0">
-                        <h6>Filters</h6>
+                        <h6>@lang('admin.common.filters')</h6>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('admin.users.index') }}" method="GET">
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <input type="text" name="search" class="form-control" placeholder="Search by Name or Email..." value="{{ request('search') }}">
+                                        <input type="text" name="search" class="form-control"
+                                            placeholder="@lang('admin.common.search_by_name_or_email')" value="{{ request('search') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <select name="role" class="form-control">
-                                            <option value="">-- All Roles --</option>
-                                            @foreach($roles as $role)
-                                                <option value="{{ $role->name }}" {{ request('role') == $role->name ? 'selected' : '' }}>
+                                            <option value="">@lang('admin.common.all_roles')</option>
+                                            @foreach ($roles as $role)
+                                                <option value="{{ $role->name }}"
+                                                    {{ request('role') == $role->name ? 'selected' : '' }}>
                                                     {{ ucfirst($role->name) }}
                                                 </option>
                                             @endforeach
@@ -30,8 +32,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary">Filter</button>
-                                    <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Reset</a>
+                                    <button type="submit" class="btn btn-primary">@lang('admin.common.filter')</button>
+                                    <a href="{{ route('admin.users.index') }}"
+                                        class="btn btn-secondary">@lang('admin.common.reset')</a>
                                 </div>
                             </div>
                         </form>
@@ -96,7 +99,9 @@
                                                 <form action="{{ route('admin.users.toggle-status', $user->id) }}"
                                                     method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-link text-sm mb-0 px-0" data-toggle="tooltip" title="Click to toggle status">
+                                                    <button type="submit" class="btn btn-link text-sm mb-0 px-0"
+                                                        data-toggle="tooltip"
+                                                        title="{{ __('attributes.users.toggle_status_tooltip') }}">
                                                         <span
                                                             class="badge badge-sm {{ $user->is_active ? 'bg-gradient-success' : 'bg-gradient-secondary' }}">
                                                             {{ $user->is_active ? __('attributes.users.active') : __('attributes.users.inactive') }}
@@ -112,16 +117,19 @@
                                                 <div class="d-flex justify-content-end gap-2">
                                                     <a href="{{ route('admin.users.edit', $user->id) }}"
                                                         class="text-secondary font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit user">
+                                                        data-toggle="tooltip"
+                                                        data-original-title="{{ __('attributes.users.edit_user_tooltip') }}">
                                                         {{ __('attributes.users.edit') }}
                                                     </a>
                                                     <form action="{{ route('admin.users.destroy', $user->id) }}"
-                                                        method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                                        method="POST" class="d-inline"
+                                                        onsubmit="return confirm('@lang('admin.common.confirm_delete_user')');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"
                                                             class="text-danger font-weight-bold text-xs border-0 bg-transparent"
-                                                            data-toggle="tooltip" data-original-title="Delete user">
+                                                            data-toggle="tooltip"
+                                                            data-original-title="{{ __('attributes.users.delete_user_tooltip') }}">
                                                             {{ __('attributes.users.delete') }}
                                                         </button>
                                                     </form>

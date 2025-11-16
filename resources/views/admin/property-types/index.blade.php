@@ -70,7 +70,7 @@
                                                 <div class="d-flex justify-content-end gap-2">
                                                     <a href="{{ route('admin.property-types.edit', $propertyType->id) }}"
                                                         class="text-secondary font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit property type">
+                                                        data-toggle="tooltip" data-original-title="{{ __('attributes.property_types.edit_property_type_tooltip') }}">
                                                         {{ __('attributes.property_types.edit') }}
                                                     </a>
                                                     <form
@@ -80,7 +80,7 @@
                                                         @method('DELETE')
                                                         <button type="submit"
                                                             class="text-danger font-weight-bold text-xs border-0 bg-transparent"
-                                                            data-toggle="tooltip" data-original-title="Delete property type">
+                                                            data-toggle="tooltip" data-original-title="{{ __('attributes.property_types.delete_property_type_tooltip') }}">
                                                             {{ __('attributes.property_types.delete') }}
                                                         </button>
                                                     </form>

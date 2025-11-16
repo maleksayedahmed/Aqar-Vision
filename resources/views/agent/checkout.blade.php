@@ -21,7 +21,7 @@
                         {{ $plan->price_monthly }}<span class="text-base md:text-[16.6px]">/{{ __('common.monthly') }}</span>
                     </p>
                     <ul class="mt-8 space-y-4 text-sm font-medium text-gray-700">
-                        @foreach(json_decode($plan->features) as $feature)
+                        @foreach($plan->features ?? [] as $feature)
                             <li class="flex items-center gap-3">
                                 <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>

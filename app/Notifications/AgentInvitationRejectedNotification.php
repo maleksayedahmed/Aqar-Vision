@@ -35,7 +35,7 @@ class AgentInvitationRejectedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => 'Agent ' . $this->invitation->agent->user->name . ' has rejected your invitation.',
+            'message' => __('admin.notifications.agent_invitation_rejected', ['agent_name' => $this->invitation->agent->user->name]),
             'agent_id' => $this->invitation->agent_id,
             'invitation_id' => $this->invitation->id,
             'status' => 'rejected',

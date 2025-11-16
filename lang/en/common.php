@@ -267,6 +267,10 @@ return [
     'dark' => 'Dark',
     'auto' => 'Auto',
 
+    // Language switcher
+    'language' => 'Language',
+    'switch_language' => 'Switch Language',
+
     // Admin Upgrade Requests
     'user_upgrade_requests' => 'User Upgrade Requests',
     'user_info' => 'User Information',

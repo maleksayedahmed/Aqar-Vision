@@ -19,6 +19,9 @@ return [
         'no_records' => 'No users found',
         'password' => 'Password',
         'password_confirmation' => 'Confirm Password',
+        'edit_user_tooltip' => 'Edit user',
+        'delete_user_tooltip' => 'Delete user',
+        'toggle_status_tooltip' => 'Click to toggle status',
     ],
 
     // Roles
@@ -61,6 +64,8 @@ return [
         'email' => 'Email',
         'accreditation_status_en' => 'Accreditation Status (English)',
         'accreditation_status_ar' => 'Accreditation Status (Arabic)',
+        'edit_agency_tooltip' => 'Edit agency',
+        'delete_agency_tooltip' => 'Delete agency',
     ],
 
     // Agency Types
@@ -81,6 +86,8 @@ return [
         'description_en' => 'Description (English)',
         'description_ar' => 'Description (Arabic)',
         'is_active' => 'Is Active',
+        'edit_agency_type_tooltip' => 'Edit agency type',
+        'delete_agency_type_tooltip' => 'Delete agency type',
     ],
 
     // License Types
@@ -101,6 +108,8 @@ return [
         'description_en' => 'Description (English)',
         'description_ar' => 'Description (Arabic)',
         'is_active' => 'Is Active',
+        'edit_license_type_tooltip' => 'Edit license type',
+        'delete_license_type_tooltip' => 'Delete license type',
     ],
 
     // Licenses
@@ -138,6 +147,10 @@ return [
         'type' => 'Property Type',
         'total_price' => 'Total Price',
         'listing_purpose' => 'Listing Purpose',
+        'edit' => 'Edit',
+        'delete' => 'Delete',
+        'are_you_sure' => 'Are you sure?',
+        'no_records' => 'No properties found.',
     ],
 
     // Property Purposes
@@ -158,6 +171,8 @@ return [
         'description_en' => 'Description (English)',
         'description_ar' => 'Description (Arabic)',
         'is_active' => 'Is Active',
+        'edit_property_purpose_tooltip' => 'Edit property purpose',
+        'delete_property_purpose_tooltip' => 'Delete property purpose',
     ],
 
     // Property Types
@@ -181,6 +196,10 @@ return [
         'parent_type' => 'Parent Type',
         'icon' => 'Icon',
         'applicable_attributes' => 'Applicable Attributes',
+        'edit_property_tooltip' => 'Edit Property',
+        'delete_property_tooltip' => 'Delete Property',
+        'edit_property_type_tooltip' => 'Edit property type',
+        'delete_property_type_tooltip' => 'Delete property type',
     ],
 
     // Property Attributes
@@ -250,6 +269,11 @@ return [
         'end_date' => 'End Date',
         'status' => 'Status',
         'no_records' => 'No subscriptions found.',
+        'active' => 'Active',
+        'expired' => 'Expired',
+        'cancelled' => 'Cancelled',
+        'save_subscription' => 'Save Subscription',
+        'cancel' => 'Cancel',
     ],
 
     // Messages
@@ -315,6 +339,8 @@ return [
         'agent_type_description' => 'Description',
         'agent_type_is_active' => 'Is Active',
         'agent_type_status' => 'Status',
+        'edit_agent_type_tooltip' => 'Edit agent type',
+        'delete_agent_type_tooltip' => 'Delete agent type',
         'messages' => [
             'save' => 'Save',
             'cancel' => 'Cancel',
@@ -384,5 +410,16 @@ return [
 
     'districts' => [
         'title' => 'Districts',
+        'create' => 'Create New District',
+        'edit' => 'Edit District',
+        'delete' => 'Delete',
+        'district_name' => 'District Name',
+        'city' => 'City',
+        'status' => 'Status',
+        'active' => 'Active',
+        'inactive' => 'Inactive',
+        'no_records' => 'No districts found',
+        'create_new' => 'Create New District',
+        'are_you_sure' => 'Are you sure?',
     ],
 ];

@@ -19,6 +19,9 @@ return [
         'no_records' => 'لم يتم العثور على مستخدمين',
         'password' => 'كلمة المرور',
         'password_confirmation' => 'تأكيد كلمة المرور',
+        'edit_user_tooltip' => 'تعديل المستخدم',
+        'delete_user_tooltip' => 'حذف المستخدم',
+        'toggle_status_tooltip' => 'انقر لتغيير الحالة',
     ],
 
     // Roles
@@ -61,6 +64,8 @@ return [
         'email' => 'البريد الإلكتروني',
         'accreditation_status_en' => 'حالة الاعتماد (الإنجليزية)',
         'accreditation_status_ar' => 'حالة الاعتماد (العربية)',
+        'edit_agency_tooltip' => 'تعديل الوكالة',
+        'delete_agency_tooltip' => 'حذف الوكالة',
     ],
 
     // Agency Types
@@ -81,6 +86,8 @@ return [
         'description_en' => 'الوصف (الإنجليزية)',
         'description_ar' => 'الوصف (العربية)',
         'is_active' => 'هل هو نشط',
+        'edit_agency_type_tooltip' => 'تعديل نوع الوكالة',
+        'delete_agency_type_tooltip' => 'حذف نوع الوكالة',
     ],
 
     // License Types
@@ -101,6 +108,8 @@ return [
         'description_en' => 'الوصف (الإنجليزية)',
         'description_ar' => 'الوصف (العربية)',
         'is_active' => 'هل هو نشط',
+        'edit_license_type_tooltip' => 'تعديل نوع الترخيص',
+        'delete_license_type_tooltip' => 'حذف نوع الترخيص',
     ],
 
     // Licenses
@@ -138,6 +147,10 @@ return [
         'type' => 'نوع العقار',
         'total_price' => 'السعر الإجمالي',
         'listing_purpose' => 'الغرض من الإعلان',
+        'edit' => 'تعديل',
+        'delete' => 'حذف',
+        'are_you_sure' => 'هل أنت متأكد؟',
+        'no_records' => 'لم يتم العثور على عقارات.',
     ],
 
     // Property Purposes
@@ -158,6 +171,8 @@ return [
         'description_en' => 'الوصف (الإنجليزية)',
         'description_ar' => 'الوصف (العربية)',
         'is_active' => 'هل هو نشط',
+        'edit_property_purpose_tooltip' => 'تعديل غرض العقار',
+        'delete_property_purpose_tooltip' => 'حذف غرض العقار',
     ],
 
     // Property Types
@@ -181,6 +196,10 @@ return [
         'parent_type' => 'النوع الأصلي',
         'icon' => 'أيقونة',
         'applicable_attributes' => 'السمات المطبقة',
+        'edit_property_tooltip' => 'تعديل العقار',
+        'delete_property_tooltip' => 'حذف العقار',
+        'edit_property_type_tooltip' => 'تعديل نوع العقار',
+        'delete_property_type_tooltip' => 'حذف نوع العقار',
     ],
 
     // Property Attributes
@@ -250,6 +269,11 @@ return [
         'end_date' => 'تاريخ الانتهاء',
         'status' => 'الحالة',
         'no_records' => 'لم يتم العثور على اشتراكات.',
+        'active' => 'نشط',
+        'expired' => 'منتهي الصلاحية',
+        'cancelled' => 'ملغي',
+        'save_subscription' => 'حفظ الاشتراك',
+        'cancel' => 'إلغاء',
     ],
 
     // Messages
@@ -315,6 +339,8 @@ return [
         'agent_type_description' => 'الوصف',
         'agent_type_is_active' => 'هل هو نشط',
         'agent_type_status' => 'الحالة',
+        'edit_agent_type_tooltip' => 'تعديل نوع الوكيل',
+        'delete_agent_type_tooltip' => 'حذف نوع الوكيل',
         'messages' => [
             'save' => 'حفظ',
             'cancel' => 'إلغاء',
@@ -384,5 +410,16 @@ return [
 
     'districts' => [
         'title' => 'الأحياء',
+        'create' => 'إنشاء حي جديد',
+        'edit' => 'تعديل الحي',
+        'delete' => 'حذف',
+        'district_name' => 'اسم الحي',
+        'city' => 'المدينة',
+        'status' => 'الحالة',
+        'active' => 'نشط',
+        'inactive' => 'غير نشط',
+        'no_records' => 'لم يتم العثور على أحياء',
+        'create_new' => 'إنشاء حي جديد',
+        'are_you_sure' => 'هل أنت متأكد؟',
     ],
 ];

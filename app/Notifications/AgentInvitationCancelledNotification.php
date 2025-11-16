@@ -24,7 +24,7 @@ class AgentInvitationCancelledNotification extends Notification
             'invitation_id' => $this->invitation->id,
             'agency_id' => $this->invitation->agency_id,
             'agent_id' => $this->invitation->agent_id,
-            'message' => 'Your invitation to join the agency has been canceled.',
+            'message' => __('admin.notifications.agent_invitation_cancelled', ['agency_name' => $this->invitation->agency->agency_name]),
             'status' => 'cancelled',
         ];
     }
