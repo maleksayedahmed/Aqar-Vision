@@ -5,17 +5,24 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Agent;
 use App\Models\Agency;
-use App\Models\AgencyType; // <-- Import AgencyType
-use App\Models\AgentType;   // <-- Import AgentType
+use App\Models\AgencyType;
+use App\Models\AgentType;
 use App\Models\UpgradeRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use App\Models\AgencyUpgradeRequest;
 
 class UpgradeRequestController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $requests = UpgradeRequest::with('user')
+        $requests = UpgradeRequest::with(['user', 'processor', 'license'])
             ->orderByRaw("FIELD(status, 'pending') DESC")
             ->latest()
             ->paginate(20);
@@ -23,65 +30,108 @@ class UpgradeRequestController extends Controller
         return view('admin.upgrade-requests.index', compact('requests'));
     }
 
-    public function approve(UpgradeRequest $upgradeRequest)
+    /**
+     * Display the specified resource.
+     */
+    public function show(UpgradeRequest $upgradeRequest)
+    {
+        $upgradeRequest->load('user', 'agencyUpgradeRequest.agencyType');
+
+        return view('admin.upgrade-requests.show', ['request' => $upgradeRequest]);
+    }
+
+    /**
+     * Approve the specified upgrade request.
+     */
+    public function approve(UpgradeRequest $upgradeRequest): RedirectResponse
     {
         $user = $upgradeRequest->user;
         $role = $upgradeRequest->requested_role; // 'agent' or 'agency'
 
-        $user->syncRoles(ucfirst($role));
+        // 1. Sync the user's role (e.g., to 'agent' or 'agency')
+        $user->syncRoles([$role]);
 
-        if ($role === 'agent') {
-            // THE FIX: Find a default Agent Type
-            $defaultAgentType = AgentType::first();
-            if (!$defaultAgentType) {
-                return back()->with('error', 'Cannot approve request: No Agent Types exist in the system. Please create one first.');
-            }
-            Agent::firstOrCreate(
-                ['user_id' => $user->id],
-                [
+        // 2. Ensure the user's account is active
+        $user->update(['is_active' => true]);
+
+        // 3. Create the appropriate profile if it doesn't exist
+        if ($role === 'agent' && !$user->agent) {
+            // Find a default agent type to assign
+            $defaultAgentType = AgentType::where('is_active', true)->orderBy('id')->first();
+            if ($defaultAgentType) {
+                $agent = Agent::create([
+                    'user_id' => $user->id,
                     'full_name' => $user->name,
                     'email' => $user->email,
-                    'agent_type_id' => $defaultAgentType->id, // Assign the default type
-                ]
-            );
-        } elseif ($role === 'agency') {
-            // THE FIX: Find a default Agency Type
-            $defaultAgencyType = AgencyType::first();
-            if (!$defaultAgencyType) {
-                return back()->with('error', 'Cannot approve request: No Agency Types exist in the system. Please create one first.');
+                    'phone_number' => $user->phone,
+                    'agent_type_id' => $defaultAgentType->id,
+                ]);
+
+                // Link license to agent if it exists in the request
+                if ($upgradeRequest->license_id) {
+                    $upgradeRequest->license->update(['agent_id' => $agent->id]);
+                }
             }
-            Agency::firstOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'agency_name' => ['en' => $user->name . ' Agency', 'ar' => 'وكالة ' . $user->name],
-                    'email' => $user->email,
-                    'agency_type_id' => $defaultAgencyType->id, // Assign the default type
-                ]
-            );
+        } elseif ($role === 'agency' && !$user->agency) {
+            $agencyUpgradeRequest = $upgradeRequest->agencyUpgradeRequest;
+            if ($agencyUpgradeRequest) {
+                Agency::create([
+                    'user_id' => $user->id,
+                    'agency_name' => $agencyUpgradeRequest->agency_name,
+                    'agency_type_id' => $agencyUpgradeRequest->agency_type_id,
+                    'commercial_register_number' => $agencyUpgradeRequest->commercial_register_number,
+                    'commercial_issue_date' => $agencyUpgradeRequest->commercial_issue_date,
+                    'commercial_expiry_date' => $agencyUpgradeRequest->commercial_expiry_date,
+                    'tax_id' => $agencyUpgradeRequest->tax_id,
+                    'tax_issue_date' => $agencyUpgradeRequest->tax_issue_date,
+                    'tax_expiry_date' => $agencyUpgradeRequest->tax_expiry_date,
+                    'address' => $agencyUpgradeRequest->address,
+                    'phone_number' => $agencyUpgradeRequest->phone_number,
+                    'email' => $agencyUpgradeRequest->email,
+                ]);
+            }
         }
 
+        // 4. Update the request status
         $upgradeRequest->update([
             'status' => 'approved',
             'processed_by' => Auth::id(),
             'processed_at' => now(),
         ]);
 
-        Auth::user()->notifications()->where('data->request_id', $upgradeRequest->id)->first()?->markAsRead();
+        // 5. Send notification to user
+        $user->notify(new \App\Notifications\UpgradeRequestStatusChanged($upgradeRequest));
 
-        return back()->with('success', "Request approved. User {$user->name} is now an {$role}.");
+        return back()->with('success', "تم الموافقة على الطلب. المستخدم {$user->name} أصبح الآن {$role} نشط.");
     }
 
-    public function reject(Request $request, UpgradeRequest $upgradeRequest)
+    /**
+     * Reject the specified upgrade request.
+     */
+    public function reject(Request $request, UpgradeRequest $upgradeRequest): JsonResponse|RedirectResponse
     {
-         $upgradeRequest->update([
+        // 1. Delete associated license if it exists
+        if ($upgradeRequest->license) {
+            $upgradeRequest->license->delete();
+        }
+
+        // 2. Update the request status
+        $upgradeRequest->update([
             'status' => 'rejected',
             'admin_notes' => $request->input('rejection_reason'),
             'processed_by' => Auth::id(),
             'processed_at' => now(),
+            'license_id' => null, // Remove license reference
         ]);
 
-        Auth::user()->notifications()->where('data->request_id', $upgradeRequest->id)->first()?->markAsRead();
+        // 3. Send notification to user
+        $upgradeRequest->user->notify(new \App\Notifications\UpgradeRequestStatusChanged($upgradeRequest));
 
-        return back()->with('success', 'Request has been rejected.');
+        // 4. Respond based on the request type
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'تم رفض الطلب بنجاح.']);
+        }
+
+        return back()->with('success', 'تم رفض الطلب وإزالة الرخصة المعلقة.');
     }
 }

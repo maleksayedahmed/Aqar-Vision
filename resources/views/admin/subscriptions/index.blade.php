@@ -24,10 +24,10 @@
                         <td>{{ $subscription->end_date->toFormattedDateString() }}</td>
                         <td><span class="badge bg-info">{{ $subscription->status }}</span></td>
                         <td>
-                            <a href="{{ route('admin.subscriptions.edit', $subscription->id) }}">Edit</a>
+                            <a href="{{ route('admin.subscriptions.edit', $subscription->id) }}">@lang('attributes.subscriptions.edit')</a>
                             <form action="{{ route('admin.subscriptions.destroy', $subscription->id) }}" method="POST" class="d-inline">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-link text-danger">Delete</button>
+                                <button type="submit" class="btn btn-link text-danger">@lang('attributes.subscriptions.delete')</button>
                             </form>
                         </td>
                     </tr>

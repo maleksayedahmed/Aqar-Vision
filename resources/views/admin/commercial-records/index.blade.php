@@ -42,7 +42,8 @@
                                                 <div class="d-flex justify-content-end gap-2">
                                                     <a href="{{ route('admin.commercial-records.edit', $record->id) }}"
                                                         class="text-secondary font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit">
+                                                        data-toggle="tooltip"
+                                                        data-original-title="{{ __('attributes.commercial_records.edit') }}">
                                                         {{ __('attributes.commercial_records.edit') }}
                                                     </a>
                                                     <form
@@ -52,7 +53,8 @@
                                                         @method('DELETE')
                                                         <button type="submit"
                                                             class="text-danger font-weight-bold text-xs border-0 bg-transparent"
-                                                            data-toggle="tooltip" data-original-title="Delete">
+                                                            data-toggle="tooltip"
+                                                            data-original-title="{{ __('attributes.commercial_records.delete') }}">
                                                             {{ __('attributes.commercial_records.delete') }}
                                                         </button>
                                                     </form>

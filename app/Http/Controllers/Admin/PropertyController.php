@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PropertyRequest;
+use App\Models\City;
+use App\Models\District;
 use App\Models\Property;
 use App\Models\PropertyPurpose;
 use App\Models\PropertyType;
@@ -15,7 +17,8 @@ class PropertyController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Property::with(['propertyType', 'user']);
+        // Load relationships to prevent N+1 issues
+        $query = Property::with(['propertyType', 'user', 'district.city']);
 
         if ($request->filled('search')) {
             $query->where('title', 'LIKE', '%' . $request->search . '%');
@@ -26,14 +29,17 @@ class PropertyController extends Controller
         if ($request->filled('property_type_id')) {
             $query->where('property_type_id', $request->property_type_id);
         }
-        if ($request->filled('city')) {
-            $query->where('city', 'LIKE', '%' . $request->city . '%');
+        if ($request->filled('city_id')) {
+            $query->whereHas('district', function ($q) use ($request) {
+                $q->where('city_id', $request->city_id);
+            });
         }
 
         $properties = $query->latest()->paginate(15)->withQueryString();
         $propertyTypes = PropertyType::where('is_active', true)->orderBy('name')->get();
+        $cities = City::where('is_active', true)->orderBy('name')->get(); // For the filter dropdown
 
-        return view('admin.properties.index', compact('properties', 'propertyTypes'));
+        return view('admin.properties.index', compact('properties', 'propertyTypes', 'cities'));
     }
 
     public function create()
@@ -41,8 +47,9 @@ class PropertyController extends Controller
         $purposes = PropertyPurpose::where('is_active', true)->get();
         $types = PropertyType::where('is_active', true)->get();
         $users = User::where('is_active', true)->get();
+        $cities = City::where('is_active', true)->orderBy('name')->get(); // <-- ADD THIS
 
-        return view('admin.properties.create', compact('purposes', 'types', 'users'));
+        return view('admin.properties.create', compact('purposes', 'types', 'users', 'cities'));
     }
 
     public function store(PropertyRequest $request)
@@ -56,11 +63,9 @@ class PropertyController extends Controller
         $property = Property::create($data);
 
         if ($request->hasFile('photos')) {
-            $property
-                ->addMultipleMediaFromRequest(['photos'])
-                ->each(function ($fileAdder) {
-                    $fileAdder->toMediaCollection('property_images');
-                });
+            $property->addMultipleMediaFromRequest(['photos'])->each(function ($fileAdder) {
+                $fileAdder->toMediaCollection('property_images');
+            });
         }
 
         return redirect()->route('admin.properties.edit', $property)->with('success', 'Property created successfully.');
@@ -76,8 +81,9 @@ class PropertyController extends Controller
         $purposes = PropertyPurpose::where('is_active', true)->get();
         $types = PropertyType::where('is_active', true)->get();
         $users = User::where('is_active', true)->get();
+        $cities = City::where('is_active', true)->orderBy('name')->get(); // <-- ADD THIS
 
-        return view('admin.properties.edit', compact('property', 'purposes', 'types', 'users'));
+        return view('admin.properties.edit', compact('property', 'purposes', 'types', 'users', 'cities'));
     }
 
     public function update(PropertyRequest $request, Property $property)
@@ -89,11 +95,9 @@ class PropertyController extends Controller
         $property->update($data);
 
         if ($request->hasFile('photos')) {
-            $property
-                ->addMultipleMediaFromRequest(['photos'])
-                ->each(function ($fileAdder) {
-                    $fileAdder->toMediaCollection('property_images');
-                });
+            $property->addMultipleMediaFromRequest(['photos'])->each(function ($fileAdder) {
+                $fileAdder->toMediaCollection('property_images');
+            });
         }
 
         return redirect()->route('admin.properties.edit', $property)->with('success', 'Property updated successfully.');

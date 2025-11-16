@@ -8,7 +8,7 @@
                     <div class="card-header">
                         <h3 class="card-title">{{ __('attributes.ad_prices.create') }}</h3>
                     </div>
-                    <form action="{{ route('admin.ad-prices.store') }}" method="POST">
+                    <form action="{{ route('admin.ad-prices.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @include('admin.ad-prices._form', ['adPrice' => null])
                     </form>

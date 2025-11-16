@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\AgencyTypeController;
 use App\Http\Controllers\Admin\AgentController;
 use App\Http\Controllers\Admin\AgentTypeController;
 use App\Http\Controllers\Admin\CommercialRecordController;
-use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LicenseController;
@@ -20,10 +20,12 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UpgradeRequestController;
+use App\Http\Controllers\Admin\AdController;
 use App\Http\Middleware\Language;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth' ,Language::class])
+
+Route::middleware(['auth' ,'role:admin', Language::class])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -32,6 +34,7 @@ Route::middleware(['auth' ,Language::class])
 
     // Users & Roles
     Route::resource('users', UserController::class)->except('show');
+    Route::get('users/{user}/details', [UserController::class, 'getDetails'])->name('users.details');
     Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
     Route::resource('roles', RoleController::class)->except('show');
 
@@ -59,8 +62,12 @@ Route::middleware(['auth' ,Language::class])
     Route::post('property-purposes/{propertyPurpose}/toggle-status', [PropertyPurposeController::class, 'toggleStatus'])->name('property-purposes.toggle-status');
     Route::resource('property-attributes', PropertyAttributeController::class)->except('show');
 
-    // Locations (Countries & Cities)
-    Route::resource('countries', CountryController::class)->except('show');
+    Route::resource('ads', AdController::class);
+    Route::post('ads/{ad}/approve', [AdController::class, 'approve'])->name('ads.approve');
+    Route::post('ads/{ad}/reject', [AdController::class, 'reject'])->name('ads.reject');
+
+    // Locations (Districts & Cities)
+    Route::resource('districts', DistrictController::class)->except('show');
     Route::resource('cities', CityController::class)->except('show');
 
     // Monetization
@@ -72,6 +79,7 @@ Route::middleware(['auth' ,Language::class])
     Route::resource('commercial-records', CommercialRecordController::class)->except('show');
 
     Route::get('upgrade-requests', [UpgradeRequestController::class, 'index'])->name('upgrade-requests.index');
+    Route::get('upgrade-requests/{upgradeRequest}', [UpgradeRequestController::class, 'show'])->name('upgrade-requests.show');
     Route::post('upgrade-requests/{upgradeRequest}/approve', [UpgradeRequestController::class, 'approve'])->name('upgrade-requests.approve');
     Route::post('upgrade-requests/{upgradeRequest}/reject', [UpgradeRequestController::class, 'reject'])->name('upgrade-requests.reject');
 });

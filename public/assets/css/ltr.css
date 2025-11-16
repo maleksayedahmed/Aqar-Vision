@@ -1,0 +1,185 @@
+/*
+ * LTR Override Stylesheet
+ * Version 2.0
+ *
+ * This file converts RTL layouts from Tailwind CSS to LTR.
+ * It handles global direction, flexbox order, text alignment,
+ * positioning, and component-specific overrides for both the
+* homepage and the property details page.
+ */
+
+/* ==========================================================================
+   1. Global Direction & Text Alignment Overrides
+   ========================================================================== */
+
+/*
+ * Force LTR direction and left-align text globally.
+ * The `[dir="rtl"]` selector is used to override inline `dir` attributes.
+ */
+body,
+[dir="rtl"] {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* General text alignment classes */
+.text-right {
+  text-align: left !important;
+}
+
+@media (min-width: 1024px) {
+  .lg\:text-right {
+    text-align: left !important;
+  }
+}
+
+/* ==========================================================================
+   2. Flexbox & Layout Overrides
+   ========================================================================== */
+
+/* Reverse the direction of flex rows */
+.flex-row-reverse {
+  flex-direction: row !important;
+}
+
+@media (min-width: 1024px) {
+  .lg\:flex-row-reverse {
+    flex-direction: row !important;
+  }
+}
+
+/* Change flex alignment from end (right in RTL) to start (left in LTR) */
+.self-end {
+  align-self: flex-start !important;
+}
+
+/* Change justification from end to start for modal buttons, etc. */
+.justify-end {
+  justify-content: flex-start !important;
+}
+
+/* ==========================================================================
+   3. Spacing & Positioning Overrides
+   ========================================================================== */
+
+/* Swap padding from left to right */
+.pl-10 { padding-left: 0 !important; padding-right: 2.5rem !important; }
+.pl-4 { padding-left: 0 !important; padding-right: 1rem !important; }
+
+/* Swap padding from right to left */
+.pr-4 { padding-right: 0 !important; padding-left: 1rem !important; }
+.pr-12 { padding-right: 0 !important; padding-left: 3rem !important; }
+
+/* Swap margin from left to right */
+.ml-2 { margin-left: 0 !important; margin-right: 0.5rem !important; }
+
+@media (min-width: 1024px) {
+  .lg\:-ml-\[210px\] { margin-left: 0 !important; margin-right: -210px !important; }
+  .lg\:-ml-\[8\%\] { margin-left: 0 !important; margin-right: -8% !important; }
+}
+
+/* Swap absolute positioning from left to right */
+.left-0 { left: auto !important; right: 0 !important; }
+.absolute.inset-y-0.left-0 { left: auto !important; right: 0 !important; }
+
+@media (min-width: 1024px) {
+  .lg\:left-\[-50px\] { left: auto !important; right: -50px !important; }
+}
+
+/* Swap absolute positioning from right to left */
+.right-0 { right: auto !important; left: 0 !important; }
+.absolute.inset-y-0.right-0 { right: auto !important; left: 0 !important; }
+
+@media (min-width: 1024px) {
+  .lg\:right-\[-35px\] { right: auto !important; left: -35px !important; }
+}
+
+/* ==========================================================================
+   4. Component-Specific Overrides
+   ========================================================================== */
+
+/* --- Homepage Components --- */
+
+/* Correct direction of "View All" arrows */
+a[href*="properties.search"] svg,
+a[href*="all.agents"] svg {
+    transform: rotate(180deg);
+}
+
+/* Latest Properties & Featured Properties Slider Buttons */
+#nextBtn, #featuredNextBtn {
+    left: auto !important;
+    right: -50px !important;
+    transform: translateY(-50%) rotate(180deg) !important;
+}
+#prevBtn, #featuredPrevBtn {
+    right: auto !important;
+    left: -35px !important;
+        transform: translateY(-50%) rotate(180deg) !important;
+
+}
+.seeallbtn{
+     transform: rotate(180deg) !important;
+}
+
+/* Agents Slider Gradient Overlays */
+#gradient-left {
+    right: auto !important;
+    left: 0 !important;
+    background-image: linear-gradient(to right, white, transparent) !important;
+}
+#gradient-right {
+    left: auto !important;
+    right: 0 !important;
+    background-image: linear-gradient(to left, white, transparent) !important;
+}
+
+/* --- Property Details Page Components --- */
+
+/* "Change Property Status" dropdown menu */
+.absolute.left-0.z-10.mt-2 {
+    left: auto !important;
+    right: 0 !important;
+    origin-top-right: top left !important; /* Adjust animation origin */
+}
+
+/* Text inside the dropdown */
+.w-full.text-right {
+    text-align: left !important;
+}
+
+/* Image gallery navigation arrows */
+/* The RTL version uses a right-arrow for 'prev' and a left-arrow for 'next'.
+   We rotate them 180 degrees to make them point in the correct LTR direction. */
+button > svg[d^="M9 5l7 7-7 7"],
+button > svg[d^="M15 19l-7-7 7-7"] {
+    transform: rotate(180deg);
+}
+
+/* Price currency symbol positioning */
+/* The HTML places the symbol after the number, which is correct for LTR.
+   The `self-start` class vertically aligns it, which is also fine.
+   No override is needed. */
+img.self-start {
+    /* No change needed */
+}
+
+/* Advertiser details heading alignment */
+h2.self-start {
+  align-self: flex-start !important; /* Ensures "تفاصيل المعلن" is on the left */
+}
+select{
+  background-position: right 0.5rem center !important;
+} 
+.info-icon{
+ border-top-right-radius: 0.75rem !important;
+ border-bottom-right-radius: 0.75rem !important;
+ border-top-left-radius: 0 !important;
+ border-bottom-left-radius: 0 !important;
+}
+img[alt="Back"] {
+  transform: rotate(180deg) !important;
+}
+img[alt="next"] {
+  transform: rotate(180deg) !important;
+}

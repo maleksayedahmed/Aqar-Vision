@@ -94,12 +94,12 @@
                                                 <div class="d-flex justify-content-end gap-2">
                                                     <a href="{{ route('admin.licenses.show', $license->id) }}"
                                                         class="text-info font-weight-bold text-xs" data-toggle="tooltip"
-                                                        data-original-title="View license">
+                                                        data-original-title="{{ __('attributes.licenses.show') }}">
                                                         {{ __('attributes.licenses.show') }}
                                                     </a>
                                                     <a href="{{ route('admin.licenses.edit', $license->id) }}"
                                                         class="text-secondary font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit license">
+                                                        data-toggle="tooltip" data-original-title="{{ __('attributes.licenses.edit') }}">
                                                         {{ __('attributes.licenses.edit') }}
                                                     </a>
                                                     <form action="{{ route('admin.licenses.destroy', $license->id) }}"
@@ -108,7 +108,7 @@
                                                         @method('DELETE')
                                                         <button type="submit"
                                                             class="text-danger font-weight-bold text-xs border-0 bg-transparent"
-                                                            data-toggle="tooltip" data-original-title="Delete license">
+                                                            data-toggle="tooltip" data-original-title="{{ __('attributes.licenses.delete') }}">
                                                             {{ __('attributes.licenses.delete') }}
                                                         </button>
                                                     </form>

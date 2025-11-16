@@ -38,13 +38,13 @@
     <div class="form-group">
         <label for="status">{{ __('attributes.subscriptions.status') }}</label>
         <select name="status" class="form-control" required>
-            <option value="active" {{ old('status', $subscription?->status) == 'active' ? 'selected' : '' }}>Active</option>
-            <option value="expired" {{ old('status', $subscription?->status) == 'expired' ? 'selected' : '' }}>Expired</option>
-            <option value="cancelled" {{ old('status', $subscription?->status) == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+            <option value="active" {{ old('status', $subscription?->status) == 'active' ? 'selected' : '' }}>{{ __('attributes.subscriptions.active') }}</option>
+            <option value="expired" {{ old('status', $subscription?->status) == 'expired' ? 'selected' : '' }}>{{ __('attributes.subscriptions.expired') }}</option>
+            <option value="cancelled" {{ old('status', $subscription?->status) == 'cancelled' ? 'selected' : '' }}>{{ __('attributes.subscriptions.cancelled') }}</option>
         </select>
     </div>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-primary">Save Subscription</button>
-    <a href="{{ route('admin.subscriptions.index') }}" class="btn btn-default">Cancel</a>
+    <button type="submit" class="btn btn-primary">{{ __('attributes.subscriptions.save_subscription') }}</button>
+    <a href="{{ route('admin.subscriptions.index') }}" class="btn btn-default">{{ __('attributes.subscriptions.cancel') }}</a>
 </div>

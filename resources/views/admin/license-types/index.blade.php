@@ -70,7 +70,7 @@
                                                 <div class="d-flex justify-content-end gap-2">
                                                     <a href="{{ route('admin.license-types.edit', $licenseType->id) }}"
                                                         class="text-secondary font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit license type">
+                                                        data-toggle="tooltip" data-original-title="{{ __('attributes.license_types.edit_license_type_tooltip') }}">
                                                         {{ __('attributes.license_types.edit') }}
                                                     </a>
                                                     <form
@@ -80,7 +80,7 @@
                                                         @method('DELETE')
                                                         <button type="submit"
                                                             class="text-danger font-weight-bold text-xs border-0 bg-transparent"
-                                                            data-toggle="tooltip" data-original-title="Delete license type">
+                                                            data-toggle="tooltip" data-original-title="{{ __('attributes.license_types.delete_license_type_tooltip') }}">
                                                             {{ __('attributes.license_types.delete') }}
                                                         </button>
                                                     </form>

@@ -16,7 +16,7 @@ class Agent extends Model
         'agent_type_id',
         'phone_number',
         'email',
-        'license_number',
+        'city_id',
         'license_issue_date',
         'license_expiry_date',
         'national_id',
@@ -47,6 +47,11 @@ class Agent extends Model
         return $this->belongsTo(Agency::class);
     }
 
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
     public function licenses()
     {
         return $this->hasMany(License::class);
@@ -60,5 +65,20 @@ class Agent extends Model
     public function updater()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function subscriptions()
+    {
+        return $this->user->subscriptions;
+    }
+
+    public function subscribeTo(Plan $plan)
+    {
+        return $this->user->subscriptions()->create([
+            'plan_id' => $plan->id,
+            'start_date' => now(),
+            'end_date' => now()->addDays(30), // Assuming monthly plan
+            'status' => 'active',
+        ]);
     }
 }

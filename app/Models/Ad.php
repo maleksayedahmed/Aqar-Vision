@@ -12,68 +12,56 @@ class Ad extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * This array is now updated to remove the old, fixed columns.
      */
     protected $fillable = [
         // Foreign Keys
         'user_id',
         'ad_price_id',
-        
+        'property_type_id',
+        'district_id',
+
         // Ad Status
         'status',
+        'user_status',
         'expires_at',
 
-        // Step 1: Basic Info
+        // Core Property Details
         'title',
-        'age',
-        'transaction_type',
-        'floor_number',
-        'price',
-        'finishing_status',
-        'property_type',
-        'direction',
-        'bathrooms',
-        'rooms',
-        'area',
         'description',
+        'listing_purpose',
+        'total_price',
+        'area_sq_meters',
+        'age_years',
 
-        // Step 1: Location Info
-        'city',
-        'neighborhood',
-        'province',
-        'street',
+        // Location Details
         'latitude',         
         'longitude',       
+        'street_name',
+        'province',
 
-        // Step 1: Features & Additional Details
-        'features', // This will store the array of selected features
-        'usage',
+        // Features & Additional Details (Now includes all dynamic attributes)
+        'features',
+        'property_usage',
         'plan_number',
-        'mortgaged',
-        'furniture',
-        'build_status',
+        'building_status',
         'building_number',
         'postal_code',
 
-        // Step 2: Media (Simple path storage)
+        // Media Paths
         'video_path',
-        'images', // This will store an array of image paths
+        'images',
     ];
 
     /**
      * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
      */
     protected $casts = [
         'expires_at' => 'datetime',
-        'price' => 'decimal:2',
-        'area' => 'decimal:2',
-        'bathrooms' => 'integer',
-        'rooms' => 'integer',
-        'features' => 'array', // Automatically convert the features array to/from JSON
-        'images' => 'array',   // Automatically convert the images array to/from JSON
+        'total_price' => 'decimal:2',
+        'area_sq_meters' => 'decimal:2',
+        'features' => 'array', // This is now the main field for dynamic attributes
+        'images' => 'array',
     ];
 
     /**
@@ -90,5 +78,26 @@ class Ad extends Model
     public function adPrice()
     {
         return $this->belongsTo(AdPrice::class);
+    }
+
+    /**
+     * Get the district for this ad.
+     */
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    /**
+     * Get the property type for this ad.
+     */
+    public function propertyType()
+    {
+        return $this->belongsTo(PropertyType::class);
+    }
+    public function agency()
+    {
+        // An Ad has one Agency through its User's Agent profile.
+        return $this->hasOneThrough(Agency::class, Agent::class, 'user_id', 'id', 'user_id', 'agency_id');
     }
 }

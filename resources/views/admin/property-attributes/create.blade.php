@@ -8,7 +8,7 @@
                     <div class="card-header">
                         <h3 class="card-title">{{ __('attributes.property_attributes.create') }}</h3>
                     </div>
-                    <form action="{{ route('admin.property-attributes.store') }}" method="POST">
+                    <form action="{{ route('admin.property-attributes.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @include('admin.property-attributes._form', ['propertyAttribute' => null])
                     </form>

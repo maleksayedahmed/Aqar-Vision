@@ -27,33 +27,33 @@ class Language
     public function handle(Request $request, Closure $next)
     {
         try {
-            // Get locale from session or default to 'en'
-            $locale = Session::get('locale', 'en');
-            
+            // Get locale from request session or default to config locale
+            $locale = $request->session()->get('locale', config('app.locale', 'ar'));
+
             // Log the current locale for debugging
             Log::info('Current locale from session: ' . $locale);
-            
+
             // Validate if the locale is available
             if (!in_array($locale, $this->availableLocales)) {
-                $locale = 'en';
-                Session::put('locale', $locale);
+                $locale = config('app.locale', 'ar');
+                $request->session()->put('locale', $locale);
                 Log::warning('Invalid locale detected, defaulting to: ' . $locale);
             }
-            
+
             // Set the application locale
             App::setLocale($locale);
-            
+
             // Verify the locale was set
             $currentLocale = App::getLocale();
             Log::info('Application locale set to: ' . $currentLocale);
-            
+
             // Set the locale in the view
             view()->share('locale', $currentLocale);
-            
+
             return $next($request);
         } catch (\Exception $e) {
             Log::error('Language middleware error: ' . $e->getMessage());
             return $next($request);
         }
     }
-} 
+}

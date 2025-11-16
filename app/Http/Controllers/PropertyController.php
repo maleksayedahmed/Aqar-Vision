@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Favorite;
 use App\Models\Property;
 use App\Models\PropertyType;
 use App\Models\PropertyPurpose;
@@ -18,8 +19,11 @@ class PropertyController extends Controller
             $query->where('user_id', $user->id)
                   ->orWhere('agent_id', $user->agent?->id);
         })->with(['propertyType', 'purpose'])->get();
-
-        return view('properties.index', compact('properties'));
+        $favoriteAdIds = [];
+        if (Auth::check()) {
+            $favoriteAdIds = Favorite::where('user_id', Auth::id())->pluck('ad_id')->toArray();
+        }
+        return view('properties.index', compact('properties', 'favoriteAdIds'));
     }
 
     public function create()
@@ -51,7 +55,7 @@ class PropertyController extends Controller
         ]);
 
         $user = Auth::user();
-        
+
         try {
             DB::beginTransaction();
 
@@ -92,7 +96,7 @@ class PropertyController extends Controller
 
         $propertyTypes = PropertyType::where('is_active', true)->get();
         $propertyPurposes = PropertyPurpose::where('is_active', true)->get();
-        
+
         return view('properties.edit', compact('property', 'propertyTypes', 'propertyPurposes'));
     }
 
@@ -161,4 +165,4 @@ class PropertyController extends Controller
             return back()->with('error', 'Failed to delete property. Please try again.');
         }
     }
-} 
+}

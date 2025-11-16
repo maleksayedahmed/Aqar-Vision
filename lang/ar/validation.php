@@ -3,18 +3,57 @@
 return [
     'required' => 'حقل :attribute مطلوب.',
     'string' => ':attribute يجب أن يكون نصاً.',
+    'min' => [
+        'string' => ':attribute يجب ألا يقل عن :min حروف.',
+        'numeric' => ':attribute يجب ألا يقل عن :min.',
+    ],
     'max' => [
         'string' => ':attribute يجب ألا يزيد عن :max حرفاً.',
     ],
+    'numeric' => ':attribute يجب أن يكون رقماً.',
+    'digits' => ':attribute يجب أن يكون :digits أرقام.',
     'email' => ':attribute يجب أن يكون بريداً إلكترونياً صحيحاً.',
     'date' => ':attribute ليس تاريخاً صحيحاً.',
     'after' => ':attribute يجب أن يكون تاريخاً بعد :date.',
     'exists' => ':attribute غير صحيح.',
     'unique' => ':attribute مستخدم من قبل.',
     'boolean' => 'حقل :attribute يجب أن يكون نعم أو لا.',
+    'confirmed' => 'تأكيد :attribute غير متطابق.',
+    'regex' => 'تنسيق :attribute غير صحيح.',
+    'accepted' => 'يجب قبول :attribute.',
 
     // رسائل مخصصة للوكلاء
     'custom' => [
+        // Auth / Login / Signup
+        'email' => [
+            'required' => 'حقل البريد الإلكتروني مطلوب.',
+            'email' => 'أدخل بريداً إلكترونياً صالحاً.',
+            'max' => 'البريد الإلكتروني يجب ألا يزيد عن :max حرفاً.',
+        ],
+        'phone' => [
+            'required' => 'حقل رقم الجوال مطلوب.',
+            'regex' => 'أدخل رقم جوال صالح.',
+            'min' => 'رقم الجوال يجب ألا يقل عن :min أرقام.',
+        ],
+        'password' => [
+            'required' => 'حقل كلمة المرور مطلوب.',
+            'min' => 'كلمة المرور يجب ألا تقل عن :min أحرف.',
+            'confirmed' => 'تأكيد كلمة المرور غير متطابق.',
+        ],
+        'password_confirmation' => [
+            'required' => 'حقل تأكيد كلمة المرور مطلوب.',
+        ],
+        'terms' => [
+            'accepted' => 'يجب عليك قبول شروط الاستخدام.',
+        ],
+        'otp' => [
+            'required' => 'رمز التحقق مطلوب.',
+            'digits' => 'رمز التحقق يجب أن يكون :digits أرقام.',
+        ],
+        'code' => [
+            'required' => 'رمز التحقق مطلوب.',
+            'digits' => 'رمز التحقق يجب أن يكون :digits أرقام.',
+        ],
         'name' => [
             'required' => 'حقل الاسم مطلوب.',
             'string' => 'الاسم يجب أن يكون نصاً.',
@@ -100,7 +139,13 @@ return [
         'agent_type_id' => 'نوع الوكيل',
         'agency_id' => 'الوكالة',
         'phone_number' => 'رقم الهاتف',
+        'phone' => 'رقم الجوال',
         'email' => 'البريد الإلكتروني',
+        'password' => 'كلمة المرور',
+        'password_confirmation' => 'تأكيد كلمة المرور',
+        'otp' => 'رمز التحقق',
+        'code' => 'رمز التحقق',
+        'terms' => 'شروط الاستخدام',
         'license_number' => 'رقم الترخيص',
         'license_issue_date' => 'تاريخ إصدار الترخيص',
         'license_expiry_date' => 'تاريخ انتهاء الترخيص',
