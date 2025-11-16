@@ -431,7 +431,7 @@
             </section>
         @endif
 
-        <section class="py-10 w-[98%] bg-white">
+        {{-- <section class="py-10 w-[98%] bg-white">
             <div class="max-w-7xl mx-auto">
                 <div class="flex justify-between items-center mb-8">
                     <h2 class="text-xl font-bold text-slate-800 md:text-3xl">{{ __('common.real_estate_agents_title') }}</h2>
@@ -520,7 +520,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         <!-- world section -->
         <section class="my-16 flex justify-center px-4">

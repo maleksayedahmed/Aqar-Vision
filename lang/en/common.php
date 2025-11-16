@@ -4,6 +4,7 @@ return [
     // Global navigation & header
     'home' => 'Home',
     'agents' => 'Agents',
+    'marketers' => 'Marketers',
     'about_nav' => 'About Us',
     'arabic' => 'العربية',
     'english' => 'English',

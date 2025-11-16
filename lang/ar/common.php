@@ -4,6 +4,7 @@ return [
     // Global navigation & header
     'home' => 'الرئيسية',
     'agents' => 'وسطاء العقاريون',
+    'marketers' => 'مسوقين عقاريون',
     'about_nav' => 'نبذة عنا',
     'arabic' => 'العربية',
     'english' => 'English',

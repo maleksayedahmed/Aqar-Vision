@@ -18,6 +18,8 @@
                             class="text-[16px] {{ request()->routeIs('home') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">{{ __('common.home') }}</a>
                         <a href="{{ route('all.agents') }}"
                             class="text-[16px] {{ request()->routeIs('all.agents') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">{{ __('common.agents') }}</a>
+                        <a href="{{ route('all.agents') }}"
+                            class="text-[16px] {{ request()->routeIs('all.agents') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">{{ __('common.marketers') }}</a>
                         <a href="{{ route('user.about-us') }}"
                             class="text-[16px] {{ request()->routeIs('user.about-us') ? 'text-[rgba(79,171,232,1)]' : 'text-[#303f7d]' }} font-medium hover:text-[#6381ff]">{{ __('common.about_nav') }}</a>
                         <a href="{{ route('contact.us') }}"
